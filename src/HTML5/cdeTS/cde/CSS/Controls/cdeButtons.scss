@@ -1,0 +1,152 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+input.cdeButton {
+    font-size: 24px;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+    font-weight: lighter;
+    width: 300px;
+    height: 55px;
+    margin-right: 4px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+.cdeDragButton {
+    cursor: grab;
+    text-shadow: none;
+}
+
+.cdeNoButton, 
+.cdeYesButton, 
+.cdeOkButton {
+    font-size: 20px;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+    font-weight: lighter;
+    text-align: center;
+    cursor: pointer;
+    background-color: rgba(33,33,33,.1);
+    color: white;
+}
+
+.cdeOkButton {
+    margin: 0 auto;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.cdeNoButton {
+    float: left;
+}
+
+.cdeYesButton {
+    float: right;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+div.cdePinDiv, 
+div.cdeUnpinDiv, 
+div.cdeDivUp, 
+div.cdeDivDown, 
+div.cdeDivSave, 
+div.cdeDivRefresh {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    z-index: 10;
+    color: #404040;
+    cursor: pointer;
+}
+
+.cdeMutButton {
+    color: white;
+}
+
+.cdeEmptyButtoninner {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.cdeDeleteButton, 
+.cdeDetailButton, 
+.cdeDropButton, 
+.cdeLiveTileSmall {
+    font-size: 16px;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+    font-weight: lighter;
+    text-align: center;
+    float: left;
+    cursor: pointer;
+}
+
+.cdeOuterTileButton {
+    float: left;
+    cursor: pointer;
+}
+
+.cdeDropButton {
+    margin: 5px;
+}
+
+.cdeGlassButton {
+    background-image: url('../Images/GlasButton.png');
+    background-size: cover;
+    font-size: 16px;
+    font-family: 'robotothin', 'Segoe UI', Arial,sans-serif;
+    font-weight: lighter;
+    cursor: pointer;
+    border: 0;
+    padding: 0;
+    border-radius: 20px;
+}
+
+.cdeTransitButton {
+    color: white;
+    background-color: rgba(0, 0, 255, 0.3);
+    border-radius: 20px;
+}
+
+.cdeGoodActionButton {
+    color: white;
+    background-color: rgba(0, 255, 0, 0.30);
+    border-radius: 20px;
+}
+
+.cdeBadActionButton {
+    color: white;
+    background-color: rgba(255, 0, 0, 0.30);
+    border-radius: 20px;
+}
+
+
+.cdeTabSelected {
+    color: rgba(0, 0, 0, 1);
+}
+
+.cdeTabNotSelected {
+    color: rgba(0, 0, 0, 0.3);
+}
+
+.cdeTabButton {
+    color: white;
+    background-color: rgba(0, 0, 255, 0.3);
+    text-align: left;
+}
+
+.cdeTabButtoninner {
+    margin-left: 20px;
+}
+
+.cdeLargeIcon {
+    margin-top: 10px;
+}
+
+button.cdeLargeTile {
+    font-size: 24px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}

@@ -1,0 +1,82 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+@charset 'utf-8';
+
+/**
+* This file overwrites values in MainBaseColors.scss and defines C-DEngine
+* styles in the SomeBrand theme.
+**/
+
+
+// branding colors
+$somebrand-header: hsl(0, 0%, 15%);
+$somebrand-background: hsl(0, 0%, 95%);
+$somebrand-yellow-default: hsl(52, 97%, 59%);
+$somebrand-yellow: #52D0EB;
+
+$cde-logo-darkblue: $somebrand-yellow;
+$cde-logo-liteblue: $somebrand-yellow;
+$cde-logo-litegrau: #CCCCCC;
+$cde-logo-darker: $somebrand-yellow;
+$cde-logo-blue: $somebrand-yellow-default;
+
+// commonly used color defenitions
+$color-black: hsl(0, 0%, 0%);
+$color-light-black: hsl(0, 0%, 20%);
+$color-white: hsl(0, 0%, 100%);
+
+// SomeBrand theme color definitions
+$cde-background: $somebrand-background;
+$cde-log-background: $color-black;
+$cde-sidebar: $somebrand-header;
+$cde-app-bar: $somebrand-header;
+
+$progress-color-blue: hsl(195, 53%, 47%);
+$progress-color-green: $somebrand-yellow;
+
+$cde-tile-background2: $somebrand-yellow;
+$cde-tile-icon-color: hsl(0, 0%, 53%);
+$cde-tile-color: hsl(0, 0%, 53%);
+$cde-tile-background: $color-white;
+$cde-tile-border: $color-white;
+
+$cde-header-row: #333;
+$cde-header-row-back: rgba(88,188,209,0.7);
+$cde-header-row-border: hsla(0, 0%, 0%, 0.4);
+$cde-row-even: #ddd;
+$cde-row-odd: #eee;
+
+$cde-main-font-color-dark: hsl(0, 0%, 8%);
+$cde-main-font-color: hsl(0, 0%, 13%);
+$cde-main-font-color-lite: hsl(0, 0%, 80%);
+
+$cde-popup-content-color: hsl(0, 0%, 7%);
+$cde-dash-cate-color: $color-black;
+$cde-dash-plate-border: $color-black;
+$cde-dash-plate-back: hsl(205, 13%, 18%);
+
+$cde-group-header-color: $color-light-black;
+
+$cde-input-back: hsla(0, 0%, 31%, 0.1);
+$cde-edit-back: rgba(255, 255, 255, 0.72) !default;
+$cde-edit-color: black !default;
+
+// popup control
+$cde-popup-content-color: #212121;
+$cde-popup-background: #EEEEEE;
+
+$cde-sidebarright: white !default;
+$cde-wizard-explainer: white;
+
+$cde-table-frame-color: #52D0EB;
+
+$cde-popup-overlay: rgba(216,216,216,.8);
+$cde-popup-template-back: #ccc;
+$cde-popup-template-shadow: rgba(41, 41, 41, 0.48);
+$cde-popup-template-border: #aaa;
+// import statement must be at end of file to compile
+@import 'MainBaseColors.scss';

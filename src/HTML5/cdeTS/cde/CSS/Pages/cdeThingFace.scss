@@ -1,0 +1,105 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+div.cdeSensorTile4x3 {
+    width: 312px;
+    height: 234px;
+    margin: 0 auto;
+}
+
+div.cdeSensorTileOuterDiv4x3 {
+    width: 312px;
+    height: 234px;
+    display: flex;
+    justify-content: space-around;
+    align-content: space-around;
+    align-items: center;
+    border-radius:20px;
+}
+
+div.cdeSensorTileInnerDiv4x3 {
+    width: 297px;
+    height: 219px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-content: space-around;
+    align-items: center;
+}
+
+div.cdeMainDivTile4x3 {
+    width: 260px;
+    height: 80px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+}
+
+.cdeLabelTile4x3 {
+    width: 260px;
+    height: 15px;
+    font-size: 10px;
+}
+
+.cdeValueTile4x3 {
+    width: 260px;
+    height: 70px;
+    font-size: 48px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.cdeUnitTile4x3 {
+    width: 260px;
+    height: 15px;
+    font-size: 10px;
+}
+
+div.cdeNodeTile4x3 {
+    width: 260px;
+    height: 30px;
+    font-size: 10px;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.cdeLowerNodeName4x3 {
+    font-size: 16px;
+    margin-top: 4px;
+}
+
+div.cdeTopTile4x3 {
+    width: 260px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+}
+
+div.cdeStatusLightTile4x3 {
+    opacity: 1;
+    border-radius: 50%;
+    width: 39px;
+    height: 39px;
+}
+
+.cdeTitleTile4x3 {
+    font-size: 15px;
+    width: 171px;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.cdeImgTile4x3 {
+    width: 50px;
+    height: 50px;
+}

@@ -1,0 +1,123 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+div.cdeHeader {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    top: auto;
+    width: 100%;
+    z-index: 100;
+}
+
+.cdeScreenList {
+    height: auto;
+    position: absolute;
+    bottom: 100px;
+}
+
+.cdeSideTiles {
+    position: absolute;
+    bottom: 48px;
+}
+
+.cdeMyDashboard{
+    margin-left: 50px;
+}
+
+.TemplateThing12x10 {
+    margin-bottom: 100px;
+    border-color: transparent;
+    background-color: unset;
+    box-shadow:none;
+}
+
+.cdeInsideCollapsible {
+    background-color: rgba(0,0,0,.01);
+}
+
+div.cdeTileGroupHeader, div.cdeTileGroupHeaderSmall {
+    background-color: rgba(0,0,0,.03);
+}
+
+.cdeCloseGroup {
+    background-color: rgba(0,0,0,.03);
+}
+
+.cdeBottomSpacer 
+{
+    float: left;
+    position: relative;
+    height:100px;
+}
+
+
+.cdeTesButton {
+    border: none;
+    outline: none;
+    /*color: #fff;
+    background: #111;*/
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+}
+
+.cdeTesButton:before {
+    content: '';
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: cdeglowing 20s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 10px;
+}
+
+.cdeTesButton:active {
+    /*color: #000*/
+}
+
+.cdeTesButton:active:after {
+    background: transparent;
+}
+
+.cdeTesButton:hover:before {
+    opacity: 1;
+}
+
+.cdeTesButton:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /*background: #111;*/
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+}
+
+@keyframes cdeglowing {
+    0% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 400% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+

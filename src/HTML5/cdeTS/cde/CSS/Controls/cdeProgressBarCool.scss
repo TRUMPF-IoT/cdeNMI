@@ -1,0 +1,36 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+.cdeMeter {
+    position: relative;
+    float: left;
+}
+
+.cdeMeter > span {
+    display: block;
+    height: 100%;
+    -webkit-border-top-right-radius: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+    -moz-border-radius-topright: 8px;
+    -moz-border-radius-bottomright: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    -webkit-border-top-left-radius: 20px;
+    -webkit-border-bottom-left-radius: 20px;
+    -moz-border-radius-topleft: 20px;
+    -moz-border-radius-bottomleft: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    background-color: rgb(29,163,209);
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    margin-top: 10px;
+    margin-left: 10px;
+}

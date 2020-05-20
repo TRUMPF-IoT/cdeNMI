@@ -1,0 +1,29 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+div.cdeFormTitle {
+    overflow: hidden;
+}
+
+h1.cdeFormTitle {
+    font-size: 20px;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+    font-weight: lighter;
+    text-align: left;
+    margin: 0;
+    clear: left;
+    margin-top: 20px;
+}
+
+div.CMyCanvas {
+    overflow: hidden;
+    text-align: left;
+    position: absolute;
+}
+
+.cdeTableInline {
+    align-items: flex-start;
+}

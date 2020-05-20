@@ -1,0 +1,30 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+div.ctrlCheckBox {
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 2px;
+    display: block;
+    text-align: center;
+    margin: auto;
+    float: left;
+}
+
+div.ctrlCheckBoxInner {
+    margin: 0 auto;
+    vertical-align: middle;
+    background-image: url('../Images/cdeInnerCheck.png');
+    background-size: 100% 100%;
+}
+
+span.cdeCheckText {
+    font-size: xx-small;
+}
+
+span.cdeCheckIcon {
+    font-size: 25px;
+}

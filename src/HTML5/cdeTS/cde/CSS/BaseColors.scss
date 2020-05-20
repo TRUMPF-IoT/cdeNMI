@@ -1,0 +1,44 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+@charset 'utf-8';
+
+/**
+* This file overwrites values in MainBaseColors.scss and defines C-DEngine
+* styles in the SomeBrand theme.
+**/
+
+
+// branding colors
+$somebrand-header: hsl(0, 0%, 15%);
+$somebrand-background: hsl(0, 0%, 53%);
+$somebrand-yellow-default: hsl(52, 97%, 59%);
+$somebrand-yellow: #1e586d;
+
+$cde-logo-darkblue: $somebrand-yellow;
+$cde-logo-liteblue: $somebrand-yellow;
+$cde-logo-darker: $somebrand-yellow;
+$cde-logo-blue: $somebrand-yellow-default;
+
+// SomeBrand theme color definitions
+$cde-sidebar: $somebrand-header;
+$cde-app-bar: $somebrand-header;
+
+$progress-color-green: $somebrand-yellow;
+
+$cde-tile-background2: $somebrand-yellow;
+$cde-row-even: #444;
+$cde-row-odd: #666;
+$cde-edit-back: rgba(90,90,90,.72) !default;
+$cde-edit-color: white !default;
+
+$cde-sidebarright: black !default;
+
+$cde-wizard-explainer: #eee !default;
+
+$cde-table-frame-color: #1e586d !default;
+// import statement must be at end of file to compile
+@import 'MainBaseColors.scss';

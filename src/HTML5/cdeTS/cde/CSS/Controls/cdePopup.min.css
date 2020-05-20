@@ -1,0 +1,7 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+div.cdeScreenPopup{width:100%;position:fixed;top:0;overflow:hidden;margin:0 auto;display:block;vertical-align:middle;z-index:1200;background-color:rgba(33,33,33,.2);}.cde-animate-popup{position:relative;animation:animatepopup ease-out .4s;}@keyframes animatepopup{from{top:-150px;opacity:0;}to{top:0;opacity:1;}}div.cdeCenteredPopup{margin:0 auto;}div.cdePopupContent41{font-family:'robotothin','Segoe UI',Arial,sans-serif;display:block;width:100%;font-size:20px;text-align:center;padding-bottom:1em;}div.cdePopupBackAlarm{padding:2em;}table.MyFullTable{padding-top:1em;width:100%;border-spacing:0;}

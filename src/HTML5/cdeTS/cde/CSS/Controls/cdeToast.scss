@@ -1,0 +1,56 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+div.cdeTextCrop {
+    overflow: hidden;
+    width: inherit;
+}
+
+div.cdeToast {
+    opacity: 1;
+    display: block;
+    position: relative;
+    background-color: rgba(33,33,33,.5);
+    width: inherit;
+}
+
+div.ToastTopic {
+    text-align: center;
+    width: 100%;
+    font-size: 24px;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+    color: white;
+}
+
+div.ToastText {
+    text-align: center;
+    width: 100%;
+    font-size: 20px;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+}
+
+div.ToastDebug {
+    width: 100%;
+    font-size: 10px;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+}
+
+.cde-animate-bottom {
+    position: relative;
+    animation: animatebottomcde 0.4s
+}
+
+@keyframes animatebottomcde {
+    from {
+        bottom: -300px;
+        opacity: 0
+    }
+
+    to {
+        bottom: 0;
+        opacity: 1
+    }
+}

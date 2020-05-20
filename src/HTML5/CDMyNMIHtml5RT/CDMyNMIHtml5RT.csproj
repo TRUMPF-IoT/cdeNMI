@@ -1,0 +1,199 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;netstandard2.0;net40;net35</TargetFrameworks>
+	  <PackageId>CDMyNMIHtml5RT</PackageId>
+    <Version>4.302.1$(cdeNugetSuffix)</Version>
+    <Authors>Chris Muench</Authors>
+    <Company>C-Labs</Company>
+    <Product>CDMyNMI HTML5 Runtime for $(TargetFramework)$(cdeDebugProductSuffix)</Product>
+    <PackageDescription>CDMyNMI HTML5 Runtime</PackageDescription>
+    <PackageIcon>toplogo-128.png</PackageIcon>
+    <Description>HMTL5 NMI Runtime for C-DEngine based Relays</Description>
+    <Copyright>Copyright (C) 2017-2020 TRUMPF Laser GmbH, authors: C-Labs</Copyright>
+    <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
+    <ProjectName>$(AssemblyName).$(TargetFramework)</ProjectName>
+    <AssemblyName>CDMyNMIHtml5</AssemblyName>
+
+    <!-- Set if you want to have a Nuget created automatically -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!-- Workaround for placing the .nupkg into the build's output folder when using msbuild's GenerateProjectSpecificOutputFolder -->
+    <ProjectName>$(AssemblyName).$(TargetFramework)</ProjectName>
+    <!-- Workaround for placing each DLL into a separate directory when using msbuild's GenerateProjectSpecificOutputFolder -->
+    <PackageOutputPath>$(OutDir)</PackageOutputPath>
+  </PropertyGroup>
+
+
+
+  <Choose>
+    <When Condition="'$(TargetFramework)'=='net35'">
+      <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DefineConstants>TRACE;DEBUG;CDE_SYSLOG;CDE_NET35</DefineConstants>
+      </PropertyGroup>
+
+      <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DefineConstants>TRACE;RELEASE;CDE_SYSLOG;CDE_NET35</DefineConstants>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(TargetFramework)'=='net40'">
+      <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DefineConstants>TRACE;DEBUG;CDE_SYSLOG;CDE_NET4</DefineConstants>
+      </PropertyGroup>
+
+      <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DefineConstants>TRACE;RELEASE;CDE_SYSLOG;CDE_NET4</DefineConstants>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(TargetFramework)'=='netstandard2.0'">
+      <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DefineConstants>TRACE;DEBUG;CDE_SYSLOG;CDE_STANDARD;NET_STANDARD;NETSTANDARD2_0</DefineConstants>
+      </PropertyGroup>
+
+      <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DefineConstants>TRACE;RELEASE;CDE_SYSLOG;CDE_STANDARD;NET_STANDARD;NETSTANDARD2_0</DefineConstants>
+      </PropertyGroup>
+    </When>
+  </Choose>
+
+  <ItemGroup>
+    <Compile Remove="ClientBin\CDEHTML5\Scripts\**" />
+    <Compile Remove="ClientBin\fonts\**" />
+    <Compile Remove="HTML\**" />
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="ClientBin\CDEHTML5\Scripts\**" />
+    <EmbeddedResource Remove="ClientBin\fonts\**" />
+    <EmbeddedResource Remove="HTML\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="ClientBin\CDEHTML5\Scripts\**" />
+    <None Remove="ClientBin\fonts\**" />
+    <None Remove="HTML\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Remove="ClientBin\CDE\cde.min.js" />
+    <None Remove="ClientBin\CDE\cdeWorker.min.js" />
+    <None Remove="ClientBin\CSS\cdeBaseColors.css" />
+    <None Remove="ClientBin\CSS\cdeBaseColors.min.css" />
+    <None Remove="ClientBin\CSS\CDESTYLES.min.css" />
+    <None Remove="ClientBin\CSS\choices.dark.min.css" />
+    <None Remove="ClientBin\CSS\choices.lite.min.css" />
+    <None Remove="ClientBin\CSS\flatpickr.dark.css" />
+    <None Remove="ClientBin\CSS\flatpickr.lite.css" />
+    <None Remove="ClientBin\CSS\LcdeBaseColors.min.css" />
+    <None Remove="ClientBin\CSS\MainBaseColors.min.css" />
+    <None Remove="ClientBin\CSS\MYSTYLES.min.css" />
+    <None Remove="ClientBin\CSS\MYSTYLESH.min.css" />
+    <None Remove="ClientBin\CSS\MYSTYLESL.min.css" />
+    <None Remove="ClientBin\CSS\MYSTYLESP.min.css" />
+    <None Remove="ClientBin\CSS\MYSTYLEST.min.css" />
+    <None Remove="ClientBin\CSS\MYSTYLESW.min.css" />
+    <None Remove="ClientBin\CSS\MYSTYLESX.min.css" />
+    <None Remove="ClientBin\IMAGES\GlasButton.png" />
+    <None Remove="ClientBin\JS\choices.min.js" />
+    <None Remove="ClientBin\JS\flatpickr.js" />
+    <None Remove="ClientBin\JS\flatpickr.monthSelect.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ClientBin\CDE\cde.min.js" />
+    <EmbeddedResource Include="ClientBin\CDE\cdeWorker.min.js" />
+    <EmbeddedResource Include="ClientBin\CSS\cdeBaseColors.css" />
+    <EmbeddedResource Include="ClientBin\CSS\cdeBaseColors.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\CDESTYLES.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\choices.dark.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\choices.lite.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\flatpickr.dark.css" />
+    <EmbeddedResource Include="ClientBin\CSS\flatpickr.lite.css" />
+    <EmbeddedResource Include="ClientBin\CSS\LcdeBaseColors.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\MainBaseColors.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\MYSTYLES.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\MYSTYLESH.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\MYSTYLESL.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\MYSTYLESP.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\MYSTYLEST.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\MYSTYLESW.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\MYSTYLESX.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ClientBin\IMAGES\GlasButton.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ClientBin\CSS\all.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\BaseColors.min.CSS" />
+    <EmbeddedResource Include="ClientBin\CSS\LBaseColors.min.CSS" />
+    <EmbeddedResource Include="ClientBin\IMAGES\cdeInnerCheck.png" />
+    <EmbeddedResource Include="ClientBin\IMAGES\E.PNG" />
+    <EmbeddedResource Include="ClientBin\IMAGES\iconTopLogo.png" />
+    <EmbeddedResource Include="ClientBin\IMAGES\logowz.png" />
+    <EmbeddedResource Include="ClientBin\IMAGES\toplogo-150.png" />
+    <EmbeddedResource Include="ClientBin\IMAGES\UPNPICON.png" />
+    <EmbeddedResource Include="ClientBin\JS\cdeNMITransforms.js" />
+    <EmbeddedResource Include="ClientBin\JS\choices.min.js" />
+    <EmbeddedResource Include="ClientBin\JS\excellentexport.js" />
+    <EmbeddedResource Include="ClientBin\JS\flatpickr.js" />
+    <EmbeddedResource Include="ClientBin\JS\flatpickr.monthSelect.js" />
+    <EmbeddedResource Include="ClientBin\JS\jdenticon-2.2.0.min.js" />
+    <EmbeddedResource Include="ClientBin\JS\moment-with-locales.min.js" />
+    <EmbeddedResource Include="ClientBin\JS\cdeSorttable.js" />
+    <EmbeddedResource Include="ClientBin\pages\nmiportal.html" />
+    <EmbeddedResource Include="ClientBin\pages\ThingFace.html" />
+    <EmbeddedResource Include="ClientBin\lang\NMIlang1031.json" />
+    <EmbeddedResource Include="ClientBin\webfonts\C-Labs-Font_Basis.eot" />
+    <EmbeddedResource Include="ClientBin\webfonts\C-Labs-Font_Basis.otf" />
+    <EmbeddedResource Include="ClientBin\webfonts\C-Labs-Font_Basis.ttf" />
+    <EmbeddedResource Include="ClientBin\webfonts\C-Labs-Font_Basis.woff" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-brands-400.eot" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-brands-400.svg" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-brands-400.ttf" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-brands-400.woff" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-brands-400.woff2" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-regular-400.eot" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-regular-400.svg" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-regular-400.ttf" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-regular-400.woff" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-regular-400.woff2" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-solid-900.eot" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-solid-900.svg" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-solid-900.ttf" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-solid-900.woff" />
+    <EmbeddedResource Include="ClientBin\webfonts\fa-solid-900.woff2" />
+    <EmbeddedResource Include="ClientBin\webfonts\Roboto-Thin-webfont.eot" />
+    <EmbeddedResource Include="ClientBin\webfonts\Roboto-Thin-webfont.svg" />
+    <EmbeddedResource Include="ClientBin\webfonts\Roboto-Thin-webfont.ttf" />
+    <EmbeddedResource Include="ClientBin\webfonts\Roboto-Thin-webfont.woff" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="toplogo-128.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClientBin\FAVICON.ICO" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <Reference Include="System.IO.Compression" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="C-DEngine" Version="5.*" />
+    <!--<ProjectReference Include="..\..\025 - C-DEngine\C-DEngine\C-DEngine.csproj" />-->
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
+    <!-- Required for dotnet build -->
+    <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" />
+  </ItemGroup>
+
+  <Target Name="GetPackagingOutputs" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="call &quot;$(ProjectDir)..\..\..\BuildTools\signandpackage.cmd&quot; &quot;$(ProjectDir)&quot; &quot;$(TargetDir)&quot; &quot;$(TargetFileName)&quot;" />
+  </Target>
+</Project>

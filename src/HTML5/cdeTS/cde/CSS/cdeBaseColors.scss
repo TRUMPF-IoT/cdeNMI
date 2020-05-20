@@ -1,0 +1,21 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+@charset 'utf-8';
+
+/**
+* This file overwrites values in MainBaseColors.scss and defines C-DEngine
+* styles in the dark theme. 
+**/
+
+// Nothing currently here because dark theme is used as the default values in MainBaseColors.scss
+// and therefore nothing needs to be overwritten. All values are imported below.
+
+
+
+
+// import statement must be at end of file to compile
+@import 'cdeMainBaseColors.scss';

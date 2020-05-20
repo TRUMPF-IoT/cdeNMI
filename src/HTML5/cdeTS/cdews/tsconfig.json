@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": true,
+    "declaration": true,
+    "sourceMap": true,
+    "module": "system",
+    "target": "es5",
+    "lib": [
+      "es5",
+      "webworker"
+    ],
+    "outFile": "../cde/cdeWorker.js"
+  },
+  "files": [
+    "../cde/src/cdeLibs/cdeRSA-4.1.0.ts",
+    "cdeWebWorker/cdeWebWorker-4.1.0.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "ClientBin"
+  ]
+}

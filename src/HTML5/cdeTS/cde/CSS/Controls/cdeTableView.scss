@@ -1,0 +1,194 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+/** For styles related to color see MainBaseColors.scss or relevant skins */
+
+/** Table Header */
+
+thead.cdeFixedHeader {
+    display: block;
+}
+
+thead.cdeFixedHeader tr {
+    position: relative
+}
+
+tr.cdeHeaderRow {
+    background-image: none;
+}
+
+.cdeTHCell {
+    display: inline-block;
+}
+
+.cdeMainTableHeader {
+    padding: 0px;
+}
+
+th.cdeTH {
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+    font-weight: lighter;
+    vertical-align: middle;
+    background-color: rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    padding: 0px;
+    border-left: rgba(0, 0, 0, 0.1);
+    border-left-width: 1px;
+    border-left-style: groove;
+}
+
+
+/** Table Body */
+
+td {
+    padding: 0;
+    border: 0;
+    border-collapse: collapse;
+}
+
+/*tbody {
+    overflow-y: auto;
+    overflow-x: hidden;
+}*/
+
+table.CMyTable {
+    border-collapse: collapse;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+    padding: inherit;
+    font-weight: lighter;
+    text-decoration: none;
+}
+
+td.cdeTabEntry {
+    font-size: 20px;
+    text-align: center;
+    border-left: rgba(0, 0, 0, 0.15);
+    border-left-width: 1px;
+    border-left-style: groove;
+    display: table-cell;
+}
+
+tbody.cdeScrollBody {
+    display: block;
+}
+
+tbody.cdeScrollContent {
+    overflow-y: scroll;
+    width: 100%
+}
+
+tr.cdeRowEven {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+tr.cdeRowOdd {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.cdeTDCell {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+.cdeInFormTable {
+    height: inherit;
+    overflow-y: auto;
+}
+
+table.cdeInlineTable {
+    margin: 0;
+    border-collapse: collapse;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+    padding-bottom: inherit;
+    padding-left: inherit;
+    padding-right: inherit;
+    padding-top: inherit;
+    font-weight: lighter;
+    text-decoration: none;
+}
+
+div.cdeRelativeDiv {
+    position: relative;
+}
+
+div.cdeTHsortup {
+    border-bottom: 1px solid;
+    border-bottom-color: red;
+}
+
+div.cdeTHsortdn {
+    border-top: 1px solid;
+    border-bottom-color: red;
+}
+
+tr.rowDeleted {
+    background-color: red;
+}
+
+
+.cdeTableButton {
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+    font-weight: lighter;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+div.cdeTableContainer {
+    clear: both;
+    overflow: auto;
+}
+
+h1.cdeTableHeader {
+    font-size: 20px;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+    font-weight: lighter;
+    pointer-events: none;
+    text-align: right;
+    margin-right: 10px;
+    margin-top: 0px;
+}
+
+table.cdeHilite {
+    margin: 1em;
+    border-collapse: collapse;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+    padding-bottom: inherit;
+    padding-left: inherit;
+    padding-right: inherit;
+    padding-top: inherit;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.cdeTableHeaderIcon {
+    font-size: 16px;
+}
+
+.cdeTableContainer {
+    overflow: auto;
+}
+.cdeTableTEContainer {
+    //DONT DELETE!
+}
+
+.cdeRefresher {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.cdeFilterInput {
+    float: left;
+}
+
+.cdeFilterInputIcon {
+    font-size: 12px;
+    margin-top: 8px;
+}

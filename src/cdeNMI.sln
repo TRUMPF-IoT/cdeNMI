@@ -1,0 +1,68 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cdeTS", "HTML5\cdeTS\cdeTS.csproj", "{375C2814-126B-4A75-84E4-3CAA6D271E10}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDMyNMIHtml5RT", "HTML5\CDMyNMIHtml5RT\CDMyNMIHtml5RT.csproj", "{44DB0EE1-68B6-4F66-8765-1198E91906F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extension Plugins", "Extension Plugins", "{E55F4F70-38D5-44D5-8457-6E88E5516A6C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDMyC3", "HTML5\ExtensionPlugins\172-CDMyC3\CDMyC3\CDMyC3.csproj", "{3672E942-624E-42F4-8D40-18189A27DB79}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Licenses", "_Licenses", "{129DEE11-3740-4D35-B695-20F9EB0DA7D8}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSES\Apache-2.0.txt = ..\LICENSES\Apache-2.0.txt
+		..\LICENSES\BSD-3-Clause.txt = ..\LICENSES\BSD-3-Clause.txt
+		..\LICENSES\CC-BY-4.0.txt = ..\LICENSES\CC-BY-4.0.txt
+		..\.reuse\dep5 = ..\.reuse\dep5
+		..\LICENSES\MIT.txt = ..\LICENSES\MIT.txt
+		..\LICENSES\MPL-2.0.txt = ..\LICENSES\MPL-2.0.txt
+		..\LICENSES\MS-PL.txt = ..\LICENSES\MS-PL.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Build", "_Build", "{9189CCAB-0D24-4ABB-AFE5-C92C7F5E69B1}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitignore = ..\.gitignore
+		..\Directory.Build.props = ..\Directory.Build.props
+		..\Directory.Build.targets = ..\Directory.Build.targets
+		..\.github\workflows\dotnetcore.yml = ..\.github\workflows\dotnetcore.yml
+		..\GitVersion.yml = ..\GitVersion.yml
+		..\NuGet.config = ..\NuGet.config
+		..\BuildTools\README.md = ..\BuildTools\README.md
+		..\BuildTools\SignAndPackage.cmd = ..\BuildTools\SignAndPackage.cmd
+		..\BuildTools\SignAndPackageS.cmd = ..\BuildTools\SignAndPackageS.cmd
+		..\BuildTools\signMeSha.bat = ..\BuildTools\signMeSha.bat
+		..\BuildTools\signtool.exe = ..\BuildTools\signtool.exe
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{375C2814-126B-4A75-84E4-3CAA6D271E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{375C2814-126B-4A75-84E4-3CAA6D271E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{375C2814-126B-4A75-84E4-3CAA6D271E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{375C2814-126B-4A75-84E4-3CAA6D271E10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44DB0EE1-68B6-4F66-8765-1198E91906F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44DB0EE1-68B6-4F66-8765-1198E91906F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44DB0EE1-68B6-4F66-8765-1198E91906F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44DB0EE1-68B6-4F66-8765-1198E91906F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3672E942-624E-42F4-8D40-18189A27DB79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3672E942-624E-42F4-8D40-18189A27DB79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3672E942-624E-42F4-8D40-18189A27DB79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3672E942-624E-42F4-8D40-18189A27DB79}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3672E942-624E-42F4-8D40-18189A27DB79} = {E55F4F70-38D5-44D5-8457-6E88E5516A6C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {79F916A1-7079-491E-97C2-B436C610BA3F}
+	EndGlobalSection
+EndGlobal

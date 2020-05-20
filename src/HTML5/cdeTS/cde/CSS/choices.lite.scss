@@ -1,0 +1,17 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+$cde-edit-back: rgba(255, 255, 255, 0.72) !default;
+$cde-edit-color: black !default;
+$cde-group-color: #555 !default;
+$cde-edit-disabled-color: #ccc !default;
+$cde-edit-hover-color: #eee !default;
+$cde-edit-active-border: #ddd !default;
+$cde-edit-border: rgba(255, 255, 255,.72) !default;
+
+$cde-select-back: #569ff7 !default;
+
+@import 'choices.scss';

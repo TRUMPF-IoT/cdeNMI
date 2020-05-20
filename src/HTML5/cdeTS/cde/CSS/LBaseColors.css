@@ -1,0 +1,480 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+/**
+* This file overwrites values in MainBaseColors.scss and defines C-DEngine
+* styles in the SomeBrand theme.
+**/
+/**
+* This file overwrites values in cdeMainBaseColors.scss and defines C-DEngine
+* and addes styles for SomeBrand theme.
+**/
+/**
+* This file defines all base colors for the C-DEngine that can be overwritten
+* by 3rd party developers creating their own skins.
+*
+* In order to override these values, @import MainBaseColors.scss must be added
+* to the bottom of the desired scss file.
+*
+* NOTE: Changes made to this file will not appear in browser until the Skin in use
+* is re-complied. This file does not ever compile on its own.
+**/
+body.cdeBody {
+  background-color: #f2f2f2; }
+
+div.cdeHeader {
+  background-color: #262626; }
+
+h1.cdeScreenTitle {
+  color: black; }
+
+td.MyItemFont {
+  color: #878787; }
+
+span.cdeMyHeaderTitle {
+  color: #878787; }
+
+td.cdeDlgTitleBar {
+  color: #262626; }
+
+div.cdeCentered {
+  background: white;
+  /* Older browsers */ }
+
+td.Data {
+  color: #f2f2f2; }
+
+span.cdeInfoText {
+  color: red; }
+
+.cdeHeadline2 {
+  color: #212121; }
+
+.cdeHeadline {
+  color: #212121; }
+
+h1.cdeDashCategory {
+  color: black; }
+
+p.cdeNormal {
+  color: #212121; }
+
+body.cdeLogBody {
+  background-color: black; }
+
+td.cdeLogEntry {
+  border-color: #ccc; }
+
+th.cdeLogEntryHeader {
+  border-color: #ccc;
+  background-color: lightgray;
+  color: white; }
+
+li.cdeChannelInfo {
+  color: lightgray; }
+
+.cdePopupContent {
+  padding: 20px; }
+
+div.cdePopupOverlay {
+  background: rgba(216, 216, 216, 0.8); }
+
+.cdePopupTemplate {
+  background-color: #ccc;
+  box-shadow: 10px 10px rgba(41, 41, 41, 0.48);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #aaa; }
+
+/*Login Stuff*/
+.cdeEngineStatusRed {
+  background: red;
+  color: white; }
+
+td.cdeEngineStatusGreen {
+  background: green;
+  color: white; }
+
+td.cdeEngineStatusYellow {
+  background: #fce233;
+  color: black; }
+
+/*ctrlTabelView Colors*/
+table.cdeHilite {
+  color: #52D0EB; }
+
+div.CMyTable {
+  background-color: #f2f2f2; }
+
+table.CMyTable {
+  color: #f2f2f2; }
+
+h1.cdeTableHeader {
+  color: #212121; }
+
+th.cdeTH {
+  color: #333;
+  background-image: none;
+  background-color: rgba(88, 188, 209, 0.7);
+  font-size: 16px; }
+
+tr.cdeHeaderRow {
+  color: rgba(88, 188, 209, 0.7); }
+
+tr.cdeRowOdd {
+  background-color: #eee;
+  color: #212121;
+  border-bottom-color: rgba(0, 0, 0, 0.4); }
+
+tr.cdeRowDeleted {
+  background-color: red; }
+
+tr.cdeRowEven {
+  color: #212121;
+  border-bottom-color: rgba(0, 0, 0, 0.4);
+  background-color: #ddd; }
+
+tr.cdeHilightRow {
+  background-color: #52D0EB; }
+
+div.CMyCanvas {
+  background-color: #f2f2f2; }
+
+div.cdeAboutBox {
+  color: black; }
+
+input.cdeInput {
+  color: black;
+  background-color: rgba(255, 255, 255, 0.72);
+  border: 1px solid #3f4458; }
+
+input.cdeInputCombo {
+  color: black;
+  background-color: rgba(255, 255, 255, 0.72); }
+
+div.ctrlCheckBox {
+  color: black;
+  background-color: rgba(255, 255, 255, 0.72);
+  border: 1px solid #3f4458; }
+
+div.cdeLiveImg {
+  color: #212121; }
+
+input.cdeButton {
+  color: #212121; }
+
+button.cdeAddButton {
+  color: #212121; }
+
+button.cdeLiveTileBar {
+  color: #878787;
+  background-color: white;
+  border-color: white; }
+
+input.cdeInputCredentials {
+  color: black;
+  background-color: rgba(255, 255, 255, 0.72);
+  border: 1px solid #3f4458; }
+
+input.cdeInputNumber {
+  color: black;
+  background-color: rgba(255, 255, 255, 0.72);
+  border: 1px solid #3f4458; }
+
+input.cdeInputCenter {
+  color: black;
+  background-color: rgba(255, 255, 255, 0.72);
+  border: 1px solid #3f4458; }
+
+textarea.ctrlTextArea {
+  background-color: rgba(255, 255, 255, 0.72);
+  color: black; }
+
+div.ctrlEndlessSlider {
+  background-color: rgba(79, 79, 79, 0.1); }
+
+div.ctrlBarChart {
+  background-color: rgba(79, 79, 79, 0.1); }
+
+.cdeMutLock {
+  background-color: black;
+  color: white; }
+
+h1.cdeTileGroupHeader {
+  color: #333333; }
+
+div.cdeTileGroupHeader {
+  color: #333333; }
+
+div.cdeTileGroupHeaderSmall {
+  color: #333333; }
+
+div.cdeCloseGroup {
+  color: #333333; }
+
+div.ctrlDropUploader {
+  border-color: #3f4458;
+  background-color: rgba(255, 255, 255, 0.72);
+  color: black;
+  border-width: 6px; }
+
+div.ctrlDropUploaderHover {
+  background-color: white;
+  border-color: #ccc;
+  border-width: 6px; }
+
+.cdeDashPlate {
+  color: #878787; }
+
+div.cdeTileTextSmall {
+  color: #878787; }
+
+.cdeTiles {
+  color: #878787; }
+
+.cdeLiveTile {
+  color: #878787;
+  background-color: white;
+  border-color: white;
+  border-radius: 20px; }
+
+div.cdeOuterTileButton {
+  color: #878787; }
+
+.cdeLiveTileLong {
+  color: #878787; }
+
+.cdeLiveTileVeryLong {
+  color: #878787; }
+
+.cdeLiveTileSmall {
+  color: #878787; }
+
+div.cdeTileEntry {
+  color: #212121;
+  background-color: white;
+  border-top-color: #ccc;
+  border-right-color: #ccc;
+  border-bottom-color: #ccc; }
+
+div.cdeTileText {
+  color: inherit; }
+
+div.cdeTileTextNoImg {
+  color: inherit; }
+
+div.cdeTileEntryText {
+  color: #212121; }
+
+div.cdeLiveTileSmall {
+  color: #212121;
+  background-color: white; }
+
+.actionButton {
+  color: #878787; }
+
+::-webkit-scrollbar {
+  background-color: white; }
+
+::-webkit-scrollbar-track {
+  background-color: white; }
+
+::-webkit-scrollbar-thumb {
+  background-color: #52D0EB; }
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #52D0EB; }
+
+::-webkit-scrollbar-thumb:active {
+  background-color: #52D0EB; }
+
+a {
+  color: #52D0EB; }
+
+a:visited {
+  color: #52D0EB; }
+
+div.SensorGroupLabel {
+  background: #52D0EB;
+  background-color: #52D0EB; }
+
+div.TransparentGroupLabel {
+  background: transparent;
+  background-color: transparent; }
+
+div.cdePinDiv {
+  color: #878787; }
+
+div.cdeUnpinDiv {
+  color: #878787; }
+
+div.cdeDivUp {
+  color: #878787; }
+
+div.cdeDivDown {
+  color: #878787; }
+
+div.cdeDivSave {
+  color: #878787; }
+
+div.cdeDivDraw {
+  color: #878787; }
+
+div.cdeDivRefresh {
+  color: #878787; }
+
+div.cdeSideBar {
+  background-color: #262626; }
+
+.cdeScreenListButtoninner {
+  color: #878787; }
+
+.cdeMyHeaderTitleModern {
+  color: #878787; }
+
+.cdeVertCenter {
+  color: #fce131; }
+
+.cdeOkButton {
+  color: #212121;
+  background-color: #52D0EB; }
+
+.cdeYesButton {
+  background-color: green;
+  color: #cccccc; }
+
+.cdeNoButton {
+  background-color: red;
+  color: #cccccc; }
+
+.cdeTableButton {
+  color: #878787; }
+
+.cdeDeleteButton {
+  background-image: none; }
+
+.cdeDetailButton {
+  background-image: none; }
+
+.MyHeaderButton {
+  background-image: none;
+  color: #878787; }
+
+div.cdePopupBackAlarm {
+  background: #EEEEEE; }
+
+div.cdePopupBackInfo {
+  background: #EEEEEE; }
+
+div.cdePopupContent41 {
+  color: #212121; }
+
+.cdeSwitch {
+  background: #bebaa7; }
+
+.cdeSwitch div {
+  background: white; }
+
+.toggleChecked > .cdeSwitch {
+  background: #65bb00; }
+
+.cdeSideBarRight {
+  background-color: white; }
+
+/*cdeStatus0 to cdeStatus7 refer to the status level 0=gray, 1=green, 2=yellow, 3=red, 4=blue, 5=brown, 6=purlple, 7=black*/
+.cdeStatus0 {
+  background-color: gray;
+  color: white; }
+
+.cdeStatus1 {
+  background-color: green;
+  color: white; }
+
+.cdeStatus2 {
+  background-color: yellow;
+  color: black; }
+
+.cdeStatus3 {
+  background-color: red;
+  color: white; }
+
+.cdeStatus4 {
+  background-color: blue;
+  color: white; }
+
+.cdeStatus5 {
+  background-color: brown;
+  color: white; }
+
+.cdeStatus6 {
+  background-color: purple;
+  color: white; }
+
+.cdeStatus7 {
+  background-color: black;
+  color: white; }
+
+.cdeWizardExplainer {
+  color: white; }
+
+.cdeTileEntryLabel {
+  color: #878787; }
+
+.cdeBlurBack {
+  position: absolute;
+  background: inherit;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  filter: drop-shadow(8px 8px 10px black) sepia(90%) hue-rotate(180deg); }
+  .cdeBlurBack:before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: inherit;
+    filter: blur(10px) saturate(2); }
+  .cdeBlurBack.dragging:before {
+    filter: blur(10px) sepia(1) hue-rotate(200deg); }
+
+.cdeMainTableHeader {
+  background-color: #52D0EB;
+  margin: 0px; }
+
+.cdeTableContainer {
+  box-sizing: border-box;
+  border-color: #52D0EB;
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px; }
+
+.cdeTabButton {
+  background: #52D0EB;
+  background-color: #52D0EB; }
+
+.cdeTabNotSelected {
+  border: none; }
+
+button.cdeTabSelected {
+  border-style: solid;
+  border-color: #cccccc;
+  border-top-width: 2px;
+  border-left-width: 2px;
+  border-right-width: 2px; }
+
+input.cdeButton {
+  color: #212121;
+  background-color: initial; }
+
+button.cdeAddButton {
+  color: #212121;
+  background-color: initial; }

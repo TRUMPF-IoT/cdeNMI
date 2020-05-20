@@ -1,0 +1,79 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+@charset 'utf-8';
+
+/**
+* This file overwrites values in MainBaseColors.scss and defines C-DEngine
+* styles in the light theme. 
+**/
+
+$color-red: red;
+$color-green: green;
+$color-white: white;
+$color-yellow: #fce233;
+
+$cde-background: #f1f1f1;
+$cde-log-background: $color-white;
+$cde-sidebar: #f7f7f7;
+$cde-app-bar: #f1f1f1;
+
+$progress-color-blue: #52D0EB;
+$progress-color-green: #52D0EB;
+
+$notifications-color-orange: $color-yellow;
+$system-available-color-green: #65bb00;
+
+$cde-tile-background2: #52D0EB;
+$cde-tile-icon-color: #888;
+$cde-tile-color: #333;
+$cde-tile-background: rgba(0,0,0,0.1);
+$cde-tile-border: rgba(0,0,0,0.05);
+
+$cde-header-row: rgba(0,0,0,0.2);
+$cde-header-row-back: rgba(88,188,209,0.7);
+$cde-header-row-border: rgba(0,0,0,0.4);
+$cde-row-even: #42C0DB;
+$cde-row-odd:#52D0EB;
+
+$cde-main-font-color-dark: #151515;
+$cde-main-font-color: #222;
+$cde-main-font-color-lite: #ccc;
+
+$cde-dash-cate-color: black;
+$cde-dash-plate-border: black;
+$cde-dash-plate-back: #272e33;
+
+$cde-group-header-color: #333;
+
+$cde-logo-darkblue: #1DA3D1;
+$cde-logo-liteblue: #52D0EB;
+$cde-logo-litegrau: #CCCCCC;
+$cde-logo-darker: #1e586d;
+
+$cde-sidebarright: #ccc;
+
+$cde-logo-blue: #52D0EB;
+
+$cde-input-back: rgba(80,80,80,0.1);
+$cde-edit-back: $color-white;
+
+// popup control
+$cde-popup-content-color: #212121;
+$cde-popup-background: #EEEEEE;
+
+$cde-wizard-explainer: white;
+
+$cde-table-frame-color: #52D0EB;
+
+$cde-popup-overlay: rgba(216,216,216,.8);
+$cde-popup-template-back: #ccc;
+$cde-popup-template-shadow: rgba(41, 41, 41, 0.48);
+$cde-popup-template-border: #aaa;
+
+// import statement must be at end of file to compile
+@import 'cdeMainBaseColors.scss';
+

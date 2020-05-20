@@ -1,0 +1,28 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+@charset 'utf-8';
+
+/**
+* This file overwrites values in cdeMainBaseColors.scss and defines C-DEngine
+* and addes styles for SomeBrand theme.
+**/
+
+.cde-animate-shake {
+  //  animation: none;  //this would disable the wobble effect, but it has a purpose and should not be removed!
+}
+
+@import 'cdeMainBaseColors.scss';
+
+input.cdeButton {
+    color: $cde-main-font-color;
+    background-color: initial;
+}
+
+button.cdeAddButton {
+    color: $cde-main-font-color;
+    background-color: initial;
+}

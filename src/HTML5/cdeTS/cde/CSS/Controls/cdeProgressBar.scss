@@ -1,0 +1,17 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+div.ctrlProgressBar {
+    width: inherit;
+    height: inherit;
+    float: left;
+}
+
+progress.ctrlProgressBar {
+    width: 100%;
+    height: 100%;
+    float: left;
+}

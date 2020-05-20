@@ -1,0 +1,82 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+@charset 'utf-8';
+
+//** Toggle Button Styles **//
+div.cdeToggleSwitch {
+    float: left;
+    display: flex;
+    /*justify-content: center;*/
+    align-items: center;
+    flex-direction: column;
+}
+
+
+// Hide the browser's default checkbox
+.cdeSwitch input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.cdeSwitchLabel {
+    max-height: 25px;
+    word-wrap: break-word;
+    text-overflow:  ellipsis;
+}
+
+.cdeSwitch {
+    display: inline-block;
+    font-size: 20px;
+    height: 1.5em;
+    width: 2.5em;
+    border-radius: 1em;
+
+    div {
+        height: 1.5em;
+        width: 1.5em;
+        border-radius: 1em;
+        box-shadow: 0 0.1em 0.3em rgba(0,0,0,0.3);
+        -webkit-transition: all 300ms;
+        -moz-transition: all 300ms;
+        transition: all 300ms;
+    }
+}
+
+// moves toggle to the right when activated
+.toggleChecked > .cdeSwitch > div {
+    -webkit-transform: translate3d(100%, 0, 0);
+    -moz-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+}
+
+// TABLE STYLES - use original checkbox
+
+td {
+    .cdeToggleSwitch > .cdeSwitch {
+        border-radius: 0;
+        border: 1px solid #cacece;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+        margin: 25%;
+        padding: 1em;
+        width: auto;
+        height: auto;
+    }
+
+    .cdeToggleSwitch > .cdeSwitch > .cdeCheckboxInnerDiv {
+        height: 0;
+        width: 0;
+    }
+
+    .toggleChecked > .cdeSwitch {
+        background-image: url("../../Images/cdeInnerCheck.png");
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}

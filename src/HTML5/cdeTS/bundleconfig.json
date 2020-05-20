@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "cde/cde.min.js",
+    "inputFiles": [
+      "cde/cde.js"
+    ]
+  },
+  {
+    "outputFileName": "cde/cdeWorker.min.js",
+    "inputFiles": [
+      "cde/cdeWorker.js"
+    ]
+  }
+]

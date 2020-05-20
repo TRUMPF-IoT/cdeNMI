@@ -1,0 +1,175 @@
+<Project Sdk="Microsoft.NET.Sdk.web">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;netstandard2.0;net40</TargetFrameworks>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="3.9.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Update="cde\src\cdeCORE\cdeCore-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeCORE\cdeEngines-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeLIBS\cdeFileSaver-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeLIBS\cdeRSA-4.1.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeLIBS\cdeShapeRecognizer-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeLIBS\cdeSpeech-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIComboBox-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIComboLookup-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMICompoundControls-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIControls-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIDashboard-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIDataViewBase-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIDrawControls-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIEditBox-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIFormView-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIGroups-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIIFrameView-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMILoginScreen-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIPortalControls-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIPropertyPicker-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMISmartLabel-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMITableView-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMIThingPicker-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMITileButton-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMITileEntry-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMI\cdeNMI-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMI\cdeNMIBackCompat-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMI\cdeNMIBaseControl-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMI\cdeNMIControlFactory-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMIControls\cdeNMICertPicker-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMI\cdeNMIModel-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMI\cdeNMIScreen-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMI\cdeNMIScreenManager-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMI\cdeNMIService-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMI\cdeNMIServiceBase-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMI\cdeNMIServiceLocal-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeNMI\cdeNMIUtils-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeWebComm\cdeWebComm-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+    <TypeScriptCompile Update="cde\src\cdeWebComm\cdeWebWorkerComm-5.0.ts">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </TypeScriptCompile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="cde\CSS\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="cde\Images\GlasButton.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Update="cde\webfonts\C-Labs-Font_Basis.eot">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Update="cde\webfonts\C-Labs-Font_Basis.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Update="cde\webfonts\C-Labs-Font_Basis.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Update="cde\webfonts\C-Labs-Font_Basis.woff">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

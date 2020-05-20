@@ -1,0 +1,16 @@
+{
+  "version": "5.0.15",
+  "name": "cde-js",
+  "private": true,
+  "description": "C-DEngine NMI JavaScript Runtime written in TS",
+  "main": "./cde.js",
+  "types": "./cde.d.ts",
+  "license": "MPL-2.0",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "Chris Muench",
+  "devDependencies": {
+    "typescript": "^3.9.2"
+  }
+}

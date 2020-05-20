@@ -1,0 +1,734 @@
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+/**
+* This file defines all base colors for the C-DEngine that can be overwritten
+* by 3rd party developers creating their own skins.
+*
+* In order to override these values, @import MainBaseColors.scss must be added
+* to the bottom of the desired scss file.
+*
+* NOTE: Changes made to this file will not appear in browser until the Skin in use 
+* is re-complied. This file does not ever compile on its own.
+**/
+
+$color-red: red !default;
+$color-green: green !default;
+$color-white: white !default;
+$color-yellow: #fce233 !default;
+
+$cde-background: #444 !default;
+$cde-log-background: $color-white !default;
+$cde-sidebar: #333 !default;
+$cde-app-bar: #303030 !default;
+
+$progress-color-blue: #1e586d !default;
+$progress-color-green: #1e586d !default;
+
+$notifications-color-orange: $color-yellow !default;
+$system-available-color-green: #65bb00 !default;
+
+$cde-tile-background2: $progress-color-blue !default;
+$cde-tile-icon-color: #888 !default;
+$cde-tile-color: #CCCCCC !default;
+$cde-tile-background: rgba(0,0,0,0.1) !default;
+$cde-tile-border: rgba(0,0,0,0.2) !default;
+
+$cde-header-row: #eee !default;
+$cde-header-row-back: rgba(30,88,109,0.7) !default;
+$cde-header-row-border: rgba(0,0,0,0.4) !default;
+$cde-row-even: #0D93C1 !default;
+$cde-row-odd: $progress-color-blue !default;
+
+$cde-main-font-color-dark: #555 !default;
+$cde-main-font-color: #ccc !default;
+$cde-main-font-color-lite: #eee !default;
+
+$cde-dash-cate-color: #CCCCCC !default;
+$cde-dash-plate-border: black !default;
+$cde-dash-plate-back: #272e33 !default;
+
+$cde-group-header-color: #ccc !default;
+
+$cde-logo-darkblue: #1DA3D1 !default;
+$cde-logo-liteblue: #52D0EB !default;
+$cde-logo-litegrau: #CCCCCC !default;
+$cde-logo-darker: #1e586d !default;
+$cde-logo-blue: #1DA3D1 !default;
+
+$cde-sidebarright: #0f2b35 !default;
+
+$cde-input-back: rgba(90,90,90,.72) !default;
+$cde-input-color: white !default;
+$cde-edit-back: rgba(90,90,90,.72) !default;
+$cde-edit-color: white !default;
+$cde-edit-hover-color: #3f4458 !default;
+$cde-edit-border: #3f4458 !default;
+
+$cde-wizard-explainer: #eee !default;
+
+$cde-table-frame-color: #1e586d !default;
+
+$cde-popup-overlay: rgba(0,0,0,.8) !default;
+$cde-popup-template-back: #181818 !default;
+$cde-popup-template-shadow: rgba(41, 41, 41, 0.48) !default;
+$cde-popup-template-border: #252525 !default;
+
+body.cdeBody {
+    background-color: $cde-background;
+}
+
+///MAINFRAME
+
+div.cdeHeader {
+    background-color: $cde-app-bar;
+}
+
+h1.cdeScreenTitle {
+    color: $cde-dash-cate-color;
+}
+
+td.MyItemFont {
+    color: $cde-tile-color;
+}
+
+span.cdeMyHeaderTitle {
+    color: $cde-tile-color;
+}
+
+td.cdeDlgTitleBar {
+    color: $cde-app-bar;
+}
+
+div.cdeCentered {
+    background: $cde-tile-background; /* Older browsers */
+}
+
+td.Data {
+    color: $cde-background;
+}
+
+span.cdeInfoText {
+    color: $color-red;
+}
+
+.cdeHeadline2 {
+    color: $cde-main-font-color;
+}
+
+.cdeHeadline {
+    color: $cde-main-font-color;
+}
+
+h1.cdeDashCategory {
+    color: $cde-dash-cate-color;
+}
+
+p.cdeNormal {
+    color: $cde-main-font-color;
+}
+
+// cdeStatus LOG
+body.cdeLogBody {
+    background-color: $cde-log-background;
+}
+
+td.cdeLogEntry {
+    border-color: #ccc;
+}
+
+th.cdeLogEntryHeader {
+    border-color: #ccc;
+    background-color: lightgray;
+    color: white;
+}
+
+li.cdeChannelInfo {
+    color: lightgray;
+}
+.cdePopupContent {
+    padding: 20px;
+}
+
+div.cdePopupOverlay {
+    background: $cde-popup-overlay;
+}
+
+.cdePopupTemplate {
+    background-color: $cde-popup-template-back;
+    box-shadow: 10px 10px $cde-popup-template-shadow;
+    border-width: 6px;
+    border-style: solid;
+    border-color: $cde-popup-template-border;
+}
+/*Login Stuff*/
+.cdeEngineStatusRed {
+    background: $color-red;
+    color: white;
+}
+
+td.cdeEngineStatusGreen {
+    background: $color-green;
+    color: white;
+}
+
+td.cdeEngineStatusYellow {
+    background: $color-yellow;
+    color: black;
+}
+
+/*ctrlTabelView Colors*/
+table.cdeHilite {
+    color: $cde-logo-darkblue;
+}
+
+div.CMyTable {
+    background-color: $cde-background;
+}
+
+table.CMyTable {
+    color: $cde-background;
+}
+
+h1.cdeTableHeader {
+    color: $cde-main-font-color;
+}
+
+
+th.cdeTH {
+    color: $cde-header-row;
+    background-image: none;
+    background-color: $cde-header-row-back;
+    font-size: 16px;
+}
+
+tr.cdeHeaderRow {
+    color: $cde-header-row-back;
+}
+
+tr.cdeRowOdd {
+    background-color: $cde-row-odd;
+    color: $cde-main-font-color;
+    border-bottom-color: $cde-header-row-border;
+}
+
+tr.cdeRowDeleted {
+    background-color: $color-red;
+}
+
+tr.cdeRowEven {
+    color: $cde-main-font-color;
+    border-bottom-color: $cde-header-row-border;
+    background-color: $cde-row-even;
+}
+
+td.cdeTabEntry {
+    //color: $cde-tile-color;
+}
+
+tr.cdeHilightRow {
+    background-color: $cde-logo-darkblue;
+}
+
+//NMI CONTROLS
+
+div.CMyCanvas {
+    background-color: $cde-background;
+}
+
+div.cdeAboutBox {
+    color: $cde-log-background;
+}
+
+input.cdeInput {
+    color: $cde-edit-color;
+    background-color: $cde-edit-back;
+    border: 1px solid $cde-edit-border;
+}
+
+input.cdeInputCombo {
+    color: $cde-edit-color;
+    background-color: $cde-edit-back;
+}
+
+div.ctrlCheckBox {
+    color: $cde-edit-color;
+    background-color: $cde-edit-back;
+    border: 1px solid $cde-edit-border;
+}
+
+div.cdeLiveImg {
+    color: $cde-main-font-color;
+}
+
+input.cdeButton {
+    color: $cde-main-font-color;
+    //background-color: #C4BD97;
+}
+
+button.cdeAddButton {
+    color: $cde-main-font-color;
+    //background-color: #C4BD97;
+}
+
+button.cdeLiveTileBar {
+    color: $cde-tile-color;
+    background-color: $cde-tile-background;
+    border-color: $cde-tile-border;
+}
+
+input.cdeInputCredentials {
+    color: $cde-edit-color;
+    background-color: $cde-edit-back;
+    border: 1px solid $cde-edit-border;
+}
+
+input.cdeInputNumber {
+    color: $cde-edit-color;
+    background-color: $cde-edit-back;
+    border: 1px solid $cde-edit-border;
+}
+
+input.cdeInputCenter {
+    color: $cde-edit-color;
+    background-color: $cde-edit-back;
+    border: 1px solid $cde-edit-border;
+}
+
+textarea.ctrlTextArea {
+    background-color: $cde-edit-back;
+    color: $cde-edit-color;
+}
+
+div.ctrlEndlessSlider {
+    background-color: $cde-input-back;
+}
+
+div.ctrlBarChart {
+    background-color: $cde-input-back;
+}
+
+.cdeMutLock {
+    background-color: black;
+    color: white;
+}
+
+h1.cdeTileGroupHeader {
+    color: $cde-group-header-color;
+}
+
+div.cdeTileGroupHeader {
+    //background-color: $cde-tile-background;
+    color: $cde-group-header-color;
+}
+
+div.cdeTileGroupHeaderSmall {
+    //background-color: $cde-tile-background;
+    color: $cde-group-header-color;
+}
+div.cdeCloseGroup {
+    //background-color: $cde-tile-background;
+    color: $cde-group-header-color;
+}
+
+div.ctrlDropUploader {
+    border-color: $cde-edit-hover-color;
+    background-color: $cde-edit-back;
+    color: $cde-edit-color;
+    border-width: 6px;
+}
+
+div.ctrlDropUploaderHover {
+    background-color: white;
+    border-color: #ccc;
+    border-width: 6px;
+}
+
+
+.cdeDashPlate {
+    color: $cde-tile-color;
+}
+
+//TILES
+
+div.cdeTileTextSmall {
+    color: $cde-tile-color;
+}
+
+.cdeTiles {
+    color: $cde-tile-color;
+}
+
+.cdeLiveTile {
+    color: $cde-tile-color;
+    background-color: $cde-tile-background;
+    border-color: $cde-tile-border;
+    border-radius: 20px;
+}
+
+div.cdeOuterTileButton {
+    color: $cde-tile-color;
+}
+
+.cdeLiveTileLong {
+    color: $cde-tile-color;
+}
+
+.cdeLiveTileVeryLong {
+    color: $cde-tile-color;
+}
+
+.cdeLiveTileSmall {
+    color: $cde-tile-color;
+}
+
+div.cdeTileEntry {
+    color: $cde-main-font-color;
+    background-color: $cde-tile-background;
+    border-top-color: #ccc;
+    border-right-color: #ccc;
+    border-bottom-color: #ccc;
+}
+
+div.cdeTileText {
+    color: inherit;
+}
+
+div.cdeTileTextNoImg {
+    color: inherit;
+}
+
+div.cdeTileEntryText {
+    color: $cde-main-font-color;
+}
+
+div.cdeLiveTileSmall {
+    color: $cde-main-font-color;
+    background-color: $cde-tile-background;
+}
+
+.actionButton {
+    color: $cde-tile-color;
+}
+
+//BROWSER MISCS
+
+::-webkit-scrollbar {
+    background-color: $cde-tile-background;
+}
+
+::-webkit-scrollbar-track {
+    background-color: $cde-tile-background;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: $progress-color-green;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: $progress-color-green;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: $progress-color-green;
+}
+
+a {
+    color: $cde-logo-darkblue;
+}
+
+a:visited {
+    color: $cde-logo-darkblue;
+}
+
+div.SensorGroupLabel {
+    background: $cde-logo-darkblue;
+    background-color: $cde-logo-darkblue;
+}
+
+div.TransparentGroupLabel {
+    background: transparent;
+    background-color: transparent;
+}
+
+div.cdePinDiv {
+    color: $cde-tile-icon-color;
+}
+
+div.cdeUnpinDiv {
+    color: $cde-tile-icon-color;
+}
+
+div.cdeDivUp {
+    color: $cde-tile-icon-color;
+}
+
+div.cdeDivDown {
+    color: $cde-tile-icon-color;
+}
+
+div.cdeDivSave {
+    color: $cde-tile-icon-color;
+}
+
+div.cdeDivDraw {
+    color: $cde-tile-icon-color;
+}
+
+div.cdeDivRefresh {
+    color: $cde-tile-icon-color;
+}
+
+.cdeFormPin {
+}
+
+
+div.cdeSideBar {
+    background-color: $cde-sidebar;
+}
+
+.cdeScreenListButtoninner {
+    color: $cde-tile-color;
+}
+
+.cdeMyHeaderTitleModern {
+    color: $cde-tile-color;
+}
+
+.cdeVertCenter {
+    color: $cde-logo-blue;
+}
+
+//** Button Colors **//
+
+$cde-ok-button-color: $cde-main-font-color !default;
+$cde-ok-button-background-color: $cde-tile-background2 !default;
+
+.cdeOkButton {
+    color: $cde-ok-button-color;
+    background-color: $cde-ok-button-background-color;
+}
+
+
+$cde-yes-button-color: $cde-main-font-color-lite !default;
+$cde-yes-button-background-color: $color-green !default;
+
+.cdeYesButton {
+    background-color: $cde-yes-button-background-color;
+    color: $cde-yes-button-color;
+}
+
+
+$cde-no-button-color: $cde-main-font-color-lite !default;
+$cde-no-button-background-color: $color-red !default;
+
+.cdeNoButton {
+    background-color: $cde-no-button-background-color;
+    color: $cde-no-button-color;
+}
+
+
+$cde-table-button-color: $cde-tile-color !default;
+
+.cdeTableButton {
+    color: $cde-table-button-color;
+}
+
+
+$cde-delete-button-background-image: none !default;
+
+.cdeDeleteButton {
+    background-image: $cde-delete-button-background-image;
+}
+
+
+$cde-detail-button-background-image: none !default;
+.cdeDetailButton {
+    background-image: $cde-detail-button-background-image;
+}
+
+
+$cde-myheader-button-background-image: none !default;
+$cde-myheader-button-background-color: $cde-tile-icon-color !default;
+
+.MyHeaderButton {
+    background-image: $cde-myheader-button-background-image;
+    color: $cde-tile-icon-color;
+}
+
+//** The Popup Colors **//
+
+$cde-popup-background: hsl(0, 0%, 0%) !default;
+
+div.cdePopupBackAlarm {
+    background: $cde-popup-background;
+}
+
+div.cdePopupBackInfo {
+    background: $cde-popup-background;
+}
+
+$cde-popup-content-color: $color-white !default;
+
+div.cdePopupContent41 {
+    color: $cde-popup-content-color;
+}
+
+
+//** Toggle Button Colors **//
+
+$cde-toggle-off: hsl(50, 15%, 70%) !default;
+
+.cdeSwitch {
+    background: $cde-toggle-off;
+}
+
+
+$cde-toggle-circle: hsl(0, 0%, 100%) !default;
+
+.cdeSwitch div {
+    background: $cde-toggle-circle;
+}
+
+
+$cde-toggle-active: $system-available-color-green !default;
+
+.toggleChecked > .cdeSwitch {
+    background: $cde-toggle-active;
+}
+
+.cdeSideBarRight {
+    background-color: $cde-sidebarright;
+}
+
+/*cdeStatus0 to cdeStatus7 refer to the status level 0=gray, 1=green, 2=yellow, 3=red, 4=blue, 5=brown, 6=purlple, 7=black*/
+
+.cdeStatus0 {
+    background-color: gray;
+    color: white;
+}
+
+.cdeStatus1 {
+    background-color: green;
+    color: white;
+}
+
+.cdeStatus2 {
+    background-color: yellow;
+    color: black;
+}
+
+.cdeStatus3 {
+    background-color: red;
+    color: white;
+}
+
+.cdeStatus4 {
+    background-color: blue;
+    color: white;
+}
+
+.cdeStatus5 {
+    background-color: brown;
+    color: white;
+}
+
+.cdeStatus6 {
+    background-color: purple;
+    color: white;
+}
+
+.cdeStatus7 {
+    background-color: black;
+    color: white;
+}
+
+
+
+
+.cdeWizardExplainer {
+    color: $cde-wizard-explainer;
+}
+
+
+.cdeTileEntryLabel {
+    color: $cde-tile-color;
+    }
+
+
+
+    $blur: 10;
+
+    .cdeBlurBack {
+        position: absolute;
+        background: inherit;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 6px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+        overflow: hidden;
+        filter: drop-shadow(8px 8px 10px black) sepia(90%) hue-rotate(180deg);
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: -$blur * 2px;
+            left: -$blur * 2px;
+            right: -$blur * 2px;
+            bottom: -$blur * 2px;
+            background: inherit;
+            filter: blur($blur * 1px) saturate(2);
+        }
+
+        &.dragging {
+            &:before {
+                filter: blur($blur * 1px) sepia(1) hue-rotate(200deg);
+            }
+
+            .cdeBlurTitle {
+                //background: rgba(215,225,255,0.85);
+            }
+        }
+
+        .cdeBlurTitle {
+        }
+
+        .cdeBlurContent {
+            //background: rgba(255,255,255,0.66);
+        }
+    }
+
+    .cdeMainTableHeader {
+        background-color: $cde-table-frame-color;
+        margin: 0px;
+    }
+
+    .cdeTableContainer {
+        box-sizing: border-box;
+        border-color: $cde-table-frame-color;
+        border-left-width: 1px;
+        border-left-style: solid;
+        border-right-style: solid;
+        border-right-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+    }
+
+    .cdeTabButton {
+        background: $cde-logo-darkblue;
+        background-color: $cde-logo-darkblue;
+    }
+
+    .cdeTabNotSelected {
+        border: none;
+    }
+
+    button.cdeTabSelected {
+        border-style: solid;
+        border-color: #cccccc;
+        border-top-width: 2px;
+        border-left-width: 2px;
+        border-right-width: 2px;
+    }
