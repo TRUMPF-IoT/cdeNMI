@@ -3,7 +3,7 @@
 ### CDMyNMIHtml5RT - the NMI-RT (Runtime) plugin
 
 If you install this plugin in your solution and referenc it with a C-DEngine based host, you can access the NMI on any browser.
-Details how to do this can be found in our ["Getting Started"](https://github.com/TRUMPF-IoT/C-DEDocs/blob/master/docs/Coding/HelloWorld.md)
+Details how to do this can be found in our ["Getting Started"](https://github.com/TRUMPF-IoT/cdeDocs/blob/master/docs/Coding/HelloWorld.md)
 
 ### cdeTS - the source of the NMI JavaScript Engine written in TypeScript
 
