@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
-//
-// SPDX-License-Identifier: MPL-2.0
-
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -22,7 +18,13 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
+// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+//
+// SPDX-License-Identifier: MPL-2.0
 var cde;
+// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+//
+// SPDX-License-Identifier: MPL-2.0
 (function (cde) {
     //////////////////////////////////////////////////////////////////////////////
     /// Interfaces
@@ -331,6 +333,7 @@ var cde;
             this.MainConfigScreen = "";
             this.TileSize = 78;
             this.TileScale = 1.0;
+            this.InputSize = 60;
             this.ScreenClassName = "cdeBrowserTop";
             this.WasInitialScreenVisible = false;
             ///Used by Convenience Apps
@@ -649,14 +652,10 @@ var cde;
     cde.MyCommChannel = null;
     cde.MyEventLogger = new TheMetaDataBase();
 })(cde || (cde = {}));
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2018-2019 C-Labs
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 var cde;
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2018-2019 C-Labs
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
@@ -1051,14 +1050,10 @@ var cdeCommCore;
     }
     cdeCommCore.CleanState = CleanState;
 })(cdeCommCore || (cdeCommCore = {}));
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2018-2019 C-Labs
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 var cdeWEB;
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2018-2019 C-Labs
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
@@ -1988,7 +1983,9 @@ var cdeWEB;
     }(cde.TheThing));
     cdeWEB.cdeWebComm = cdeWebComm;
 })(cdeWEB || (cdeWEB = {}));
-//////////////////////////////////////////////////////////////////////////////
+// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+//
+// SPDX-License-Identifier: MPL-2.0
 //declare const SharedWorker: {
 //    prototype: SharedWorker.SharedWorker;
 //    /***
@@ -2211,12 +2208,11 @@ var cdeWEB;
     }(cde.TheThing));
     cdeWEB.cdeWebWorkerComm = cdeWebWorkerComm;
 })(cdeWEB || (cdeWEB = {}));
-//////////////////////////////////////////////////////////////////////////////
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: Copyright (c) 2003-2005  Tom Wu
 //
-// SPDX-License-Identifier: MPL-2.0
+// SPDX-License-Identifier: BSD-3-Clause
 //Author:
-//      original code by
+//      original code by Tom Wu
 //      ported to TypeScript by Chris Muench
 //Language:
 //      neutral in NMI - verified
@@ -2224,7 +2220,36 @@ var cdeWEB;
 //Dependencies: none
 //Version History
 //      4.109: Initial Drop
-//////////////////////////////////////////////////////////////////////////////
+/*
+ * Copyright (c) 2003-2005  Tom Wu
+ * All Rights Reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * IN NO EVENT SHALL TOM WU BE LIABLE FOR ANY SPECIAL, INCIDENTAL,
+ * INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER
+ * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER OR NOT ADVISED OF
+ * THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF LIABILITY, ARISING OUT
+ * OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ *
+ * In addition, the following condition applies:
+ *
+ * All redistributions must retain an intact copy of this copyright notice
+ * and disclaimer.
+ */
 // @ts-nocheck
 var dbits;
 var canary = 244837814094590;
@@ -3076,12 +3101,10 @@ RSAKey.prototype.doPublic = RSADoPublic;
 RSAKey.prototype.setPublic = RSASetPublic;
 RSAKey.prototype.encrypt = RSAEncrypt;
 //module.exports = RSAKey; //LOCAL: Fix
-//////////////////////////////////////////////////////////////////////////////
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 var cdeSpeech;
-//////////////////////////////////////////////////////////////////////////////
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
@@ -3124,7 +3147,6 @@ var cdeSpeech;
     }
     cdeSpeech.talk = talk;
 })(cdeSpeech || (cdeSpeech = {}));
-//////////////////////////////////////////////////////////////////////////////
 // SPDX-FileCopyrightText: Eli Grey
 //
 // SPDX-License-Identifier: MIT
@@ -3147,7 +3169,6 @@ var cdeSpeech;
 //      4.109: Initial Drop
 //////////////////////////////////////////////////////////////////////////////
 var cde;
-//////////////////////////////////////////////////////////////////////////////
 // SPDX-FileCopyrightText: Eli Grey
 //
 // SPDX-License-Identifier: MIT
@@ -3358,7 +3379,7 @@ var cdeNMI;
         cdeControlType[cdeControlType["Time"] = 8] = "Time";
         cdeControlType[cdeControlType["TimeSpan"] = 9] = "TimeSpan";
         cdeControlType[cdeControlType["Password"] = 10] = "Password";
-        //SubmitButton = 11,//         ctrlTileButton      YES        RETIRED! USE ctrlTileButton
+        //SubmitButton = 11,//         ctrlTileButton      YES        RETIRED! USE ctrlTileButton   
         cdeControlType[cdeControlType["Number"] = 12] = "Number";
         cdeControlType[cdeControlType["Region"] = 13] = "Region";
         cdeControlType[cdeControlType["Country"] = 14] = "Country";
@@ -3790,7 +3811,7 @@ var cdeNMI;
                         if (cdeNMI.MyNMIModels[this.ModelID].MyStorageMirror[this.TableName][this.RowNo]) {
                             tN = cdeNMI.MyNMIModels[this.ModelID].MyStorageMirror[this.TableName][this.RowNo].cdeN;
                             if (!tN) {
-                                // WARNING: this is a fallback if the StorageMirror was not using TheMetaDataBase as base class and will not work Multi-Node!
+                                // WARNING: this is a fallback if the StorageMirror was not using TheMetaDataBase as base class and will not work Multi-Node! 
                                 tN = cdeNMI.MyNMIModels[this.ModelID].cdeN;
                             }
                         }
@@ -6305,7 +6326,7 @@ var cdeNMI;
                     this.MyScreenDIV.style.overflow = "hidden";
                     this.MyScreenDIV.style.zIndex = "400";
                     this.divDragContent.appendChild(this.MyScreenDIV);
-                    tMainDash.appendChild(this.divDragContent); //
+                    tMainDash.appendChild(this.divDragContent); // 
                     this.SetElement(this.divDragContent, false, this.MyScreenDIV);
                 }
                 else {
@@ -6875,7 +6896,7 @@ var cdeNMI;
             _this.MyNMIScreens = new Array(); //All currently registered screens
             _this.MyNavHistory = new Array(); //Navigation Histor
             _this.MyDrawOverlay = null; // Draw / Annotation overlay
-            _this.MyMainBackButton = null; // Main Back Button
+            _this.MyMainBackButton = null; // Main Back Button 
             _this.MyPopupOverlay = null;
             _this.CurrentScreen = null; //The Current screen visible in the NMI
             _this.CurrentView = null; //CurrentView (scene) displayed
@@ -7716,7 +7737,7 @@ var cdeNMI;
             if (pMSG && (typeof (pMSG.PLS) === "object" || (pMSG.PLS !== "" && pMSG.PLS !== "[]"))) {
                 var tParts = pMSG.PLS.split(":-MODELUPDATE-:");
                 var pMSGPLS = tParts[0];
-                if (!tModel.MyStorageMirror[tTableName] || cde.CBool(bForceInitData) === true) //
+                if (!tModel.MyStorageMirror[tTableName] || cde.CBool(bForceInitData) === true) // 
                     tModel.MyStorageMirror[tTableName] = (typeof (pMSGPLS) === "object" ? pMSGPLS : JSON.parse(pMSGPLS));
                 else {
                     var tTable = (typeof (pMSGPLS) === "object" ? pMSGPLS : JSON.parse(pMSGPLS));
@@ -8337,7 +8358,7 @@ var cdeNMI;
                     cdeNMI.TL.SaveResources();
                 });
             }
-            this.MyLogoButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.LogoButton).Create(null, { PreInitBag: ["ControlTW=1", "ControlTH=1", "TileFactorX=2", "TileFactorY=2"], PostInitBag: ["ClassName=MyHeaderButton", "PixelHeight=48", "FontSize=48"] });
+            this.MyLogoButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.LogoButton).Create(null, { PreInitBag: ["ControlTW=1", "ControlTH=1", "TileFactorX=2", "TileFactorY=2"], PostInitBag: ["ClassName=MyHeaderButton", "PixelHeight=48", "PixelWidth=48", "FontSize=48"] });
             this.MyLogoButton.SetProperty("OnClick", function (sender, e, tPs) {
                 if (cdeNMI.MyPopUp)
                     cdeNMI.MyPopUp.Hide(false);
@@ -8929,7 +8950,7 @@ var cdeNMI;
         if (pType === void 0) { pType = cdeNMI.cdeControlType.SingleEnded; }
         var tTCB = new cdeNMI.TheControlBlock();
         tTCB.TargetID = "CNMIC" + (cdeNMI.MyNMISettings.IDCounter++);
-        tTCB.MyControl = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.SmartLabel); // new ctrlSmartLabel();
+        tTCB.MyControl = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.SmartLabel); // new ctrlSmartLabel();  
         var tFldContent = "";
         var tFldInfo = new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.SmartLabel, 0, null);
         tFldInfo.DataItem = "MyPropertyBag." + pName + ".Value";
@@ -10017,14 +10038,10 @@ var cdeNMI;
     }
     cdeNMI.GetAllElementsFromPoint = GetAllElementsFromPoint;
 })(cdeNMI || (cdeNMI = {}));
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2018-2019 C-Labs
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 var cdeNMI;
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 2018-2019 C-Labs
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
@@ -10608,7 +10625,7 @@ var cdeNMI;
         };
         TheNMIServiceLocal.prototype.Login = function (pTarget, pUID, pPWD, pPlatform) {
             if (pUID === "nmi") {
-                cde.MyBaseAssets.MyCommStatus.UserPref = new cde.TheUserPreferences(); //We could set some values here
+                cde.MyBaseAssets.MyCommStatus.UserPref = new cde.TheUserPreferences(); //We could set some values here 
                 this.FireEvent(true, "CDE_LOGIN_EVENT", true);
             }
             else
@@ -11147,10 +11164,10 @@ var cdeNMI;
     }(cdeNMI.TheNMIServiceBase));
     cdeNMI.TheNMIService = TheNMIService;
 })(cdeNMI || (cdeNMI = {}));
-//////////////////////////////////////////////////////////////////////////////
 // SPDX-FileCopyrightText: Copyright (C) 2007-2012, Jacob O. Wobbrock, Andrew D. Wilson and Yang Li.
 //
 // SPDX-License-Identifier: BSD-3-Clause
+//
 //Author:
 //      original code see below
 //      ported to TypeScript and adopted by Chris Muench
@@ -11164,7 +11181,6 @@ var cdeNMI;
 //      cdeNMIBaseControl
 //Version History
 //      4.109: Initial Drop
-//////////////////////////////////////////////////////////////////////////////
 /**
 * The $1 Unistroke Recognizer (JavaScript version)
 *
@@ -11233,10 +11249,10 @@ var cdeNMI;
 * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **/
 var cdeNMI;
-//////////////////////////////////////////////////////////////////////////////
 // SPDX-FileCopyrightText: Copyright (C) 2007-2012, Jacob O. Wobbrock, Andrew D. Wilson and Yang Li.
 //
 // SPDX-License-Identifier: BSD-3-Clause
+//
 //Author:
 //      original code see below
 //      ported to TypeScript and adopted by Chris Muench
@@ -11250,7 +11266,6 @@ var cdeNMI;
 //      cdeNMIBaseControl
 //Version History
 //      4.109: Initial Drop
-//////////////////////////////////////////////////////////////////////////////
 /**
 * The $1 Unistroke Recognizer (JavaScript version)
 *
@@ -11875,7 +11890,7 @@ var cdeNMI;
                 this.IsDirty = true;
             }
             else if ((pName === "SetChoice" || pName === "SetChoiceV") && pValue) {
-                //TODO: Find pValue in MyCurrentData. If not add to
+                //TODO: Find pValue in MyCurrentData. If not add to 
                 this.AddChoice(pValue);
                 this.DontFire = true;
                 this.myChoices.setChoices(this.MyCurrentData, "value", "label", true);
@@ -11997,7 +12012,7 @@ var cdeNMI;
                         }
                         break;
                     default:
-                        this.myChoicesOptions.searchEnabled = true;
+                        this.myChoicesOptions.searchEnabled = false;
                         SortOptions = true;
                         break;
                 }
@@ -12277,7 +12292,7 @@ var cdeNMI;
             var tOpt;
             try {
                 var tGroupLookup = this.GetProperty("GroupLookup");
-                var tFilter = this.GetProperty("Filter"); //"Platform=2"; //
+                var tFilter = this.GetProperty("Filter"); //"Platform=2"; // 
                 var tFilterFld = null;
                 var tFilterVal = [];
                 if (tFilter && tFilter.split('=').length > 1) {
@@ -13917,7 +13932,7 @@ var cdeNMI;
                     if (tTileFY > 1)
                         this.SetProperty("TileFactorY", tTileFY);
                 }
-                //TODO: Here is the loop that creates the CheckBoxes (toggles). Instead of using checkboxes with 1x1 tilewidth can you create another smartlabel behind each toggle for the label
+                //TODO: Here is the loop that creates the CheckBoxes (toggles). Instead of using checkboxes with 1x1 tilewidth can you create another smartlabel behind each toggle for the label 
                 for (var i = this.BitCount - 1; i >= 0; i--) {
                     var tTitle = (1 << i).toString();
                     if (taTitle && taTitle.length > i)
@@ -17002,7 +17017,7 @@ var cdeNMI;
                 context.font = '10pt Roboto';
                 context.fillStyle = 'rgb(255,192,0)';
                 context.fillText(upperLimit.toString(), x * 1.20, y * 0.95);
-                //upper limit
+                //upper limit 
                 context.beginPath();
                 context.arc(x, y, radius - 3, this.startAngle + ((valMaxLim - 1) * (Math.PI / 180)), this.startAngle + ((valMaxLim + 1) * (Math.PI / 180)), this.counterClockwise);
                 context.lineWidth = y * .2;
@@ -19312,7 +19327,7 @@ var cdeNMI;
                 }
             }
             else {
-                if (cde.CInt(this.MyNMIControl.MyBaseType) !== cde.CInt(cdeNMI.cdeControlType.Picture)) ///BUG IN TS 2.1: should works
+                if (cde.CInt(this.MyNMIControl.MyBaseType) !== cde.CInt(cdeNMI.cdeControlType.Picture)) ///BUG IN TS 2.1: should works 
                     this.MyNMIControl.SetProperty(pName, pValue);
             }
         };
@@ -19654,7 +19669,7 @@ var cdeNMI;
                 if (!pTRF.FldInfo["PlaceHolder"])
                     this.SetProperty("PlaceHolder", pTRF.FldInfo["PlaceHolder"]);
             }
-            switch (pTRF.FldInfo.Type) { //TODO: I dont want this here but in the ctrlTable - it needs to decide how it looks inside
+            switch (pTRF.FldInfo.Type) { //TODO: I dont want this here but in the ctrlTable - it needs to decide how it looks inside 
                 case cdeNMI.cdeControlType.Table:
                     if (cde.IsNotSet(pTRF.FldInfo["ClassName"]))
                         pTRF.FldInfo["ClassName"] = "CMyTable";
@@ -23242,12 +23257,10 @@ var cdeNMI;
     }(cdeNMI.ctrlPropertyPicker));
     cdeNMI.ctrlCertPicker = ctrlCertPicker;
 })(cdeNMI || (cdeNMI = {}));
-//////////////////////////////////////////////////////////////////////////////
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 var cdeNMI;
-//////////////////////////////////////////////////////////////////////////////
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
@@ -23495,7 +23508,7 @@ var cdeNMI;
         cdeNMI.MyShapeRecognizer = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.ShapeRecognizer, true);
         //Step 7: Switch to the correct language
         cdeNMI.TL.RegisterEvent("OnLCIDChanged", function () {
-            //Step 8: if you want a screen manager - create it
+            //Step 8: if you want a screen manager - create it 
             if (cdeNMI.MyScreenManager || cdeNMI.MyLoginScreen) {
                 return;
             }

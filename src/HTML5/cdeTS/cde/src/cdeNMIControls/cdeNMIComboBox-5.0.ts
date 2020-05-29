@@ -236,7 +236,7 @@ namespace cdeNMI {
                         }
                         break;
                     default:
-                        this.myChoicesOptions.searchEnabled = true;
+                        this.myChoicesOptions.searchEnabled = false;
                         SortOptions = true;
                         break;
                 }

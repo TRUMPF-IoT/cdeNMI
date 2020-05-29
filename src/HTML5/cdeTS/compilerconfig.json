@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "outputFile": "cde/CSS/BaseColors.css",
     "inputFile": "cde/CSS/BaseColors.scss"
@@ -6,5 +6,9 @@
   {
     "outputFile": "cde/CSS/LBaseColors.css",
     "inputFile": "cde/CSS/LBaseColors.scss"
+  },
+  {
+    "outputFile": "cde/CSS/CDESTYLES.css",
+    "inputFile": "cde/CSS/CDESTYLES.scss"
   }
 ]

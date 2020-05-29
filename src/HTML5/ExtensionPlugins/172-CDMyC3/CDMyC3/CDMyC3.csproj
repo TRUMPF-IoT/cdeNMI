@@ -23,17 +23,24 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="ClientBin\plugins\P172\CDMyC3.TheC3Service.js" />
+    <None Remove="ClientBin\plugins\P172\CDMyC3.TheC3Service.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ClientBin\plugins\P172\CDMyC3.TheC3Service.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="ClientBin\plugins\P172\CSS\c3.min.css" />
     <EmbeddedResource Include="ClientBin\plugins\P172\CSS\cssDark.min.css" />
     <EmbeddedResource Include="ClientBin\plugins\P172\JS\c3.min.js" />
-    <EmbeddedResource Include="ClientBin\plugins\P172\JS\cytoscape.min.js"/>
+    <EmbeddedResource Include="ClientBin\plugins\P172\JS\cytoscape.min.js" />
     <EmbeddedResource Include="ClientBin\plugins\P172\JS\d3.min.js" />
     <EmbeddedResource Include="ClientBin\plugins\P172\JS\smoothie.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="C-DEngine"  Version="5.*" />
+    <PackageReference Include="C-DEngine" Version="5.*" />
     <!--<ProjectReference Include="..\..\025 - C-DEngine\C-DEngine\C-DEngine.csproj" />-->
   </ItemGroup>
 
@@ -42,6 +49,14 @@
     <PackageReference Include="System.Drawing.Common">
       <Version>4.5.1</Version>
     </PackageReference>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Update="ClientBin\plugins\P172\CDMyC3.TheC3Service.js.map">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

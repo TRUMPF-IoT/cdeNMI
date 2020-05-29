@@ -1,9 +1,8 @@
-/*
+﻿/*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
  *
  * SPDX-License-Identifier: CC0-1.0
  */
-
 /** 
     This file contains styles pertaining to multiple controls.
     All control specific styles must be included by importing
@@ -975,6 +974,11 @@ div.cdeDrawOverlay {
   z-index: 999;
   opacity: 0.9; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 input.cdeButton {
   font-size: 24px;
   font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
@@ -1099,6 +1103,11 @@ button.cdeLargeTile {
   margin-right: 20px;
   margin-bottom: 20px; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 div.ctrlCheckBox {
   border-width: 2px;
   border-style: solid;
@@ -1120,10 +1129,20 @@ span.cdeCheckText {
 span.cdeCheckIcon {
   font-size: 25px; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 .ctrlCheckField {
   position: relative;
   float: left; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 div.cdeTileEntry {
   font-size: 20px;
   font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
@@ -1188,6 +1207,11 @@ div.cdeTiles {
   border-width: 1px;
   border-style: solid; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 div.ctrlDropUploader {
   margin: 0 auto;
   float: left;
@@ -1203,6 +1227,11 @@ div.ctrlDropUploaderHover {
   box-sizing: border-box;
   background-color: rgba(0, 0, 0, 0.2); }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 textarea.ctrlTextArea {
   font-size: 20px;
   overflow: auto;
@@ -1276,6 +1305,11 @@ div.cdeMTL {
 .cdeValidateError {
   background-color: red; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 div.cdeFormTitle {
   overflow: hidden; }
 
@@ -1296,6 +1330,11 @@ div.CMyCanvas {
 .cdeTableInline {
   align-items: flex-start; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 div.cdeScreenPopup {
   width: 100%;
   position: fixed;
@@ -1346,6 +1385,11 @@ div.cdeCentered {
   width: 476px;
   background-image: url("../Images/GlasOverlay.png"); }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 div.ctrlProgressBar {
   width: inherit;
   height: inherit;
@@ -1356,6 +1400,11 @@ progress.ctrlProgressBar {
   height: 100%;
   float: left; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 .cdeMeter {
   position: relative;
   float: left; }
@@ -1385,6 +1434,11 @@ progress.ctrlProgressBar {
   margin-top: 10px;
   margin-left: 10px; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 /** For styles related to color see MainBaseColors.scss or relevant skins */
 /** Table Header */
 thead.cdeFixedHeader {
@@ -1536,6 +1590,11 @@ table.cdeHilite {
   font-size: 12px;
   margin-top: 8px; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 div.cdeTileGroupHeader,
 div.cdeTileGroupHeaderSmall {
   background-color: rgba(0, 0, 0, 0.08);
@@ -1553,7 +1612,7 @@ div.cdeTileGroupHeaderSmall {
   width: 100%; }
 
 .cdeInsideCollapsible {
-  background-color: rgba(0, 0, 0, 0.06); }
+  background-color: rgba(0, 0, 0, 0.01); }
 
 span.cdeTileGroupHeader {
   font-size: 24px;
@@ -1642,6 +1701,11 @@ div.ctrlTileGroup {
   float: none;
   background: rgba(255, 255, 255, 0.04); }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 div.cdeTextCrop {
   overflow: hidden;
   width: inherit; }
@@ -1683,6 +1747,11 @@ div.ToastDebug {
     bottom: 0;
     opacity: 1; } }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 div.cdeToggleSwitch {
   float: left;
   display: flex;
@@ -1740,6 +1809,11 @@ td .toggleChecked > .cdeSwitch {
   background-repeat: no-repeat;
   background-position: center; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 .cdeToolTip {
   position: relative;
   display: inline-block; }
@@ -1781,6 +1855,11 @@ td .toggleChecked > .cdeSwitch {
   border-style: solid;
   border-color: transparent transparent black transparent; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 div.cdeLiveImg {
   display: block;
   font-size: 20px;
@@ -1792,6 +1871,11 @@ div.cdeLiveImg {
 img.Blocked {
   display: block; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 div.flatpickr-wrapper {
   width: 100%; }
 
@@ -1863,6 +1947,11 @@ div.flatpickr-wrapper {
   color: #fff;
   border-color: #80cbc4; }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 .cdeLoginScreen {
   box-sizing: content-box;
   text-align: center; }
@@ -1950,6 +2039,11 @@ td.cdeEngineStatusRed, td.cdeEngineStatusGreen, td.cdeEngineStatusYellow {
   40%, 60% {
     transform: translate3d(20px, 0, 0); } }
 
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 div.cdeSensorTile4x3 {
   width: 312px;
   height: 234px;

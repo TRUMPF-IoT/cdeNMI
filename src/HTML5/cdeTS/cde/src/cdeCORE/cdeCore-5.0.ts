@@ -417,6 +417,7 @@ namespace cde {
         MainConfigScreen = "";
         TileSize = 78;
         TileScale = 1.0;
+        InputSize = 60;
 
         ScreenClassName = "cdeBrowserTop";
         WasInitialScreenVisible = false;

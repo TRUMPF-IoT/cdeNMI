@@ -62,6 +62,10 @@ namespace CDMyC3
                 mIsUXInitCalled = true;
                 TheNMIEngine.RegisterControlType(MyBaseEngine, "C3 Chart", "CDMyC3.ctrlC3Chart", "CDMyC3.ctrlC3Chart");
                 TheNMIEngine.RegisterControlType(MyBaseEngine, "Time Line Chart", "CDMyC3.ctrlTimeLineChart", "CDMyC3.ctrlTimeLineChart");
+                TheNMIEngine.RegisterControlType(MyBaseEngine, "Live Chart", "CDMyC3.ctrlProLiveChart");
+                TheNMIEngine.RegisterControlType(MyBaseEngine, "Stack Chart", "CDMyC3.ctrlC3StackChart");
+                TheNMIEngine.RegisterControlType(MyBaseEngine, "Cyto Chart", "CDMyC3.ctrlProCytoChart");
+                TheNMIEngine.RegisterControlType(MyBaseEngine, "Line Chart", "CDMyC3.ctrlC3Line");
                 //NUI Definition for All clients
 
                 if (TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("ShowSamples")))

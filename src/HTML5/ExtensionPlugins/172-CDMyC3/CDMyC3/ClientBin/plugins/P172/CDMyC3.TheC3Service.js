@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
-//
-// SPDX-License-Identifier: MPL-2.0
-
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -665,7 +661,7 @@ var CDMyC3;
         }
         ctrlC3Line.prototype.InitControl = function (pTargetElem, pTRF, pPropertyBag, pScreenID) {
             _super.prototype.InitControl.call(this, pTargetElem, pTRF, pPropertyBag, pScreenID);
-            this.SetProperty("ChartType", "line");
+            this.SetProperty("ChartType", "spline");
             this.SetProperty("UpdateData", "true");
             this.SetProperty("Axis", JSON.stringify({
                 x: {

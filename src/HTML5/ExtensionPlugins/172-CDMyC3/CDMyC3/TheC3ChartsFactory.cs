@@ -64,6 +64,11 @@ namespace CDMyC3
         public void SetInfo(TheChartDefinition pDef, string pZoomType, string xAxisType)
         {
             mChart.ChartDef = pDef;
+            if (mChart.ChartDef.ValueDefinitions == null)
+            {
+                //Must contain ValueDefinition or else out!
+                return;
+            }
             for (int i = 0; i < mChart.ChartDef.ValueDefinitions.Count; i++)
                 mChart.dataseries[i] = new List<double>();
         }

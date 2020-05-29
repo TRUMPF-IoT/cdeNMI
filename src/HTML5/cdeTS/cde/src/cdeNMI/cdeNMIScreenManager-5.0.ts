@@ -1559,7 +1559,7 @@
                 });
             }
 
-            this.MyLogoButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.LogoButton).Create(null, { PreInitBag: ["ControlTW=1", "ControlTH=1", "TileFactorX=2", "TileFactorY=2"], PostInitBag: ["ClassName=MyHeaderButton", "PixelHeight=48", "FontSize=48"] });
+            this.MyLogoButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.LogoButton).Create(null, { PreInitBag: ["ControlTW=1", "ControlTH=1", "TileFactorX=2", "TileFactorY=2"], PostInitBag: ["ClassName=MyHeaderButton", "PixelHeight=48", "PixelWidth=48", "FontSize=48"] });
             this.MyLogoButton.SetProperty("OnClick", (sender: INMIControl, e: PointerEvent, tPs: ThePointer) => {
                 if (cdeNMI.MyPopUp)
                     cdeNMI.MyPopUp.Hide(false);
