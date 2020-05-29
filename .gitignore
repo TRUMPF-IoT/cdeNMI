@@ -35,3 +35,5 @@ _[Rr]elease/
 *.map
 /src/HTML5/cdeTS/cdews/node_modules
 /src/HTML5/cdeTS/node_modules/cde-js
+/BuildTools/cdePackager
+/BuildTools/signtool.exe
