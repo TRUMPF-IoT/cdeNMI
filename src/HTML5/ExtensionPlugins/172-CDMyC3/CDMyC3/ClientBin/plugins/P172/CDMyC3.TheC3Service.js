@@ -470,6 +470,7 @@ var CDMyC3;
             _this.myChartControl = null;
             _this.myChartScreen = null;
             _this.myChartSize = { width: 0, height: 0 };
+            _this.mInitialRefresh = false;
             return _this;
         }
         ctrlC3Chart.prototype.InitControl = function (pTargetElem, pTRF, pPropertyBag, pScreenID) {
@@ -521,7 +522,12 @@ var CDMyC3;
             if (IsDirty && TheC3Service.HaveCtrlsLoaded && this.myChartControl)
                 this.ApplySkin();
         };
+        ctrlC3Chart.prototype.OnLoad = function (bIsVisible) {
+            if (cde.CBool(bIsVisible) === true && !this.mInitialRefresh)
+                this.RefreshData();
+        };
         ctrlC3Chart.prototype.RefreshData = function () {
+            this.mInitialRefresh = true;
             var tStr = this.GetProperty("DataSource");
             if (tStr && tStr.length > 0) {
                 var tParts = tStr.split(';');
@@ -603,7 +609,7 @@ var CDMyC3;
                 var tDM = this.GetProperty("DataModel");
                 if (this.GetProperty("DataModel") !== "[]") {
                     this.myCurrentSeries = JSON.parse(tDM);
-                    this.SetProperty("DataModel", "[]");
+                    _super.prototype.SetProperty.call(this, "DataModel", "[]");
                 }
             }
             if (this.GetProperty("SetSeries") && this.GetProperty("SetSeries") !== "[]") {
@@ -637,7 +643,6 @@ var CDMyC3;
             if (!this.myChartControl) {
                 this.myChartConfig.bindto = this.myChartScreen.GetElement();
                 this.myChartControl = c3.generate(this.myChartConfig);
-                this.RefreshData();
             }
             else {
                 var tArgs = {};

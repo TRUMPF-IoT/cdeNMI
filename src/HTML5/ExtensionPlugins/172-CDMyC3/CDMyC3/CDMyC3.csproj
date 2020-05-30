@@ -24,6 +24,14 @@
 
   <ItemGroup>
     <None Remove="ClientBin\plugins\P172\CDMyC3.TheC3Service.js" />
+    <None Remove="ClientBin\plugins\P172\CDMyC3.TheC3Service.js.map" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ClientBin\plugins\P172\CDMyC3.TheC3Service.js.map">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -49,14 +57,6 @@
     <PackageReference Include="System.Drawing.Common">
       <Version>4.5.1</Version>
     </PackageReference>
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <None Update="ClientBin\plugins\P172\CDMyC3.TheC3Service.js.map">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

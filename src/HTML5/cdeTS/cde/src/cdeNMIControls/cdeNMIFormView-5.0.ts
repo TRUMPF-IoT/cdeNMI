@@ -294,7 +294,7 @@ namespace cdeNMI {
             return true;
         }
 
-        OnLoad() {
+        OnLoad(bIsVisible?: boolean) {
             if (this.GetProperty("TTSCookie") && cdeNMI.MyScreenManager) {
                 //cdeNMI.MyToast.ShowToastMessage("Form loaded with ID:" + this.GetProperty("TTSCookie"));
                 const tRID: string = this.GetProperty("TTSCookie");
@@ -309,7 +309,7 @@ namespace cdeNMI {
             }
             if (this.GetProperty("StartGroup"))
                 this.SetProperty("SetGroup", "GRP:" + this.GetProperty("StartGroup"));
-            super.OnLoad();
+            super.OnLoad(bIsVisible);
         }
 
         OnLoaded() {

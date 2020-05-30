@@ -751,7 +751,7 @@
                 }
             } else {
                 if (!pScreen.Visibility)
-                    pScreen.OnLoad();
+                    pScreen.OnLoad(true);
                 pScreen.SetProperty("Visibility", true);
             }
         }

@@ -5025,7 +5025,7 @@ var cdeNMI;
                 this.Visibility = pValue;
                 if (typeof pValue === "undefined" || pValue) {
                     this.MyRootElement.style.display = '';
-                    this.OnLoad();
+                    this.OnLoad(this.Visibility);
                 }
                 else {
                     this.MyRootElement.style.display = 'none';
@@ -5778,11 +5778,11 @@ var cdeNMI;
         TheNMIBaseControl.prototype.SetDataItem = function (pName, pValue) {
             this.MyDataItems[pName] = pValue;
         };
-        TheNMIBaseControl.prototype.OnLoad = function () {
+        TheNMIBaseControl.prototype.OnLoad = function (bIsVisible) {
             this.SetProperty("IsUnloaded", false);
             for (var tdx in this.MyChildren) {
                 this.MyChildren[tdx].SetProperty("TabIndex", this.MyChildren[tdx].MyFieldInfo ? this.MyChildren[tdx].MyFieldInfo.FldOrder + 101 : 100);
-                this.MyChildren[tdx].OnLoad();
+                this.MyChildren[tdx].OnLoad(bIsVisible);
             }
         };
         TheNMIBaseControl.prototype.OnUnload = function () {
@@ -6765,9 +6765,9 @@ var cdeNMI;
                 this.MyPinArea.SetProperty("Visibility", !cde.CBool(pValue));
             }
         };
-        TheNMIScreen.prototype.OnLoad = function () {
+        TheNMIScreen.prototype.OnLoad = function (bIsVisible) {
             if (this.MyNMIControl)
-                this.MyNMIControl.OnLoad();
+                this.MyNMIControl.OnLoad(bIsVisible);
             _super.prototype.OnLoad.call(this);
             this.SetProperty("LastShow", new Date());
             this.FireEvent(true, "OnLoaded");
@@ -7594,7 +7594,7 @@ var cdeNMI;
             }
             else {
                 if (!pScreen.Visibility)
-                    pScreen.OnLoad();
+                    pScreen.OnLoad(true);
                 pScreen.SetProperty("Visibility", true);
             }
         };
@@ -19843,10 +19843,10 @@ var cdeNMI;
                 this.MyNMIControl.SetProperty(pName, pValue);
             }
         };
-        ctrlTileEntry.prototype.OnLoad = function () {
+        ctrlTileEntry.prototype.OnLoad = function (bIsVisible) {
             if (this.MyNMIControl)
-                this.MyNMIControl.OnLoad();
-            _super.prototype.OnLoad.call(this);
+                this.MyNMIControl.OnLoad(bIsVisible);
+            _super.prototype.OnLoad.call(this, bIsVisible);
         };
         ctrlTileEntry.prototype.OnUnload = function () {
             if (this.MyNMIControl)
@@ -21477,7 +21477,7 @@ var cdeNMI;
             this.RegisterNMIControl();
             return true;
         };
-        ctrlFormView.prototype.OnLoad = function () {
+        ctrlFormView.prototype.OnLoad = function (bIsVisible) {
             if (this.GetProperty("TTSCookie") && cdeNMI.MyScreenManager) {
                 //cdeNMI.MyToast.ShowToastMessage("Form loaded with ID:" + this.GetProperty("TTSCookie"));
                 var tRID = this.GetProperty("TTSCookie");
@@ -21493,7 +21493,7 @@ var cdeNMI;
             }
             if (this.GetProperty("StartGroup"))
                 this.SetProperty("SetGroup", "GRP:" + this.GetProperty("StartGroup"));
-            _super.prototype.OnLoad.call(this);
+            _super.prototype.OnLoad.call(this, bIsVisible);
         };
         ctrlFormView.prototype.OnLoaded = function () {
             _super.prototype.OnLoad.call(this);
