@@ -94,6 +94,8 @@
     <None Remove="ClientBin\JS\choices.min.js" />
     <None Remove="ClientBin\JS\flatpickr.js" />
     <None Remove="ClientBin\JS\flatpickr.monthSelect.js" />
+    <None Remove="ClientBin\webfonts\roboto-medium-webfont.woff2" />
+    <None Remove="ClientBin\webfonts\roboto-regular-webfont.woff2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -165,6 +167,8 @@
     <EmbeddedResource Include="ClientBin\webfonts\fa-solid-900.ttf" />
     <EmbeddedResource Include="ClientBin\webfonts\fa-solid-900.woff" />
     <EmbeddedResource Include="ClientBin\webfonts\fa-solid-900.woff2" />
+    <EmbeddedResource Include="ClientBin\webfonts\roboto-medium-webfont.woff2" />
+    <EmbeddedResource Include="ClientBin\webfonts\roboto-regular-webfont.woff2" />
     <EmbeddedResource Include="ClientBin\webfonts\Roboto-Thin-webfont.eot" />
     <EmbeddedResource Include="ClientBin\webfonts\Roboto-Thin-webfont.svg" />
     <EmbeddedResource Include="ClientBin\webfonts\Roboto-Thin-webfont.ttf" />
@@ -172,7 +176,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="toplogo-128.png" Pack="true" PackagePath=""/>
+    <None Include="toplogo-128.png" Pack="true" PackagePath="" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClientBin\FAVICON.ICO" />

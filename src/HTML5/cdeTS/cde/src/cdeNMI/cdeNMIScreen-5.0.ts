@@ -531,9 +531,9 @@
             }
         }
 
-        public OnLoad() {
+        public OnLoad(bIsVisible?: boolean) {
             if (this.MyNMIControl)
-                this.MyNMIControl.OnLoad();
+                this.MyNMIControl.OnLoad(bIsVisible);
             super.OnLoad();
             this.SetProperty("LastShow", new Date());
             this.FireEvent(true, "OnLoaded");

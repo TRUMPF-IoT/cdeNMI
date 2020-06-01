@@ -64,6 +64,11 @@ namespace CDMyC3
         public void SetInfo(TheChartDefinition pDef, string pZoomType, string xAxisType)
         {
             mChart.ChartDef = pDef;
+            if (mChart.ChartDef.ValueDefinitions == null)
+            {
+                //Must contain ValueDefinition or else out!
+                return;
+            }
             for (int i = 0; i < mChart.ChartDef.ValueDefinitions.Count; i++)
                 mChart.dataseries[i] = new List<double>();
         }
@@ -74,7 +79,17 @@ namespace CDMyC3
             for (int i=0; i<pData.MyValue.Length;i++)
             {
                 if (mChart.dataseries.ContainsKey(i))
-                    mChart.dataseries[i].Add(pData.MyValue[i]);
+                {
+                    if (pData.IsValidValue[i])
+                        mChart.dataseries[i].Add(pData.MyValue[i]);
+                    else
+                    {
+                        if (mChart.dataseries[i].Count > 0)
+                            mChart.dataseries[i].Add(mChart.dataseries[i][mChart.dataseries[i].Count - 1]);
+                        else
+                            mChart.dataseries[i].Add(0);
+                    }
+                }
             }
             return true;
         }

@@ -228,7 +228,7 @@
                 this.Visibility = pValue;
                 if (typeof pValue === "undefined" || pValue) {
                     this.MyRootElement.style.display = '';
-                    this.OnLoad();
+                    this.OnLoad(this.Visibility);
                 }
                 else {
                     this.MyRootElement.style.display = 'none';
@@ -984,11 +984,11 @@
             this.MyDataItems[pName] = pValue;
         }
 
-        public OnLoad() {
+        public OnLoad(bIsVisible?: boolean) {
             this.SetProperty("IsUnloaded", false);
             for (const tdx in this.MyChildren) {
                 this.MyChildren[tdx].SetProperty("TabIndex", this.MyChildren[tdx].MyFieldInfo ? this.MyChildren[tdx].MyFieldInfo.FldOrder + 101 : 100);
-                this.MyChildren[tdx].OnLoad();
+                this.MyChildren[tdx].OnLoad(bIsVisible);
             }
         }
         public OnUnload() {

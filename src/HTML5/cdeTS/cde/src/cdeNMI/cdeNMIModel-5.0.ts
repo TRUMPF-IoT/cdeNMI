@@ -46,7 +46,7 @@
         DoFireClick(pTargetObj: INMIControl, pEvent?: Event, pPointer?: ThePointer);
         ToggleDrop(doClose: boolean, doForce: boolean);
         OnNUITag(pTag: string, pCookie: string);
-        OnLoad();
+        OnLoad(bIsVisible?: boolean);
         OnUnload();
         ReloadData(): boolean;
 

@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
-//
-// SPDX-License-Identifier: MPL-2.0
-
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -474,6 +470,7 @@ var CDMyC3;
             _this.myChartControl = null;
             _this.myChartScreen = null;
             _this.myChartSize = { width: 0, height: 0 };
+            _this.mInitialRefresh = false;
             return _this;
         }
         ctrlC3Chart.prototype.InitControl = function (pTargetElem, pTRF, pPropertyBag, pScreenID) {
@@ -525,7 +522,12 @@ var CDMyC3;
             if (IsDirty && TheC3Service.HaveCtrlsLoaded && this.myChartControl)
                 this.ApplySkin();
         };
+        ctrlC3Chart.prototype.OnLoad = function (bIsVisible) {
+            if (cde.CBool(bIsVisible) === true && !this.mInitialRefresh)
+                this.RefreshData();
+        };
         ctrlC3Chart.prototype.RefreshData = function () {
+            this.mInitialRefresh = true;
             var tStr = this.GetProperty("DataSource");
             if (tStr && tStr.length > 0) {
                 var tParts = tStr.split(';');
@@ -607,7 +609,7 @@ var CDMyC3;
                 var tDM = this.GetProperty("DataModel");
                 if (this.GetProperty("DataModel") !== "[]") {
                     this.myCurrentSeries = JSON.parse(tDM);
-                    this.SetProperty("DataModel", "[]");
+                    _super.prototype.SetProperty.call(this, "DataModel", "[]");
                 }
             }
             if (this.GetProperty("SetSeries") && this.GetProperty("SetSeries") !== "[]") {
@@ -641,7 +643,6 @@ var CDMyC3;
             if (!this.myChartControl) {
                 this.myChartConfig.bindto = this.myChartScreen.GetElement();
                 this.myChartControl = c3.generate(this.myChartConfig);
-                this.RefreshData();
             }
             else {
                 var tArgs = {};
@@ -665,7 +666,7 @@ var CDMyC3;
         }
         ctrlC3Line.prototype.InitControl = function (pTargetElem, pTRF, pPropertyBag, pScreenID) {
             _super.prototype.InitControl.call(this, pTargetElem, pTRF, pPropertyBag, pScreenID);
-            this.SetProperty("ChartType", "line");
+            this.SetProperty("ChartType", "spline");
             this.SetProperty("UpdateData", "true");
             this.SetProperty("Axis", JSON.stringify({
                 x: {

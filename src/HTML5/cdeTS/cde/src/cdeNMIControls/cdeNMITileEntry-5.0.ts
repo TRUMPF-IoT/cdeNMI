@@ -274,10 +274,10 @@
             }
         }
 
-        OnLoad() {
+        OnLoad(bIsVisible?: boolean) {
             if (this.MyNMIControl)
-                this.MyNMIControl.OnLoad();
-            super.OnLoad();
+                this.MyNMIControl.OnLoad(bIsVisible);
+            super.OnLoad(bIsVisible);
         }
 
         OnUnload() {
