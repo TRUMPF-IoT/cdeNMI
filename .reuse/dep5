@@ -141,6 +141,10 @@ Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/webfonts/Roboto-*
 Copyright: 2015 Google Inc
 License: Apache-2.0
 
+Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/webfonts/roboto-*
+Copyright: 2015 Google Inc
+License: Apache-2.0
+
 Files:  src/HTML5/cdeTS/*.png
 Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 License: CC-BY-4.0
