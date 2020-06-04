@@ -2,7 +2,44 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-﻿namespace cdeNMI {
+namespace cdeNMI {
+
+    export class ctrlDeviceTypePicker extends ctrlPropertyPicker implements INMIComboBox {
+        constructor(pTRF?: TheTRF) {
+            super(pTRF);
+        }
+
+        MyThingFriendlyName: string = null;
+
+        public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
+            this.RefreshCombo = '[{"V":"CDE_NOP","N":"loading...please wait"}]';
+            this.MyBaseType = cdeControlType.DeviceTypePicker;
+            this.ControlText = "ctrlDeviceTypePicker";
+            super.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
+            return true;
+        }
+
+        LoadComboContent(bForceShow: boolean) {
+            const tChoiceOptions = this.GetProperty("LiveOptions");
+            if (!tChoiceOptions) {
+                if (cdeNMI.MyEngine) {
+                    let tFilter = "";
+                    if (this.GetProperty("Filter"))
+                        tFilter = GenerateFinalString(this.GetProperty("Filter"), null, this.MyTRF);
+                    const tRemotes: boolean = cde.CBool(this.GetProperty("IncludeRemotes"));
+                    cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:DEVICETYPEPICKER:' + this.GetProperty("ID") + ':' + this.GetProperty("UXID") + ';76;' + this.MyFieldInfo.FldOrder + ':' + tRemotes + ':' + tFilter, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
+                }
+                else {
+                    this.CreateComboOptions('[{"V":"CDE_NOP","N":"No DeviceType available - nothing to show"}]', "CDE_NOP", false);
+                    this.UpdatePicker(bForceShow);
+                }
+            }
+            else {
+                this.CreateComboOptions(tChoiceOptions, this.GetProperty("Value"), true);
+                this.UpdatePicker(bForceShow);
+            }
+        }
+    }
 
     export class ctrlThingPicker extends ctrlPropertyPicker implements INMIComboBox {
         constructor(pTRF?: TheTRF) {
@@ -48,7 +85,7 @@
                 return pVal;
             if (!this.MyThingFriendlyName) {
                 if (cdeNMI.MyEngine) {
-                    cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:THINGRESOLVE:' + this.GetProperty("ID") + ':' + this.GetProperty("UXID") + ';63:' + pVal , '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
+                    cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:THINGRESOLVE:' + this.GetProperty("ID") + ':' + this.GetProperty("UXID") + ';63;' + this.MyFieldInfo.FldOrder + ':' + pVal, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
                 }
                 return pVal;
             } else {
@@ -80,8 +117,8 @@
                     const tRemotes: boolean = cde.CBool(this.GetProperty("IncludeRemotes"));
                     let tFilter = "";
                     if (this.GetProperty("Filter"))
-                        tFilter = this.GetProperty("Filter");
-                    cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:THINGPICKER:' + this.GetProperty("ID") +':' + this.GetProperty("UXID") +';63:' + tEngs + ':' + tRemotes +':'+ tFilter, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
+                        tFilter = GenerateFinalString(this.GetProperty("Filter"), null, this.MyTRF);
+                    cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:THINGPICKER:' + this.GetProperty("ID") + ':' + this.GetProperty("UXID") + ';63;' + this.MyFieldInfo.FldOrder + ':' + tEngs + ':' + tRemotes + ':' + tFilter, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
                 }
                 else {
                     this.CreateComboOptions('[{"G":"Other Options...","V":"CDE_NOP","N":"No NMI Engine available - cannot load"}]', "CDE_NOP", false);

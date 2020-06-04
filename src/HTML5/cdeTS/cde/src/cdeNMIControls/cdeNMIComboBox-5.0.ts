@@ -338,8 +338,10 @@ namespace cdeNMI {
                     this.SetOptions();
                     if (cde.CBool(this.GetProperty("AllowMultiSelect")))
                         this.myChoicesOptions.maxItemCount = -1;
-                    if (this.GetProperty("Separator"))
+                    if (this.GetProperty("Separator")) {
                         this.myChoicesOptions.delimiter = this.GetProperty("Separator");
+                        this.MySep = this.myChoicesOptions.delimiter;
+                    }
                     this.myChoices = new Choices(this.MyComboBox, this.myChoicesOptions);
                     this.myChoices.setChoices(this.MyCurrentData, "value", "label", true);
                     if (!this.MyFieldInfo || (this.MyFieldInfo.Flags & 2) === 0) {
