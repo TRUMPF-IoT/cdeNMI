@@ -372,7 +372,8 @@
         UserMenu = 72,
         MeshPicker = 73,
         HashIcon = 74,
-        CertPicker = 75
+        CertPicker = 75,
+        DeviceTypePicker = 76
     }
 
     export enum cdeInputEventType {

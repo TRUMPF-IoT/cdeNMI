@@ -243,6 +243,7 @@
                                 break;
                         }
                         tE.CreateControl("inTableClick", (pNewControl: INMIControl) => {
+                            pNewControl.SetProperty("UXID", pNewControl.MyFieldInfo.cdeMID);
                             pNewControl.SetProperty("Z-Index", 1300);
                             pNewControl.SetProperty("OnValueChanged",
                                 (pCtrl, evtName, pVal) => {

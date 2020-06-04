@@ -1099,6 +1099,7 @@
                         else
                             tE.SetProperty("TileWidth", tFldInfo["FldWidth"]);
                         tE.CreateControl("Id" + i, null);
+                        tE.SetProperty("UXID", tFldInfo.cdeMID); //Sets the guid of the control
                         this.MyAdderRow[this.MyTableName + "_" + tFldInfo.FldOrder] = tE;
                     }
                 }

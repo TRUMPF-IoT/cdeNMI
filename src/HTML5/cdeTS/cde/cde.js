@@ -3445,6 +3445,7 @@ var cdeNMI;
         cdeControlType[cdeControlType["MeshPicker"] = 73] = "MeshPicker";
         cdeControlType[cdeControlType["HashIcon"] = 74] = "HashIcon";
         cdeControlType[cdeControlType["CertPicker"] = 75] = "CertPicker";
+        cdeControlType[cdeControlType["DeviceTypePicker"] = 76] = "DeviceTypePicker";
     })(cdeControlType = cdeNMI.cdeControlType || (cdeNMI.cdeControlType = {}));
     var cdeInputEventType;
     (function (cdeInputEventType) {
@@ -4341,6 +4342,7 @@ var cdeNMI;
             _this.cdeControlTypeNames[73] = "cdeNMI.ctrlMeshPicker";
             _this.cdeControlTypeNames[74] = "cdeNMI.ctrlHashIcon";
             _this.cdeControlTypeNames[75] = "cdeNMI.ctrlCertPicker";
+            _this.cdeControlTypeNames[76] = "cdeNMI.ctrlDeviceTypePicker";
             _this.MyKnownControls[0] = "CMyDashboard";
             _this.MyKnownControls[1] = "CMyChart";
             _this.MyKnownControls[2] = "CMyTable";
@@ -12115,8 +12117,10 @@ var cdeNMI;
                     this.SetOptions();
                     if (cde.CBool(this.GetProperty("AllowMultiSelect")))
                         this.myChoicesOptions.maxItemCount = -1;
-                    if (this.GetProperty("Separator"))
+                    if (this.GetProperty("Separator")) {
                         this.myChoicesOptions.delimiter = this.GetProperty("Separator");
+                        this.MySep = this.myChoicesOptions.delimiter;
+                    }
                     this.myChoices = new Choices(this.MyComboBox, this.myChoicesOptions);
                     this.myChoices.setChoices(this.MyCurrentData, "value", "label", true);
                     if (!this.MyFieldInfo || (this.MyFieldInfo.Flags & 2) === 0) {
@@ -12690,6 +12694,43 @@ var cdeNMI;
 //
 // SPDX-License-Identifier: MPL-2.0
 (function (cdeNMI) {
+    var ctrlDeviceTypePicker = /** @class */ (function (_super) {
+        __extends(ctrlDeviceTypePicker, _super);
+        function ctrlDeviceTypePicker(pTRF) {
+            var _this = _super.call(this, pTRF) || this;
+            _this.MyThingFriendlyName = null;
+            return _this;
+        }
+        ctrlDeviceTypePicker.prototype.InitControl = function (pTargetControl, pTRF, pPropertyBag, pScreenID) {
+            this.RefreshCombo = '[{"V":"CDE_NOP","N":"loading...please wait"}]';
+            this.MyBaseType = cdeNMI.cdeControlType.DeviceTypePicker;
+            this.ControlText = "ctrlDeviceTypePicker";
+            _super.prototype.InitControl.call(this, pTargetControl, pTRF, pPropertyBag, pScreenID);
+            return true;
+        };
+        ctrlDeviceTypePicker.prototype.LoadComboContent = function (bForceShow) {
+            var tChoiceOptions = this.GetProperty("LiveOptions");
+            if (!tChoiceOptions) {
+                if (cdeNMI.MyEngine) {
+                    var tFilter = "";
+                    if (this.GetProperty("Filter"))
+                        tFilter = cdeNMI.GenerateFinalString(this.GetProperty("Filter"), null, this.MyTRF);
+                    var tRemotes = cde.CBool(this.GetProperty("IncludeRemotes"));
+                    cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:DEVICETYPEPICKER:' + this.GetProperty("ID") + ':' + this.GetProperty("UXID") + ';76;' + this.MyFieldInfo.FldOrder + ':' + tRemotes + ':' + tFilter, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
+                }
+                else {
+                    this.CreateComboOptions('[{"V":"CDE_NOP","N":"No DeviceType available - nothing to show"}]', "CDE_NOP", false);
+                    this.UpdatePicker(bForceShow);
+                }
+            }
+            else {
+                this.CreateComboOptions(tChoiceOptions, this.GetProperty("Value"), true);
+                this.UpdatePicker(bForceShow);
+            }
+        };
+        return ctrlDeviceTypePicker;
+    }(cdeNMI.ctrlPropertyPicker));
+    cdeNMI.ctrlDeviceTypePicker = ctrlDeviceTypePicker;
     var ctrlThingPicker = /** @class */ (function (_super) {
         __extends(ctrlThingPicker, _super);
         function ctrlThingPicker(pTRF) {
@@ -12732,7 +12773,7 @@ var cdeNMI;
                 return pVal;
             if (!this.MyThingFriendlyName) {
                 if (cdeNMI.MyEngine) {
-                    cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:THINGRESOLVE:' + this.GetProperty("ID") + ':' + this.GetProperty("UXID") + ';63:' + pVal, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
+                    cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:THINGRESOLVE:' + this.GetProperty("ID") + ':' + this.GetProperty("UXID") + ';63;' + this.MyFieldInfo.FldOrder + ':' + pVal, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
                 }
                 return pVal;
             }
@@ -12764,8 +12805,8 @@ var cdeNMI;
                     var tRemotes = cde.CBool(this.GetProperty("IncludeRemotes"));
                     var tFilter = "";
                     if (this.GetProperty("Filter"))
-                        tFilter = this.GetProperty("Filter");
-                    cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:THINGPICKER:' + this.GetProperty("ID") + ':' + this.GetProperty("UXID") + ';63:' + tEngs + ':' + tRemotes + ':' + tFilter, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
+                        tFilter = cdeNMI.GenerateFinalString(this.GetProperty("Filter"), null, this.MyTRF);
+                    cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:THINGPICKER:' + this.GetProperty("ID") + ':' + this.GetProperty("UXID") + ';63;' + this.MyFieldInfo.FldOrder + ':' + tEngs + ':' + tRemotes + ':' + tFilter, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
                 }
                 else {
                     this.CreateComboOptions('[{"G":"Other Options...","V":"CDE_NOP","N":"No NMI Engine available - cannot load"}]', "CDE_NOP", false);
@@ -18984,6 +19025,7 @@ var cdeNMI;
                                 break;
                         }
                         tE.CreateControl("inTableClick", function (pNewControl) {
+                            pNewControl.SetProperty("UXID", pNewControl.MyFieldInfo.cdeMID);
                             pNewControl.SetProperty("Z-Index", 1300);
                             pNewControl.SetProperty("OnValueChanged", function (pCtrl, evtName, pVal) {
                                 if (!cdeNMI.MyTouchOverlay)
@@ -22627,6 +22669,7 @@ var cdeNMI;
                         else
                             tE.SetProperty("TileWidth", tFldInfo["FldWidth"]);
                         tE.CreateControl("Id" + i, null);
+                        tE.SetProperty("UXID", tFldInfo.cdeMID); //Sets the guid of the control
                         this.MyAdderRow[this.MyTableName + "_" + tFldInfo.FldOrder] = tE;
                     }
                 }

@@ -84,6 +84,7 @@
             this.cdeControlTypeNames[73] = "cdeNMI.ctrlMeshPicker";
             this.cdeControlTypeNames[74] = "cdeNMI.ctrlHashIcon";
             this.cdeControlTypeNames[75] = "cdeNMI.ctrlCertPicker";
+            this.cdeControlTypeNames[76] = "cdeNMI.ctrlDeviceTypePicker";
 
             this.MyKnownControls[0] = "CMyDashboard";
             this.MyKnownControls[1] = "CMyChart";
