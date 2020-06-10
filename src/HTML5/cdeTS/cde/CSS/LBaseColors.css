@@ -1,17 +1,26 @@
+﻿/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+/**
+* This file overwrites values in MainBaseColors.scss and defines C-DEngine
+* styles in the SomeBrand theme.
+**/
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
  *
  * SPDX-License-Identifier: CC0-1.0
  */
-
-/**
-* This file overwrites values in MainBaseColors.scss and defines C-DEngine
-* styles in the SomeBrand theme.
-**/
 /**
 * This file overwrites values in cdeMainBaseColors.scss and defines C-DEngine
 * and addes styles for SomeBrand theme.
 **/
+/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
 /**
 * This file defines all base colors for the C-DEngine that can be overwritten
 * by 3rd party developers creating their own skins.
@@ -19,7 +28,7 @@
 * In order to override these values, @import MainBaseColors.scss must be added
 * to the bottom of the desired scss file.
 *
-* NOTE: Changes made to this file will not appear in browser until the Skin in use
+* NOTE: Changes made to this file will not appear in browser until the Skin in use 
 * is re-complied. This file does not ever compile on its own.
 **/
 body.cdeBody {
@@ -170,7 +179,7 @@ button.cdeAddButton {
   color: #212121; }
 
 button.cdeLiveTileBar {
-  color: #878787;
+  color: white;
   background-color: white;
   border-color: white; }
 

@@ -69,6 +69,8 @@ namespace cdeNMI {
                 this.MyFieldInfo["Value"] = this.MyFieldInfo["DefaultValue"];
             if (this.MyFieldInfo && this.MyFieldInfo["HideInput"])
                 this.HideInput = true;
+            if (this.MyFieldInfo)
+                super.SetProperty("UXID", this.MyFieldInfo.cdeMID);
 
             this.CalculateOption(null);
 
