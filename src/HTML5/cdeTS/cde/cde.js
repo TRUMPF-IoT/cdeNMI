@@ -11840,6 +11840,8 @@ var cdeNMI;
                 this.MyFieldInfo["Value"] = this.MyFieldInfo["DefaultValue"];
             if (this.MyFieldInfo && this.MyFieldInfo["HideInput"])
                 this.HideInput = true;
+            if (this.MyFieldInfo)
+                _super.prototype.SetProperty.call(this, "UXID", this.MyFieldInfo.cdeMID);
             this.CalculateOption(null);
             this.RegisterEvent("OnDelete", function () {
                 cdeNMI.MyEngine.UnregisterLazyLoader(_this.MyScreenID, _this.MyTableName, _this.HandleLazyLoad);
