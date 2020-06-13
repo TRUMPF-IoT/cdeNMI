@@ -180,11 +180,11 @@ Files:  src/HTML5/cdeTS/cde/webfonts/Roboto-*
 Copyright: 2015 Google Inc
 License: Apache-2.0
 
-Files: src/HTML5/cdeTS/cde/CSS/BaseColor.min.css
+Files: src/HTML5/cdeTS/cde/CSS/BaseColors.min.css
 Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
-Files: src/HTML5/cdeTS/cde/CSS/LBaseColor.min.css
+Files: src/HTML5/cdeTS/cde/CSS/LBaseColors.min.css
 Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
