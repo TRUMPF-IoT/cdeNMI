@@ -38,9 +38,16 @@ namespace cdeNMI {
             removeItemButton: false,
             searchEnabled: false,
             shouldSort: true,
+            searchResultLimit: 100,
             shouldSortItems: true,
             duplicateItemsAllowed: false,
             position: "bottom",
+            fuseOptions: {
+                ignoreLocation: true,
+                threshold: 0.1,
+                location: 0,
+                distance: 1000,
+            },
             sorter: function (a, b) {
                 const indexA = cdeSortAlphabet.indexOf(a[0]),
                     indexB = cdeSortAlphabet.indexOf(b[0]);
