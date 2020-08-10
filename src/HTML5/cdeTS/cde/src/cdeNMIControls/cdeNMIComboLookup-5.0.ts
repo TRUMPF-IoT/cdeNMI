@@ -71,6 +71,7 @@
             this.myChoicesOptions.searchEnabled = true;
             this.myChoicesOptions.removeItemButton = true;
             this.myChoicesOptions.maxItemCount = 1;
+            this.myChoicesOptions.searchResultLimit = 100;
         }
     }
 }
