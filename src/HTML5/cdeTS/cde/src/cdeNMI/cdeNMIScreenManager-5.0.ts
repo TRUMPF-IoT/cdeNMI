@@ -100,10 +100,17 @@
                 } else if (keyCode === 36 && cde.MyBaseAssets.MyServiceHostInfo.WasPortalRequested && cdeNMI.Key13Event === null) {
                     if (!cdeNMI.DisableKey36Event)
                         this.GotoStationHome(false);
-                } if (keyCode > 47 && keyCode < 58 && cdeNMI.Key13Event === null) {
+                } else if (keyCode === 10009) {
+                    if (cdeNMI.MyScreenManager)
+                        cdeNMI.MyScreenManager.NavigateBack(false);
+                } else if (keyCode === 39) {
+                    cdeNMI.focusNextElement(false);
+                } else if (keyCode === 37) {
+                    cdeNMI.focusNextElement(true);
+                }
+                if (keyCode > 47 && keyCode < 58 && cdeNMI.Key13Event === null) {
                     this.TransitToScreenIDX(keyCode - 48);
                 }
-                return true;
             };
             window.onpopstate = () => {
                 this.NavigateBack(false);

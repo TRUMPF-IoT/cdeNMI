@@ -6994,10 +6994,19 @@ var cdeNMI;
                     if (!cdeNMI.DisableKey36Event)
                         _this.GotoStationHome(false);
                 }
+                else if (keyCode === 10009) {
+                    if (cdeNMI.MyScreenManager)
+                        cdeNMI.MyScreenManager.NavigateBack(false);
+                }
+                else if (keyCode === 39) {
+                    cdeNMI.focusNextElement(false);
+                }
+                else if (keyCode === 37) {
+                    cdeNMI.focusNextElement(true);
+                }
                 if (keyCode > 47 && keyCode < 58 && cdeNMI.Key13Event === null) {
                     _this.TransitToScreenIDX(keyCode - 48);
                 }
-                return true;
             };
             window.onpopstate = function () {
                 _this.NavigateBack(false);
@@ -10039,6 +10048,27 @@ var cdeNMI;
         return elements;
     }
     cdeNMI.GetAllElementsFromPoint = GetAllElementsFromPoint;
+    function focusNextElement(goBack) {
+        var focussableElements = 'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
+        var focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements), function (element) {
+            return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
+        });
+        var index = focussable.indexOf(document.activeElement);
+        if (index > -1) {
+            if (goBack === true) {
+                var nextElement = focussable[index - 1] || focussable[0];
+                nextElement.focus();
+            }
+            else {
+                var nextElement = focussable[index + 1] || focussable[0];
+                nextElement.focus();
+            }
+        }
+        else {
+            focussable[0].focus();
+        }
+    }
+    cdeNMI.focusNextElement = focusNextElement;
 })(cdeNMI || (cdeNMI = {}));
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
@@ -23447,20 +23477,32 @@ var cdeNMI;
             });
         }
         //cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "ScreenInfo", window.innerWidth + "," + window.innerHeight +" Doc:"+ screen.width+","+screen.height);
-        document.onkeydown = function (evt) {
-            var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : evt.keyCode;
-            if (keyCode === 13) {
-                if (cdeNMI.Key13Event !== null)
-                    cdeNMI.Key13Event(evt);
-                cdeNMI.Key13Event = null;
-            }
-            else if (keyCode === 27) {
-                //For escape.
-                if (cdeNMI.Key27Event !== null)
-                    cdeNMI.Key27Event(evt);
-                cdeNMI.Key27Event = null;
-            }
-        };
+        //document.onkeydown = (evt) => {
+        //    const keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : evt.keyCode;
+        //    switch (keyCode) {
+        //        case 13:
+        //            if (cdeNMI.Key13Event !== null)
+        //                cdeNMI.Key13Event(evt);
+        //            cdeNMI.Key13Event = null;
+        //            break;
+        //        case 27:
+        //            //For escape.
+        //            if (cdeNMI.Key27Event !== null)
+        //                cdeNMI.Key27Event(evt);
+        //            cdeNMI.Key27Event = null;
+        //            break;
+        //        case 10009: //Tizen back
+        //            if (cdeNMI.MyScreenManager)
+        //                cdeNMI.MyScreenManager.NavigateBack(false);
+        //            break;
+        //        case 39: //right
+        //            cdeNMI.focusNextElement(false);
+        //            break;
+        //        case 37: //left
+        //            cdeNMI.focusNextElement(true);
+        //            break;
+        //    }
+        //};
         //Step 1: Register all overrides (can be done in StartEngine of custom Engines)
         if (cde.MyBaseAssets.MyServiceHostInfo.ShowClassic)
             cdeNMI.MyTCF.RegisterControlType(cdeNMI.cdeControlType.ScreenManager, "cdeNMI.TheScreenManagerClassic");
