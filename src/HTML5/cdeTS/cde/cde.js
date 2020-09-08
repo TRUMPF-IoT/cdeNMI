@@ -6344,6 +6344,8 @@ var cdeNMI;
             }
             this.MyScreen = this.MyScreenDIV; //BackCompat
             this.MyScreenDIV.className = cde.MyBaseAssets.MyServiceHostInfo.ScreenClassName; // "cdeBrowserTop";
+            if (cde.CInt(this.GetSetting("TileWidth")) == 0)
+                this.MyScreenDIV.style.width = "100%";
             this.divDragContent.classList.add("cde-animate-opacity");
             //this.SetElement(this.MyScreenDIV);
             if (!cde.CBool(this.GetSetting("NeverHide")) && !cde.CBool(this.GetSetting("HidePins")) && !cde.MyBaseAssets.MyServiceHostInfo.HideHeader && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 2 && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 4) {
@@ -6599,6 +6601,8 @@ var cdeNMI;
                 this.mDivDashboardContent = document.createElement("div");
             this.mDivDashboardContent.id = "Content_" + this.MyScreenID;
             this.mDivDashboardContent.className = "CMyDashboard";
+            if (cde.CInt(this.GetSetting("TileWidth")) == 0)
+                this.mDivDashboardContent.style.width = "100%";
             this.MyScreenDIV.appendChild(this.mDivDashboardContent);
             this.MyContainerElement = this.mDivDashboardContent;
             if (cdeNMI.MyScreenManager) {
@@ -7166,9 +7170,12 @@ var cdeNMI;
                 tPopup.SetProperty("NoLabel", "Cancel");
             }
         };
-        TheScreenManager.prototype.SetView = function (pView) {
+        TheScreenManager.prototype.SetView = function (pView, ClearScreens) {
+            if (ClearScreens === void 0) { ClearScreens = false; }
             if (!pView)
                 return;
+            if (ClearScreens === true)
+                this.ClearScenes();
             this.CurrentView = pView;
             if (cde.MyBaseAssets.MyServiceHostInfo.StartScreen)
                 this.StartView = this.CurrentView;
@@ -7325,7 +7332,7 @@ var cdeNMI;
             }
             return cde.MyBaseAssets.MyServiceHostInfo.ApplicationTitle;
         };
-        TheScreenManager.prototype.ClearAndGoHome = function () {
+        TheScreenManager.prototype.ClearScenes = function () {
             this.CurrentScreen = null;
             for (var i in this.MyNMIScreens) {
                 if (this.MyNMIScreens.hasOwnProperty(i)) {
@@ -7333,6 +7340,9 @@ var cdeNMI;
                     this.ShowHideScreen(this.MyNMIScreens[i]);
                 }
             }
+        };
+        TheScreenManager.prototype.ClearAndGoHome = function () {
+            this.ClearScenes();
             this.GotoStationHome(false);
         };
         TheScreenManager.prototype.AreScreensPinned = function (pScreen) {
@@ -10467,9 +10477,13 @@ var cdeNMI;
                         cdeNMI.MyScreenManager.RequestPortalScreen(true);
                     }
                     return true;
+                case "NMI_GS":
+                    if (cdeNMI.MyEngine)
+                        cdeNMI.MyEngine.GetScene(pMSG.PLS);
+                    return true;
                 case "NMI_TTS":
                     if (cdeNMI.MyScreenManager)
-                        cdeNMI.MyScreenManager.TransitToScreen(pMSG.PLS);
+                        cdeNMI.MyScreenManager.TransitToScreen(pMSG.PLS, true);
                     return true;
                 case "NMI_LIVESCREENMETA":
                     if (pMSG.PLS) {
@@ -10571,7 +10585,7 @@ var cdeNMI;
                     break;
                 case "NMI_SET_SCENE":
                     if (cdeNMI.MyScreenManager) {
-                        cdeNMI.MyScreenManager.SetView(JSON.parse(pMSG.PLS));
+                        cdeNMI.MyScreenManager.SetView(JSON.parse(pMSG.PLS), true);
                     }
                     break;
                 case "NMI_SET_DATA":
@@ -21332,6 +21346,8 @@ var cdeNMI;
                     tF.RemoveFormHooks(tF.MyFormControls);
                 this.mBaseDiv.innerHTML = ""; //OK
             }
+            this.mBaseDiv.style.width = "inherit";
+            this.mBaseDiv.style.height = "inherit";
             this.SetElement(this.mBaseDiv);
             var tCurrentRow = cde.CInt(this.MyTRF.RowNo);
             if (this.MyFieldInfo && cde.CBool(this.MyFieldInfo["ILF"]) && !this.MyScreenInfo.IsLiveForm)
@@ -22857,6 +22873,8 @@ var cdeNMI;
             else {
                 this.mBaseDiv.innerHTML = ""; //OK
             }
+            this.mBaseDiv.style.width = "inherit";
+            this.mBaseDiv.style.height = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) + "px";
             this.mDivDashboardContent = document.createElement("iframe");
             this.mDivDashboardContent.className = "cdeDashboardIFrame";
             this.mDivDashboardContent.style.width = "inherit";
@@ -22865,7 +22883,6 @@ var cdeNMI;
                 _this.FireEvent(true, "OnIFrameLoaded", evt);
             };
             this.mDivDashboardContent.id = "cdeIFrame_" + this.MyScreenID;
-            this.mDivDashboardContent.className = "CMyDashboard";
             this.mBaseDiv.appendChild(this.mDivDashboardContent);
             this.SetElement(this.mBaseDiv, false, this.mDivDashboardContent);
             this.SetProperty("ID", "FORM_" + this.MyTableName);

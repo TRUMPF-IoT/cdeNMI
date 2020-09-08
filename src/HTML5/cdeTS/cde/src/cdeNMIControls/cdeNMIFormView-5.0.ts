@@ -65,7 +65,8 @@ namespace cdeNMI {
                     tF.RemoveFormHooks(tF.MyFormControls);
                 this.mBaseDiv.innerHTML = "";    //OK
             }
-
+            this.mBaseDiv.style.width = "inherit";
+            this.mBaseDiv.style.height = "inherit";
             this.SetElement(this.mBaseDiv);
 
             const tCurrentRow = cde.CInt(this.MyTRF.RowNo);

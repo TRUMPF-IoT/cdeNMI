@@ -298,9 +298,11 @@
             }
         }
 
-        public SetView(pView: TheNMIScene) {
+        public SetView(pView: TheNMIScene, ClearScreens = false) {
             if (!pView)
                 return;
+            if (ClearScreens === true)
+                this.ClearScenes();
             this.CurrentView = pView;
             if (cde.MyBaseAssets.MyServiceHostInfo.StartScreen)
                 this.StartView = this.CurrentView;
@@ -465,7 +467,7 @@
             return cde.MyBaseAssets.MyServiceHostInfo.ApplicationTitle;
         }
 
-        public ClearAndGoHome() {
+        public ClearScenes() {
             this.CurrentScreen = null;
             for (const i in this.MyNMIScreens) {
                 if (this.MyNMIScreens.hasOwnProperty(i)) {
@@ -473,6 +475,9 @@
                     this.ShowHideScreen(this.MyNMIScreens[i]);
                 }
             }
+        }
+        public ClearAndGoHome() {
+            this.ClearScenes();
             this.GotoStationHome(false);
         }
 

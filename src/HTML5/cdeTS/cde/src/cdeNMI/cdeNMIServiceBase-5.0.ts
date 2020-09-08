@@ -396,9 +396,13 @@ namespace cdeNMI {
                         cdeNMI.MyScreenManager.RequestPortalScreen(true);
                     }
                     return true;
+                case "NMI_GS":
+                    if (cdeNMI.MyEngine)
+                        cdeNMI.MyEngine.GetScene(pMSG.PLS);
+                    return true;
                 case "NMI_TTS":
                     if (cdeNMI.MyScreenManager)
-                        cdeNMI.MyScreenManager.TransitToScreen(pMSG.PLS);
+                        cdeNMI.MyScreenManager.TransitToScreen(pMSG.PLS, true);
                     return true;
                 case "NMI_LIVESCREENMETA":
                     if (pMSG.PLS) {
@@ -498,7 +502,7 @@ namespace cdeNMI {
                     break;
                 case "NMI_SET_SCENE":
                     if (cdeNMI.MyScreenManager) {
-                        cdeNMI.MyScreenManager.SetView(JSON.parse(pMSG.PLS) as TheNMIScene);
+                        cdeNMI.MyScreenManager.SetView(JSON.parse(pMSG.PLS) as TheNMIScene, true);
                     }
                     break;
                 case "NMI_SET_DATA":
