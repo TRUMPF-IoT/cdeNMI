@@ -6344,8 +6344,11 @@ var cdeNMI;
             }
             this.MyScreen = this.MyScreenDIV; //BackCompat
             this.MyScreenDIV.className = cde.MyBaseAssets.MyServiceHostInfo.ScreenClassName; // "cdeBrowserTop";
-            if (cde.CInt(this.GetSetting("TileWidth")) == 0)
+            if (this.GetSetting("ScreenClassName"))
+                this.MyScreenDIV.className = this.GetSetting("ScreenClassName");
+            if (cde.CBool(this.GetSetting("ShowFullScreen")) === true) {
                 this.MyScreenDIV.style.width = "100%";
+            }
             this.divDragContent.classList.add("cde-animate-opacity");
             //this.SetElement(this.MyScreenDIV);
             if (!cde.CBool(this.GetSetting("NeverHide")) && !cde.CBool(this.GetSetting("HidePins")) && !cde.MyBaseAssets.MyServiceHostInfo.HideHeader && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 2 && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 4) {
@@ -6601,8 +6604,12 @@ var cdeNMI;
                 this.mDivDashboardContent = document.createElement("div");
             this.mDivDashboardContent.id = "Content_" + this.MyScreenID;
             this.mDivDashboardContent.className = "CMyDashboard";
-            if (cde.CInt(this.GetSetting("TileWidth")) == 0)
+            if (cde.CBool(this.GetSetting("ShowFullScreen")) === true) {
                 this.mDivDashboardContent.style.width = "100%";
+                this.mDivDashboardContent.style.display = "flex";
+                this.mDivDashboardContent.style.verticalAlign = "middle";
+                this.mDivDashboardContent.style.height = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) + "px";
+            }
             this.MyScreenDIV.appendChild(this.mDivDashboardContent);
             this.MyContainerElement = this.mDivDashboardContent;
             if (cdeNMI.MyScreenManager) {
@@ -10482,8 +10489,10 @@ var cdeNMI;
                         cdeNMI.MyEngine.GetScene(pMSG.PLS);
                     return true;
                 case "NMI_TTS":
-                    if (cdeNMI.MyScreenManager)
+                    if (cdeNMI.MyScreenManager) {
+                        cdeNMI.MyScreenManager.ClearScenes();
                         cdeNMI.MyScreenManager.TransitToScreen(pMSG.PLS, true);
+                    }
                     return true;
                 case "NMI_LIVESCREENMETA":
                     if (pMSG.PLS) {
@@ -21241,7 +21250,7 @@ var cdeNMI;
             if (IsNewDashboard) {
                 if (!cde.MyBaseAssets.MyServiceHostInfo.WasInitialScreenVisible) {
                     if (cde.MyBaseAssets.MyCommStatus.LastStartScreen) {
-                        cdeNMI.MyScreenManager.TransitToScreen(cde.MyBaseAssets.MyCommStatus.LastStartScreen);
+                        cdeNMI.MyEngine.GetScene(cde.MyBaseAssets.MyCommStatus.LastStartScreen);
                     }
                     else if (cde.MyBaseAssets.MyServiceHostInfo.StartScreen !== "" && tScreenInfo.MyDashboard["InitialState"] !== "error")
                         cdeNMI.MyScreenManager.GotoStationHome(false);
@@ -21348,6 +21357,7 @@ var cdeNMI;
             }
             this.mBaseDiv.style.width = "inherit";
             this.mBaseDiv.style.height = "inherit";
+            this.mBaseDiv.style.margin = "auto";
             this.SetElement(this.mBaseDiv);
             var tCurrentRow = cde.CInt(this.MyTRF.RowNo);
             if (this.MyFieldInfo && cde.CBool(this.MyFieldInfo["ILF"]) && !this.MyScreenInfo.IsLiveForm)

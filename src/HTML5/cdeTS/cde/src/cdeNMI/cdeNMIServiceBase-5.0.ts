@@ -401,8 +401,10 @@ namespace cdeNMI {
                         cdeNMI.MyEngine.GetScene(pMSG.PLS);
                     return true;
                 case "NMI_TTS":
-                    if (cdeNMI.MyScreenManager)
+                    if (cdeNMI.MyScreenManager) {
+                        cdeNMI.MyScreenManager.ClearScenes();
                         cdeNMI.MyScreenManager.TransitToScreen(pMSG.PLS, true);
+                    }
                     return true;
                 case "NMI_LIVESCREENMETA":
                     if (pMSG.PLS) {

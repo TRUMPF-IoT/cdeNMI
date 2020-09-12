@@ -153,6 +153,7 @@
         RenumberScreens();
 
         SetView(pView: TheNMIScene, ClearScreens?: boolean);
+        ClearScenes();
         ShowView();
 
         SetStatusMsg(pStatusMsg: string, pState: number);
