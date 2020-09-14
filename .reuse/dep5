@@ -201,6 +201,11 @@ Files: src/HTML5/cdeTS/cde/CSS/CDESTYLES.min.css
 Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
+Files: src/HTML5/cdeTS/cde/CSS/MYSTYLEST.min.css
+Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+License: MPL-2.0
+
+
 Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/CDMyC3.csproj
 Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 License: CC0-1.0

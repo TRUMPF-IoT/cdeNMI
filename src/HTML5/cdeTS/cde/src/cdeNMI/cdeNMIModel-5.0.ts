@@ -152,7 +152,8 @@
         FindPinnedScreen(): cdeNMI.INMIScreen;
         RenumberScreens();
 
-        SetView(pView: TheNMIScene);
+        SetView(pView: TheNMIScene, ClearScreens?: boolean);
+        ClearScenes();
         ShowView();
 
         SetStatusMsg(pStatusMsg: string, pState: number);

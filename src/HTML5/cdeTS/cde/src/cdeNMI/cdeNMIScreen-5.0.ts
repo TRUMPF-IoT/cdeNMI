@@ -98,6 +98,11 @@
             }
             this.MyScreen = this.MyScreenDIV; //BackCompat
             this.MyScreenDIV.className = cde.MyBaseAssets.MyServiceHostInfo.ScreenClassName; // "cdeBrowserTop";
+            if (this.GetSetting("ScreenClassName"))
+                this.MyScreenDIV.className = this.GetSetting("ScreenClassName");
+            if (cde.CBool(this.GetSetting("ShowFullScreen")) === true) {
+                this.MyScreenDIV.style.width = "100%";
+            }
             this.divDragContent.classList.add("cde-animate-opacity");
             //this.SetElement(this.MyScreenDIV);
 
@@ -360,6 +365,12 @@
                 this.mDivDashboardContent = document.createElement("div");
             this.mDivDashboardContent.id = "Content_" + this.MyScreenID;
             this.mDivDashboardContent.className = "CMyDashboard";
+            if (cde.CBool(this.GetSetting("ShowFullScreen")) === true) {
+                this.mDivDashboardContent.style.width = "100%";
+                this.mDivDashboardContent.style.display = "flex";
+                this.mDivDashboardContent.style.verticalAlign= "middle";
+                this.mDivDashboardContent.style.height = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) + "px";
+            }
             this.MyScreenDIV.appendChild(this.mDivDashboardContent);
 
             this.MyContainerElement = this.mDivDashboardContent;
