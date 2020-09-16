@@ -23968,7 +23968,7 @@ function Zoom(elem, config, wnd) {
     this.wnd = wnd || window;
     // trigger browser optimisations for the transition
     // see https://dev.opera.com/articles/css-will-change-property/
-    elem.style['will-change'] = 'transform';
+    //elem.style['will-change'] = 'transform';  //Bug in Chromium: https://stackoverflow.com/questions/51971241/webview-crashing-my-app-with-validation-error-deserialization-failed
     elem.style['transform-origin'] = '0 0';
     var getCoordsDouble = function (t) {
         var oX = elem.offsetLeft;
