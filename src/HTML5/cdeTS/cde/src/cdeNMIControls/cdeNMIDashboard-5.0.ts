@@ -271,7 +271,7 @@
             if (IsNewDashboard) {
                 if (!cde.MyBaseAssets.MyServiceHostInfo.WasInitialScreenVisible) {
                     if (cde.MyBaseAssets.MyCommStatus.LastStartScreen) {
-                        cdeNMI.MyScreenManager.TransitToScreen(cde.MyBaseAssets.MyCommStatus.LastStartScreen);
+                        cdeNMI.MyEngine.GetScene(cde.MyBaseAssets.MyCommStatus.LastStartScreen);
                     } else if (cde.MyBaseAssets.MyServiceHostInfo.StartScreen !== "" && tScreenInfo.MyDashboard["InitialState"] !== "error")
                         cdeNMI.MyScreenManager.GotoStationHome(false);
                     else {

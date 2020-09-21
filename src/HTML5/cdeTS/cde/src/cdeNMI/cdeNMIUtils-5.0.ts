@@ -1447,5 +1447,25 @@ namespace cdeNMI {
         elements.reverse();
         return elements;
     }
+
+    export function focusNextElement(goBack: boolean) {
+        const focussableElements = 'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
+        const focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
+            function (element) {
+                return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
+            });
+        const index = focussable.indexOf(document.activeElement);
+        if (index > -1) {
+            if (goBack === true) {
+                const nextElement = focussable[index - 1] || focussable[0];
+                nextElement.focus();
+            } else {
+                const nextElement = focussable[index + 1] || focussable[0];
+                nextElement.focus();
+            }
+        } else {
+            focussable[0].focus();
+        }
+    }
 }
 

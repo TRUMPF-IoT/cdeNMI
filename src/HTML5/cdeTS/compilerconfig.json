@@ -10,5 +10,9 @@
   {
     "outputFile": "cde/CSS/CDESTYLES.css",
     "inputFile": "cde/CSS/CDESTYLES.scss"
+  },
+  {
+    "outputFile": "cde/CSS/MYSTYLEST.css",
+    "inputFile": "cde/CSS/MYSTYLEST.scss"
   }
 ]

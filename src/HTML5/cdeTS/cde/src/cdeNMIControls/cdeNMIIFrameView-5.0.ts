@@ -51,8 +51,8 @@ namespace cdeNMI {
             else {
                 this.mBaseDiv.innerHTML = "";    //OK
             }
-
-
+            this.mBaseDiv.style.width = "inherit";
+            this.mBaseDiv.style.height = (window.innerHeight-cdeNMI.GetSizeFromTile(1))+"px";
             this.mDivDashboardContent = document.createElement("iframe");
             this.mDivDashboardContent.className = "cdeDashboardIFrame";
             this.mDivDashboardContent.style.width = "inherit";
@@ -61,7 +61,6 @@ namespace cdeNMI {
                 this.FireEvent(true, "OnIFrameLoaded", evt);
             };
             this.mDivDashboardContent.id = "cdeIFrame_" + this.MyScreenID;
-            this.mDivDashboardContent.className = "CMyDashboard";
             this.mBaseDiv.appendChild(this.mDivDashboardContent);
 
             this.SetElement(this.mBaseDiv, false, this.mDivDashboardContent);

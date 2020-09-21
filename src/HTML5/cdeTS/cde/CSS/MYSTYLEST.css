@@ -1,9 +1,8 @@
-/*
+﻿/*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
  *
  * SPDX-License-Identifier: CC0-1.0
  */
-
 div.cdeHeader {
   display: block;
   position: fixed;
@@ -53,6 +52,10 @@ div.cdeTileGroupHeader, div.cdeTileGroupHeaderSmall {
   cursor: pointer;
   position: relative;
   z-index: 0; }
+
+.cdeTesButton:focus {
+  background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+  border-radius: 10px; }
 
 .cdeTesButton:before {
   content: '';

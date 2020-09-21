@@ -123,6 +123,7 @@
                                 this.MyConfirmBox.style.cssFloat = "left";
                                 this.MyConfirmBox.className = "cdeInput";
                                 this.MyConfirmBox.type = "password";
+
                                 if (!cde.CBool(this.GetProperty("EnableAutoFill")) && !cde.CBool(this.GetProperty("InTemplate"))) {
                                     this.MyConfirmBox.name = "EB" + cde.GuidToString(this.MyFieldInfo.cdeMID) + "_" + Math.floor((Math.random() * 1000) + 1)
                                     this.MyConfirmBox.autocomplete = "new-password";

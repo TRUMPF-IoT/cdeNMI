@@ -6344,6 +6344,11 @@ var cdeNMI;
             }
             this.MyScreen = this.MyScreenDIV; //BackCompat
             this.MyScreenDIV.className = cde.MyBaseAssets.MyServiceHostInfo.ScreenClassName; // "cdeBrowserTop";
+            if (this.GetSetting("ScreenClassName"))
+                this.MyScreenDIV.className = this.GetSetting("ScreenClassName");
+            if (cde.CBool(this.GetSetting("ShowFullScreen")) === true) {
+                this.MyScreenDIV.style.width = "100%";
+            }
             this.divDragContent.classList.add("cde-animate-opacity");
             //this.SetElement(this.MyScreenDIV);
             if (!cde.CBool(this.GetSetting("NeverHide")) && !cde.CBool(this.GetSetting("HidePins")) && !cde.MyBaseAssets.MyServiceHostInfo.HideHeader && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 2 && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 4) {
@@ -6599,6 +6604,12 @@ var cdeNMI;
                 this.mDivDashboardContent = document.createElement("div");
             this.mDivDashboardContent.id = "Content_" + this.MyScreenID;
             this.mDivDashboardContent.className = "CMyDashboard";
+            if (cde.CBool(this.GetSetting("ShowFullScreen")) === true) {
+                this.mDivDashboardContent.style.width = "100%";
+                this.mDivDashboardContent.style.display = "flex";
+                this.mDivDashboardContent.style.verticalAlign = "middle";
+                this.mDivDashboardContent.style.height = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) + "px";
+            }
             this.MyScreenDIV.appendChild(this.mDivDashboardContent);
             this.MyContainerElement = this.mDivDashboardContent;
             if (cdeNMI.MyScreenManager) {
@@ -6994,10 +7005,19 @@ var cdeNMI;
                     if (!cdeNMI.DisableKey36Event)
                         _this.GotoStationHome(false);
                 }
+                else if (keyCode === 10009) {
+                    if (cdeNMI.MyScreenManager)
+                        cdeNMI.MyScreenManager.NavigateBack(false);
+                }
+                else if (keyCode === 39) {
+                    cdeNMI.focusNextElement(false);
+                }
+                else if (keyCode === 37) {
+                    cdeNMI.focusNextElement(true);
+                }
                 if (keyCode > 47 && keyCode < 58 && cdeNMI.Key13Event === null) {
                     _this.TransitToScreenIDX(keyCode - 48);
                 }
-                return true;
             };
             window.onpopstate = function () {
                 _this.NavigateBack(false);
@@ -7157,9 +7177,12 @@ var cdeNMI;
                 tPopup.SetProperty("NoLabel", "Cancel");
             }
         };
-        TheScreenManager.prototype.SetView = function (pView) {
+        TheScreenManager.prototype.SetView = function (pView, ClearScreens) {
+            if (ClearScreens === void 0) { ClearScreens = false; }
             if (!pView)
                 return;
+            if (ClearScreens === true)
+                this.ClearScenes();
             this.CurrentView = pView;
             if (cde.MyBaseAssets.MyServiceHostInfo.StartScreen)
                 this.StartView = this.CurrentView;
@@ -7316,7 +7339,7 @@ var cdeNMI;
             }
             return cde.MyBaseAssets.MyServiceHostInfo.ApplicationTitle;
         };
-        TheScreenManager.prototype.ClearAndGoHome = function () {
+        TheScreenManager.prototype.ClearScenes = function () {
             this.CurrentScreen = null;
             for (var i in this.MyNMIScreens) {
                 if (this.MyNMIScreens.hasOwnProperty(i)) {
@@ -7324,6 +7347,9 @@ var cdeNMI;
                     this.ShowHideScreen(this.MyNMIScreens[i]);
                 }
             }
+        };
+        TheScreenManager.prototype.ClearAndGoHome = function () {
+            this.ClearScenes();
             this.GotoStationHome(false);
         };
         TheScreenManager.prototype.AreScreensPinned = function (pScreen) {
@@ -10039,6 +10065,27 @@ var cdeNMI;
         return elements;
     }
     cdeNMI.GetAllElementsFromPoint = GetAllElementsFromPoint;
+    function focusNextElement(goBack) {
+        var focussableElements = 'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])';
+        var focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements), function (element) {
+            return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
+        });
+        var index = focussable.indexOf(document.activeElement);
+        if (index > -1) {
+            if (goBack === true) {
+                var nextElement = focussable[index - 1] || focussable[0];
+                nextElement.focus();
+            }
+            else {
+                var nextElement = focussable[index + 1] || focussable[0];
+                nextElement.focus();
+            }
+        }
+        else {
+            focussable[0].focus();
+        }
+    }
+    cdeNMI.focusNextElement = focusNextElement;
 })(cdeNMI || (cdeNMI = {}));
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
@@ -10437,9 +10484,15 @@ var cdeNMI;
                         cdeNMI.MyScreenManager.RequestPortalScreen(true);
                     }
                     return true;
+                case "NMI_GS":
+                    if (cdeNMI.MyEngine)
+                        cdeNMI.MyEngine.GetScene(pMSG.PLS);
+                    return true;
                 case "NMI_TTS":
-                    if (cdeNMI.MyScreenManager)
-                        cdeNMI.MyScreenManager.TransitToScreen(pMSG.PLS);
+                    if (cdeNMI.MyScreenManager) {
+                        cdeNMI.MyScreenManager.ClearScenes();
+                        cdeNMI.MyScreenManager.TransitToScreen(pMSG.PLS, true);
+                    }
                     return true;
                 case "NMI_LIVESCREENMETA":
                     if (pMSG.PLS) {
@@ -10541,7 +10594,7 @@ var cdeNMI;
                     break;
                 case "NMI_SET_SCENE":
                     if (cdeNMI.MyScreenManager) {
-                        cdeNMI.MyScreenManager.SetView(JSON.parse(pMSG.PLS));
+                        cdeNMI.MyScreenManager.SetView(JSON.parse(pMSG.PLS), true);
                     }
                     break;
                 case "NMI_SET_DATA":
@@ -21197,7 +21250,7 @@ var cdeNMI;
             if (IsNewDashboard) {
                 if (!cde.MyBaseAssets.MyServiceHostInfo.WasInitialScreenVisible) {
                     if (cde.MyBaseAssets.MyCommStatus.LastStartScreen) {
-                        cdeNMI.MyScreenManager.TransitToScreen(cde.MyBaseAssets.MyCommStatus.LastStartScreen);
+                        cdeNMI.MyEngine.GetScene(cde.MyBaseAssets.MyCommStatus.LastStartScreen);
                     }
                     else if (cde.MyBaseAssets.MyServiceHostInfo.StartScreen !== "" && tScreenInfo.MyDashboard["InitialState"] !== "error")
                         cdeNMI.MyScreenManager.GotoStationHome(false);
@@ -21302,6 +21355,9 @@ var cdeNMI;
                     tF.RemoveFormHooks(tF.MyFormControls);
                 this.mBaseDiv.innerHTML = ""; //OK
             }
+            this.mBaseDiv.style.width = "inherit";
+            this.mBaseDiv.style.height = "inherit";
+            this.mBaseDiv.style.margin = "auto";
             this.SetElement(this.mBaseDiv);
             var tCurrentRow = cde.CInt(this.MyTRF.RowNo);
             if (this.MyFieldInfo && cde.CBool(this.MyFieldInfo["ILF"]) && !this.MyScreenInfo.IsLiveForm)
@@ -22827,6 +22883,8 @@ var cdeNMI;
             else {
                 this.mBaseDiv.innerHTML = ""; //OK
             }
+            this.mBaseDiv.style.width = "inherit";
+            this.mBaseDiv.style.height = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) + "px";
             this.mDivDashboardContent = document.createElement("iframe");
             this.mDivDashboardContent.className = "cdeDashboardIFrame";
             this.mDivDashboardContent.style.width = "inherit";
@@ -22835,7 +22893,6 @@ var cdeNMI;
                 _this.FireEvent(true, "OnIFrameLoaded", evt);
             };
             this.mDivDashboardContent.id = "cdeIFrame_" + this.MyScreenID;
-            this.mDivDashboardContent.className = "CMyDashboard";
             this.mBaseDiv.appendChild(this.mDivDashboardContent);
             this.SetElement(this.mBaseDiv, false, this.mDivDashboardContent);
             this.SetProperty("ID", "FORM_" + this.MyTableName);
@@ -23447,20 +23504,32 @@ var cdeNMI;
             });
         }
         //cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "ScreenInfo", window.innerWidth + "," + window.innerHeight +" Doc:"+ screen.width+","+screen.height);
-        document.onkeydown = function (evt) {
-            var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : evt.keyCode;
-            if (keyCode === 13) {
-                if (cdeNMI.Key13Event !== null)
-                    cdeNMI.Key13Event(evt);
-                cdeNMI.Key13Event = null;
-            }
-            else if (keyCode === 27) {
-                //For escape.
-                if (cdeNMI.Key27Event !== null)
-                    cdeNMI.Key27Event(evt);
-                cdeNMI.Key27Event = null;
-            }
-        };
+        //document.onkeydown = (evt) => {
+        //    const keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : evt.keyCode;
+        //    switch (keyCode) {
+        //        case 13:
+        //            if (cdeNMI.Key13Event !== null)
+        //                cdeNMI.Key13Event(evt);
+        //            cdeNMI.Key13Event = null;
+        //            break;
+        //        case 27:
+        //            //For escape.
+        //            if (cdeNMI.Key27Event !== null)
+        //                cdeNMI.Key27Event(evt);
+        //            cdeNMI.Key27Event = null;
+        //            break;
+        //        case 10009: //Tizen back
+        //            if (cdeNMI.MyScreenManager)
+        //                cdeNMI.MyScreenManager.NavigateBack(false);
+        //            break;
+        //        case 39: //right
+        //            cdeNMI.focusNextElement(false);
+        //            break;
+        //        case 37: //left
+        //            cdeNMI.focusNextElement(true);
+        //            break;
+        //    }
+        //};
         //Step 1: Register all overrides (can be done in StartEngine of custom Engines)
         if (cde.MyBaseAssets.MyServiceHostInfo.ShowClassic)
             cdeNMI.MyTCF.RegisterControlType(cdeNMI.cdeControlType.ScreenManager, "cdeNMI.TheScreenManagerClassic");
