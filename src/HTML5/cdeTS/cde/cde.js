@@ -12148,14 +12148,22 @@ var cdeNMI;
         };
         ctrlComboBox.prototype.OnHideDropDown = function () {
             var cDropDownEle = this.GetElement().getElementsByClassName("choices__list choices__list--dropdown")[0];
-            if (cDropDownEle) {
-                cDropDownEle.style.top = "initial";
+            if (cDropDownEle && window.innerWidth > 1024) {
+                cDropDownEle.style.top = null;
+                cDropDownEle.style.bottom = null; //"initial";
+                cDropDownEle.style.width = null; //"800px";
             }
         };
         ctrlComboBox.prototype.OnShowDropDown = function () {
             var cDropDownEle = this.GetElement().getElementsByClassName("choices__list choices__list--dropdown is-active")[0];
-            if (cDropDownEle) {
-                cDropDownEle.style.top = (cDropDownEle.getBoundingClientRect().top - window.scrollY) + "px";
+            if (cDropDownEle && window.innerWidth > 1024) {
+                if (window.innerHeight - (cDropDownEle.getBoundingClientRect().top - window.scrollY) < 300) {
+                    cDropDownEle.style.bottom = "0px";
+                    cDropDownEle.style.width = "100%";
+                }
+                else {
+                    cDropDownEle.style.top = (cDropDownEle.getBoundingClientRect().top - window.scrollY) + "px";
+                }
             }
             this.myChoices.setChoices(this.MyCurrentData, "value", "label", true);
             if (this.NeedRefresh)
