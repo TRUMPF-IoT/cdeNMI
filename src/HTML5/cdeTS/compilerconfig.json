@@ -14,5 +14,13 @@
   {
     "outputFile": "cde/CSS/MYSTYLEST.css",
     "inputFile": "cde/CSS/MYSTYLEST.scss"
+  },
+  {
+    "outputFile": "cde/CSS/choices.dark.css",
+    "inputFile": "cde/CSS/choices.dark.scss"
+  },
+  {
+    "outputFile": "cde/CSS/choices.lite.css",
+    "inputFile": "cde/CSS/choices.lite.scss"
   }
 ]

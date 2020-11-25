@@ -20,8 +20,9 @@
         public MyTEContent: INMIControl = null; // ctrlTileGroup = null;
 
         mOldClassName: string = null;
-        mTELabel: INMIControl = null; // ctrlTileGroup = null;
+        public MyTELabel: INMIControl = null; // ctrlTileGroup = null;
         mTEContentOuter: INMIControl = null;
+        public DontHideLabel: boolean;
 
         public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
             this.MyBaseType = cdeControlType.TileEntry;
@@ -35,10 +36,10 @@
             }
             //this.MyTEContainer.GetElement().style.zoom = cde.MyBaseAssets.MyServiceHostInfo.TileScale.toString();
 
-            this.mTELabel = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(this.MyTEContainer, { ScreenID: pScreenID });
-            this.mTELabel.SetProperty("LabelElement", "span");
-            this.mTELabel.SetProperty("LabelClassName", "cdeTileEntryLabel");
-            this.mTELabel.SetProperty("ClassName", "cdeFlexLabel");
+            this.MyTELabel = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(this.MyTEContainer, { ScreenID: pScreenID });
+            this.MyTELabel.SetProperty("LabelElement", "span");
+            this.MyTELabel.SetProperty("LabelClassName", "cdeTileEntryLabel");
+            this.MyTELabel.SetProperty("ClassName", "cdeFlexLabel");
 
             this.mTEContentOuter = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(this.MyTEContainer, { ScreenID: pScreenID });
             this.mTEContentOuter.SetProperty("ClassName", "cdeFlexRow cdeFlexCenter cdeFlexStart cdeControlContainer");
@@ -184,14 +185,15 @@
                     tScale = cde.CInt(this.GetProperty("TileFactorX"));
 
                 if (cde.CBool(this.GetProperty("NoTE")) || cde.CInt(this.GetProperty("TileWidth")) < (3 * tScale)) {
-                    this.mTELabel.SetProperty("Visibility", false);
+                    if (!this.DontHideLabel)
+                        this.MyTELabel.SetProperty("Visibility", false);
                     this.MyTEContainer.SetProperty("TileWidth", cde.CInt(this.GetProperty("TileWidth")));
                     this.mTEContentOuter.SetProperty("TileWidth", cde.CInt(this.GetProperty("TileWidth")));
                     super.SetProperty("ControlTW", cde.CInt(this.GetProperty("TileWidth")));
                 }
                 else {
-                    this.mTELabel.SetProperty("Visibility", true);
-                    this.mTELabel.SetProperty("TileWidth", 2);
+                    this.MyTELabel.SetProperty("Visibility", true);
+                    this.MyTELabel.SetProperty("TileWidth", 2);
                     this.mTEContentOuter.SetProperty("TileWidth", cde.CInt(this.GetProperty("TileWidth")) - 2);
                     super.SetProperty("ControlTW", cde.CInt(this.GetProperty("TileWidth")) - 2);
                 }
@@ -204,7 +206,7 @@
                     return;
                 this.MyTEContainer.SetProperty("TileHeight", cde.CInt(pValue));
                 this.mTEContentOuter.SetProperty("TileHeight", cde.CInt(pValue));
-                this.mTELabel.SetProperty("TileHeight", cde.CInt(pValue));
+                this.MyTELabel.SetProperty("TileHeight", cde.CInt(pValue));
                 super.SetProperty("ControlTH", cde.CInt(this.GetProperty("TileHeight")));
                 if (this.MyNMIControl) {
                     this.MyNMIControl.SetProperty("ControlTH", cde.CInt(this.GetProperty("ControlTH")));
@@ -213,30 +215,30 @@
             } else if (pName === "TileFactorX") {
                 this.MyTEContainer.SetProperty("TileFactorX", cde.CInt(pValue));
                 this.mTEContentOuter.SetProperty("TileFactorX", cde.CInt(pValue));
-                this.mTELabel.SetProperty("TileFactorX", cde.CInt(pValue));
+                this.MyTELabel.SetProperty("TileFactorX", cde.CInt(pValue));
                 //return;
             } else if (pName === "TileFactorY") {
                 this.MyTEContainer.SetProperty("TileFactorY", cde.CInt(pValue));
                 this.mTEContentOuter.SetProperty("TileFactorY", cde.CInt(pValue));
-                this.mTELabel.SetProperty("TileFactorY", cde.CInt(pValue));
+                this.MyTELabel.SetProperty("TileFactorY", cde.CInt(pValue));
                 //return;
-            } else if (pName === "ContainerStyle" && this.mTELabel) {
+            } else if (pName === "ContainerStyle" && this.MyTELabel) {
                 this.MyTEContainer.SetProperty("Style", pValue);
             } else if (pName === "ContainerClassName" && this.MyTEContainer) {
                 this.MyTEContainer.SetProperty("ClassName", pValue);
                 return;
-            } else if (pName === "LabelClassName" && this.mTELabel) {
-                this.mTELabel.SetProperty("ClassName", pValue);
-                this.mTELabel.SetProperty("LabelClassName", pValue);
+            } else if (pName === "LabelClassName" && this.MyTELabel) {
+                this.MyTELabel.SetProperty("ClassName", pValue);
+                this.MyTELabel.SetProperty("LabelClassName", pValue);
                 return;
-            } else if (pName === "LabelForeground" && this.mTELabel) {
-                this.mTELabel.SetProperty("LabelForeground", pValue);
+            } else if (pName === "LabelForeground" && this.MyTELabel) {
+                this.MyTELabel.SetProperty("LabelForeground", pValue);
                 return;
-            } else if (pName === "LabelFontSize" && this.mTELabel) {
-                this.mTELabel.SetProperty("LabelFontSize", pValue);
+            } else if (pName === "LabelFontSize" && this.MyTELabel) {
+                this.MyTELabel.SetProperty("LabelFontSize", pValue);
                 return;
-            } else if ((pName === "LabelBackground" || pName === "CaptionBackground") && this.mTELabel) {
-                this.mTELabel.SetProperty("CaptionBackground", pValue);
+            } else if ((pName === "LabelBackground" || pName === "CaptionBackground") && this.MyTELabel) {
+                this.MyTELabel.SetProperty("CaptionBackground", pValue);
                 return;
             } else if (pName === "ContentOuterClassName" && this.mTEContentOuter) {
                 this.mTEContentOuter.SetProperty("ClassName", pValue);
@@ -261,8 +263,8 @@
                         break;
                 }
                 return;
-            } else if ((pName === "Label" || pName === "Title") && this.mTELabel) {
-                this.mTELabel.SetProperty("Label", pValue);
+            } else if ((pName === "Label" || pName === "Title") && this.MyTELabel) {
+                this.MyTELabel.SetProperty("Label", pValue);
                 if (!cde.CBool(this.GetProperty("NoTE")))
                     return;
             } else if (pName === "PlaceHolder" && this.MyTEContent) {
