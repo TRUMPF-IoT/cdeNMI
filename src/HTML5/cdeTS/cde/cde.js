@@ -17849,8 +17849,12 @@ var cdeNMI;
             }
             if (pValidateOnly === true)
                 return;
-            if (this.MyFieldInfo.Type === cdeNMI.cdeControlType.Password && cdeNMI.MyToast)
-                cdeNMI.MyToast.ShowToastMessage("Password was set successfully");
+            if (this.MyFieldInfo.Type === cdeNMI.cdeControlType.Password && cdeNMI.MyToast) {
+                if (this.GetProperty("ReturnClicked"))
+                    this.GetProperty("ReturnClicked")();
+                else
+                    cdeNMI.MyToast.ShowToastMessage("Password was set successfully");
+            }
             this.IsDirty = true;
             this.FireEvent(false, "OnValueChanged", "CheckAndWriteValue", pEle.value, this.MyTRF);
             this.FireEvent(false, "OnPropertyChanged", "CheckAndWriteValue", pEle.value, "Value");
@@ -18312,8 +18316,11 @@ var cdeNMI;
             return true;
         };
         ctrlCollapsibleGroup.prototype.SetProperty = function (pName, pValue) {
-            if (pName === "UseMargin" && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 1 && cde.CBool(pValue) === true) {
-                _super.prototype.SetProperty.call(this, "Margin", cdeNMI.GetSizeFromTile(1) / 4);
+            if (pName === "UseMargin" && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 1) {
+                if (cde.CBool(pValue) === true)
+                    _super.prototype.SetProperty.call(this, "Margin", cdeNMI.GetSizeFromTile(1) / 4);
+                else
+                    _super.prototype.SetProperty.call(this, "Margin", 0);
                 return;
             }
             else if (pName === "Caption" || pName === "Label" || pName === "Title" || pName === "Value" || pName === "iValue") {
@@ -23107,6 +23114,7 @@ var cdeNMI;
                         this.mLoginButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tLogBut });
                         this.mLoginButton.CreateControl("LOGBUT");
                         this.mLoginButton.MyNMIControl.SetProperty("OnClick", function () { _this.LoginClick(); });
+                        this.mPWD.SetProperty("ReturnClicked", function () { _this.LoginClick(); });
                     }
                 }
             }
@@ -23325,6 +23333,7 @@ var cdeNMI;
                     this.mScope.SetProperty("Visibility", true);
                 this.mUID.SetProperty("Visibility", true);
                 this.mPWD2.SetProperty("Visibility", true);
+                this.mPWD2.SetProperty("ReturnClicked", function () { _this.LoginClick(); });
                 if (cde.MyBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin)
                     this.mScope.SetProperty("Visibility", true);
                 this.mHeaderHelp.MyNMIControl.SetProperty("Text", "The Administrator password and email are not set, yet. Please enter a strong password to ensure maximum security.");

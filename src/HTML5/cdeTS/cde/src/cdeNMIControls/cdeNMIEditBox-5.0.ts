@@ -582,8 +582,12 @@
             }
             if (pValidateOnly === true)
                 return;
-            if (this.MyFieldInfo.Type === cdeControlType.Password && cdeNMI.MyToast)
-                cdeNMI.MyToast.ShowToastMessage("Password was set successfully");
+            if (this.MyFieldInfo.Type === cdeControlType.Password && cdeNMI.MyToast) {
+                if (this.GetProperty("ReturnClicked"))
+                    this.GetProperty("ReturnClicked")();
+                else
+                    cdeNMI.MyToast.ShowToastMessage("Password was set successfully");
+            }
 
             this.IsDirty = true;
             this.FireEvent(false, "OnValueChanged", "CheckAndWriteValue", pEle.value, this.MyTRF);

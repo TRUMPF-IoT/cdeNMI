@@ -396,8 +396,11 @@
         }
 
         public SetProperty(pName: string, pValue) {
-            if (pName === "UseMargin" && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 1 && cde.CBool(pValue) === true) {
-                super.SetProperty("Margin", cdeNMI.GetSizeFromTile(1) / 4);
+            if (pName === "UseMargin" && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 1) {
+                if (cde.CBool(pValue) === true)
+                    super.SetProperty("Margin", cdeNMI.GetSizeFromTile(1) / 4);
+                else
+                    super.SetProperty("Margin", 0);
                 return;
             } else if (pName === "Caption" || pName === "Label" || pName === "Title" || pName === "Value" || pName === "iValue") {
                 let tNewVal = pValue;
