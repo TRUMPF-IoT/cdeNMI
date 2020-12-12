@@ -1,5 +1,5 @@
 {
-  "version": "5.0.15",
+  "version": "5.110.1",
   "name": "cde-js",
   "private": true,
   "description": "C-DEngine NMI JavaScript Runtime written in TS",
@@ -11,6 +11,6 @@
   },
   "author": "Chris Muench",
   "devDependencies": {
-    "typescript": "^3.9.2"
+    "typescript": "^4.0.3"
   }
 }

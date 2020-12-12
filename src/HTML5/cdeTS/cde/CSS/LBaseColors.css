@@ -432,6 +432,9 @@ div.cdePopupContent41 {
 .cdeTileEntryLabel {
   color: #878787; }
 
+.cdeTileEntryLabelSmall {
+  color: #878787; }
+
 .cdeBlurBack {
   position: absolute;
   background: inherit;

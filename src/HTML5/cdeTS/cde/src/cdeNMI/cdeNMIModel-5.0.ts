@@ -109,6 +109,8 @@
 
         MyTEContainer: INMIControl;
         MyTEContent: INMIControl;
+        MyTELabel: INMIControl;
+        DontHideLabel: boolean;
     }
 
     export interface INMIButton extends INMIControl {

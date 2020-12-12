@@ -313,8 +313,25 @@ namespace cdeNMI {
         public ApplySkin() {
             this.ApplySkiny();
         }
-
+        public OnHideDropDown() {
+            const cDropDownEle = this.GetElement().getElementsByClassName("choices__list choices__list--dropdown")[0] as HTMLElement;
+            if (cDropDownEle && window.innerWidth > 1024) {
+                cDropDownEle.style.top = null;
+                cDropDownEle.style.bottom = null; //"initial";
+                cDropDownEle.style.width = null; //"800px";
+            }
+        }
         public OnShowDropDown() {
+            const cDropDownEle = this.GetElement().getElementsByClassName("choices__list choices__list--dropdown is-active")[0] as HTMLElement;
+            if (cDropDownEle && window.innerWidth > 1024) {
+                if (window.innerHeight - (cDropDownEle.getBoundingClientRect().top-window.scrollY) < 300) {
+                    cDropDownEle.style.bottom = "0px";
+                    cDropDownEle.style.width = "100%";
+                } else {
+                    cDropDownEle.style.top = (cDropDownEle.getBoundingClientRect().top - window.scrollY) + "px";
+                }
+            }
+
             this.myChoices.setChoices(this.MyCurrentData, "value", "label", true);
             if (this.NeedRefresh)
                 this.CalculateOption(null);
@@ -360,6 +377,13 @@ namespace cdeNMI {
                             'showDropdown',
                             () => {
                                 this.OnShowDropDown();
+                            },
+                            false,
+                        );
+                        this.myChoices.passedElement.element.addEventListener(
+                            'hideDropdown',
+                            () => {
+                                this.OnHideDropDown();
                             },
                             false,
                         );
@@ -412,6 +436,16 @@ namespace cdeNMI {
                 this.SetToDefault(true);
             } catch (e) {
                 cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", this.ControlText + ":ApplySkiny", "Exception :" + e);
+            }
+        }
+
+        SetTE(pTE: INMITileEntry) {
+            super.SetTE(pTE);
+            if (this.MyTE && cde.CBool(this.GetProperty("NoTE")) === true) {
+                this.MyTE.DontHideLabel = true;
+                this.MyTE.MyTELabel.SetProperty("Visibility", true);
+                this.MyTE.MyTELabel.SetProperty("PixelHeight", 18);
+                this.MyTE.MyTELabel.SetProperty("LabelClassName", "cdeTileEntryLabelSmall");
             }
         }
 

@@ -2,7 +2,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -12146,7 +12146,25 @@ var cdeNMI;
         ctrlComboBox.prototype.ApplySkin = function () {
             this.ApplySkiny();
         };
+        ctrlComboBox.prototype.OnHideDropDown = function () {
+            var cDropDownEle = this.GetElement().getElementsByClassName("choices__list choices__list--dropdown")[0];
+            if (cDropDownEle && window.innerWidth > 1024) {
+                cDropDownEle.style.top = null;
+                cDropDownEle.style.bottom = null; //"initial";
+                cDropDownEle.style.width = null; //"800px";
+            }
+        };
         ctrlComboBox.prototype.OnShowDropDown = function () {
+            var cDropDownEle = this.GetElement().getElementsByClassName("choices__list choices__list--dropdown is-active")[0];
+            if (cDropDownEle && window.innerWidth > 1024) {
+                if (window.innerHeight - (cDropDownEle.getBoundingClientRect().top - window.scrollY) < 300) {
+                    cDropDownEle.style.bottom = "0px";
+                    cDropDownEle.style.width = "100%";
+                }
+                else {
+                    cDropDownEle.style.top = (cDropDownEle.getBoundingClientRect().top - window.scrollY) + "px";
+                }
+            }
             this.myChoices.setChoices(this.MyCurrentData, "value", "label", true);
             if (this.NeedRefresh)
                 this.CalculateOption(null);
@@ -12192,6 +12210,9 @@ var cdeNMI;
                         this.myChoices.passedElement.element.addEventListener('showDropdown', function () {
                             _this.OnShowDropDown();
                         }, false);
+                        this.myChoices.passedElement.element.addEventListener('hideDropdown', function () {
+                            _this.OnHideDropDown();
+                        }, false);
                         if (this.MyFieldInfo.Type === cdeNMI.cdeControlType.ComboOption && cde.CBool(this.GetProperty("AllowNewEntry")) === true) {
                             this.myChoices.passedElement.element.addEventListener('search', function (event) {
                                 var tRealVal = event.detail.value;
@@ -12231,6 +12252,15 @@ var cdeNMI;
             }
             catch (e) {
                 cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", this.ControlText + ":ApplySkiny", "Exception :" + e);
+            }
+        };
+        ctrlComboBox.prototype.SetTE = function (pTE) {
+            _super.prototype.SetTE.call(this, pTE);
+            if (this.MyTE && cde.CBool(this.GetProperty("NoTE")) === true) {
+                this.MyTE.DontHideLabel = true;
+                this.MyTE.MyTELabel.SetProperty("Visibility", true);
+                this.MyTE.MyTELabel.SetProperty("PixelHeight", 18);
+                this.MyTE.MyTELabel.SetProperty("LabelClassName", "cdeTileEntryLabelSmall");
             }
         };
         ctrlComboBox.prototype.CalPicker = function () {
@@ -13897,6 +13927,14 @@ var cdeNMI;
                 this.InnerText.innerHTML = pValue;
             }
             _super.prototype.SetProperty.call(this, pName, pValue);
+        };
+        ctrlCheckBox.prototype.SetTE = function (pTE) {
+            _super.prototype.SetTE.call(this, pTE);
+            if (this.MyTE && cde.CBool(this.GetProperty("NoTE")) === true) {
+                this.MyTE.MyTELabel.SetProperty("Visibility", true);
+                this.MyTE.MyTELabel.SetProperty("PixelHeight", 18);
+                this.MyTE.MyTELabel.SetProperty("FontSize", 15);
+            }
         };
         ctrlCheckBox.prototype.PostCreate = function (pTE) {
             var _this = this;
@@ -17811,8 +17849,12 @@ var cdeNMI;
             }
             if (pValidateOnly === true)
                 return;
-            if (this.MyFieldInfo.Type === cdeNMI.cdeControlType.Password && cdeNMI.MyToast)
-                cdeNMI.MyToast.ShowToastMessage("Password was set successfully");
+            if (this.MyFieldInfo.Type === cdeNMI.cdeControlType.Password && cdeNMI.MyToast) {
+                if (this.GetProperty("ReturnClicked"))
+                    this.GetProperty("ReturnClicked")();
+                else
+                    cdeNMI.MyToast.ShowToastMessage("Password was set successfully");
+            }
             this.IsDirty = true;
             this.FireEvent(false, "OnValueChanged", "CheckAndWriteValue", pEle.value, this.MyTRF);
             this.FireEvent(false, "OnPropertyChanged", "CheckAndWriteValue", pEle.value, "Value");
@@ -18274,8 +18316,11 @@ var cdeNMI;
             return true;
         };
         ctrlCollapsibleGroup.prototype.SetProperty = function (pName, pValue) {
-            if (pName === "UseMargin" && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 1 && cde.CBool(pValue) === true) {
-                _super.prototype.SetProperty.call(this, "Margin", cdeNMI.GetSizeFromTile(1) / 4);
+            if (pName === "UseMargin" && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 1) {
+                if (cde.CBool(pValue) === true)
+                    _super.prototype.SetProperty.call(this, "Margin", cdeNMI.GetSizeFromTile(1) / 4);
+                else
+                    _super.prototype.SetProperty.call(this, "Margin", 0);
                 return;
             }
             else if (pName === "Caption" || pName === "Label" || pName === "Title" || pName === "Value" || pName === "iValue") {
@@ -19694,7 +19739,7 @@ var cdeNMI;
             _this.MyTEContainer = null;
             _this.MyTEContent = null; // ctrlTileGroup = null;
             _this.mOldClassName = null;
-            _this.mTELabel = null; // ctrlTileGroup = null;
+            _this.MyTELabel = null; // ctrlTileGroup = null;
             _this.mTEContentOuter = null;
             return _this;
         }
@@ -19709,10 +19754,10 @@ var cdeNMI;
                 this.MyTEContainer.GetElement().setAttribute("cdemid", cde.GuidToString(pTRF.FldInfo.cdeMID));
             }
             //this.MyTEContainer.GetElement().style.zoom = cde.MyBaseAssets.MyServiceHostInfo.TileScale.toString();
-            this.mTELabel = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileGroup).Create(this.MyTEContainer, { ScreenID: pScreenID });
-            this.mTELabel.SetProperty("LabelElement", "span");
-            this.mTELabel.SetProperty("LabelClassName", "cdeTileEntryLabel");
-            this.mTELabel.SetProperty("ClassName", "cdeFlexLabel");
+            this.MyTELabel = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileGroup).Create(this.MyTEContainer, { ScreenID: pScreenID });
+            this.MyTELabel.SetProperty("LabelElement", "span");
+            this.MyTELabel.SetProperty("LabelClassName", "cdeTileEntryLabel");
+            this.MyTELabel.SetProperty("ClassName", "cdeFlexLabel");
             this.mTEContentOuter = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileGroup).Create(this.MyTEContainer, { ScreenID: pScreenID });
             this.mTEContentOuter.SetProperty("ClassName", "cdeFlexRow cdeFlexCenter cdeFlexStart cdeControlContainer");
             this.MyTEContent = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileGroup).Create(this.mTEContentOuter, { ScreenID: pScreenID });
@@ -19844,14 +19889,15 @@ var cdeNMI;
                 if (cde.CInt(this.GetProperty("TileFactorX")) > 1)
                     tScale = cde.CInt(this.GetProperty("TileFactorX"));
                 if (cde.CBool(this.GetProperty("NoTE")) || cde.CInt(this.GetProperty("TileWidth")) < (3 * tScale)) {
-                    this.mTELabel.SetProperty("Visibility", false);
+                    if (!this.DontHideLabel)
+                        this.MyTELabel.SetProperty("Visibility", false);
                     this.MyTEContainer.SetProperty("TileWidth", cde.CInt(this.GetProperty("TileWidth")));
                     this.mTEContentOuter.SetProperty("TileWidth", cde.CInt(this.GetProperty("TileWidth")));
                     _super.prototype.SetProperty.call(this, "ControlTW", cde.CInt(this.GetProperty("TileWidth")));
                 }
                 else {
-                    this.mTELabel.SetProperty("Visibility", true);
-                    this.mTELabel.SetProperty("TileWidth", 2);
+                    this.MyTELabel.SetProperty("Visibility", true);
+                    this.MyTELabel.SetProperty("TileWidth", 2);
                     this.mTEContentOuter.SetProperty("TileWidth", cde.CInt(this.GetProperty("TileWidth")) - 2);
                     _super.prototype.SetProperty.call(this, "ControlTW", cde.CInt(this.GetProperty("TileWidth")) - 2);
                 }
@@ -19865,7 +19911,7 @@ var cdeNMI;
                     return;
                 this.MyTEContainer.SetProperty("TileHeight", cde.CInt(pValue));
                 this.mTEContentOuter.SetProperty("TileHeight", cde.CInt(pValue));
-                this.mTELabel.SetProperty("TileHeight", cde.CInt(pValue));
+                this.MyTELabel.SetProperty("TileHeight", cde.CInt(pValue));
                 _super.prototype.SetProperty.call(this, "ControlTH", cde.CInt(this.GetProperty("TileHeight")));
                 if (this.MyNMIControl) {
                     this.MyNMIControl.SetProperty("ControlTH", cde.CInt(this.GetProperty("ControlTH")));
@@ -19875,37 +19921,37 @@ var cdeNMI;
             else if (pName === "TileFactorX") {
                 this.MyTEContainer.SetProperty("TileFactorX", cde.CInt(pValue));
                 this.mTEContentOuter.SetProperty("TileFactorX", cde.CInt(pValue));
-                this.mTELabel.SetProperty("TileFactorX", cde.CInt(pValue));
+                this.MyTELabel.SetProperty("TileFactorX", cde.CInt(pValue));
                 //return;
             }
             else if (pName === "TileFactorY") {
                 this.MyTEContainer.SetProperty("TileFactorY", cde.CInt(pValue));
                 this.mTEContentOuter.SetProperty("TileFactorY", cde.CInt(pValue));
-                this.mTELabel.SetProperty("TileFactorY", cde.CInt(pValue));
+                this.MyTELabel.SetProperty("TileFactorY", cde.CInt(pValue));
                 //return;
             }
-            else if (pName === "ContainerStyle" && this.mTELabel) {
+            else if (pName === "ContainerStyle" && this.MyTELabel) {
                 this.MyTEContainer.SetProperty("Style", pValue);
             }
             else if (pName === "ContainerClassName" && this.MyTEContainer) {
                 this.MyTEContainer.SetProperty("ClassName", pValue);
                 return;
             }
-            else if (pName === "LabelClassName" && this.mTELabel) {
-                this.mTELabel.SetProperty("ClassName", pValue);
-                this.mTELabel.SetProperty("LabelClassName", pValue);
+            else if (pName === "LabelClassName" && this.MyTELabel) {
+                this.MyTELabel.SetProperty("ClassName", pValue);
+                this.MyTELabel.SetProperty("LabelClassName", pValue);
                 return;
             }
-            else if (pName === "LabelForeground" && this.mTELabel) {
-                this.mTELabel.SetProperty("LabelForeground", pValue);
+            else if (pName === "LabelForeground" && this.MyTELabel) {
+                this.MyTELabel.SetProperty("LabelForeground", pValue);
                 return;
             }
-            else if (pName === "LabelFontSize" && this.mTELabel) {
-                this.mTELabel.SetProperty("LabelFontSize", pValue);
+            else if (pName === "LabelFontSize" && this.MyTELabel) {
+                this.MyTELabel.SetProperty("LabelFontSize", pValue);
                 return;
             }
-            else if ((pName === "LabelBackground" || pName === "CaptionBackground") && this.mTELabel) {
-                this.mTELabel.SetProperty("CaptionBackground", pValue);
+            else if ((pName === "LabelBackground" || pName === "CaptionBackground") && this.MyTELabel) {
+                this.MyTELabel.SetProperty("CaptionBackground", pValue);
                 return;
             }
             else if (pName === "ContentOuterClassName" && this.mTEContentOuter) {
@@ -19935,8 +19981,8 @@ var cdeNMI;
                 }
                 return;
             }
-            else if ((pName === "Label" || pName === "Title") && this.mTELabel) {
-                this.mTELabel.SetProperty("Label", pValue);
+            else if ((pName === "Label" || pName === "Title") && this.MyTELabel) {
+                this.MyTELabel.SetProperty("Label", pValue);
                 if (!cde.CBool(this.GetProperty("NoTE")))
                     return;
             }
@@ -23068,6 +23114,7 @@ var cdeNMI;
                         this.mLoginButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tLogBut });
                         this.mLoginButton.CreateControl("LOGBUT");
                         this.mLoginButton.MyNMIControl.SetProperty("OnClick", function () { _this.LoginClick(); });
+                        this.mPWD.SetProperty("ReturnClicked", function () { _this.LoginClick(); });
                     }
                 }
             }
@@ -23286,6 +23333,7 @@ var cdeNMI;
                     this.mScope.SetProperty("Visibility", true);
                 this.mUID.SetProperty("Visibility", true);
                 this.mPWD2.SetProperty("Visibility", true);
+                this.mPWD2.SetProperty("ReturnClicked", function () { _this.LoginClick(); });
                 if (cde.MyBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin)
                     this.mScope.SetProperty("Visibility", true);
                 this.mHeaderHelp.MyNMIControl.SetProperty("Text", "The Administrator password and email are not set, yet. Please enter a strong password to ensure maximum security.");
@@ -23968,7 +24016,7 @@ function Zoom(elem, config, wnd) {
     this.wnd = wnd || window;
     // trigger browser optimisations for the transition
     // see https://dev.opera.com/articles/css-will-change-property/
-    elem.style['will-change'] = 'transform';
+    //elem.style['will-change'] = 'transform';  //Bug in Chromium: https://stackoverflow.com/questions/51971241/webview-crashing-my-app-with-validation-error-deserialization-failed
     elem.style['transform-origin'] = '0 0';
     var getCoordsDouble = function (t) {
         var oX = elem.offsetLeft;

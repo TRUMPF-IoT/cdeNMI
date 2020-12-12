@@ -1002,7 +1002,14 @@
             super.SetProperty(pName, pValue);
         }
 
-
+        SetTE(pTE: INMITileEntry) {
+            super.SetTE(pTE);
+            if (this.MyTE && cde.CBool(this.GetProperty("NoTE")) === true) {
+                this.MyTE.MyTELabel.SetProperty("Visibility", true);
+                this.MyTE.MyTELabel.SetProperty("PixelHeight", 18);
+                this.MyTE.MyTELabel.SetProperty("FontSize", 15);
+            }
+        }
 
         PostCreate(pTE: INMITileEntry) {
             if (!cde.CBool(pTE.GetProperty("IsInTable"))) {

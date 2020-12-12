@@ -659,7 +659,9 @@ $cde-toggle-active: $system-available-color-green !default;
     color: $cde-tile-color;
     }
 
-
+.cdeTileEntryLabelSmall {
+    color: $cde-tile-color;
+}
 
     $blur: 10;
 
