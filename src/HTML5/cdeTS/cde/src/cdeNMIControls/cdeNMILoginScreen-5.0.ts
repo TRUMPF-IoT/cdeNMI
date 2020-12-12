@@ -110,7 +110,7 @@
                         this.mLoginButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tLogBut }) as INMITileEntry;
                         this.mLoginButton.CreateControl("LOGBUT");
                         this.mLoginButton.MyNMIControl.SetProperty("OnClick", () => { this.LoginClick(); })
-                        this.mPWD.SetProperty("ReturnClicked", () => { this.LoginClick(); });
+                        this.mPWD.MyNMIControl.RegisterEvent("OnReturn", () => { this.LoginClick(); });
                     }
                 }
             }
@@ -333,7 +333,7 @@
                     this.mScope.SetProperty("Visibility", true);
                 this.mUID.SetProperty("Visibility", true);
                 this.mPWD2.SetProperty("Visibility", true);
-                this.mPWD2.SetProperty("ReturnClicked", () => { this.LoginClick(); });
+                this.mPWD2.MyNMIControl.RegisterEvent("OnReturn", () => { this.LoginClick(); });
                 if (cde.MyBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin)
                     this.mScope.SetProperty("Visibility", true);
                 this.mHeaderHelp.MyNMIControl.SetProperty("Text", "The Administrator password and email are not set, yet. Please enter a strong password to ensure maximum security.");
