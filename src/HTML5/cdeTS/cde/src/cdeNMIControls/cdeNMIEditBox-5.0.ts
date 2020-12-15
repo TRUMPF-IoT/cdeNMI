@@ -583,8 +583,8 @@
             if (pValidateOnly === true)
                 return;
             if (this.MyFieldInfo.Type === cdeControlType.Password && cdeNMI.MyToast) {
-                if (this.GetProperty("ReturnClicked"))
-                    this.GetProperty("ReturnClicked")();
+                if (this.HasEvent("OnReturn"))
+                    this.FireEvent(true,"OnReturn");
                 else
                     cdeNMI.MyToast.ShowToastMessage("Password was set successfully");
             }

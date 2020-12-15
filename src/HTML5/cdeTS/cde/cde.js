@@ -17850,8 +17850,8 @@ var cdeNMI;
             if (pValidateOnly === true)
                 return;
             if (this.MyFieldInfo.Type === cdeNMI.cdeControlType.Password && cdeNMI.MyToast) {
-                if (this.GetProperty("ReturnClicked"))
-                    this.GetProperty("ReturnClicked")();
+                if (this.HasEvent("OnReturn"))
+                    this.FireEvent(true, "OnReturn");
                 else
                     cdeNMI.MyToast.ShowToastMessage("Password was set successfully");
             }
@@ -23114,7 +23114,7 @@ var cdeNMI;
                         this.mLoginButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tLogBut });
                         this.mLoginButton.CreateControl("LOGBUT");
                         this.mLoginButton.MyNMIControl.SetProperty("OnClick", function () { _this.LoginClick(); });
-                        this.mPWD.SetProperty("ReturnClicked", function () { _this.LoginClick(); });
+                        this.mPWD.MyNMIControl.RegisterEvent("OnReturn", function () { _this.LoginClick(); });
                     }
                 }
             }
@@ -23333,7 +23333,7 @@ var cdeNMI;
                     this.mScope.SetProperty("Visibility", true);
                 this.mUID.SetProperty("Visibility", true);
                 this.mPWD2.SetProperty("Visibility", true);
-                this.mPWD2.SetProperty("ReturnClicked", function () { _this.LoginClick(); });
+                this.mPWD2.MyNMIControl.RegisterEvent("OnReturn", function () { _this.LoginClick(); });
                 if (cde.MyBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin)
                     this.mScope.SetProperty("Visibility", true);
                 this.mHeaderHelp.MyNMIControl.SetProperty("Text", "The Administrator password and email are not set, yet. Please enter a strong password to ensure maximum security.");
