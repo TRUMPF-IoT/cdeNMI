@@ -477,7 +477,7 @@ namespace NMIService
                         ChangeActivationForm(false);
 
                     TheNMIEngine.AddPageDefinition(new ThePageDefinition(new Guid("{D514DC92-1108-4701-808D-1689537D9757}"), "/ACTIVATE", "Relay Activation", "nmiportal.html", Guid.Empty)
-                        {WPID = 10, IncludeCDE = true, RequireLogin = false,IsPublic=true, PortalGuid = eActivationAndStatusDashGuid, StartScreen = tActivationForm.cdeMID});
+                        {WPID = 10, IncludeCDE = true, RequireLogin = true,IsPublic=false, PortalGuid = eActivationAndStatusDashGuid, StartScreen = tActivationForm.cdeMID});
                 }
                 InitNMIAssets();
             }

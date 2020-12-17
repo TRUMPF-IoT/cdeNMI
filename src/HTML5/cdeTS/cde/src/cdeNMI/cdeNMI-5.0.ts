@@ -231,7 +231,7 @@
         });
         cdeNMI.MyScreenManager.Create(null);
         cdeNMI.MyScreenManager.CreateLoginButtonOnly();
-        if (cde.MyBaseAssets.MyServiceHostInfo.DoAllowAnonymous && !cdeNMI.MyEngine)
+        if (cde.MyBaseAssets.MyServiceHostInfo.DoAllowAnonymous || !cdeNMI.MyEngine)
             cdeNMI.MyScreenManager.GotoStationHome(false);        //Required only if no Login or Engine is present
     }
 }
