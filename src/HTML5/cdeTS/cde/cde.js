@@ -11930,7 +11930,7 @@ var cdeNMI;
         ctrlComboBox.prototype.SetProperty = function (pName, pValue) {
             if ((pName === "Value" || pName === "iValue") && pValue !== null) {
                 if (this.myChoices) {
-                    var tChoices = pValue.split(this.MySep);
+                    var tChoices = pValue.toString().split(this.MySep);
                     this.DontFire = true;
                     try {
                         for (var i = 0; i < tChoices.length; i++) {
@@ -11972,7 +11972,7 @@ var cdeNMI;
             else if (pName === "ScreenFriendlyName" && pValue) {
                 var tO = this.GetProperty("LiveOptions");
                 if (!tO)
-                    tO = pValue;
+                    tO = pValue.toString();
                 else
                     tO += this.MySep + pValue;
                 this.SetProperty("LiveOptions", tO);
@@ -11995,11 +11995,13 @@ var cdeNMI;
                 this.MyComboBox.style.cssText = pValue;
             }
             else if (pName === "Options" && this.MyComboDiv) {
-                this.MyFieldInfo["OptionsLive"] = pValue;
-                if (this.myChoices)
-                    this.CreateComboOptions(pValue, null, false);
-                else
-                    this.CalculateOption(pValue);
+                if (!this.CalPicker(pValue)) {
+                    this.MyFieldInfo["OptionsLive"] = pValue;
+                    if (this.myChoices)
+                        this.CreateComboOptions(pValue, null, false);
+                    else
+                        this.CalculateOption(pValue);
+                }
             }
             else if (pName === "Z-Index" && this.MyComboBox) {
                 this.MyComboBox.style.zIndex = pValue.toString();
@@ -12136,7 +12138,7 @@ var cdeNMI;
                     }
                 }
                 else {
-                    if (!this.CalPicker())
+                    if (!this.CalPicker(null))
                         this.CreateComboOptions(tChoiceOptions, this.GetProperty("Value"), SortOptions);
                 }
                 this.SetProperty("HasChoices", true);
@@ -12159,6 +12161,7 @@ var cdeNMI;
             if (cDropDownEle && window.innerWidth > 1024) {
                 if (window.innerHeight - (cDropDownEle.getBoundingClientRect().top - window.scrollY) < 300) {
                     cDropDownEle.style.bottom = "0px";
+                    cDropDownEle.style.left = "0px";
                     cDropDownEle.style.width = "100%";
                 }
                 else {
@@ -12263,8 +12266,9 @@ var cdeNMI;
                 this.MyTE.MyTELabel.SetProperty("LabelClassName", "cdeTileEntryLabelSmall");
             }
         };
-        ctrlComboBox.prototype.CalPicker = function () {
-            var tLO = this.GetProperty("OptionsLive");
+        ctrlComboBox.prototype.CalPicker = function (tLO) {
+            if (!tLO)
+                tLO = this.GetProperty("OptionsLive");
             if (!tLO)
                 tLO = this.GetProperty("Options");
             if (tLO && tLO.startsWith("SCREENPICKER")) {
