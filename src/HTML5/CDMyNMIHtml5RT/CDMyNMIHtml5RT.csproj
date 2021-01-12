@@ -10,7 +10,7 @@
     <PackageDescription>CDMyNMI HTML5 Runtime</PackageDescription>
     <PackageIcon>toplogo-128.png</PackageIcon>
     <Description>HMTL5 NMI Runtime for C-DEngine based Relays</Description>
-    <Copyright>Copyright (C) 2017-2020 TRUMPF Laser GmbH, authors: C-Labs</Copyright>
+    <Copyright>Copyright (C) 2017-2021 TRUMPF Laser GmbH, authors: C-Labs</Copyright>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
     <ProjectName>$(AssemblyName).$(TargetFramework)</ProjectName>
     <AssemblyName>CDMyNMIHtml5</AssemblyName>

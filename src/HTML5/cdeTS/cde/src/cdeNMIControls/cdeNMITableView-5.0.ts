@@ -743,7 +743,7 @@
                         const tDCellDiv: INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(tD);
                         tDCellDiv.SetProperty("ClassName", "cdeTDCell");
                         tDCellDiv.SetProperty("TileWidth", tDWidth);
-                        const HookEvent = true;
+                        let HookEvent = true;
                         tFldInfo["IsInTable"] = true;
                         switch (tFldInfo.Type) {
                             case cdeControlType.Picture:
@@ -758,6 +758,14 @@
                             case cdeControlType.Table:
                                 //this.MyTableControls[i][tFldID] = ctrlTableView.Create(null, this.MyScreenID, new TheTRF(this.MyTableName, i, tFldInfo), null, false, "cdeInlineTable");
                                 this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.Table).Create(null, { ScreenID: this.MyScreenID, TRF: new cdeNMI.TheTRF(this.MyTableName, i, tFldInfo), PostInitBag: ["InnerClassName=cdeInlineTable"] });
+                                break;
+                            case cdeControlType.CanvasDraw:
+                                HookEvent = false;
+                                this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.CanvasDraw).Create(null, { TRF: new TheTRF(this.MyTableName, i, tFldInfo), PostInitBag: ["iValue=" + tFldContent] });
+                                if (cde.CInt(tFldInfo["FldWidth"]) > 0) {
+                                    this.MyTableControls[i][tFldID].SetProperty("ControlTW", cde.CInt(tFldInfo["FldWidth"]));
+                                    this.MyTableControls[i][tFldID].SetProperty("ControlTH", 1);
+                                }
                                 break;
                             case cdeControlType.TouchDraw:
                                 // ctrlTouchDraw.Create(null, new TheTRF(this.MyTableName, i, tFldInfo), false, cde.CInt(tFldInfo["FldWidth"]) * cdeNMI.GetSizeFromTile(1), tFldInfo["TileHeight"] * cdeNMI.GetSizeFromTile(1), tFldContent);

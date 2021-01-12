@@ -36,6 +36,7 @@
         public MyHostNode = "";
         public MyRefreshButton: INMIControl = null;
         public MySavePin: INMIControl = null;
+        public MyShowAllPin: INMIControl = null;
         public MyRefreshPin: INMIControl = null;
         MyCloseButton: INMIControl = null;
         MyPinButton: INMIControl = null;
@@ -291,6 +292,10 @@
                     });
                     this.MySavePin.SetProperty("Content", "<i class='fa'>&#xf0c7;</i>");
                     this.MySavePin.SetProperty("Visibility", false);
+
+                    this.MyShowAllPin = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.PinButton).Create(tAllPins, { ScreenID: this.MyScreenID, PostInitBag: ["iValue=true", "Right=175", "Top=6", "ClassName=cdeDivSave"] });
+                    this.MyShowAllPin.SetProperty("Content", "<i class='fa'>&#xf06e;</i>");
+                    this.MyShowAllPin.SetProperty("Visibility", false);
                 }
 
                 this.MyRefreshPin = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.PinButton).Create(tAllPins, { ScreenID: this.MyScreenID, PostInitBag: ["iValue=true", "Left=0", "Top=6", "ClassName=cdeDivRefresh"] });

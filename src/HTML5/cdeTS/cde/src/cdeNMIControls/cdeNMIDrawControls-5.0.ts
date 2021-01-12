@@ -75,7 +75,8 @@
             this.fgctx = this.fgcanvas.getContext("2d");
             this.fgcanvas.width = 0;
             this.fgcanvas.height = 0;
-            this.fgcanvas.style.position = "absolute";
+            if (!cde.CBool(this.GetSetting("IsInTable")))
+                this.fgcanvas.style.position = "absolute";
             this.fgcanvas.style.top = "0px";
             this.fgcanvas.style.left = "0px";
 
@@ -104,6 +105,13 @@
                         this.fgcanvas.style.cssText += pValue;
                 }
                 else {
+                    if ((pName === "Value" || pName === "iValue") && pValue) {
+                        const tV: string = pValue.toString();
+                        if (tV.substr(0, 3) === "SH:") {
+                            this.SetProperty("SetShapes", tV.substr(3));
+                            return;
+                        }
+                    }
                     super.SetProperty(pName, pValue);
                 }
             }
@@ -168,8 +176,10 @@
                 } catch (error) {
                     cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNMI:ctrlCanvasDraw", "DrawCanvas-AddShape :" + error);
                 }
-            } else if (pName === "DrawShapes" && pValue) {
+            } else if ((pName === "DrawShapes" || pName==="SetShapes") && pValue) {
                 try {
+                    if (pName === "SetShapes")
+                        this.ClearPicture();
                     const tShapes: TheDrawingObject[] = JSON.parse(pValue);
                     for (let i = 0; i < tShapes.length; i++) {
                         this.AddDrawingObject(tShapes[i], tShapes[i].ID + i.toString(), i < tShapes.length - 1);

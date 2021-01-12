@@ -6280,6 +6280,7 @@ var cdeNMI;
             _this.MyHostNode = "";
             _this.MyRefreshButton = null;
             _this.MySavePin = null;
+            _this.MyShowAllPin = null;
             _this.MyRefreshPin = null;
             _this.MyCloseButton = null;
             _this.MyPinButton = null;
@@ -6533,6 +6534,9 @@ var cdeNMI;
                     });
                     this.MySavePin.SetProperty("Content", "<i class='fa'>&#xf0c7;</i>");
                     this.MySavePin.SetProperty("Visibility", false);
+                    this.MyShowAllPin = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.PinButton).Create(tAllPins, { ScreenID: this.MyScreenID, PostInitBag: ["iValue=true", "Right=175", "Top=6", "ClassName=cdeDivSave"] });
+                    this.MyShowAllPin.SetProperty("Content", "<i class='fa'>&#xf06e;</i>");
+                    this.MyShowAllPin.SetProperty("Visibility", false);
                 }
                 this.MyRefreshPin = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.PinButton).Create(tAllPins, { ScreenID: this.MyScreenID, PostInitBag: ["iValue=true", "Left=0", "Top=6", "ClassName=cdeDivRefresh"] });
                 this.MyRefreshPin.SetProperty("OnClick", function (val, evt, pointer) {
@@ -11930,7 +11934,7 @@ var cdeNMI;
         ctrlComboBox.prototype.SetProperty = function (pName, pValue) {
             if ((pName === "Value" || pName === "iValue") && pValue !== null) {
                 if (this.myChoices) {
-                    var tChoices = pValue.split(this.MySep);
+                    var tChoices = pValue.toString().split(this.MySep);
                     this.DontFire = true;
                     try {
                         for (var i = 0; i < tChoices.length; i++) {
@@ -11972,7 +11976,7 @@ var cdeNMI;
             else if (pName === "ScreenFriendlyName" && pValue) {
                 var tO = this.GetProperty("LiveOptions");
                 if (!tO)
-                    tO = pValue;
+                    tO = pValue.toString();
                 else
                     tO += this.MySep + pValue;
                 this.SetProperty("LiveOptions", tO);
@@ -11995,11 +11999,13 @@ var cdeNMI;
                 this.MyComboBox.style.cssText = pValue;
             }
             else if (pName === "Options" && this.MyComboDiv) {
-                this.MyFieldInfo["OptionsLive"] = pValue;
-                if (this.myChoices)
-                    this.CreateComboOptions(pValue, null, false);
-                else
-                    this.CalculateOption(pValue);
+                if (!this.CalPicker(pValue)) {
+                    this.MyFieldInfo["OptionsLive"] = pValue;
+                    if (this.myChoices)
+                        this.CreateComboOptions(pValue, null, false);
+                    else
+                        this.CalculateOption(pValue);
+                }
             }
             else if (pName === "Z-Index" && this.MyComboBox) {
                 this.MyComboBox.style.zIndex = pValue.toString();
@@ -12136,7 +12142,7 @@ var cdeNMI;
                     }
                 }
                 else {
-                    if (!this.CalPicker())
+                    if (!this.CalPicker(null))
                         this.CreateComboOptions(tChoiceOptions, this.GetProperty("Value"), SortOptions);
                 }
                 this.SetProperty("HasChoices", true);
@@ -12159,6 +12165,7 @@ var cdeNMI;
             if (cDropDownEle && window.innerWidth > 1024) {
                 if (window.innerHeight - (cDropDownEle.getBoundingClientRect().top - window.scrollY) < 300) {
                     cDropDownEle.style.bottom = "0px";
+                    cDropDownEle.style.left = "0px";
                     cDropDownEle.style.width = "100%";
                 }
                 else {
@@ -12263,8 +12270,9 @@ var cdeNMI;
                 this.MyTE.MyTELabel.SetProperty("LabelClassName", "cdeTileEntryLabelSmall");
             }
         };
-        ctrlComboBox.prototype.CalPicker = function () {
-            var tLO = this.GetProperty("OptionsLive");
+        ctrlComboBox.prototype.CalPicker = function (tLO) {
+            if (!tLO)
+                tLO = this.GetProperty("OptionsLive");
             if (!tLO)
                 tLO = this.GetProperty("Options");
             if (tLO && tLO.startsWith("SCREENPICKER")) {
@@ -14683,7 +14691,8 @@ var cdeNMI;
             this.fgctx = this.fgcanvas.getContext("2d");
             this.fgcanvas.width = 0;
             this.fgcanvas.height = 0;
-            this.fgcanvas.style.position = "absolute";
+            if (!cde.CBool(this.GetSetting("IsInTable")))
+                this.fgcanvas.style.position = "absolute";
             this.fgcanvas.style.top = "0px";
             this.fgcanvas.style.left = "0px";
             this.SetProperty("Foreground", "#000000");
@@ -14706,6 +14715,13 @@ var cdeNMI;
                         this.fgcanvas.style.cssText += pValue;
                 }
                 else {
+                    if ((pName === "Value" || pName === "iValue") && pValue) {
+                        var tV = pValue.toString();
+                        if (tV.substr(0, 3) === "SH:") {
+                            this.SetProperty("SetShapes", tV.substr(3));
+                            return;
+                        }
+                    }
                     _super.prototype.SetProperty.call(this, pName, pValue);
                 }
             }
@@ -14780,8 +14796,10 @@ var cdeNMI;
                     cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNMI:ctrlCanvasDraw", "DrawCanvas-AddShape :" + error);
                 }
             }
-            else if (pName === "DrawShapes" && pValue) {
+            else if ((pName === "DrawShapes" || pName === "SetShapes") && pValue) {
                 try {
+                    if (pName === "SetShapes")
+                        this.ClearPicture();
                     var tShapes = JSON.parse(pValue);
                     for (var i = 0; i < tShapes.length; i++) {
                         this.AddDrawingObject(tShapes[i], tShapes[i].ID + i.toString(), i < tShapes.length - 1);
@@ -21286,8 +21304,8 @@ var cdeNMI;
             }
             if (tTileCount > 1) {
                 if (cde.CBool(tScreenInfo.MyDashboard["HideShowAll"]) === false) {
-                    var t_11 = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(tTileGroup, { PreInitBag: ["ControlTW=2", "ControlTH=2"], PostInitBag: ["Title=<span class='fa fa-5x'>&#xf067;</span></br>Show All"] });
-                    t_11.SetProperty("OnClick", function () {
+                    this.mDashboardScreen.MyShowAllPin.SetProperty("Visibility", true);
+                    this.mDashboardScreen.MyShowAllPin.SetProperty("OnClick", function () {
                         _this.ShowAllScreens();
                     });
                 }
@@ -22445,6 +22463,14 @@ var cdeNMI;
                             case cdeNMI.cdeControlType.Table:
                                 //this.MyTableControls[i][tFldID] = ctrlTableView.Create(null, this.MyScreenID, new TheTRF(this.MyTableName, i, tFldInfo), null, false, "cdeInlineTable");
                                 this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.Table).Create(null, { ScreenID: this.MyScreenID, TRF: new cdeNMI.TheTRF(this.MyTableName, i, tFldInfo), PostInitBag: ["InnerClassName=cdeInlineTable"] });
+                                break;
+                            case cdeNMI.cdeControlType.CanvasDraw:
+                                HookEvent = false;
+                                this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.CanvasDraw).Create(null, { TRF: new cdeNMI.TheTRF(this.MyTableName, i, tFldInfo), PostInitBag: ["iValue=" + tFldContent] });
+                                if (cde.CInt(tFldInfo["FldWidth"]) > 0) {
+                                    this.MyTableControls[i][tFldID].SetProperty("ControlTW", cde.CInt(tFldInfo["FldWidth"]));
+                                    this.MyTableControls[i][tFldID].SetProperty("ControlTH", 1);
+                                }
                                 break;
                             case cdeNMI.cdeControlType.TouchDraw:
                                 // ctrlTouchDraw.Create(null, new TheTRF(this.MyTableName, i, tFldInfo), false, cde.CInt(tFldInfo["FldWidth"]) * cdeNMI.GetSizeFromTile(1), tFldInfo["TileHeight"] * cdeNMI.GetSizeFromTile(1), tFldContent);

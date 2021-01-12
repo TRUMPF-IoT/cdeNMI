@@ -108,7 +108,7 @@ namespace cdeNMI {
         public SetProperty(pName: string, pValue) {
             if ((pName === "Value" || pName === "iValue") && pValue !== null) {
                 if (this.myChoices) {
-                    const tChoices = pValue.split(this.MySep);
+                    const tChoices = pValue.toString().split(this.MySep);
                     this.DontFire = true;
                     try {
                         for (let i = 0; i < tChoices.length; i++) {
@@ -146,7 +146,7 @@ namespace cdeNMI {
             } else if (pName === "ScreenFriendlyName" && pValue) {
                 let tO = this.GetProperty("LiveOptions");
                 if (!tO)
-                    tO = pValue;
+                    tO = pValue.toString();
                 else
                     tO += this.MySep + pValue;
                 this.SetProperty("LiveOptions", tO);
@@ -163,11 +163,13 @@ namespace cdeNMI {
             } else if (pName === "InnerStyle" && this.MyComboBox && pValue) {
                 this.MyComboBox.style.cssText = pValue;
             } else if (pName === "Options" && this.MyComboDiv) {
-                this.MyFieldInfo["OptionsLive"] = pValue;
-                if (this.myChoices)
-                    this.CreateComboOptions(pValue, null, false);
-                else
-                    this.CalculateOption(pValue);
+                if (!this.CalPicker(pValue)) {
+                    this.MyFieldInfo["OptionsLive"] = pValue;
+                    if (this.myChoices)
+                        this.CreateComboOptions(pValue, null, false);
+                    else
+                        this.CalculateOption(pValue);
+                }
             } else if (pName === "Z-Index" && this.MyComboBox) {
                 this.MyComboBox.style.zIndex = pValue.toString();
             } else if (pName === "Separator") {
@@ -302,7 +304,7 @@ namespace cdeNMI {
                     }
                 }
                 else {
-                    if (!this.CalPicker())
+                    if (!this.CalPicker(null))
                         this.CreateComboOptions(tChoiceOptions, this.GetProperty("Value"), SortOptions);
                 }
                 this.SetProperty("HasChoices", true);
@@ -326,6 +328,7 @@ namespace cdeNMI {
             if (cDropDownEle && window.innerWidth > 1024) {
                 if (window.innerHeight - (cDropDownEle.getBoundingClientRect().top-window.scrollY) < 300) {
                     cDropDownEle.style.bottom = "0px";
+                    cDropDownEle.style.left = "0px";
                     cDropDownEle.style.width = "100%";
                 } else {
                     cDropDownEle.style.top = (cDropDownEle.getBoundingClientRect().top - window.scrollY) + "px";
@@ -449,8 +452,9 @@ namespace cdeNMI {
             }
         }
 
-        public CalPicker(): boolean {
-            let tLO: string = this.GetProperty("OptionsLive");
+        public CalPicker(tLO: string): boolean {
+            if (!tLO)
+                tLO = this.GetProperty("OptionsLive");
             if (!tLO)
                 tLO = this.GetProperty("Options");
             if (tLO && tLO.startsWith("SCREENPICKER")) {
