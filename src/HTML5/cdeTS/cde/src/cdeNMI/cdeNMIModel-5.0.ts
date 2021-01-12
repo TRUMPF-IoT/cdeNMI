@@ -99,7 +99,7 @@
         MyRefreshButton: INMIControl;
         MySavePin: INMIControl;
         MyRefreshPin: INMIControl;
-
+        MyShowAllPin: INMIControl;
         MyHostNode: string;
         HasRenderTarget: boolean;
     }

@@ -6280,6 +6280,7 @@ var cdeNMI;
             _this.MyHostNode = "";
             _this.MyRefreshButton = null;
             _this.MySavePin = null;
+            _this.MyShowAllPin = null;
             _this.MyRefreshPin = null;
             _this.MyCloseButton = null;
             _this.MyPinButton = null;
@@ -6533,6 +6534,9 @@ var cdeNMI;
                     });
                     this.MySavePin.SetProperty("Content", "<i class='fa'>&#xf0c7;</i>");
                     this.MySavePin.SetProperty("Visibility", false);
+                    this.MyShowAllPin = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.PinButton).Create(tAllPins, { ScreenID: this.MyScreenID, PostInitBag: ["iValue=true", "Right=175", "Top=6", "ClassName=cdeDivSave"] });
+                    this.MyShowAllPin.SetProperty("Content", "<i class='fa'>&#xf06e;</i>");
+                    this.MyShowAllPin.SetProperty("Visibility", false);
                 }
                 this.MyRefreshPin = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.PinButton).Create(tAllPins, { ScreenID: this.MyScreenID, PostInitBag: ["iValue=true", "Left=0", "Top=6", "ClassName=cdeDivRefresh"] });
                 this.MyRefreshPin.SetProperty("OnClick", function (val, evt, pointer) {
@@ -21300,8 +21304,8 @@ var cdeNMI;
             }
             if (tTileCount > 1) {
                 if (cde.CBool(tScreenInfo.MyDashboard["HideShowAll"]) === false) {
-                    var t_11 = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(tTileGroup, { PreInitBag: ["ControlTW=2", "ControlTH=2"], PostInitBag: ["Title=<span class='fa fa-5x'>&#xf067;</span></br>Show All"] });
-                    t_11.SetProperty("OnClick", function () {
+                    this.mDashboardScreen.MyShowAllPin.SetProperty("Visibility", true);
+                    this.mDashboardScreen.MyShowAllPin.SetProperty("OnClick", function () {
                         _this.ShowAllScreens();
                     });
                 }

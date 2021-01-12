@@ -260,8 +260,8 @@
 
             if (tTileCount > 1) {
                 if (cde.CBool(tScreenInfo.MyDashboard["HideShowAll"]) === false) {
-                    const t: cdeNMI.INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(tTileGroup, { PreInitBag: ["ControlTW=2", "ControlTH=2"], PostInitBag: ["Title=<span class='fa fa-5x'>&#xf067;</span></br>Show All"] });
-                    t.SetProperty("OnClick", () => {
+                    this.mDashboardScreen.MyShowAllPin.SetProperty("Visibility", true);
+                    this.mDashboardScreen.MyShowAllPin.SetProperty("OnClick", () => {
                         this.ShowAllScreens();
                     });
                 }
