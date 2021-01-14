@@ -4646,18 +4646,23 @@ var cdeNMI;
                 var tV = pPara.split(':');
                 var tGroup = tV[0];
                 var tID = tV.length > 1 ? tV[1] : null;
-                if (tV.length > 3 && tCtrl.MyBaseType === cdeNMI.cdeControlType.FormView) {
+                if (tV.length > 2 && tCtrl.MyBaseType === cdeNMI.cdeControlType.FormView) {
                     var tForm = tCtrl;
                     var tRealCondition = "";
                     try {
-                        tRealCondition = tForm.ReplaceMarcos(tV[3], tForm.MyFormControls);
-                        var IsTrue = cde.cdeEval(tRealCondition);
-                        if (IsTrue)
-                            tID = tV[2];
+                        if (tV.length > 3) {
+                            tRealCondition = tForm.ReplaceMarcos(tV[3], tForm.MyFormControls);
+                            var IsTrue = cde.cdeEval(tRealCondition);
+                            if (IsTrue)
+                                tID = tV[2];
+                        }
+                        else {
+                            tID = tForm.ReplaceMarcos(tV[2], tForm.MyFormControls);
+                        }
                     }
                     catch (e) {
                         //cdeNMI.ShowToastMessage("Validating Hide-Condition Error:" + e, "in: (" + tHideCondition + ") resolved to<br/>" + tRealCondition);
-                        cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "Validating Group-Condition Error:" + e, "in: (" + tV[3] + ") resolved to<br/>" + tRealCondition);
+                        cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "Validating Group-Condition Error:" + e, "in: (" + pPara + ") resolved to<br/>" + tRealCondition);
                     }
                 }
                 tCtrl.SetProperty("StartGroup", pPara);
@@ -19313,6 +19318,12 @@ var cdeNMI;
             else if (pName === "Foreground") {
                 if (this.divTitle)
                     this.divTitle.style.color = pValue;
+            }
+            else if (pName === "IsHitTestDisabled" && this.divOuter) {
+                if (cde.CBool(pValue))
+                    this.divOuter.style.pointerEvents = 'none';
+                else
+                    this.divOuter.style.pointerEvents = '';
             }
             else if (pName === "FontSize") {
                 if (this.divTitle)

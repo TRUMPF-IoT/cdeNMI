@@ -416,18 +416,22 @@
                 const tV: string[] = pPara.split(':');
                 const tGroup: string = tV[0];
                 let tID: string = tV.length > 1 ? tV[1] : null;
-                if (tV.length > 3 && tCtrl.MyBaseType === cdeControlType.FormView) {
+                if (tV.length > 2 && tCtrl.MyBaseType === cdeControlType.FormView) {
                     const tForm: INMIDataView = tCtrl as cdeNMI.INMIDataView;
                     let tRealCondition = "";
                     try {
-                        tRealCondition = tForm.ReplaceMarcos(tV[3], tForm.MyFormControls);
-                        const IsTrue = cde.cdeEval(tRealCondition);
-                        if (IsTrue)
-                            tID = tV[2];
+                        if (tV.length > 3) {
+                            tRealCondition = tForm.ReplaceMarcos(tV[3], tForm.MyFormControls);
+                            const IsTrue = cde.cdeEval(tRealCondition);
+                            if (IsTrue)
+                                tID = tV[2];
+                        } else {
+                            tID = tForm.ReplaceMarcos(tV[2], tForm.MyFormControls);
+                        }
                     }
                     catch (e) {
                         //cdeNMI.ShowToastMessage("Validating Hide-Condition Error:" + e, "in: (" + tHideCondition + ") resolved to<br/>" + tRealCondition);
-                        cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "Validating Group-Condition Error:" + e, "in: (" + tV[3] + ") resolved to<br/>" + tRealCondition);
+                        cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "Validating Group-Condition Error:" + e, "in: (" + pPara + ") resolved to<br/>" + tRealCondition);
                     }
                 }
                 tCtrl.SetProperty("StartGroup", pPara);

@@ -120,6 +120,11 @@
             } else if (pName === "Foreground") {
                 if (this.divTitle)
                     this.divTitle.style.color = pValue;
+            } else if (pName === "IsHitTestDisabled" && this.divOuter) {
+                if (cde.CBool(pValue))
+                    this.divOuter.style.pointerEvents = 'none';
+                else
+                    this.divOuter.style.pointerEvents = '';
             } else if (pName === "FontSize") {
                 if (this.divTitle)
                     this.divTitle.style.fontSize = pValue + "px";
