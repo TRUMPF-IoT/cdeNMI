@@ -36,10 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="ClientBin\plugins\P172\CDMyC3.TheC3Service.js">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="ClientBin\plugins\P172\CDMyC3.TheC3Service.js"/>
     <EmbeddedResource Include="ClientBin\plugins\P172\CSS\c3.min.css" />
     <EmbeddedResource Include="ClientBin\plugins\P172\CSS\cssDark.min.css" />
     <EmbeddedResource Include="ClientBin\plugins\P172\JS\c3.min.js" />

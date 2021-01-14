@@ -120,20 +120,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="ClientBin\IMAGES\GlasButton.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="ClientBin\CSS\all.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\BaseColors.min.CSS" />
     <EmbeddedResource Include="ClientBin\CSS\LBaseColors.min.CSS" />
     <EmbeddedResource Include="ClientBin\IMAGES\cdeInnerCheck.png" />
     <EmbeddedResource Include="ClientBin\IMAGES\E.PNG" />
     <EmbeddedResource Include="ClientBin\IMAGES\iconTopLogo.png" />
+    <EmbeddedResource Include="ClientBin\IMAGES\GlasButton.png"/>
     <EmbeddedResource Include="ClientBin\IMAGES\logowz.png" />
     <EmbeddedResource Include="ClientBin\IMAGES\toplogo-150.png" />
     <EmbeddedResource Include="ClientBin\IMAGES\UPNPICON.png" />
