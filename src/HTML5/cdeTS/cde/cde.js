@@ -23139,13 +23139,15 @@ var cdeNMI;
                         var tPWD = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.Password, 4, "Password", 3, "", ["EditPlaceholder=Enter Password", "InTemplate=true"]));
                         this.mPWD = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tPWD });
                         this.mPWD.CreateControl("PWD");
-                        var tPWD2 = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.Password, 4, "Repeat Password", 3, "", ["EditPlaceholder=Repeat Password", "InTemplate=true"]));
-                        this.mPWD2 = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tPWD2 });
-                        this.mPWD2.CreateControl("PWD2");
-                        if (cde.MyBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin) {
-                            var tScope = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.Password, 4, "Security ID", 3, "", ["EditPlaceholder=Security ID", "Visibility=false", "InTemplate=true"]));
-                            this.mScope = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tScope });
-                            this.mScope.CreateControl("SCOPE");
+                        if (cde.MyBaseAssets.MyServiceHostInfo.AdminPWMustBeSet) {
+                            var tPWD2 = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.Password, 4, "Repeat Password", 3, "", ["EditPlaceholder=Repeat Password", "InTemplate=true"]));
+                            this.mPWD2 = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tPWD2 });
+                            this.mPWD2.CreateControl("PWD2");
+                            if (cde.MyBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin) {
+                                var tScope = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.Password, 4, "Security ID", 3, "", ["EditPlaceholder=Security ID", "Visibility=false", "InTemplate=true"]));
+                                this.mScope = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tScope });
+                                this.mScope.CreateControl("SCOPE");
+                            }
                         }
                         var tLogBut = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.TileButton, 4, "Login", 2, "", ["NoTE=true"]));
                         this.mLoginButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tLogBut });
@@ -23218,7 +23220,7 @@ var cdeNMI;
                         }
                     }
                     else {
-                        this.ShakeNError("Passwords do not match, please try again");
+                        this.ShakeNError("Admin Passwords do not match, please try again");
                     }
                 }
                 else {
@@ -23270,7 +23272,8 @@ var cdeNMI;
                     this.SetProperty("Text", "...verifying credentials...");
                     this.mUID.SetProperty("Disabled", true);
                     this.mPWD.SetProperty("Disabled", true);
-                    this.mPWD2.SetProperty("Disabled", true);
+                    if (this.mPWD2)
+                        this.mPWD2.SetProperty("Disabled", true);
                     this.mLoginButton.SetProperty("Disabled", true);
                     if (cdeNMI.MyEngine)
                         cdeNMI.MyEngine.Login(tTarget, this.mUID.GetProperty("Value"), this.mPWD.GetProperty("Value"));
@@ -23351,7 +23354,8 @@ var cdeNMI;
             };
             this.mUID.SetProperty("Disabled", false);
             this.mPWD.SetProperty("Disabled", false);
-            this.mPWD2.SetProperty("Disabled", false);
+            if (this.mPWD2)
+                this.mPWD2.SetProperty("Disabled", false);
             this.mLoginButton.SetProperty("Disabled", false);
             this.mUID.SetProperty("Value", "");
             this.mPWD.SetProperty("Value", "");
@@ -23359,7 +23363,8 @@ var cdeNMI;
                 this.mScope.SetProperty("Visibility", false);
                 this.mScope.SetProperty("Disabled", false);
             }
-            this.mPWD2.SetProperty("Value", "");
+            if (this.mPWD2)
+                this.mPWD2.SetProperty("Value", "");
             if (this.mScope)
                 this.mScope.SetProperty("Value", "");
             this.mPWD.SetProperty("Label", "Password");
@@ -23379,7 +23384,8 @@ var cdeNMI;
                 if (cde.MyBaseAssets.MyServiceHostInfo.IsUsingUserMapper) {
                     this.mLoginButton.MyNMIControl.SetProperty("Text", "Login");
                     this.mUID.SetProperty("Visibility", true);
-                    this.mPWD2.SetProperty("Visibility", false);
+                    if (this.mPWD2)
+                        this.mPWD2.SetProperty("Visibility", false);
                     this.mHeaderHelp.MyNMIControl.SetProperty("Text", "Please login with your credentials");
                 }
                 else {
@@ -23387,7 +23393,8 @@ var cdeNMI;
                     this.mUID.SetProperty("Visibility", false);
                     this.mPWD.SetProperty("Label", "Security ID");
                     this.mPWD.SetProperty("EditPlaceholder", "Enter Security ID");
-                    this.mPWD2.SetProperty("Visibility", false);
+                    if (this.mPWD2)
+                        this.mPWD2.SetProperty("Visibility", false);
                     this.mHeaderHelp.MyNMIControl.SetProperty("Text", "Please enter your Security ID");
                 }
             }
