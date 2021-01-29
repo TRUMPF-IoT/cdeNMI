@@ -57,6 +57,7 @@
         }
 
         public OnShowDropDown() {
+            super.OnShowDropDown();
             try {
                 if (!this.HasLoaded || cde.CBool(this.GetProperty("RefreshOnLoad")) === true)
                     this.ComboUpdateValue("CDE_LLL");
