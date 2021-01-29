@@ -53,6 +53,7 @@
         }
 
         public OnShowDropDown() {
+            super.OnShowDropDown();
             try {
                 if (!this.GetProperty("LiveOptions") || this.GetProperty("LiveOptions").substr(0, 15) === '[{"V":"CDE_NOP"')
                     this.LoadComboContent(false);

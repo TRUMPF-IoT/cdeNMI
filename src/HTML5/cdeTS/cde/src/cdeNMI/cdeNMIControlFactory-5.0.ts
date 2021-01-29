@@ -426,7 +426,9 @@
                             if (IsTrue)
                                 tID = tV[2];
                         } else {
-                            tID = tForm.ReplaceMarcos(tV[2], tForm.MyFormControls);
+                            const resID = tForm.ReplaceMarcos(tV[2], tForm.MyFormControls);
+                            if (resID && resID.length > 0)
+                                tID = resID;
                         }
                     }
                     catch (e) {
