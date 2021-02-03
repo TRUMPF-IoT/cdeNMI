@@ -4657,7 +4657,9 @@ var cdeNMI;
                                 tID = tV[2];
                         }
                         else {
-                            tID = tForm.ReplaceMarcos(tV[2], tForm.MyFormControls);
+                            var resID = tForm.ReplaceMarcos(tV[2], tForm.MyFormControls);
+                            if (resID && resID.length > 0)
+                                tID = resID;
                         }
                     }
                     catch (e) {
@@ -12651,6 +12653,7 @@ var cdeNMI;
             this.ApplySkiny();
         };
         ctrlComboLookup.prototype.OnShowDropDown = function () {
+            _super.prototype.OnShowDropDown.call(this);
             try {
                 if (!this.HasLoaded || cde.CBool(this.GetProperty("RefreshOnLoad")) === true)
                     this.ComboUpdateValue("CDE_LLL");
@@ -12723,6 +12726,7 @@ var cdeNMI;
             this.ApplySkiny();
         };
         ctrlPropertyPicker.prototype.OnShowDropDown = function () {
+            _super.prototype.OnShowDropDown.call(this);
             try {
                 if (!this.GetProperty("LiveOptions") || this.GetProperty("LiveOptions").substr(0, 15) === '[{"V":"CDE_NOP"')
                     this.LoadComboContent(false);
