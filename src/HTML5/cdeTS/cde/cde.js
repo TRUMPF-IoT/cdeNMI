@@ -12865,14 +12865,48 @@ var cdeNMI;
                 }
             }
             if (pName === "ThingFriendlyName" && pValue) {
-                this.MyThingFriendlyName = pValue;
+                var newFriendlyName = this.ReplaceNodeIdInFriendlyNameWithNodeName(pValue);
+                this.MyThingFriendlyName = newFriendlyName;
                 var tC = new cdeNMI.TheComboOption();
                 tC.value = this.GetProperty("Value");
-                tC.label = this.GetNameFromValue(pValue);
+                tC.label = this.GetNameFromValue(newFriendlyName);
                 pValue = tC;
                 pName = "SetChoice";
             }
+            if (pName === "LiveOptions" && pValue) {
+                // When a thinkpicker has remote things, the owner nodeid gets sent with the friendly name
+                // NMI.JS maintains a list of all nodes it can see, so the node name replacement best happens here, rather than on the relay
+                try {
+                    var tJOpgs = JSON.parse(pValue);
+                    var changed = false;
+                    for (var i = 0; i < tJOpgs.length; i++) {
+                        tJOpgs[i].N = this.ReplaceNodeIdInFriendlyNameWithNodeName(tJOpgs[i].N);
+                        changed = true;
+                    }
+                    if (changed) {
+                        _super.prototype.SetProperty.call(this, pName, JSON.stringify(tJOpgs));
+                        return;
+                    }
+                }
+                catch (eee) {
+                    cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "ctrlThingPicker:SetProperty LiveOptions", eee);
+                }
+                _super.prototype.SetProperty.call(this, pName, pValue);
+                return;
+            }
             _super.prototype.SetProperty.call(this, pName, pValue);
+        };
+        ctrlThingPicker.prototype.ReplaceNodeIdInFriendlyNameWithNodeName = function (pVal) {
+            // Syntax: <friendlyName> on (<cdeN guid with dashes 36 characters>)
+            var retVal = pVal;
+            if (pVal.length > 41 && pVal.endsWith(")") && pVal.substring(pVal.length - 41, pVal.length - 37) === "on (") {
+                var cdeN = pVal.substring(pVal.length - 37, pVal.length - 1);
+                var nodeName = cdeNMI.MyEngine.GetKnownNodeName(cdeN);
+                if (nodeName && nodeName.length > 0) {
+                    retVal = pVal.substring(0, pVal.length - 41) + "on " + nodeName;
+                }
+            }
+            return retVal;
         };
         ctrlThingPicker.prototype.GetNameFromValue = function (pVal) {
             if (!pVal || pVal.length === 0)
