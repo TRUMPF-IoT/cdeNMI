@@ -70,14 +70,47 @@ namespace cdeNMI {
                 }
             }
             if (pName === "ThingFriendlyName" && pValue) {
-                this.MyThingFriendlyName = pValue;
+                var newFriendlyName = this.ReplaceNodeIdInFriendlyNameWithNodeName(pValue);
+                this.MyThingFriendlyName = newFriendlyName;
                 const tC = new TheComboOption();
                 tC.value = this.GetProperty("Value");
-                tC.label = this.GetNameFromValue(pValue);
+                tC.label = this.GetNameFromValue(newFriendlyName);
                 pValue = tC;
                 pName = "SetChoice";
             }
+
+            if (pName === "LiveOptions" && pValue) {
+                // When a thinkpicker has remote things, the owner nodeid gets sent with the friendly name
+                // NMI.JS maintains a list of all nodes it can see, so the node name replacement best happens here, rather than on the relay
+                const tJOpgs = JSON.parse(pValue);
+                var changed = false;
+                for (let i = 0; i < tJOpgs.length; i++) {
+                    tJOpgs[i].N = this.ReplaceNodeIdInFriendlyNameWithNodeName(tJOpgs[i].N);
+                    changed = true;
+                }
+                if (changed) {
+                    super.SetProperty(pName, JSON.stringify(tJOpgs));
+                }
+                else {
+                    super.SetProperty(pName, pValue);
+                }
+                return;
+            }
             super.SetProperty(pName, pValue);
+        }
+
+        ReplaceNodeIdInFriendlyNameWithNodeName(pVal: string): string
+        {
+            // Syntax: <friendlyName> on (<cdeN guid with dashes 36 characters>)
+            let retVal = pVal;
+            if (pVal.length > 41 && pVal.endsWith(")") && pVal.substring(pVal.length - 41, pVal.length - 37) == "on (") {
+                let cdeN = pVal.substring(pVal.length - 37, pVal.length - 1);
+                let nodeName = cdeNMI.MyEngine.GetKnownNodeName(cdeN);
+                if (nodeName && nodeName.length > 0) {
+                    retVal = pVal.substring(0, pVal.length - 41) + "on " + nodeName;
+                }
+            }
+            return retVal;
         }
 
         GetNameFromValue(pVal: string): string {
