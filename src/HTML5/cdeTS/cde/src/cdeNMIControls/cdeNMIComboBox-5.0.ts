@@ -344,7 +344,7 @@ namespace cdeNMI {
                 if (this.MyLookup !== null)
                     this.myChoices.setChoiceByValue("CDE_LLL");
                 else {
-                    if (this.GetProperty("Options").substr("CDE_NOP") > 0)
+                    if (this.GetProperty("Options") && this.GetProperty("Options").substr("CDE_NOP") > 0)
                         this.myChoices.setChoiceByValue("CDE_NOP");
                 }
             } else
