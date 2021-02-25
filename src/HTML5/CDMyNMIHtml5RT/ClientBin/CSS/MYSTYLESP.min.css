@@ -1,1 +1,6 @@
-﻿div.cdeTiles{float:left;clear:none;}@media only screen and (min-width:500px){div.cdeNMIPortal{width:100%;}div.CMyDashboard{width:100%;}}.cdeButtonHover2:hover,.cdeButtonHover2:visited,.cdeButtonHover2:active,.cdeButtonHover2:focus,.cdeLiveTile:hover,.cdeLiveTile:visited,.cdeLiveTile:active,.cdeLiveTile:focus,.cdeLiveTileBar:hover,.cdeLiveTileBar:visited,.cdeLiveTileBar:active,.cdeLiveTileBar:focus,.cdeGlassButton:hover,.cdeGlassButton:visited,.cdeGlassButton:active,.cdeGlassButton:focus{box-shadow:none;}
+﻿/*
+ * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+div.cdeTiles{float:left;clear:none;}@media only screen and (min-width:500px){div.cdeNMIPortal{width:100%;}div.CMyDashboard{width:100%;}}.cdeButtonHover2:hover,.cdeButtonHover2:visited,.cdeButtonHover2:active,.cdeButtonHover2:focus,.cdeLiveTile:hover,.cdeLiveTile:visited,.cdeLiveTile:active,.cdeLiveTile:focus,.cdeLiveTileBar:hover,.cdeLiveTileBar:visited,.cdeLiveTileBar:active,.cdeLiveTileBar:focus,.cdeGlassButton:hover,.cdeGlassButton:visited,.cdeGlassButton:active,.cdeGlassButton:focus{box-shadow:none;}
