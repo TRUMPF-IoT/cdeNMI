@@ -5352,6 +5352,7 @@ var cdeNMI;
             if (this.MyTarget && this.MyTarget.GetContainerElement() && this.MyTarget.GetContainerElement() !== this.MyRootElement) {
                 this.MyTarget.AppendElement(pRootControl);
             }
+            this.MyRootElement.NMIControl = this;
             if (pHookEvents && this.GetSetting("Disabled") !== true) {
                 this.HookEvents(false);
             }
@@ -19260,6 +19261,7 @@ var cdeNMI;
             _this.IsDIV = false;
             _this.mFormat = null;
             _this.IsTesla = false;
+            _this.IsCustomTile = false;
             _this.mHoverAdd = "cdeButtonHover2";
             return _this;
         }
@@ -19294,16 +19296,27 @@ var cdeNMI;
             this.IsTesla = (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform === 5);
             if (this.IsTesla)
                 this.mHoverAdd = "cdeTesButton";
-            this.s2 = document.createElement('button');
-            this.s2.type = "button";
-            this.SetProperty("ButtonStyle", 0); //custom
-            this.SetTileStyle();
-            this.RegisterEvent("PointerDown", function (pTarget, pEvent, pPointer) { return _this.eventTileDown(pTarget, pEvent, pPointer); });
-            this.RegisterEvent("PointerUp", function (pTarget, pEvent, pPointer) { return _this.eventTileExit(pTarget, pEvent, pPointer); });
-            this.SetElement(this.s2, false);
-            this.SetProperty("Disabled", (this.MyFieldInfo && (typeof this.MyFieldInfo.Flags !== "undefined") && (this.MyFieldInfo.Flags & 2) === 0)); //Must allow Click if MyFieldInfo is not set
-            this.CreateTileButtonContent();
-            this.MyContainerElement = this.divInner;
+            if (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform === 1)
+                this.mHoverAdd = null;
+            if (cde.CBool(this.GetSetting("IsCustomTile")) === true) {
+                this.IsCustomTile = true;
+                this.s2 = document.createElement('div');
+                this.SetElement(this.s2, false);
+                this.MyContainerElement = this.s2;
+                this.SetInitialSize();
+            }
+            else {
+                this.s2 = document.createElement('button');
+                this.s2.type = "button";
+                this.SetProperty("ButtonStyle", 0); //custom
+                this.SetTileStyle();
+                this.RegisterEvent("PointerDown", function (pTarget, pEvent, pPointer) { return _this.eventTileDown(pTarget, pEvent, pPointer); });
+                this.RegisterEvent("PointerUp", function (pTarget, pEvent, pPointer) { return _this.eventTileExit(pTarget, pEvent, pPointer); });
+                this.SetElement(this.s2, false);
+                this.SetProperty("Disabled", (this.MyFieldInfo && (typeof this.MyFieldInfo.Flags !== "undefined") && (this.MyFieldInfo.Flags & 2) === 0)); //Must allow Click if MyFieldInfo is not set
+                this.CreateTileButtonContent();
+                this.MyContainerElement = this.divInner;
+            }
             return true;
         };
         ctrlTileButton.prototype.SetProperty = function (pName, pValue) {
@@ -19400,19 +19413,19 @@ var cdeNMI;
                     this.HookEvents(false);
                     this.SetHoverStyle(cde.CBool(this.GetProperty("Disabled")));
                     this.RegisterEvent("FireOnClick", this.FireClick);
+                    //if ((typeof (pValue) === 'string') && pValue.substr(0, 6) === "TTS:<%")
+                    //    pValue = pValue; ///  pValue = cdeNMI.GenerateFinalString(pValue,this.MyTRF.GetDataRow(), this.MyTRF);
+                    this.RegisterEvent("OnClick", pValue);
+                    this.s2.onkeyup = function (evt) {
+                        if (evt.keyCode === 13 || evt.keyCode === 32) {
+                            _this.WasClicked = false;
+                            _this.FireClick(_this, evt);
+                        }
+                        else if (evt.keyCode === 36 && cdeNMI.MyScreenManager) {
+                            cdeNMI.MyScreenManager.GotoStationHome(false);
+                        }
+                    };
                 }
-                //if ((typeof (pValue) === 'string') && pValue.substr(0, 6) === "TTS:<%")
-                //    pValue = pValue; ///  pValue = cdeNMI.GenerateFinalString(pValue,this.MyTRF.GetDataRow(), this.MyTRF);
-                this.RegisterEvent("OnClick", pValue);
-                this.s2.onkeyup = function (evt) {
-                    if (evt.keyCode === 13 || evt.keyCode === 32) {
-                        _this.WasClicked = false;
-                        _this.FireClick(_this, evt);
-                    }
-                    else if (evt.keyCode === 36 && cdeNMI.MyScreenManager) {
-                        cdeNMI.MyScreenManager.GotoStationHome(false);
-                    }
-                };
             }
             else if (pName === "OnTileDown") {
                 this.RegisterEvent("OnTileDown", pValue);
@@ -19428,10 +19441,13 @@ var cdeNMI;
             }
             else if ((pName === "Disabled" || pName === "DisableClick") && this.s2) {
                 this.SetHoverStyle(cde.CBool(pValue));
-                if (!this.IsDIV) {
-                    this.s2.disabled = cde.CBool(pValue);
-                    if (cde.CBool(pValue))
-                        this.s2.style.outlineStyle = "none";
+                if (!this.IsDIV && !this.IsCustomTile) {
+                    try {
+                        this.s2.disabled = cde.CBool(pValue);
+                        if (cde.CBool(pValue))
+                            this.s2.style.outlineStyle = "none";
+                    }
+                    catch (_a) { }
                 }
                 if (pName === "Disabled") {
                     if (this.MyNMIControl)
@@ -19451,6 +19467,13 @@ var cdeNMI;
                 this.SetSizes();
             }
             else if ((pName === "ClassName")) {
+                if ((cde.MyBaseAssets.MyServiceHostInfo.WebPlatform === 1) && pValue) {
+                    var tHovClass = this.GetProperty("HoverClassName");
+                    if (!tHovClass)
+                        tHovClass = "cdeButtonHover2";
+                    if (tHovClass && this.s2.classList.contains(tHovClass))
+                        this.s2.classList.remove(tHovClass);
+                }
                 this.SetSizes();
             }
             if (pName === "InnerControl" && pValue) {
@@ -19478,7 +19501,7 @@ var cdeNMI;
             }
         };
         ctrlTileButton.prototype.SetHoverStyle = function (bIsDisabled, bAddForce) {
-            if (!this.s2)
+            if (!this.s2 || !this.mHoverAdd)
                 return;
             if (bIsDisabled) {
                 if (this.s2.classList.contains(this.mHoverAdd))
@@ -19570,9 +19593,9 @@ var cdeNMI;
             this.s2.appendChild(this.divOuter);
         };
         ctrlTileButton.prototype.SetSizes = function () {
+            this.SetInitialSize();
             if (!this.divOuter)
                 return;
-            this.SetInitialSize();
             this.divOuter.style.width = "inherit";
             this.divOuter.style.height = "inherit";
             this.divInner.style.width = "inherit";
@@ -19635,7 +19658,7 @@ var cdeNMI;
                 return;
             var tHovClass = this.GetProperty("HoverClassName");
             if (!tHovClass)
-                tHovClass = "cdeButtonHover2";
+                tHovClass = this.mHoverAdd;
             if (tHovClass)
                 eventObject.classList.add(tHovClass);
         };
@@ -19647,7 +19670,7 @@ var cdeNMI;
                 return;
             var tHovClass = this.GetProperty("HoverClassName");
             if (!tHovClass)
-                tHovClass = "cdeButtonHover2";
+                tHovClass = this.mHoverAdd;
             if (tHovClass && eventObject.classList.contains(tHovClass))
                 eventObject.classList.remove(tHovClass);
         };
@@ -19676,7 +19699,8 @@ var cdeNMI;
                 if (this.GetProperty("AreYouSure")) {
                     if (cdeNMI.MyPopUp)
                         cdeNMI.MyPopUp.Show(this.GetProperty("AreYouSure"), false, null, 1, function () {
-                            pEvent.AYSFired = true;
+                            if (pEvent)
+                                pEvent.AYSFired = true;
                             _this.DoFireClick(_this, pEvent);
                         });
                 }
@@ -21304,7 +21328,7 @@ var cdeNMI;
                         break;
                 }
                 if (tPanelTitle.substr(tPanelTitle.length - 5, 5) !== "-HIDE" && !tNeverHide) {
-                    var tTileButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(tTileGroup, { PreInitBag: [], PostInitBag: ["ControlTW=2", "ControlTH=2", "Title=" + tPanelTitle, "Style=" + tStyleExt] });
+                    var tTileButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(tTileGroup, { PreInitBag: ["IsCustomTile=" + cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tDashPanels[i].PropertyBag, "IsCustomTile"))], PostInitBag: ["ControlTW=2", "ControlTH=2", "Title=" + tPanelTitle, "Style=" + tStyleExt] });
                     tTileButton.SetProperty("OnClick", tOnClick);
                     tTileButton.SetProperty("TabIndex", tDashPanels[i].FldOrder + 101);
                     if (IsForm) {
@@ -23138,7 +23162,7 @@ var cdeNMI;
                     //cdeNMI.ResetBrowserToPortal();
                 }
             });
-            var tHeader = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.SmartLabel, 4, "", 2, "", ["NoTE=true", "TileFactorY=2", "TileHeight=1", "TileWidth=4", "ClassName=cdeDlgTitleBar", "ContainerStyle=margin-top: 34px;", "iValue=Welcome to your NMI Portal"]));
+            var tHeader = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.SmartLabel, 4, "", 2, "", ["NoTE=true", "TileHeight=1", "TileWidth=4", "ClassName=cdeDlgTitleBar", "ContainerStyle=margin-top: 34px;", "iValue=Welcome to your NMI Portal"]));
             this.mHeader = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tHeader });
             this.mHeader.CreateControl("HEADER");
             var tLogText = "Please login with your credentials";
@@ -23150,7 +23174,7 @@ var cdeNMI;
             }
             else if (cde.MyBaseAssets.HasAutoLogin === true)
                 tLogText = "Autologin...please wait";
-            var tHeader2 = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.SmartLabel, 4, "", 258, "", ["NoTE=true", "TileHeight=1", "TileWidth=4", "iValue=" + tLogText]));
+            var tHeader2 = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.SmartLabel, 4, "", 258, "", ["NoTE=true", "TileHeight=1", "TileWidth=4", "TileFactorY=2", "iValue=" + tLogText]));
             this.mHeaderHelp = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tHeader2 });
             this.mHeaderHelp.CreateControl("HEADERHELP");
             var tStatus = "Waiting...";

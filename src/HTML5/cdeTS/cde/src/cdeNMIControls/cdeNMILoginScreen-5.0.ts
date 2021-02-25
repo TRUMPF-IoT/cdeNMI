@@ -52,7 +52,7 @@
             });
 
 
-            const tHeader: cdeNMI.TheTRF = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.SmartLabel, 4, "", 2, "", ["NoTE=true", "TileFactorY=2", "TileHeight=1", "TileWidth=4", "ClassName=cdeDlgTitleBar", "ContainerStyle=margin-top: 34px;", "iValue=Welcome to your NMI Portal"]));
+            const tHeader: cdeNMI.TheTRF = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.SmartLabel, 4, "", 2, "", ["NoTE=true", "TileHeight=1", "TileWidth=4", "ClassName=cdeDlgTitleBar", "ContainerStyle=margin-top: 34px;", "iValue=Welcome to your NMI Portal"]));
             this.mHeader = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tHeader }) as INMITileEntry;
             this.mHeader.CreateControl("HEADER");
 
@@ -64,7 +64,7 @@
                     tLogText = "This Node is locked. NMI Access is disallowed";
             } else if (cde.MyBaseAssets.HasAutoLogin === true)
                 tLogText = "Autologin...please wait";
-            const tHeader2: cdeNMI.TheTRF = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.SmartLabel, 4, "", 258, "", ["NoTE=true", "TileHeight=1", "TileWidth=4", "iValue=" + tLogText]));
+            const tHeader2: cdeNMI.TheTRF = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.SmartLabel, 4, "", 258, "", ["NoTE=true", "TileHeight=1", "TileWidth=4", "TileFactorY=2", "iValue=" + tLogText]));
             this.mHeaderHelp = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tHeader2 }) as INMITileEntry;
             this.mHeaderHelp.CreateControl("HEADERHELP");
 

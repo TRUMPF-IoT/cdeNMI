@@ -522,6 +522,7 @@
             if (this.MyTarget && this.MyTarget.GetContainerElement() && this.MyTarget.GetContainerElement() !== this.MyRootElement) {
                 this.MyTarget.AppendElement(pRootControl);
             }
+            (this.MyRootElement as any).NMIControl = this;
             if (pHookEvents && this.GetSetting("Disabled") !== true) {
                 this.HookEvents(false);
             }
