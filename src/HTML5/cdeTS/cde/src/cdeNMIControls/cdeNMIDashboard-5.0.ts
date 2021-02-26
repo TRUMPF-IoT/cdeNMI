@@ -216,7 +216,7 @@
                 }
 
                 if (tPanelTitle.substr(tPanelTitle.length - 5, 5) !== "-HIDE" && !tNeverHide) {
-                    const tTileButton: cdeNMI.INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(tTileGroup, { PreInitBag: [], PostInitBag: ["ControlTW=2", "ControlTH=2", "Title=" + tPanelTitle, "Style=" + tStyleExt] });
+                    const tTileButton: cdeNMI.INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(tTileGroup, { PreInitBag: ["IsCustomTile=" + cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tDashPanels[i].PropertyBag, "IsCustomTile")) ], PostInitBag: ["ControlTW=2", "ControlTH=2", "Title=" + tPanelTitle, "Style=" + tStyleExt] });
                     tTileButton.SetProperty("OnClick", tOnClick);
                     tTileButton.SetProperty("TabIndex", tDashPanels[i].FldOrder + 101);
                     if (IsForm) {

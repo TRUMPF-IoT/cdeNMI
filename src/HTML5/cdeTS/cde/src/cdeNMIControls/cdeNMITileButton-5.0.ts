@@ -13,7 +13,7 @@
             super(null, pTRF);
         }
 
-        private s2: HTMLButtonElement = null;
+        private s2: HTMLElement = null;
         private divTitle: HTMLDivElement = null;
         private divOuter: HTMLDivElement = null;
         private divInner: HTMLDivElement = null;
@@ -21,6 +21,7 @@
         private IsDIV = false;
         private mFormat: string = null;
         private IsTesla = false;
+        private IsCustomTile = false;
         private mHoverAdd = "cdeButtonHover2";
 
         static Create(pTarget: INMIControl, pOnClick, pTitle: string, pTileX?: number, pTileY?: number, pClass?: string, pStyleInsert?: string, pCookie?, pParent?, pAllowMT?: boolean): ctrlTileButton {
@@ -59,23 +60,33 @@
             this.IsTesla = (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform === 5);
             if (this.IsTesla)
                 this.mHoverAdd = "cdeTesButton";
+            if (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform === 1)
+                this.mHoverAdd = null;
 
-            this.s2 = document.createElement('button');
-            this.s2.type = "button";
+            if (cde.CBool(this.GetSetting("IsCustomTile")) === true) {
+                this.IsCustomTile = true;
+                this.s2 = document.createElement('div');
+                this.SetElement(this.s2, false);
+                this.MyContainerElement = this.s2;
+                this.SetInitialSize();
+            }
+            else {
+                this.s2 = document.createElement('button');
+                (this.s2 as HTMLButtonElement).type = "button";
 
-            this.SetProperty("ButtonStyle", 0); //custom
-            this.SetTileStyle();
+                this.SetProperty("ButtonStyle", 0); //custom
+                this.SetTileStyle();
 
-            this.RegisterEvent("PointerDown", (pTarget: INMIControl, pEvent: Event, pPointer: ThePointer) => this.eventTileDown(pTarget, pEvent, pPointer));
-            this.RegisterEvent("PointerUp", (pTarget: INMIControl, pEvent: Event, pPointer: ThePointer) => this.eventTileExit(pTarget, pEvent, pPointer));
+                this.RegisterEvent("PointerDown", (pTarget: INMIControl, pEvent: Event, pPointer: ThePointer) => this.eventTileDown(pTarget, pEvent, pPointer));
+                this.RegisterEvent("PointerUp", (pTarget: INMIControl, pEvent: Event, pPointer: ThePointer) => this.eventTileExit(pTarget, pEvent, pPointer));
+                this.SetElement(this.s2, false);
 
-            this.SetElement(this.s2, false);
+                this.SetProperty("Disabled", (this.MyFieldInfo && (typeof this.MyFieldInfo.Flags !== "undefined") && (this.MyFieldInfo.Flags & 2) === 0)); //Must allow Click if MyFieldInfo is not set
 
-            this.SetProperty("Disabled", (this.MyFieldInfo && (typeof this.MyFieldInfo.Flags !== "undefined") && (this.MyFieldInfo.Flags & 2) === 0)); //Must allow Click if MyFieldInfo is not set
+                this.CreateTileButtonContent();
 
-            this.CreateTileButtonContent();
-
-            this.MyContainerElement = this.divInner;
+                this.MyContainerElement = this.divInner;
+            }
             return true;
         }
 
@@ -157,16 +168,17 @@
                     this.HookEvents(false);
                     this.SetHoverStyle(cde.CBool(this.GetProperty("Disabled")));
                     this.RegisterEvent("FireOnClick", this.FireClick);
-                }
-                //if ((typeof (pValue) === 'string') && pValue.substr(0, 6) === "TTS:<%")
-                //    pValue = pValue; ///  pValue = cdeNMI.GenerateFinalString(pValue,this.MyTRF.GetDataRow(), this.MyTRF);
-                this.RegisterEvent("OnClick", pValue);
-                this.s2.onkeyup = (evt) => {
-                    if (evt.keyCode === 13 || evt.keyCode === 32) {
-                        this.WasClicked = false;
-                        this.FireClick(this, evt);
-                    } else if (evt.keyCode === 36 && cdeNMI.MyScreenManager) {
-                        cdeNMI.MyScreenManager.GotoStationHome(false);
+
+                    //if ((typeof (pValue) === 'string') && pValue.substr(0, 6) === "TTS:<%")
+                    //    pValue = pValue; ///  pValue = cdeNMI.GenerateFinalString(pValue,this.MyTRF.GetDataRow(), this.MyTRF);
+                    this.RegisterEvent("OnClick", pValue);
+                    this.s2.onkeyup = (evt) => {
+                        if (evt.keyCode === 13 || evt.keyCode === 32) {
+                            this.WasClicked = false;
+                            this.FireClick(this, evt);
+                        } else if (evt.keyCode === 36 && cdeNMI.MyScreenManager) {
+                            cdeNMI.MyScreenManager.GotoStationHome(false);
+                        }
                     }
                 }
             }
@@ -184,10 +196,13 @@
             }
             else if ((pName === "Disabled" || pName === "DisableClick") && this.s2) {
                 this.SetHoverStyle(cde.CBool(pValue));
-                if (!this.IsDIV) {
-                    this.s2.disabled = cde.CBool(pValue);
-                    if (cde.CBool(pValue))
-                        this.s2.style.outlineStyle = "none";
+                if (!this.IsDIV && !this.IsCustomTile) {
+                    try {
+                        (this.s2 as HTMLButtonElement).disabled = cde.CBool(pValue);
+                        if (cde.CBool(pValue))
+                            this.s2.style.outlineStyle = "none";
+                    }
+                    catch { }
                 }
                 if (pName === "Disabled") {
                     if (this.MyNMIControl)
@@ -203,6 +218,13 @@
                 this.SetTileStyle();
                 this.SetSizes();
             } else if ((pName === "ClassName")) {
+                if ((cde.MyBaseAssets.MyServiceHostInfo.WebPlatform === 1) && pValue) {
+                    let tHovClass: string = this.GetProperty("HoverClassName");
+                    if (!tHovClass)
+                        tHovClass = "cdeButtonHover2";
+                    if (tHovClass && this.s2.classList.contains(tHovClass))
+                        this.s2.classList.remove(tHovClass);
+                }
                 this.SetSizes();
             } if (pName === "InnerControl" && pValue) {
                 this.SetInnerControl(pValue);
@@ -228,7 +250,7 @@
         }
 
         SetHoverStyle(bIsDisabled: boolean, bAddForce?: boolean) {
-            if (!this.s2)
+            if (!this.s2 || !this.mHoverAdd)
                 return;
             if (bIsDisabled) {
                 if (this.s2.classList.contains(this.mHoverAdd))
@@ -330,10 +352,8 @@
         }
 
         SetSizes() {
-            if (!this.divOuter) return;
-
             this.SetInitialSize();
-
+            if (!this.divOuter) return;
 
             this.divOuter.style.width = "inherit";
             this.divOuter.style.height = "inherit";
@@ -405,7 +425,7 @@
                 return;
             let tHovClass: string = this.GetProperty("HoverClassName");
             if (!tHovClass)
-                tHovClass = "cdeButtonHover2";
+                tHovClass = this.mHoverAdd;
             if (tHovClass)
                 eventObject.classList.add(tHovClass);
         }
@@ -418,7 +438,7 @@
                 return;
             let tHovClass: string = this.GetProperty("HoverClassName");
             if (!tHovClass)
-                tHovClass = "cdeButtonHover2";
+                tHovClass = this.mHoverAdd;
             if (tHovClass && eventObject.classList.contains(tHovClass))
                 eventObject.classList.remove(tHovClass);
         }
@@ -449,7 +469,8 @@
                 if (this.GetProperty("AreYouSure")) {
                     if (cdeNMI.MyPopUp)
                         cdeNMI.MyPopUp.Show(this.GetProperty("AreYouSure"), false, null, 1, () => {
-                            (pEvent as any).AYSFired = true;
+                            if (pEvent)
+                                (pEvent as any).AYSFired = true;
                             this.DoFireClick(this, pEvent);
                         });
                 }

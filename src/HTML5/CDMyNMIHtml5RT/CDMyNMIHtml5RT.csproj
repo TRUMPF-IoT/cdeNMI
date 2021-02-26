@@ -126,7 +126,7 @@
     <EmbeddedResource Include="ClientBin\IMAGES\cdeInnerCheck.png" />
     <EmbeddedResource Include="ClientBin\IMAGES\E.PNG" />
     <EmbeddedResource Include="ClientBin\IMAGES\iconTopLogo.png" />
-    <EmbeddedResource Include="ClientBin\IMAGES\GlasButton.png"/>
+    <EmbeddedResource Include="ClientBin\IMAGES\GlasButton.png" />
     <EmbeddedResource Include="ClientBin\IMAGES\logowz.png" />
     <EmbeddedResource Include="ClientBin\IMAGES\toplogo-150.png" />
     <EmbeddedResource Include="ClientBin\IMAGES\UPNPICON.png" />

@@ -22,5 +22,9 @@
   {
     "outputFile": "cde/CSS/choices.lite.css",
     "inputFile": "cde/CSS/choices.lite.scss"
+  },
+  {
+    "outputFile": "cde/CSS/MYSTYLESP.css",
+    "inputFile": "cde/CSS/MYSTYLESP.scss"
   }
 ]

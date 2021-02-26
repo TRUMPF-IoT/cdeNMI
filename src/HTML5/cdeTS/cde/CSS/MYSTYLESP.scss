@@ -18,3 +18,11 @@ div.cdeTiles {
 	    width: 100%;
     }
 }
+
+// inset dashboard tiles and all buttons when active, focus, or hover
+// must keep all classes due to not all tiles retaining hover class after being selected.
+.cdeButtonHover2, .cdeLiveTile, .cdeLiveTileBar, .cdeGlassButton {
+    &:hover, &:visited, &:active, &:focus {
+        box-shadow: none;
+    }
+}

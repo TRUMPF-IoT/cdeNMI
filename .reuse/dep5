@@ -180,19 +180,7 @@ Files:  src/HTML5/cdeTS/cde/webfonts/Roboto-*
 Copyright: 2015 Google Inc
 License: Apache-2.0
 
-Files: src/HTML5/cdeTS/cde/CSS/BaseColors.min.css
-Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
-License: MPL-2.0
-
-Files: src/HTML5/cdeTS/cde/CSS/LBaseColors.min.css
-Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
-License: MPL-2.0
-
-Files: src/HTML5/cdeTS/cde/CSS/choices.dark.min.css
-Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
-License: MPL-2.0
-
-Files: src/HTML5/cdeTS/cde/CSS/choices.lite.min.css
+Files: src/HTML5/cdeTS/cde/CSS/*
 Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
@@ -203,15 +191,6 @@ License: MPL-2.0
 Files: src/HTML5/cdeTS/cde/cdeWorker.min.js
 Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
-
-Files: src/HTML5/cdeTS/cde/CSS/CDESTYLES.min.css
-Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
-License: MPL-2.0
-
-Files: src/HTML5/cdeTS/cde/CSS/MYSTYLEST.min.css
-Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
-License: MPL-2.0
-
 
 Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/CDMyC3.csproj
 Copyright: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
