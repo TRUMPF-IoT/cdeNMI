@@ -1091,7 +1091,6 @@
                 else {
                     if (tFldInfo.DataItem !== "CDE_DETAILS" &&
                         tFldInfo.Type !== 29 &&
-                        tFldInfo.Type !== 11 &&
                         tFldInfo.Type !== 27 &&
                         tFldInfo.Type !== 22 &&
                         tFldInfo.Type !== 23 &&

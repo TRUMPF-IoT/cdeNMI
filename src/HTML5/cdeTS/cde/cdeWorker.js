@@ -1,9 +1,11 @@
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var dbits;
 var canary = 244837814094590;
@@ -1241,8 +1243,8 @@ var cde;
                     var tScheme = "http";
                     if (this.MyConfig.useTLS === true)
                         tScheme += "s";
-                    this.MyHSI.MyServiceUrl = tScheme + "://" + this.MyConfig.host + ":" + this.MyConfig.port;
-                    var isbEndpoint = this.MyHSI.MyServiceUrl + "/MYISBCONNECT";
+                    this.MyHSI.MyServiceUrl = "".concat(tScheme, "://").concat(this.MyConfig.host, ":").concat(this.MyConfig.port);
+                    var isbEndpoint = "".concat(this.MyHSI.MyServiceUrl, "/MYISBCONNECT");
                     this.GetGlobalResource(isbEndpoint, null, function (isbEnd, isbstr) {
                         var isb = JSON.parse(isbstr);
                         if (isb.ERR) {
@@ -1254,13 +1256,13 @@ var cde;
                                 var tscheme = "ws";
                                 if (isb.TLS === true)
                                     tscheme += "s";
-                                _this.MyConfig.wsuri = tscheme + "://" + _this.MyConfig.host + ":" + isb.WSP;
+                                _this.MyConfig.wsuri = "".concat(tscheme, "://").concat(_this.MyConfig.host, ":").concat(isb.WSP);
                             }
                             {
                                 var tscheme = "http";
                                 if (isb.TLS === true)
                                     tscheme += "s";
-                                _this.MyFallbackServiceUrl = tscheme + "://" + _this.MyConfig.host + ":" + _this.MyConfig.port;
+                                _this.MyFallbackServiceUrl = "".concat(tscheme, "://").concat(_this.MyConfig.host, ":").concat(_this.MyConfig.port);
                             }
                             _this.MyConfig.RequestPath = isb.NPA;
                             _this.MyHSI.InitialNPA = isb.NPA;
@@ -1413,7 +1415,7 @@ var cde;
                     this.SendQueued(null, "CDE_SETESID" + cred, "ContentService", null, null, 1, 1, 1, null, null);
                 }
                 else {
-                    var cred = this.RSAEncrypt(credentials.QUID + ":;:" + credentials.QPWD, this.MyHSI.CurrentRSA);
+                    var cred = this.RSAEncrypt("".concat(credentials.QUID, ":;:").concat(credentials.QPWD), this.MyHSI.CurrentRSA);
                     this.SendQueued(null, "CDE_LOGIN" + cred, "ContentService", null, null, 1, 1, 1, null, null);
                 }
                 this.mLoginSent = true;
@@ -1994,7 +1996,7 @@ var cde;
                 param[_i - 2] = arguments[_i];
             }
             for (var i = 0; i < this.MyPorts.length; i++)
-                this.MyPorts[i].postMessage(__spreadArrays([pEvent, this.MyHSI], param));
+                this.MyPorts[i].postMessage(__spreadArray([pEvent, this.MyHSI], param, true));
         };
         cdeWorker.prototype.UpdateCallerHSI = function (pSource) {
             this.UpdateHSI();

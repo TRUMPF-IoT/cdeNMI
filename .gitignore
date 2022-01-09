@@ -37,3 +37,5 @@ _[Rr]elease/
 /src/HTML5/cdeTS/node_modules/cde-js
 /BuildTools/cdePackager
 /BuildTools/signtool.exe
+/src/HTML5/CDMyNMIHtml5RT/ClientBin/CDE/cde.minold.js
+/src/HTML5/CDMyNMIHtml5RT/ClientBin/CDE/cdeWorker.minold.js

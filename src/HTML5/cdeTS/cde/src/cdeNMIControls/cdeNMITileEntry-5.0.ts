@@ -327,8 +327,8 @@
 
         public static Create(pTargetControl: cdeNMI.INMIControl, pTRF: TheTRF, pPropertyBag?: string[], pScreenID?: string): INMITileEntry {
             const tTile: ctrlTileEntry = new ctrlTileEntry(pTRF);
-            if (pTRF && pTRF.FldInfo && (!pTRF.FldInfo.Type || pTRF.FldInfo.Type === 0))
-                pTRF.FldInfo.Type = cdeControlType.SingleEnded; //If no Type is specified use 1 (Edit). Might be removed!
+            //if (pTRF && pTRF.FldInfo && (!pTRF.FldInfo.Type || pTRF.FldInfo.Type === 0))
+              //  pTRF.FldInfo.Type = cdeControlType.SingleEnded; //If no Type is specified use 1 (Edit). Might be removed!
             tTile.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
             return tTile;
         }

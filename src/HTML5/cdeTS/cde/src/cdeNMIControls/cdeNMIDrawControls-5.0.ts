@@ -523,11 +523,11 @@
                     });
                 }
                 else {
-                    if (window.webkitRequestAnimationFrame)
-                        window.webkitRequestAnimationFrame(() => {
-                            this.RedrawForeground();
-                        });
-                    else
+                    //if (window.webkitRequestAnimationFrame)
+                    //    window.webkitRequestAnimationFrame(() => {
+                    //        this.RedrawForeground();
+                    //    });
+                    //else
                         window.setTimeout(() => {
                             this.RedrawForeground();
                         }, Math.floor(1000 / 60));

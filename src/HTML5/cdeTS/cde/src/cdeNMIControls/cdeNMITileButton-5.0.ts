@@ -335,7 +335,7 @@
             this.divOuter.style.position = "relative";
 
             this.divInner = document.createElement("div");
-            this.divInner.style.zoom = cde.MyBaseAssets.MyServiceHostInfo.TileScale.toString();
+            //this.divInner.style.zoom = cde.MyBaseAssets.MyServiceHostInfo.TileScale.toString();
 
             this.divTitle = document.createElement("div");
             if (this.GetProperty("Value"))
