@@ -577,15 +577,15 @@
                 if (this.PropertyBag["IsPointerOutAllowed"] !== true) {
                     this.MyRootElement.addEventListener("pointerout", (evt) => this.sinkDoEvent(evt), bDoCapture);
                 }
-            } else if (window.navigator.msPointerEnabled) {
-                //  Microsoft pointer model = IE10
-                this.MyRootElement.addEventListener("MSPointerDown", (evt) => this.sinkDoEvent(evt), bDoCapture);
-                this.MyRootElement.addEventListener("MSPointerMove", (evt) => this.sinkDoEvent(evt), bDoCapture);
-                this.MyRootElement.addEventListener("MSPointerUp", (evt) => this.sinkDoEvent(evt), bDoCapture);
-                this.MyRootElement.addEventListener("MSPointerCancel", (evt) => this.sinkDoEvent(evt), bDoCapture);
-                if (this.PropertyBag["IsPointerOutAllowed"] !== true) {
-                    this.MyRootElement.addEventListener("MSPointerOut", (evt) => this.sinkDoEvent(evt), bDoCapture);
-                }
+            //} else if (window.navigator.msPointerEnabled) {
+            //    //  Microsoft pointer model = IE10
+            //    this.MyRootElement.addEventListener("MSPointerDown", (evt) => this.sinkDoEvent(evt), bDoCapture);
+            //    this.MyRootElement.addEventListener("MSPointerMove", (evt) => this.sinkDoEvent(evt), bDoCapture);
+            //    this.MyRootElement.addEventListener("MSPointerUp", (evt) => this.sinkDoEvent(evt), bDoCapture);
+            //    this.MyRootElement.addEventListener("MSPointerCancel", (evt) => this.sinkDoEvent(evt), bDoCapture);
+            //    if (this.PropertyBag["IsPointerOutAllowed"] !== true) {
+            //        this.MyRootElement.addEventListener("MSPointerOut", (evt) => this.sinkDoEvent(evt), bDoCapture);
+            //    }
             }
             else if (this.MyRootElement.addEventListener) {
                 //  iOS touch model

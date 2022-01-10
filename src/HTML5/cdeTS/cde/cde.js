@@ -6,17 +6,21 @@ var __extends = (this && this.__extends) || (function () {
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 // SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
 //
@@ -128,7 +132,7 @@ var cde;
                                         if (params.length > 0 && params[0] instanceof cde.TheProcessMessage)
                                             this.MyEvents[pEvtName][mh](this, params[0]);
                                         else
-                                            (_a = this.MyEvents[pEvtName])[mh].apply(_a, __spreadArrays([this], params));
+                                            (_a = this.MyEvents[pEvtName])[mh].apply(_a, __spreadArray([this], params, false));
                                     }
                                     break;
                             }
@@ -533,7 +537,7 @@ var cde;
         }
         if (cde.MyBaseAssets.MyCommStatus.MyServiceUrl && document.location.origin !== cde.MyBaseAssets.MyCommStatus.MyServiceUrl) {
             if (tPa.length > 0)
-                tPa = cde.MyBaseAssets.MyCommStatus.MyServiceUrl + "/" + tPa;
+                tPa = "".concat(cde.MyBaseAssets.MyCommStatus.MyServiceUrl, "/").concat(tPa);
             else
                 tPa = cde.MyBaseAssets.MyCommStatus.MyServiceUrl;
         }
@@ -1255,8 +1259,8 @@ var cdeWEB;
                     var tScheme = "http";
                     if (this.MyConfig.useTLS === true)
                         tScheme += "s";
-                    this.MyHSI.MyServiceUrl = tScheme + "://" + this.MyConfig.host + ":" + this.MyConfig.port;
-                    var isbEndpoint = this.MyHSI.MyServiceUrl + "/MYISBCONNECT";
+                    this.MyHSI.MyServiceUrl = "".concat(tScheme, "://").concat(this.MyConfig.host, ":").concat(this.MyConfig.port);
+                    var isbEndpoint = "".concat(this.MyHSI.MyServiceUrl, "/MYISBCONNECT");
                     this.GetJSON(isbEndpoint, function (isb) {
                         if (isb.ERR) {
                             cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:StartCommunication", "MyISBConnect returned: " + isb.ERR, 3);
@@ -1267,13 +1271,13 @@ var cdeWEB;
                                 var tscheme = "ws";
                                 if (isb.TLS === true)
                                     tscheme += "s";
-                                _this.MyConfig.wsuri = tscheme + "://" + _this.MyConfig.host + ":" + isb.WSP;
+                                _this.MyConfig.wsuri = "".concat(tscheme, "://").concat(_this.MyConfig.host, ":").concat(isb.WSP);
                             }
                             {
                                 var tscheme = "http";
                                 if (isb.TLS === true)
                                     tscheme += "s";
-                                _this.MyServiceUrl = tscheme + "://" + _this.MyConfig.host + ":" + _this.MyConfig.port;
+                                _this.MyServiceUrl = "".concat(tscheme, "://").concat(_this.MyConfig.host, ":").concat(_this.MyConfig.port);
                             }
                             _this.MyConfig.RequestPath = isb.NPA;
                             _this.MyHSI.InitialNPA = isb.NPA;
@@ -1842,7 +1846,7 @@ var cdeWEB;
                     this.SendQueued(null, "CDE_SETESID" + cred, "ContentService", null, null, 1, 1, 1, null, null);
                 }
                 else {
-                    var cred = this.RSAEncrypt(credentials.QUID + ":;:" + credentials.QPWD, this.MyHSI.CurrentRSA);
+                    var cred = this.RSAEncrypt("".concat(credentials.QUID, ":;:").concat(credentials.QPWD), this.MyHSI.CurrentRSA);
                     this.SendQueued(null, "CDE_LOGIN" + cred, "ContentService", null, null, 1, 1, 1, null, null);
                 }
                 this.mLoginSent = true;
@@ -2021,13 +2025,13 @@ var cdeWEB;
                     if (message.length > 1) {
                         switch (message[0]) {
                             case "CDE_NEW_LOGENTRY":
-                                (_a = cde.MyEventLogger).FireEvent.apply(_a, __spreadArrays([true, message[0]], message.slice(2)));
+                                (_a = cde.MyEventLogger).FireEvent.apply(_a, __spreadArray([true, message[0]], message.slice(2), false));
                                 break;
                             default:
                                 //if ((<string>message[0]).substr(0, 4) == "GRS_") debugger;
                                 _this.MyHSI = message[1];
                                 cde.MyBaseAssets.MyCommStatus = _this.MyHSI;
-                                _this.FireEvent.apply(_this, __spreadArrays([true, message[0]], message.slice(2)));
+                                _this.FireEvent.apply(_this, __spreadArray([true, message[0]], message.slice(2), false));
                                 break;
                         }
                     }
@@ -2136,7 +2140,7 @@ var cdeWEB;
                     for (var _i = 1; _i < arguments.length; _i++) {
                         pars[_i - 1] = arguments[_i];
                     }
-                    pCallback.apply(void 0, __spreadArrays([pResource], pars));
+                    pCallback.apply(void 0, __spreadArray([pResource], pars, false));
                     _this.UnregisterEvent("GRS_/ClientBin/" + pResource);
                 });
                 if (pErrorCallback) {
@@ -2145,7 +2149,7 @@ var cdeWEB;
                         for (var _i = 1; _i < arguments.length; _i++) {
                             pars[_i - 1] = arguments[_i];
                         }
-                        pErrorCallback.apply(void 0, __spreadArrays([pResource], pars));
+                        pErrorCallback.apply(void 0, __spreadArray([pResource], pars, false));
                         _this.UnregisterEvent("GRS_/ClientBin/" + pResource);
                         _this.UnregisterEvent("GRS_ERROR_/ClientBin/" + pResource);
                     });
@@ -2161,7 +2165,7 @@ var cdeWEB;
                     for (var _i = 1; _i < arguments.length; _i++) {
                         pars[_i - 1] = arguments[_i];
                     }
-                    pCallback.apply(void 0, __spreadArrays([pResource], pars));
+                    pCallback.apply(void 0, __spreadArray([pResource], pars, false));
                     _this.UnregisterEvent("GGR_" + pResource);
                 });
                 if (pErrorCallback) {
@@ -2170,7 +2174,7 @@ var cdeWEB;
                         for (var _i = 1; _i < arguments.length; _i++) {
                             pars[_i - 1] = arguments[_i];
                         }
-                        pCallback.apply(void 0, __spreadArrays([pResource], pars));
+                        pCallback.apply(void 0, __spreadArray([pResource], pars, false));
                         _this.UnregisterEvent("GGR_ERROR_" + pResource);
                     });
                 }
@@ -2185,7 +2189,7 @@ var cdeWEB;
                     for (var _i = 1; _i < arguments.length; _i++) {
                         pars[_i - 1] = arguments[_i];
                     }
-                    pCallback.apply(void 0, __spreadArrays([pUri], pars));
+                    pCallback.apply(void 0, __spreadArray([pUri], pars, false));
                     _this.UnregisterEvent("GJ_" + pUri);
                     if (pErrorCallback)
                         _this.UnregisterEvent("GJ_ERROR_" + pUri);
@@ -2196,7 +2200,7 @@ var cdeWEB;
                         for (var _i = 1; _i < arguments.length; _i++) {
                             pars[_i - 1] = arguments[_i];
                         }
-                        pErrorCallback.apply(void 0, __spreadArrays([pUri], pars));
+                        pErrorCallback.apply(void 0, __spreadArray([pUri], pars, false));
                         _this.UnregisterEvent("GJ_" + pUri);
                         _this.UnregisterEvent("GJ_ERROR_" + pUri);
                     });
@@ -3209,10 +3213,10 @@ var cde;
         }
         cdeFileSaver.prototype.SaveAs = function (blob, name, noAutoBom) {
             var _this = this;
-            if (window.navigator && window.navigator.msSaveOrOpenBlob) { //IE11+
-                window.navigator.msSaveOrOpenBlob(blob, name);
-                return;
-            }
+            //if (window.navigator && window.navigator.msSaveOrOpenBlob) { //IE11+
+            //    window.navigator.msSaveOrOpenBlob(blob, name);
+            //    return;
+            //}
             if (cde.IsIE()) {
                 if (cdeNMI.MyToast)
                     cdeNMI.MyToast.ShowToastMessage("Sorry...but IE does not support saving files!");
@@ -3523,7 +3527,7 @@ var cdeNMI;
             if (!pEvt)
                 return;
             this.altKey = pEvt.altKey;
-            this.Cchar = pEvt.char;
+            //this.Cchar = pEvt.char;
             this.charCode = pEvt.charCode;
             this.ctrlKey = pEvt.ctrlKey;
             this.key = pEvt.key;
@@ -5399,16 +5403,15 @@ var cdeNMI;
                 if (this.PropertyBag["IsPointerOutAllowed"] !== true) {
                     this.MyRootElement.addEventListener("pointerout", function (evt) { return _this.sinkDoEvent(evt); }, bDoCapture);
                 }
-            }
-            else if (window.navigator.msPointerEnabled) {
-                //  Microsoft pointer model = IE10
-                this.MyRootElement.addEventListener("MSPointerDown", function (evt) { return _this.sinkDoEvent(evt); }, bDoCapture);
-                this.MyRootElement.addEventListener("MSPointerMove", function (evt) { return _this.sinkDoEvent(evt); }, bDoCapture);
-                this.MyRootElement.addEventListener("MSPointerUp", function (evt) { return _this.sinkDoEvent(evt); }, bDoCapture);
-                this.MyRootElement.addEventListener("MSPointerCancel", function (evt) { return _this.sinkDoEvent(evt); }, bDoCapture);
-                if (this.PropertyBag["IsPointerOutAllowed"] !== true) {
-                    this.MyRootElement.addEventListener("MSPointerOut", function (evt) { return _this.sinkDoEvent(evt); }, bDoCapture);
-                }
+                //} else if (window.navigator.msPointerEnabled) {
+                //    //  Microsoft pointer model = IE10
+                //    this.MyRootElement.addEventListener("MSPointerDown", (evt) => this.sinkDoEvent(evt), bDoCapture);
+                //    this.MyRootElement.addEventListener("MSPointerMove", (evt) => this.sinkDoEvent(evt), bDoCapture);
+                //    this.MyRootElement.addEventListener("MSPointerUp", (evt) => this.sinkDoEvent(evt), bDoCapture);
+                //    this.MyRootElement.addEventListener("MSPointerCancel", (evt) => this.sinkDoEvent(evt), bDoCapture);
+                //    if (this.PropertyBag["IsPointerOutAllowed"] !== true) {
+                //        this.MyRootElement.addEventListener("MSPointerOut", (evt) => this.sinkDoEvent(evt), bDoCapture);
+                //    }
             }
             else if (this.MyRootElement.addEventListener) {
                 //  iOS touch model
@@ -10430,7 +10433,7 @@ var cdeNMI;
                 return true;
             if (pProcessMessage.Topic === "NMI_ERROR") {
                 if (cdeNMI.MyPopUp)
-                    cdeNMI.MyPopUp.Show(pMSG.PLS, true, null, 1, function () { document.location.reload(true); });
+                    cdeNMI.MyPopUp.Show(pMSG.PLS, true, null, 1, function () { document.location.reload(); });
                 return true;
             }
             if (pProcessMessage.Topic === "NMI_INFO") {
@@ -10486,7 +10489,7 @@ var cdeNMI;
                             cdeNMI.MyPopUp.Show(pMSG.PLS, true);
                     }
                     else {
-                        window.location.reload(true);
+                        window.location.reload();
                     }
                     return true;
                 case "NMI_REFRESH_META":
@@ -15193,14 +15196,14 @@ var cdeNMI;
                     });
                 }
                 else {
-                    if (window.webkitRequestAnimationFrame)
-                        window.webkitRequestAnimationFrame(function () {
-                            _this.RedrawForeground();
-                        });
-                    else
-                        window.setTimeout(function () {
-                            _this.RedrawForeground();
-                        }, Math.floor(1000 / 60));
+                    //if (window.webkitRequestAnimationFrame)
+                    //    window.webkitRequestAnimationFrame(() => {
+                    //        this.RedrawForeground();
+                    //    });
+                    //else
+                    window.setTimeout(function () {
+                        _this.RedrawForeground();
+                    }, Math.floor(1000 / 60));
                 }
             }
         };
@@ -19581,7 +19584,7 @@ var cdeNMI;
             this.divOuter.style.pointerEvents = "none";
             this.divOuter.style.position = "relative";
             this.divInner = document.createElement("div");
-            this.divInner.style.zoom = cde.MyBaseAssets.MyServiceHostInfo.TileScale.toString();
+            //this.divInner.style.zoom = cde.MyBaseAssets.MyServiceHostInfo.TileScale.toString();
             this.divTitle = document.createElement("div");
             if (this.GetProperty("Value"))
                 this.divTitle.innerHTML = this.GetProperty("Value");
@@ -20131,8 +20134,8 @@ var cdeNMI;
         //Backward compat
         ctrlTileEntry.Create = function (pTargetControl, pTRF, pPropertyBag, pScreenID) {
             var tTile = new ctrlTileEntry(pTRF);
-            if (pTRF && pTRF.FldInfo && (!pTRF.FldInfo.Type || pTRF.FldInfo.Type === 0))
-                pTRF.FldInfo.Type = cdeNMI.cdeControlType.SingleEnded; //If no Type is specified use 1 (Edit). Might be removed!
+            //if (pTRF && pTRF.FldInfo && (!pTRF.FldInfo.Type || pTRF.FldInfo.Type === 0))
+            //  pTRF.FldInfo.Type = cdeControlType.SingleEnded; //If no Type is specified use 1 (Edit). Might be removed!
             tTile.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
             return tTile;
         };
@@ -22864,7 +22867,6 @@ var cdeNMI;
                 else {
                     if (tFldInfo.DataItem !== "CDE_DETAILS" &&
                         tFldInfo.Type !== 29 &&
-                        tFldInfo.Type !== 11 &&
                         tFldInfo.Type !== 27 &&
                         tFldInfo.Type !== 22 &&
                         tFldInfo.Type !== 23 &&
@@ -23158,7 +23160,7 @@ var cdeNMI;
                 if (cde.MyBaseAssets.MyServiceHostInfo.PortalReset)
                     cde.MyBaseAssets.MyServiceHostInfo.PortalReset();
                 else {
-                    location.reload(true);
+                    location.reload();
                     //cdeNMI.ResetBrowserToPortal();
                 }
             });
@@ -23564,7 +23566,7 @@ var cdeNMI;
         for (var _i = 2; _i < arguments.length; _i++) {
             params[_i - 2] = arguments[_i];
         }
-        (_a = cde.MyBaseAssets).FireEvent.apply(_a, __spreadArrays([FireAsync, pEventName], params));
+        (_a = cde.MyBaseAssets).FireEvent.apply(_a, __spreadArray([FireAsync, pEventName], params, false));
     }
     cdeNMI.FireEvent = FireEvent;
     function RegisterEvent(pEventName, pCallback) {

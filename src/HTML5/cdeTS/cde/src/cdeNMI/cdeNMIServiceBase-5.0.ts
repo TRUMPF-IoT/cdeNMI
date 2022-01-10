@@ -329,7 +329,7 @@ namespace cdeNMI {
 
             if (pProcessMessage.Topic === "NMI_ERROR") {
                 if (cdeNMI.MyPopUp)
-                    cdeNMI.MyPopUp.Show(pMSG.PLS, true, null, 1, () => { document.location.reload(true) });
+                    cdeNMI.MyPopUp.Show(pMSG.PLS, true, null, 1, () => { document.location.reload() });
                 return true;
             }
             if (pProcessMessage.Topic === "NMI_INFO") {
@@ -386,7 +386,7 @@ namespace cdeNMI {
                             cdeNMI.MyPopUp.Show(pMSG.PLS, true);
                     }
                     else {
-                        window.location.reload(true);
+                        window.location.reload();
                     }
                     return true;
                 case "NMI_REFRESH_META":

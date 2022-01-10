@@ -46,7 +46,7 @@
                 if (cde.MyBaseAssets.MyServiceHostInfo.PortalReset)
                     cde.MyBaseAssets.MyServiceHostInfo.PortalReset();
                 else {
-                    location.reload(true);
+                    location.reload();
                     //cdeNMI.ResetBrowserToPortal();
                 }
             });

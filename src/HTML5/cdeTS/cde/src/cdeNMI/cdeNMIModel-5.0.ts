@@ -459,7 +459,7 @@
 
     export class TheKey {
         public altKey: boolean;
-        public Cchar: string;
+        //public Cchar: string;
         public charCode: number;
         public ctrlKey: boolean;
         public key: string;
@@ -487,7 +487,7 @@
         constructor(pEvt?: KeyboardEvent) {
             if (!pEvt) return;
             this.altKey = pEvt.altKey;
-            this.Cchar = pEvt.char;
+            //this.Cchar = pEvt.char;
             this.charCode = pEvt.charCode;
             this.ctrlKey = pEvt.ctrlKey;
             this.key = pEvt.key;

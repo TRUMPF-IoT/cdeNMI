@@ -26,10 +26,10 @@ namespace cde {
     export class cdeFileSaver extends cde.TheDataBase {
 
         public SaveAs(blob, name: string, noAutoBom?: boolean) {
-            if (window.navigator && window.navigator.msSaveOrOpenBlob) { //IE11+
-                window.navigator.msSaveOrOpenBlob(blob, name);
-                return;
-            }
+            //if (window.navigator && window.navigator.msSaveOrOpenBlob) { //IE11+
+            //    window.navigator.msSaveOrOpenBlob(blob, name);
+            //    return;
+            //}
             if (cde.IsIE()) {
                 if (cdeNMI.MyToast)
                     cdeNMI.MyToast.ShowToastMessage("Sorry...but IE does not support saving files!");
