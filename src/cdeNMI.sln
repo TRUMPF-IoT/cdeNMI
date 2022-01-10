@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30011.22
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32104.313
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cdeTS", "HTML5\cdeTS\cdeTS.csproj", "{375C2814-126B-4A75-84E4-3CAA6D271E10}"
 EndProject
@@ -18,7 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Licenses", "_Licenses", "{
 		..\.reuse\dep5 = ..\.reuse\dep5
 		..\LICENSES\MIT.txt = ..\LICENSES\MIT.txt
 		..\LICENSES\MPL-2.0.txt = ..\LICENSES\MPL-2.0.txt
-		..\LICENSES\MS-PL.txt = ..\LICENSES\MS-PL.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Build", "_Build", "{9189CCAB-0D24-4ABB-AFE5-C92C7F5E69B1}"
