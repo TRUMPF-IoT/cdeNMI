@@ -1770,7 +1770,7 @@ div.cdeToggleSwitch {
   width: 0; }
 
 .cdeSwitchLabel {
-  max-height: 25px;
+ /* max-height: 25px;*/
   word-wrap: break-word;
   text-overflow: ellipsis; }
 

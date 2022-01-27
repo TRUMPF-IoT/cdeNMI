@@ -14520,11 +14520,14 @@ var cdeNMI;
             _super.prototype.InitControl.call(this, pTargetControl, pTRF, pPropertyBag, pScreenID);
             this.MyCheckBox = document.createElement("div");
             this.MyCheckBox.className = "cdeToggleSwitch";
-            this.MyCheckBox.style.height = (cdeNMI.GetSizeFromTile(1)) + "px";
-            this.MyCheckBox.style.width = (cdeNMI.GetSizeFromTile(1)) + "px";
+            var cw = cde.CInt(this.GetSetting("CheckWidth"));
+            if (cw == 0)
+                cw = 1;
+            this.MyCheckBox.style.height = (cdeNMI.GetSizeFromTile(cw)) + "px";
+            this.MyCheckBox.style.width = (cdeNMI.GetSizeFromTile(cw)) + "px";
             this.MyLabel = document.createElement("label");
             this.MyLabel.className = "cdeSwitchLabel";
-            this.MyLabel.style.maxWidth = (cdeNMI.GetSizeFromTile(1)) + "px";
+            this.MyLabel.style.maxWidth = (cdeNMI.GetSizeFromTile(cw)) + "px";
             var tL = this.GetSetting("Label");
             this.MyLabel.innerHTML = tL ? tL : (cde.CBool(this.GetSetting("IsInTable")) === true ? "" : "&nbsp;");
             this.MyToggleSwitch = document.createElement("label");
