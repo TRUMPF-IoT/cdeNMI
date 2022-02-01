@@ -10,5 +10,11 @@
     "inputFiles": [
       "cde/cdeWorker.js"
     ]
+  },
+  {
+    "outputFileName": "cde/CSS/CDESTYLES.min.css",
+    "inputFiles": [
+      "cde/CSS/CDESTYLES.css"
+    ]
   }
 ]
