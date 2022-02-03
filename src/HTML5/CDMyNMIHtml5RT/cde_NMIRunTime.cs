@@ -573,6 +573,13 @@ namespace NMIService
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.IsUsingUserMapper={TheBaseAssets.MyServiceHostInfo.IsUsingUserMapper.ToString().ToLower()};");
                 string tPortalScreen = "";
                 string tStartScreen = "";
+                if (!TheBaseAssets.MyServiceHostInfo.IsCloudService) 
+                {
+                    //new in 5.142.1: If AutoLoginUID is set with a valid UID, this user is logged in automatically.
+                    var tAutoLoginGuid = TheBaseAssets.MySettings.GetSetting("AutoLoginUID");
+                    if (!string.IsNullOrEmpty(tAutoLoginGuid))
+                        pRequest.SessionState.CID = TheCommonUtils.CGuid(tAutoLoginGuid);
+                }
                 if (pPage.RequireLogin && TheUserManager.HasSessionValidUser(pRequest?.SessionState))
                 {
                     var tConnect = TheUserManager.GetUserDataForNMI(pRequest?.SessionState);

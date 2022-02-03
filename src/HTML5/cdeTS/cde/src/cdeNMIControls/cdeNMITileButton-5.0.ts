@@ -308,7 +308,7 @@
                     if (pValue)
                         pValue = cdeNMI.IconShim(pValue);
                     if (tS && tS.startsWith("FA")) {
-                        pValue = "<i class='fa faIcon " + (tS.substr(3, 1) === "S" ? "fa-spin " : "") + "fa-" + tS.substr(2, 1) + "x'>&#x" + tS.substr(4, tS.length - 4) + ";</i></br>" + (pValue ? pValue : "");
+                        pValue = "<i class='fa" + (tS.substr(3, 1) === "B" ? "b": "") + " faIcon " + (tS.substr(3, 1) === "S" ? "fa-spin " : "") + "fa-" + tS.substr(2, 1) + "x'>&#x" + tS.substr(4, tS.length - 4) + ";</i></br>" + (pValue ? pValue : "");
                     }
                     const tSubT = this.GetProperty("SubTitle");
                     if (tSubT)
