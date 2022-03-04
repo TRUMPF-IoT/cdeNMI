@@ -86,10 +86,12 @@
     <None Remove="ClientBin\CSS\LcdeBaseColors.min.css" />
     <None Remove="ClientBin\CSS\MainBaseColors.min.css" />
     <None Remove="ClientBin\CSS\MYSTYLES.min.css" />
+    <None Remove="ClientBin\CSS\MYSTYLESFH.min.css" />
     <None Remove="ClientBin\CSS\MYSTYLESH.min.css" />
     <None Remove="ClientBin\CSS\MYSTYLESL.min.css" />
     <None Remove="ClientBin\CSS\MYSTYLESP.min.css" />
     <None Remove="ClientBin\CSS\MYSTYLEST.min.css" />
+    <None Remove="ClientBin\CSS\MYSTYLESTY.min.css" />
     <None Remove="ClientBin\CSS\MYSTYLESW.min.css" />
     <None Remove="ClientBin\CSS\MYSTYLESX.min.css" />
     <None Remove="ClientBin\IMAGES\GlasButton.png" />
@@ -113,10 +115,12 @@
     <EmbeddedResource Include="ClientBin\CSS\LcdeBaseColors.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\MainBaseColors.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\MYSTYLES.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\MYSTYLESFH.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\MYSTYLESH.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\MYSTYLESL.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\MYSTYLESP.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\MYSTYLEST.min.css" />
+    <EmbeddedResource Include="ClientBin\CSS\MYSTYLESTY.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\MYSTYLESW.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\MYSTYLESX.min.css" />
   </ItemGroup>

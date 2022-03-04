@@ -19,7 +19,8 @@ namespace NMIService
     public partial class TheNMIHtml5RT
     {
         private string MyMainFrameHtml = "";
-
+        static private string PageScale = "";
+        static private string[] PlatformScale;
         private void InitNMIAssets()
         {
             if (TheBaseAssets.MyServiceHostInfo.ContentTemplate != Guid.Empty)
@@ -518,16 +519,30 @@ namespace NMIService
             tStr.Append("<meta content=\"en-us\" http-equiv=\"Content-Language\" /><meta charset=\"UTF-8\"> ");
             tStr.Append("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" >");
             string tPlat = "W";
-            if (pWebPlatform > 0)
+            //if (pWebPlatform > 0)
             {
-                tStr.Append(pPage.MobileConstrains > 0 ? $"<meta name=\"viewport\" content=\"width={pPage.MobileConstrains}, initial-scale=1, maximum-scale=1\">" : "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\">");
+                if (string.IsNullOrEmpty(PageScale))
+                {
+                    PageScale = TheBaseAssets.MySettings.GetSetting("PageScale");
+                    if (string.IsNullOrEmpty(PageScale))
+                        PageScale = "1.0;0.5;1.0;0.5;1.0;1.0;0.5;0.5;1.0";
+                    PlatformScale = PageScale.Split(';');
+                }
+                string tScale = "1.0";
+                if (PlatformScale?.Length > (int)pWebPlatform) tScale = PlatformScale[(int)pWebPlatform];
                 switch (pWebPlatform)
                 {
                     case eWebPlatform.Mobile: tPlat = "P"; break;
                     case eWebPlatform.HoloLens: tPlat = "H"; break;
                     case eWebPlatform.XBox: tPlat = "X"; break;
                     case eWebPlatform.TeslaXS: tPlat = "T"; break;
+                    case eWebPlatform.TizenFamilyHub: tPlat = "FH"; break;
+                    case eWebPlatform.TizenTV: tPlat = "TY"; break;
+                    case eWebPlatform.Bot: tPlat =null; break;
+                    default:
+                        break;
                 }
+                tStr.Append($"<meta name=\"viewport\" content=\"width=device-width, initial-scale={tScale}, maximum-scale={tScale}\">");
             }
 
             if (pPage.IncludeCDE)
@@ -540,7 +555,11 @@ namespace NMIService
                 tStr.Append(pPage.AddHeader);
             if (!string.IsNullOrEmpty(pPage.Title) && pComposite.IndexOf("<title>", StringComparison.OrdinalIgnoreCase) < 0)
                 tStr.Append("<title>" + pPage.Title + "</title>");
-
+            if (pWebPlatform== eWebPlatform.Bot)
+            {
+                tStr.Append("</head><body class=\"cdeBody\">");
+                return tStr.ToString();
+            }
             if (pPage.IncludeCDE)
             {
                 if (!TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("DisableNMIStyles")))
