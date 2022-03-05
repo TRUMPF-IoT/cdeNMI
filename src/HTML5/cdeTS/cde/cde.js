@@ -22513,6 +22513,8 @@ var cdeNMI;
                         var tFldContent = "";
                         if (tFldInfo.DataItem) {
                             tFldContent = cdeNMI.GetFldContent(tDataRow, tFldInfo, this.MyFormInfo.IsGenerated, false);
+                            if (tFldContent === undefined)
+                                tFldContent = "";
                         }
                         if (tFldInfo["TCClassName"])
                             tD.SetProperty("ClassName", tFldInfo["TCClassName"]);

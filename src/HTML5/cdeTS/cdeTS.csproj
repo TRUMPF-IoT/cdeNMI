@@ -137,10 +137,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="cde\CSS\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="compilerconfig.json" />
   </ItemGroup>
 
