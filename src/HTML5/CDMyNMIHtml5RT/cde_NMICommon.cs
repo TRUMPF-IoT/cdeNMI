@@ -553,14 +553,35 @@ namespace NMIService
 
         void sinkNMIMessage(ICDEThing psender, object pIncoming)
         {
-            if (!(pIncoming is TheProcessMessage pMsg) || !IsAutoTheme) return;
+            if (!(pIncoming is TheProcessMessage pMsg)) return;
             switch (pMsg.Message.TXT)   //string 2 cases
             {
                 case "NMI_NODEPING":
-                    if (IsLightTheme != (DateTimeOffset.Now > SunriseSunset.Sunrise && DateTimeOffset.Now < SunriseSunset.Sunset))
+                    bool IsAuto = IsAutoTheme;
+                    if (!string.IsNullOrEmpty(pMsg.Message.PLS))
                     {
-                        IsLightTheme = !IsLightTheme;
-                        TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_THEME", IsLightTheme.ToString()));
+                        try
+                        {
+                            var u = TheCommonUtils.DeserializeJSONStringToObject<Dictionary<string, object>>(pMsg.Message.PLS);
+                            if (u.TryGetValue("ThemeName", out object tname))
+                            {
+                                if (TheCommonUtils.CStr(tname) == "Auto")
+                                    IsAuto = true;
+                            }
+                        }
+                        catch (Exception)
+                        { }
+                    }
+                    if (IsAuto)
+                    {
+                        if (SunriseSunset == null || SunriseSunset.Sunrise.Day != DateTimeOffset.Now.Day) //Calculate once a day
+                            SunriseSunset = SolarCalculator.Calculate();
+
+                        if (IsLightTheme != (DateTimeOffset.Now > SunriseSunset.Sunrise && DateTimeOffset.Now < SunriseSunset.Sunset))
+                        {
+                            IsLightTheme = !IsLightTheme;
+                            TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_THEME", IsLightTheme.ToString()));
+                        }
                     }
                     break;
             }
