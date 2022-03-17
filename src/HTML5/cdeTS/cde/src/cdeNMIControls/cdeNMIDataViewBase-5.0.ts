@@ -184,6 +184,10 @@
                 if (pDataItem.indexOf('.') > 0) {
                     c = cdeNMI.GetFldContentByName(a, pDataItem, false);
                     d = cdeNMI.GetFldContentByName(b, pDataItem, false);
+                    if (IsNumeric) {
+                        c = cde.CDbl(c);
+                        d = cde.CDbl(d);
+                    }
                 }
                 else {
                     c = IsNumeric ? cde.CDbl(a[pDataItem]) : cde.CStr(a[pDataItem]);
