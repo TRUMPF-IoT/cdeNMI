@@ -421,6 +421,12 @@ namespace cdeNMI {
                     return true;
                 case "NMI_NODEPONG":
                     return true;
+                case "NMI_THEME":
+                    if (pMSG.PLS) {
+                        cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme = cde.CBool(pMSG.PLS);
+                        cdeNMI.ApplyTheme();
+                    }
+                    return true;
                 case "NMI_SCREENMETA":
                     if (pMSG.PLS) {
                         if (typeof pMSG.PLS === 'string')

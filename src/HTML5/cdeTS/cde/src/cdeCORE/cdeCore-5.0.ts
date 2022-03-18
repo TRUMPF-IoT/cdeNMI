@@ -423,6 +423,7 @@ namespace cde {
         WasInitialScreenVisible = false;
         ///Used by Convenience Apps
         IsLiteTheme = false;
+        UPref = "";
 
         DoesRequireConfiguration = false;
         MyStationID = "";

@@ -17,7 +17,7 @@
                 const tNow: number = (new Date()).getTime();
                 for (const mh in tEngine.MyKnownNodes) {
                     //if (tNow - tEngine.MyKnownNodes[mh].LastPing > 30000)
-                    cdeNMI.MyEngine.PublishToNMI("NMI_NODEPING", "", mh);
+                    cdeNMI.MyEngine.PublishToNMI("NMI_NODEPING", cde.MyBaseAssets.MyServiceHostInfo.UPref, mh);
                     if (tEngine.MyKnownNodes[mh].IsDown !== true && tNow - tEngine.MyKnownNodes[mh].LastPing > 60000) {
                         tEngine.MyKnownNodes[mh].IsDown = true;
                         cdeNMI.MyScreenManager.UpdateScreenStatus(mh, true);
