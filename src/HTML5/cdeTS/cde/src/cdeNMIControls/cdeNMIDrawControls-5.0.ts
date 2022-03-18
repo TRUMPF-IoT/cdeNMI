@@ -2722,11 +2722,14 @@
             } else
                 context.fillStyle = myLabCol;
 
+            let dValue:string = this.GetProperty("Value");
+            if (cde.CInt(this.GetProperty("Digits")) > 0)
+                dValue = cde.CDbl(this.GetProperty("Value")).toFixed(cde.CInt(this.GetProperty("Digits")));
             //centering canvas text
             if (cde.CBool(this.GetProperty("AnimateValue")))
                 context.fillText(myValue.toString(), x - context.measureText(myValue.toString()).width / 2, y * 0.85);
             else
-                context.fillText(cde.CDbl(this.GetProperty("Value")).toString(), x - context.measureText(cde.CDbl(this.GetProperty("Value")).toString()).width / 2, y * 0.85);
+                context.fillText(dValue.toString(), x - context.measureText(dValue.toString()).width / 2, y * 0.85);
 
             //min-value(0) text
 
