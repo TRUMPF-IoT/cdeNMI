@@ -277,6 +277,7 @@
 
     export const MyNMIModels: cdeNMI.TheScreenInfo[] = new Array<cdeNMI.TheScreenInfo>();
     export const MyNMINUITags: cdeNMI.INMIControl[] = new Array<cdeNMI.INMIControl>();
+     export const MyNMID: cdeNMI.INMIControl[] = new Array<cdeNMI.INMIControl>();
     export const MyNMIThingEvents: cdeNMI.INMIControl[][] = [];
 
     export let MyPopUp: INMIPopUp;
