@@ -200,23 +200,23 @@ Files:  src/HTML5/ExtensionPlugins/readme.md
 Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
-Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/plugins/P172/CDMyC3.TheC3Service.js
+Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/P172/CDMyC3.TheC3Service.js
 Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
-Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/plugins/P172/JS/c3.min.js
+Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/P172/JS/c3.min.js
 Copyright: Masayuki Tanaka 2014
 License: MIT
 
-Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/plugins/P172/JS/d3.min.js
+Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/P172/JS/d3.min.js
 Copyright: Mike Bostock
 License: BSD-3-Clause
 
-Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/plugins/P172/JS/smoothie.js
+Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/P172/JS/smoothie.js
 Copyright: 2010-2013, Joe Walnes, 2013-2014, Drew Noakes
 License: MIT
 
-Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/plugins/P172/JS/cytoscape.min.js
+Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/P172/JS/cytoscape.min.js
 Copyright: 2016-2022, The Cytoscape Consortium
 License: MIT
 
