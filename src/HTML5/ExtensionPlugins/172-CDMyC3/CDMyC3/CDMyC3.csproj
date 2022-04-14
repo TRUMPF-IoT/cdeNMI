@@ -28,21 +28,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ClientBin\plugins\P172\CDMyC3.TheC3Service.js" />
-    <None Remove="ClientBin\plugins\P172\CDMyC3.TheC3Service.js.map" />
+    <Compile Remove="ClientBin\plugins\**" />
+    <EmbeddedResource Remove="ClientBin\plugins\**" />
+    <None Remove="ClientBin\plugins\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientBin\P172\CDMyC3.TheC3Service.js" />
+    <None Remove="ClientBin\P172\CSS\c3.min.css" />
+    <None Remove="ClientBin\P172\CSS\cssDark.min.css" />
+    <None Remove="ClientBin\P172\JS\c3.min.js" />
+    <None Remove="ClientBin\P172\JS\cytoscape.min.js" />
+    <None Remove="ClientBin\P172\JS\d3.min.js" />
+    <None Remove="ClientBin\P172\JS\smoothie.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="ClientBin\plugins\P172\CDMyC3.TheC3Service.js"/>
-    <EmbeddedResource Include="ClientBin\plugins\P172\CSS\c3.min.css" />
-    <EmbeddedResource Include="ClientBin\plugins\P172\CSS\cssDark.min.css" />
-    <EmbeddedResource Include="ClientBin\plugins\P172\JS\c3.min.js" />
-    <EmbeddedResource Include="ClientBin\plugins\P172\JS\cytoscape.min.js" />
-    <EmbeddedResource Include="ClientBin\plugins\P172\JS\d3.min.js" />
-    <EmbeddedResource Include="ClientBin\plugins\P172\JS\smoothie.js" />
+    <EmbeddedResource Include="ClientBin\P172\CDMyC3.TheC3Service.js" />
+    <EmbeddedResource Include="ClientBin\P172\CSS\c3.min.css" />
+    <EmbeddedResource Include="ClientBin\P172\CSS\cssDark.min.css" />
+    <EmbeddedResource Include="ClientBin\P172\JS\c3.min.js" />
+    <EmbeddedResource Include="ClientBin\P172\JS\cytoscape.min.js" />
+    <EmbeddedResource Include="ClientBin\P172\JS\d3.min.js" />
+    <EmbeddedResource Include="ClientBin\P172\JS\smoothie.js" />
   </ItemGroup>
 
   <ItemGroup>

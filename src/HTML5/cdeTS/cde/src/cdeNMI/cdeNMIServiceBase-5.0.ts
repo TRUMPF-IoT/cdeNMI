@@ -151,6 +151,11 @@ namespace cdeNMI {
                         TargetControl.SetProperty(ti + "Value", Parameter);
                     return;
                 }
+            } else if (tJS.startsWith("MyNMID:")) {
+                const tPa: string[] = tJS.substr(7).split(';:;');
+                if (tPa.length < 2) return;
+                cdeNMI.MyNMID[tPa[0]].SetProperty(tPa[1], Parameter);
+                return;
             }
             if (cde.MyBaseAssets.MyServiceHostInfo.DebugLevel > 0)
                 cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "FireEvent:EVAL", "UPDATE Plugin! eval() will be dropped in the future! Code: " + tJS);
@@ -254,7 +259,7 @@ namespace cdeNMI {
         //////////////////////////////////////////////////////////////////////////////
         /// NMI Global Scripts Management
         //////////////////////////////////////////////////////////////////////////////
-        public cdeGetScript(pScriptName: string, pCallBack = null, cookie = null, pTimeout=0) {
+        public cdeGetScript(pScriptName: string, pCallBack = null, cookie = null, pTimeout=0, pScriptType=null) {
         }
 
         public cdeGetStyle(pResource: string, pCallBack: any = null, cookie: any = null, pTimeout?: number) {
@@ -556,8 +561,8 @@ namespace cdeNMI {
 
 
         ///BackCompat Requirements
-        public static cdeGetScript(pName: string, pCallback?, pCookie?) {
-            cdeNMI.MyEngine.cdeGetScript(pName, pCallback, pCookie);
+        public static cdeGetScript(pName: string, pCallback?, pCookie?,pTimeOut?, pType?) {
+            cdeNMI.MyEngine.cdeGetScript(pName, pCallback, pCookie,pTimeOut, pType);
         }
         public static cdeGetStyle(pResource: string, pCallBack= null, cookie = null) {
             cdeNMI.MyEngine.cdeGetStyle(pResource, pCallBack, cookie);

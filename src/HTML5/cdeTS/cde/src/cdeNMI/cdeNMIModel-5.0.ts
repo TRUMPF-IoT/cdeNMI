@@ -206,7 +206,7 @@
         GetKnownNodeName(pNodeID: string): string;
         IsNodeDown(pNodeID: string): boolean;
 
-        cdeGetScript(pScriptName: string, pCallBack?, cookie?, pTimeout?: number);
+        cdeGetScript(pScriptName: string, pCallBack?, cookie?, pTimeout?: number, scriptType?: string);
         cdeGetResource(pResource: string, pCallBack?, cookie?, pTimeout?: number);
         cdeGetStyle(pResource: string, pCallBack?, cookie?, pTimeout?: number);
         cdeGetImage(pResource: string, pCallBack?, cookie?, pTimeout?: number);
@@ -456,6 +456,7 @@
         public Resource: string;
         public Timeout?: number;
         public TimeoutHandler?;
+        public ResourceType: string;
     }
 
     export class TheKey {

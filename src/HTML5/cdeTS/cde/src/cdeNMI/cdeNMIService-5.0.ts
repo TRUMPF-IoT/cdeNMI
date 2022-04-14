@@ -115,7 +115,7 @@
                 this.GetBaseEngine().PublishToService(pCommand, pPayload);
         }
 
-        public cdeGetScript(pScriptName: string, pCallBack = null, cookie = null, pTimeout=0) {
+        public cdeGetScript(pScriptName: string, pCallBack = null, cookie = null, pTimeout = 0, scriptType = null) {
             if (!pScriptName) return;
             for (let mh = 0; mh < this.MyGlobalResources.length; mh++) {
                 if (this.MyGlobalResources[mh].ResourceName === pScriptName) {
@@ -125,7 +125,7 @@
                 }
             }
             if (pCallBack) {
-                const t: TheNMIResource = { ResourceName: pScriptName, CallBacks: [], Cookie: cookie, IsCreated: false, Resource: null, Timeout: pTimeout };
+                const t: TheNMIResource = { ResourceName: pScriptName, CallBacks: [], Cookie: cookie, IsCreated: false, Resource: null, Timeout: pTimeout, ResourceType: scriptType };
                 t.CallBacks.push(pCallBack);
                 this.AddToGlobalScripts(t);
             }
@@ -149,7 +149,10 @@
             try {
                 const s: HTMLScriptElement = document.createElement('script');
                 const prior = document.getElementsByTagName('script')[0];
-                s.type = "text/javascript";
+                if (this.MyGlobalResources[mh] && this.MyGlobalResources[mh].ResourceType)
+                    s.type = this.MyGlobalResources[mh].ResourceType;
+                else
+                    s.type = "text/javascript";
                 s.text = pScript.replace(String.fromCharCode(65279), '');
                 prior.parentNode.insertBefore(s, prior);
                 TheNMIService.FireCallbacks(this.MyGlobalResources[mh]);
@@ -180,7 +183,7 @@
                 }
             }
             if (pCallBack) {
-                const t: TheNMIResource = { ResourceName: pResource, CallBacks: [], Cookie: cookie, IsCreated: false, Resource: null, Timeout: pTimeout };
+                const t: TheNMIResource = { ResourceName: pResource, CallBacks: [], Cookie: cookie, IsCreated: false, Resource: null, Timeout: pTimeout, ResourceType: null };
                 t.CallBacks.push(pCallBack);
                 this.AddToGlobalScripts(t);
             }
@@ -231,7 +234,7 @@
                 }
             }
             if (pCallBack) {
-                const t: TheNMIResource = { ResourceName: pResource, CallBacks: [], Cookie: cookie, IsCreated: false, Resource: null, Timeout: pTimeout };
+                const t: TheNMIResource = { ResourceName: pResource, CallBacks: [], Cookie: cookie, IsCreated: false, Resource: null, Timeout: pTimeout, ResourceType: null };
                 t.CallBacks.push(pCallBack);
                 this.AddToGlobalScripts(t);
             }
@@ -259,7 +262,7 @@
                 }
             }
             if (pCallBack) {
-                const t: TheNMIResource = { ResourceName: pResName, CallBacks: [], Cookie: cookie, IsCreated: false, Resource: null, Timeout: pTimeout };
+                const t: TheNMIResource = { ResourceName: pResName, CallBacks: [], Cookie: cookie, IsCreated: false, Resource: null, Timeout: pTimeout, ResourceType: null };
                 t.CallBacks.push(pCallBack);
                 this.AddToGlobalScripts(t);
             }
