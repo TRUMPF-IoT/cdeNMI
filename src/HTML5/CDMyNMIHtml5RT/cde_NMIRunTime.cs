@@ -2,14 +2,14 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-﻿using nsCDEngine.BaseClasses;
+using nsCDEngine.BaseClasses;
 using nsCDEngine.Communication;
+using nsCDEngine.Engines.NMIService;
+using nsCDEngine.Security;
 using nsCDEngine.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using nsCDEngine.Security;
-using nsCDEngine.Engines.NMIService;
 
 namespace NMIService
 {
@@ -19,7 +19,11 @@ namespace NMIService
     public partial class TheNMIHtml5RT
     {
         private string MyMainFrameHtml = "";
-
+        private bool IsAutoTheme = false;
+        private bool IsLightTheme = false;
+        SolarCalculator.SolarEvents SunriseSunset = null;
+        static private string PageScale = "";
+        static private string[] PlatformScale;
         private void InitNMIAssets()
         {
             if (TheBaseAssets.MyServiceHostInfo.ContentTemplate != Guid.Empty)
@@ -43,7 +47,7 @@ namespace NMIService
 
         private void InterceptHttpRequestB4(TheRequestData pRequestData)
         {
-            pRequestData.ResponseMimeType = "text/html";       
+            pRequestData.ResponseMimeType = "text/html";
 
             switch (pRequestData.cdeRealPage.ToUpperInvariant())
             {
@@ -131,7 +135,7 @@ namespace NMIService
 
         private string IsInitalizationStr()
         {
-            string ResponseBufferStr = 
+            string ResponseBufferStr =
                 "<html><head><meta http-equiv=\"Expires\" content=\"0\" /><meta http-equiv=\"Cache-Control\" content=\"no-cache\" /><meta http-equiv=\"Pragma\" content=\"no-cache\" /></html><body>" +
                 $"<table width=\"100%\" style=\"height:100%; background-color: {TheBaseAssets.MyServiceHostInfo.BaseBackgroundColor};\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">" +
                 $"<tr><td style=\"text-align:center;\"><p style=\"color: {TheBaseAssets.MyServiceHostInfo.BaseForegroundColor}; font-family: Arial; font-size: 36px\">C-DEngine is initializing...please try again in a couple seconds</p></td></tr>" +
@@ -178,7 +182,7 @@ namespace NMIService
                     if (pRequest.SessionState != null)
                         pRequest.SessionState.WebPlatform = pRequest.WebPlatform;
                 }
-                if (tQ.ContainsKey("CDEDL") && pRequest.SessionState!=null)
+                if (tQ.ContainsKey("CDEDL") && pRequest.SessionState != null)
                 {
                     pRequest.SessionState.HS = tQ["CDEDL"];
                 }
@@ -194,10 +198,26 @@ namespace NMIService
                 pRealPage = pRequest.RequestUri.LocalPath;
             if (string.IsNullOrEmpty(pRealPage))
                 return;
+            if (pRealPage == "/NMIAUTO")
+            {
+                IsAutoTheme = true;
+                if (SunriseSunset == null || SunriseSunset.Sunrise.Day != DateTimeOffset.Now.Day) //Calculate once a day
+                    SunriseSunset = SolarCalculator.Calculate();
+                if (DateTimeOffset.Now > SunriseSunset.Sunrise && DateTimeOffset.Now < SunriseSunset.Sunset)
+                {
+                    pRealPage = "/LNMIPORTAL";
+                    IsLightTheme = true;
+                }
+                else
+                {
+                    pRealPage = "/NMIPORTAL";
+                    IsLightTheme = false;
+                }
+            }
             if (string.IsNullOrEmpty(pMainFrameHtml))
                 pMainFrameHtml = MyMainFrameHtml;
             ThePageDefinition tPageDefinition = TheNMIEngine.GetPageByRealPage(pRealPage);
-            if (tPageDefinition==null)
+            if (tPageDefinition == null)
             {
                 if (MustExist) return;
                 if (pRealPage.Substring(1).Contains("/")) return;
@@ -206,13 +226,15 @@ namespace NMIService
             }
             if (tPageDefinition == null)
                 return; // "ERR:Page Definition not found!";
+                        //if (IsAutoTheme)
+                        //  tPageDefinition.IsLiteTheme = IsLightTheme;
 
             if (string.IsNullOrEmpty(tPageDefinition.ContentType))
                 tPageDefinition.ContentType = "text/html";
             pRequest.AllowCaching = tPageDefinition.BufferResponse;
-            if (tPageDefinition.LastCacheWP!=null && tPageDefinition.LastCacheWP.ContainsKey(tWebPlatform) && !string.IsNullOrEmpty(tPageDefinition.LastCacheWP[tWebPlatform]) && 
-                (tPageDefinition.CachePeriod == 0 || 
-                (tPageDefinition.CachePeriod > 0 && DateTimeOffset.Now.Subtract(tPageDefinition.LastCacheTime).TotalSeconds < tPageDefinition.CachePeriod)) && 
+            if (tPageDefinition.LastCacheWP != null && tPageDefinition.LastCacheWP.ContainsKey(tWebPlatform) && !string.IsNullOrEmpty(tPageDefinition.LastCacheWP[tWebPlatform]) &&
+                (tPageDefinition.CachePeriod == 0 ||
+                (tPageDefinition.CachePeriod > 0 && DateTimeOffset.Now.Subtract(tPageDefinition.LastCacheTime).TotalSeconds < tPageDefinition.CachePeriod)) &&
                 !tPageDefinition.RequireLogin && !tPageDefinition.LastCacheWP[tWebPlatform].StartsWith("<html><h1>Fatal"))
             {
                 pRequest.ResponseBuffer = TheCommonUtils.CUTF8String2Array(tPageDefinition.LastCacheWP[tWebPlatform]);
@@ -240,7 +262,7 @@ namespace NMIService
                 string txtContent = "";
                 if (tPageDefinition.ContentID != Guid.Empty)
                 {
-                    List<ThePageContent> tContent = TheNMIEngine.GetPageContentByID(tPageDefinition.ContentID); 
+                    List<ThePageContent> tContent = TheNMIEngine.GetPageContentByID(tPageDefinition.ContentID);
                     foreach (ThePageContent tContentDef in tContent)
                         txtContent += ReadPageBlock(tContentDef.WBID);
                     if (string.IsNullOrEmpty(txtMainTemplate))
@@ -256,7 +278,7 @@ namespace NMIService
                 if (tPageDefinition.ContentID2 != Guid.Empty)
                 {
                     txtContent = "";
-                    List<ThePageContent> tContent = TheNMIEngine.GetPageContentByID(tPageDefinition.ContentID2); 
+                    List<ThePageContent> tContent = TheNMIEngine.GetPageContentByID(tPageDefinition.ContentID2);
                     foreach (ThePageContent tContentDef in tContent)
                         txtContent += ReadPageBlock(tContentDef.WBID);
                     txtMainTemplate = string.IsNullOrEmpty(txtMainTemplate) ? txtContent : txtMainTemplate.Replace("<%PAGE_CONTENT2%>", txtContent);
@@ -518,16 +540,30 @@ namespace NMIService
             tStr.Append("<meta content=\"en-us\" http-equiv=\"Content-Language\" /><meta charset=\"UTF-8\"> ");
             tStr.Append("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" >");
             string tPlat = "W";
-            if (pWebPlatform > 0)
+            //if (pWebPlatform > 0)
             {
-                tStr.Append(pPage.MobileConstrains > 0 ? $"<meta name=\"viewport\" content=\"width={pPage.MobileConstrains}, initial-scale=1, maximum-scale=1\">" : "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\">");
+                if (string.IsNullOrEmpty(PageScale))
+                {
+                    PageScale = TheBaseAssets.MySettings.GetSetting("PageScale");
+                    if (string.IsNullOrEmpty(PageScale))
+                        PageScale = "1.0;0.5;1.0;0.5;1.0;1.0;0.5;0.5;1.0";
+                    PlatformScale = PageScale.Split(';');
+                }
+                string tScale = "1.0";
+                if (PlatformScale?.Length > (int)pWebPlatform) tScale = PlatformScale[(int)pWebPlatform];
                 switch (pWebPlatform)
                 {
                     case eWebPlatform.Mobile: tPlat = "P"; break;
                     case eWebPlatform.HoloLens: tPlat = "H"; break;
                     case eWebPlatform.XBox: tPlat = "X"; break;
                     case eWebPlatform.TeslaXS: tPlat = "T"; break;
+                    case eWebPlatform.TizenFamilyHub: tPlat = "FH"; break;
+                    case eWebPlatform.TizenTV: tPlat = "TY"; break;
+                    case eWebPlatform.Bot: tPlat = null; break;
+                    default:
+                        break;
                 }
+                tStr.Append($"<meta name=\"viewport\" content=\"width=device-width, initial-scale={tScale}, maximum-scale={tScale}\">");
             }
 
             if (pPage.IncludeCDE)
@@ -540,7 +576,11 @@ namespace NMIService
                 tStr.Append(pPage.AddHeader);
             if (!string.IsNullOrEmpty(pPage.Title) && pComposite.IndexOf("<title>", StringComparison.OrdinalIgnoreCase) < 0)
                 tStr.Append("<title>" + pPage.Title + "</title>");
-
+            if (pWebPlatform == eWebPlatform.Bot)
+            {
+                tStr.Append("</head><body class=\"cdeBody\">");
+                return tStr.ToString();
+            }
             if (pPage.IncludeCDE)
             {
                 if (!TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("DisableNMIStyles")))
@@ -570,10 +610,10 @@ namespace NMIService
 
                 tStr.Append("<script type=\"text/javascript\">");
                 tStr.Append("document.addEventListener('DOMContentLoaded', function() {");
-                    tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.IsUsingUserMapper={TheBaseAssets.MyServiceHostInfo.IsUsingUserMapper.ToString().ToLower()};");
+                tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.IsUsingUserMapper={TheBaseAssets.MyServiceHostInfo.IsUsingUserMapper.ToString().ToLower()};");
                 string tPortalScreen = "";
                 string tStartScreen = "";
-                if (!TheBaseAssets.MyServiceHostInfo.IsCloudService) 
+                if (!TheBaseAssets.MyServiceHostInfo.IsCloudService)
                 {
                     //new in 5.142.1: If AutoLoginUID is set with a valid UID, this user is logged in automatically.
                     var tAutoLoginGuid = TheBaseAssets.MySettings.GetSetting("AutoLoginUID");
@@ -600,11 +640,11 @@ namespace NMIService
                 bool RedPill = TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("RedPill"));
                 int debugLevel = 0;
 
-                if (debugLevel>3)
+                if (debugLevel > 3)
                     tStr.Append($"debugger;");
 
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.AutoConnectRelay='INCDE';");
-                if (TheUserManager.DoesAdminRequirePWD(pPage.AdminRole) && TheScopeManager.GetScrambledScopeID()!="")
+                if (TheUserManager.DoesAdminRequirePWD(pPage.AdminRole) && TheScopeManager.GetScrambledScopeID() != "")
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.LoginDisallowed={true.ToString().ToLower()};");
                 else
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.AdminPWMustBeSet={ TheUserManager.DoesAdminRequirePWD(pPage.AdminRole).ToString().ToLower()};");
@@ -628,7 +668,7 @@ namespace NMIService
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.HideHeader={(!pPage.IncludeHeaderButtons).ToString().ToLower()};");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.DoAllowAnonymous={(pPage.IsPublic || TheBaseAssets.MyServiceHostInfo.AllowAnonymousAccess).ToString().ToLower()};");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin={TheBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin.ToString().ToLower()};");
-                
+
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.HasInternetAccess={TheBaseAssets.MyServiceHostInfo.HasInternetAccess.ToString().ToLower()};");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.MainConfigScreen='{TheBaseAssets.MyServiceHostInfo.MainConfigScreen}';");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.WsTimeOut={TheBaseAssets.MyServiceHostInfo.TO.WsTimeOut};");
@@ -719,5 +759,189 @@ namespace NMIService
             return tStr.ToString();
         }
         #endregion
+    }
+
+    internal static class SolarCalculator
+    {
+        internal class SolarEvents
+        {
+            public DateTimeOffset Sunrise { get; set; }
+            public DateTimeOffset Sunset { get; set; }
+        }
+        private const double MinutesInDay = 24 * 60;
+        private const double SecondsInDay = MinutesInDay * 60;
+        private const double J2000 = 2451545;
+
+        /// <summary>
+        ///  the sunrise/sunset for the given calendar date in the given timezone at the given location.
+        /// Accounts for DST.
+        /// </summary>
+        /// <param name="year">Calendar year in timezone</param>
+        /// <param name="month">Calendar month in timezone</param>
+        /// <param name="day">Calendar day in timezone</param>
+        /// <param name="latitude">Latitude of location in degrees</param>
+        /// <param name="longitude">Longitude of location in degrees</param>
+        /// <param name="timezoneId">Id of the timezone as specified by the .net framework</param>
+        /// <returns></returns>
+        public static SolarEvents Calculate()
+        {
+            var lat = 47;
+            //var lng = -122;
+            var gDate = DateTime.Now;
+            var timeZone = TimeZoneInfo.Local; // .FindSystemTimeZoneById(timeZoneId);
+            var timeZoneOffset = timeZone.GetUtcOffset(gDate);
+            var lng = timeZoneOffset.Hours * 17;
+            var tzOffHr = timeZoneOffset.TotalHours;
+            var jDate = GregorianToJulian(gDate, tzOffHr); // D
+            var t = JulianCentury(jDate); // G
+            var ml = GeomMeanLongitudeSun(t); // I - deg
+            var ma = GeomMeanAnomalySun(t); // J - deg
+            var eo = EccentricityEarthOrbit(t); // K
+            var eoc = EquationOfCenterSun(ma, t); // L
+            var tl = TrueLongitudeSun(ml, eoc); // M - deg
+            var al = ApparentLongitudeSun(tl, t); // P - deg
+            var oe = MeanObliquityOfEcliptic(t); // Q - deg
+            var oc = ObliquityCorrection(oe, t); // R - deg
+            var d = DeclinationSun(oc, al); // T - deg
+            var eot = EquationOfTime(oc, ml, eo, ma); // V - minutes
+            var ha = HourAngleSunrise(lat, d); // W - Deg
+            var sn = SolarNoon(lng, eot, tzOffHr); // X - LST
+            var sunrise = Sunrise(sn, ha); // Y - LST
+            var sunset = Sunset(sn, ha); // Z - LST
+            var sunriseOffset = ToDate(timeZone, gDate, sunrise);
+            var sunsetOffset = ToDate(timeZone, gDate, sunset);
+
+            return new SolarEvents
+            {
+                Sunrise = sunriseOffset,
+                Sunset = sunsetOffset
+            };
+        }
+
+        private static double GregorianToJulian(DateTime gDate, double timeZoneOffsetHours)
+        {
+            var year = gDate.Year;
+            var month = gDate.Month;
+            if (month <= 2)
+            {
+                year -= 1;
+                month += 12;
+            }
+            var A = Math.Floor(year / 100d);
+            var B = 2 - A + Math.Floor(A / 4d);
+            var jDay = Math.Floor(365.25 * (year + 4716)) + Math.Floor(30.6001 * (month + 1)) + gDate.Day + B - 1524.5;
+            var jTime = ((gDate.Hour * (60 * 60)) + (gDate.Minute * 60) + gDate.Second) / SecondsInDay;
+            return jDay + jTime - timeZoneOffsetHours / 24;
+        }
+
+        public static DateTimeOffset ToDate(TimeZoneInfo timeZone, DateTime gDate, double time)
+        {
+            var hours = (int)Math.Floor(time * 24);
+            var minutes = (int)Math.Floor((time * 24 * 60) % 60);
+            var seconds = (int)Math.Floor((time * 24 * 60 * 60) % 60);
+            return new DateTimeOffset(gDate.Year, gDate.Month, gDate.Day, hours, minutes, seconds, timeZone.GetUtcOffset(gDate));
+        }
+
+        private static double JulianCentury(double jDate)
+        {
+            const double daysInCentury = 36525;
+            return (jDate - J2000) / daysInCentury;
+        }
+
+        private static double GeomMeanAnomalySun(double t)
+        {
+            return 357.52911 + t * (35999.05029 - 0.0001537 * t);
+        }
+
+        private static double GeomMeanLongitudeSun(double t)
+        {
+            return Mod(280.46646 + t * (36000.76983 + t * 0.0003032), 0, 360);
+        }
+
+        private static double EccentricityEarthOrbit(double t)
+        {
+            return 0.016708634 - t * (0.000042037 + 0.0000001267 * t);
+        }
+
+        private static double EquationOfCenterSun(double ma, double t)
+        {
+            return Math.Sin(Radians(ma)) * (1.914602 - t * (0.004817 + 0.000014 * t))
+                + Math.Sin(Radians(2 * ma)) * (0.019993 - 0.000101 * t)
+                + Math.Sin(Radians(3 * ma)) * 0.000289;
+        }
+
+        private static double TrueLongitudeSun(double ml, double eoc)
+        {
+            return ml + eoc;
+        }
+
+        private static double ApparentLongitudeSun(double tl, double t)
+        {
+            return tl - 0.00569 - 0.00478 * Math.Sin(Radians(125.04 - 1934.136 * t));
+        }
+
+        private static double MeanObliquityOfEcliptic(double t)
+        {
+            return 23 + (26 + ((21.448 - t * (46.815 + t * (0.00059 - t * 0.001813)))) / 60) / 60;
+        }
+
+        private static double ObliquityCorrection(double oe, double t)
+        {
+            return oe + 0.00256 * Math.Cos(Radians(125.04 - 1934.136 * t));
+        }
+
+        private static double EquationOfTime(double oc, double ml, double eo, double ma)
+        {
+            var y = Math.Tan(Radians(oc / 2)) * Math.Tan(Radians(oc / 2)); // U
+            var eTime = y * Math.Sin(2 * Radians(ml))
+                - 2 * eo * Math.Sin(Radians(ma))
+                + 4 * eo * y * Math.Sin(Radians(ma)) * Math.Cos(2 * Radians(ml))
+                - 0.5 * y * y * Math.Sin(4 * Radians(ml))
+                - 1.25 * eo * eo * Math.Sin(2 * Radians(ma));
+            return 4 * Degrees(eTime);
+        }
+
+        private static double DeclinationSun(double oc, double al)
+        {
+            return Degrees(Math.Asin(Math.Sin(Radians(oc)) * Math.Sin(Radians(al))));
+        }
+
+        private static double HourAngleSunrise(double lat, double d)
+        {
+            return Degrees(Math.Acos(Math.Cos(Radians(90.833)) / (Math.Cos(Radians(lat)) * Math.Cos(Radians(d))) - Math.Tan(Radians(lat)) * Math.Tan(Radians(d))));
+        }
+
+        private static double SolarNoon(double lng, double eot, double tzOff)
+        {
+            return (720 - 4 * lng - eot + tzOff * 60) / MinutesInDay;
+        }
+
+        private static double Sunrise(double sn, double ha)
+        {
+            return sn - ha * 4 / MinutesInDay;
+        }
+
+        private static double Sunset(double sn, double ha)
+        {
+            return sn + ha * 4 / MinutesInDay;
+        }
+
+
+        private static double Mod(double x, double lo, double hi)
+        {
+            while (x > hi) x -= hi;
+            while (x < lo) x += hi;
+            return x;
+        }
+
+        private static double Radians(double degrees)
+        {
+            return degrees * Math.PI / 180;
+        }
+
+        private static double Degrees(double radians)
+        {
+            return radians * 180 / Math.PI;
+        }
     }
 }

@@ -375,6 +375,8 @@
                     cdeNMI.MyNMINUITags[t[i]] = this;
             } else if (pName === "EngineName" && pValue && pValue !== "") {
                 this.MyEngineName = pValue;
+            } else if (pName === "cdeNMID" && pValue && pValue !== "") {
+                cdeNMI.MyNMID[pValue] = this;
             }
 
             if (pValue !== tOldValue) {

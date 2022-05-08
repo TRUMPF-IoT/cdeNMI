@@ -147,7 +147,8 @@ namespace cde {
                                         const PropertyName = params.length > 2 ? params[2] : null;
 
                                         if (params.length < 3) {
-                                            debugger;
+                                            if (cde.MyBaseAssets.MyServiceHostInfo.DebugLevel > 3)
+                                                debugger;
                                         }
                                         //if (FireAsync) {
                                         //    cde.cdeRunAsync((pEvtName, params) => {
@@ -423,6 +424,7 @@ namespace cde {
         WasInitialScreenVisible = false;
         ///Used by Convenience Apps
         IsLiteTheme = false;
+        UPref = "";
 
         DoesRequireConfiguration = false;
         MyStationID = "";

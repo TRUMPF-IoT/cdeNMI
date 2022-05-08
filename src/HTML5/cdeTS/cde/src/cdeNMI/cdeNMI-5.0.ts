@@ -203,6 +203,7 @@
                     cdeNMI.MyTCF.RegisterControlType(cdeNMI.cdeControlType.ScreenManager, "cdeNMI.TheScreenManagerModern");
                 }
             }
+            cde.MyBaseAssets.MyServiceHostInfo.UPref = JSON.stringify(pUserPreferences);
             if (pUserPreferences.ThemeName === "Lite") {
                 cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme = true;
                 cdeNMI.ApplyTheme();

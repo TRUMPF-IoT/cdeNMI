@@ -26,5 +26,13 @@
   {
     "outputFile": "cde/CSS/MYSTYLESP.css",
     "inputFile": "cde/CSS/MYSTYLESP.scss"
+  },
+  {
+    "outputFile": "cde/CSS/MYSTYLESFH.css",
+    "inputFile": "cde/CSS/MYSTYLESFH.scss"
+  },
+  {
+    "outputFile": "cde/CSS/MYSTYLESTY.css",
+    "inputFile": "cde/CSS/MYSTYLESTY.scss"
   }
 ]

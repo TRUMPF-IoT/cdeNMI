@@ -40,14 +40,17 @@
         //////////////////////////////////////////////////////////////////////////////
         /// NMI Global Scripts Management
         //////////////////////////////////////////////////////////////////////////////
-        public cdeGetScript(pScriptName: string, pCallBack = null, cookie = null, pTimeout=0) {
+        public cdeGetScript(pScriptName: string, pCallBack = null, cookie = null, pTimeout=0, pType=null) {
             if (!pScriptName) return;
             fetch("/ClientBin/Scripts/" + pScriptName).then(d => {
                 if (d.ok) {
                     d.text().then(txt => {
                         const s: HTMLScriptElement = document.createElement('script');
                         const prior = document.getElementsByTagName('script')[0];
-                        s.type = "text/javascript";
+                        if (pType)
+                            s.type = pType;
+                        else
+                            s.type = "text/javascript";
                         s.text = txt.replace(String.fromCharCode(65279), '');
                         prior.parentNode.insertBefore(s, prior);
 

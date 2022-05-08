@@ -206,7 +206,7 @@
         GetKnownNodeName(pNodeID: string): string;
         IsNodeDown(pNodeID: string): boolean;
 
-        cdeGetScript(pScriptName: string, pCallBack?, cookie?, pTimeout?: number);
+        cdeGetScript(pScriptName: string, pCallBack?, cookie?, pTimeout?: number, scriptType?: string);
         cdeGetResource(pResource: string, pCallBack?, cookie?, pTimeout?: number);
         cdeGetStyle(pResource: string, pCallBack?, cookie?, pTimeout?: number);
         cdeGetImage(pResource: string, pCallBack?, cookie?, pTimeout?: number);
@@ -277,6 +277,7 @@
 
     export const MyNMIModels: cdeNMI.TheScreenInfo[] = new Array<cdeNMI.TheScreenInfo>();
     export const MyNMINUITags: cdeNMI.INMIControl[] = new Array<cdeNMI.INMIControl>();
+     export const MyNMID: cdeNMI.INMIControl[] = new Array<cdeNMI.INMIControl>();
     export const MyNMIThingEvents: cdeNMI.INMIControl[][] = [];
 
     export let MyPopUp: INMIPopUp;
@@ -455,6 +456,7 @@
         public Resource: string;
         public Timeout?: number;
         public TimeoutHandler?;
+        public ResourceType: string;
     }
 
     export class TheKey {

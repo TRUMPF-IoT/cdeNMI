@@ -2,17 +2,15 @@
 //
 // SPDX-License-Identifier: MPL-2.0
 
-﻿using nsCDEngine.BaseClasses;
+using nsCDEngine.BaseClasses;
+using nsCDEngine.Communication;
+using nsCDEngine.Engines;
+using nsCDEngine.Engines.NMIService;
+using nsCDEngine.Engines.ThingService;
+using nsCDEngine.Security;
 using nsCDEngine.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using nsCDEngine.Engines.ThingService;
-using nsCDEngine.Communication;
-using nsCDEngine.Security;
-using nsCDEngine.Activation;
-using nsCDEngine.Engines;
-using nsCDEngine.Engines.NMIService;
 using System.IO;
 
 namespace NMIService
@@ -51,7 +49,7 @@ namespace NMIService
             MyBaseEngine.AddCapability(eThingCaps.MustBePresent);
             MyBaseEngine.SetPluginInfo("This service provides a rich graphical UX - the NMI - based on HMTL5", 0, null, "toplogo-150.png", "C-Labs", "http://www.c-labs.com", new List<string> { "NMI Extension" });
             MyBaseEngine.SetCDEMinVersion(4.008);
-            MyBaseEngine.SetEngineService(true);                   
+            MyBaseEngine.SetEngineService(true);
             MyBaseEngine.GetEngineState().IsAllowedUnscopedProcessing = TheBaseAssets.MyServiceHostInfo.IsCloudService;
             MyBaseEngine.GetEngineState().IsAcceptingFilePush = true;
             MyBaseEngine.SetEngineID(new Guid("{4D6E5FE8-338E-4B3E-B98D-0FFFEB62FE63}"));
@@ -138,8 +136,8 @@ namespace NMIService
                 mIsUXInitialized = true;
                 return true;
             }
-            TheBaseAssets.MySYSLOG.WriteToLog(7678,TSM.L(eDEBUG_LEVELS.OFF) ? null : new TSM(eEngineName.NMIService, "Registering MetaInformation NMI", eMsgLevel.l3_ImportantMessage));
-            MyBaseEngine.SetDashboard(eNMIDashboard.ToString()); 
+            TheBaseAssets.MySYSLOG.WriteToLog(7678, TSM.L(eDEBUG_LEVELS.OFF) ? null : new TSM(eEngineName.NMIService, "Registering MetaInformation NMI", eMsgLevel.l3_ImportantMessage));
+            MyBaseEngine.SetDashboard(eNMIDashboard.ToString());
 
             string tMeta = TheBaseAssets.MyServiceHostInfo.GetMeta("/NMIPORTAL");
             tMeta += "<meta name=\"msapplication-task\" content=\"name=The NMI Portal;action-uri=" + TheBaseAssets.MyServiceHostInfo.GetPrimaryStationURL(false) + "/NMIPortal;icon-uri=/" + TheBaseAssets.MyServiceHostInfo.favicon_ico + "\" />";
@@ -175,9 +173,9 @@ namespace NMIService
 
             if (MyBaseEngine.GetEngineState().IsService)
             {
-                TheDashboardInfo tDash = TheNMIEngine.GetDashboardById(eNMIDashboard); 
+                TheDashboardInfo tDash = TheNMIEngine.GetDashboardById(eNMIDashboard);
 
-                TheFormInfo tInf = TheNMIEngine.GetFormById(new Guid("{6EE8AC31-7395-4A80-B01C-D49BE174CFC0}")); 
+                TheFormInfo tInf = TheNMIEngine.GetFormById(new Guid("{6EE8AC31-7395-4A80-B01C-D49BE174CFC0}"));
                 TheNMIEngine.AddFields(tInf, new List<TheFieldInfo>
                 {
                     {new TheFieldInfo() {FldOrder = 10, DataItem = "FriendlyName", Type = eFieldType.SingleEnded, Header = "Friendly Name", FldWidth = 3}},
@@ -210,36 +208,36 @@ namespace NMIService
 
                 ///NEW in 4.1: Thing Registry Template
                 var ThingTemplate = new TheFormInfo(new Guid("{5EBDEB3A-B11B-467A-94D2-71148F4FEF18}"), eEngineName.NMIService, "The Thing Editor", "TheThing;:;")
-                { cdeA = 128, TableReference = $"{new Guid("{B510837F-3B75-4CF2-A900-D36C19113A13}")}", TileWidth = 12, DefaultView=eDefaultView.Form, IsNotAutoLoading = true,  PropertyBag=new nmiCtrlFormTemplate { /*IsPopup=true*/ } };
-                TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, ThingTemplate, "CMyTable", "Thing Editor", 3, 9, 128, "NMI Administration", null, new nmiDashboardTile { ForceLoad = true, Visibility=false, HideFromSideBar=true/*, IsPopup=true coming with task 1301*/ });
-                TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.SingleEnded, 10, 2, 0x0, "Friendly Name", "FriendlyName", new nmiCtrlSingleEnded() { TileWidth=12  });
-                TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.SingleEnded, 20, 2, 0x0, "Current Value", "Value", new nmiCtrlSingleEnded() { TileWidth=12 });
-                TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 30, 2, 0x0, "", null, new nmiCtrlTileButton { Thumbnail="FA3:f044", NoTE=true, ClassName = "cdeTransitButton", OnClick = "TTS:<%cdeMID%>", TileHeight = 1, TileWidth = 1 });
-                TheFieldInfo tDlT = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 40, 2, 0x0, "", null, new nmiCtrlTileButton() { Thumbnail= "FA3:f019", NoTE =true, ClassName="cdeGoodActionButton", TileWidth=1 });
+                { cdeA = 128, TableReference = $"{new Guid("{B510837F-3B75-4CF2-A900-D36C19113A13}")}", TileWidth = 12, DefaultView = eDefaultView.Form, IsNotAutoLoading = true, PropertyBag = new nmiCtrlFormTemplate { /*IsPopup=true*/ } };
+                TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, ThingTemplate, "CMyTable", "Thing Editor", 3, 9, 128, "NMI Administration", null, new nmiDashboardTile { ForceLoad = true, Visibility = false, HideFromSideBar = true/*, IsPopup=true coming with task 1301*/ });
+                TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.SingleEnded, 10, 2, 0x0, "Friendly Name", "FriendlyName", new nmiCtrlSingleEnded() { TileWidth = 12 });
+                TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.SingleEnded, 20, 2, 0x0, "Current Value", "Value", new nmiCtrlSingleEnded() { TileWidth = 12 });
+                TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 30, 2, 0x0, "", null, new nmiCtrlTileButton { Thumbnail = "FA3:f044", NoTE = true, ClassName = "cdeTransitButton", OnClick = "TTS:<%cdeMID%>", TileHeight = 1, TileWidth = 1 });
+                TheFieldInfo tDlT = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 40, 2, 0x0, "", null, new nmiCtrlTileButton() { Thumbnail = "FA3:f019", NoTE = true, ClassName = "cdeGoodActionButton", TileWidth = 1 });
                 tDlT.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "DOWNLOAD", OnDownloadClick);
 
                 // TODO find a different font/icon for pipeline export  cloud-download-alt F381 download F019
-                TheFieldInfo tExportT = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 45, 2, 0x0, "", null, new nmiCtrlTileButton() { Thumbnail="FA3:f14d", NoTE = true, ClassName = "cdeGoodActionButton", TileWidth = 1 });
-                tExportT.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "EXPORT", (t,p) => OnExportClick(t, p, false, false, false, false));
+                TheFieldInfo tExportT = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 45, 2, 0x0, "", null, new nmiCtrlTileButton() { Thumbnail = "FA3:f14d", NoTE = true, ClassName = "cdeGoodActionButton", TileWidth = 1 });
+                tExportT.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "EXPORT", (t, p) => OnExportClick(t, p, false, false, false, false));
                 TheFieldInfo tExportTCDEF = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 46, 2, 0x0, "Export CDEF", null, new nmiCtrlTileButton() { NoTE = true, ClassName = "cdeGoodActionButton", TileWidth = 1 });
                 tExportTCDEF.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "EXPORTCDEF", (t, p) => OnExportClick(t, p, false, false, false, true));
 
                 // TODO find a different font/icon for pipeline export  cloud-download-alt F381 download F019
                 TheFieldInfo tExportGeneralizedT = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 47, 2, 0x0, "Export Pipeline Generalized", null, new nmiCtrlTileButton() { NoTE = true, ClassName = "cdeGoodActionButton", TileWidth = 2 });
-                tExportGeneralizedT.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "EXPORTGENERALIZED", (t,p) => OnExportClick(t, p, true, false, false, false));
+                tExportGeneralizedT.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "EXPORTGENERALIZED", (t, p) => OnExportClick(t, p, true, false, false, false));
 
                 TheFieldInfo tExportGeneralizedTCDEF = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 48, 2, 0x0, "Export Pipeline Generalized CDEF", null, new nmiCtrlTileButton() { NoTE = true, ClassName = "cdeGoodActionButton", TileWidth = 2 });
                 tExportGeneralizedTCDEF.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "EXPORTGENERALIZEDCDEF", (t, p) => OnExportClick(t, p, true, false, false, true));
 
                 TheFieldInfo tExportAnswerT = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 49, 2, 0x0, "Export Pipeline Answer File", null, new nmiCtrlTileButton() { NoTE = true, ClassName = "cdeGoodActionButton", TileWidth = 2 });
-                tExportAnswerT.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "EXPORTANSWER", (t,p) => OnExportClick(t, p, true, true, true, false));
+                tExportAnswerT.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "EXPORTANSWER", (t, p) => OnExportClick(t, p, true, true, true, false));
                 TheFieldInfo tExportAnswerTCDEF = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 50, 2, 0x0, "Export Pipeline Answer File CDEF", null, new nmiCtrlTileButton() { NoTE = true, ClassName = "cdeGoodActionButton", TileWidth = 2 });
                 tExportAnswerTCDEF.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "EXPORTANSWERCDEF", (t, p) => OnExportClick(t, p, true, true, true, true));
 
-                TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileGroup, 60, 0, 0, null, null, new nmiCtrlTileGroup { TileWidth=7, TileHeight=1, TileFactorY=2 });
+                TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileGroup, 60, 0, 0, null, null, new nmiCtrlTileGroup { TileWidth = 7, TileHeight = 1, TileFactorY = 2 });
 
-                TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.CollapsibleGroup, 100, 2, 0x0, "Base Properties...", null, new nmiCtrlCollapsibleGroup() { IsSmall=true, DoClose=true, TileWidth=6 });
-                TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.SingleEnded, 110, 0, 0x0, "Engine Name", "EngineName", new nmiCtrlSingleEnded() { ParentFld=100 });
+                TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.CollapsibleGroup, 100, 2, 0x0, "Base Properties...", null, new nmiCtrlCollapsibleGroup() { IsSmall = true, DoClose = true, TileWidth = 6 });
+                TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.SingleEnded, 110, 0, 0x0, "Engine Name", "EngineName", new nmiCtrlSingleEnded() { ParentFld = 100 });
                 TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.SingleEnded, 120, 0, 0x0, "Device Type", "DeviceType", new nmiCtrlSingleEnded() { ParentFld = 100 });
                 TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.SingleEnded, 130, 0, 0x0, "Address", "Address", new nmiCtrlSingleEnded() { ParentFld = 100 });
                 TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.SingleEnded, 140, 0, 0x0, "ID", "ID", new nmiCtrlSingleEnded() { ParentFld = 100 });
@@ -266,8 +264,8 @@ namespace NMIService
 
 
                 //Old ThingRegistry Table
-                tInf = new TheFormInfo(new Guid("{B510837F-3B75-4CF2-A900-D36C19113A13}"), eEngineName.NMIService, "The Thing Registry", "TheThing") {cdeA = 128, IsReadOnly = false, IsNotAutoLoading = true, PropertyBag=new nmiCtrlTableView { TemplateID="5EBDEB3A-B11B-467A-94D2-71148F4FEF18", ShowFilterField=true } };
-                TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tInf, "CMyTable", "Thing Registry", 3, 9, 128, "NMI Administration", null, new nmiDashboardTile { TileThumbnail="FA5:f1c0", ForceLoad=true });
+                tInf = new TheFormInfo(new Guid("{B510837F-3B75-4CF2-A900-D36C19113A13}"), eEngineName.NMIService, "The Thing Registry", "TheThing") { cdeA = 128, IsReadOnly = false, IsNotAutoLoading = true, PropertyBag = new nmiCtrlTableView { TemplateID = "5EBDEB3A-B11B-467A-94D2-71148F4FEF18", ShowFilterField = true } };
+                TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tInf, "CMyTable", "Thing Registry", 3, 9, 128, "NMI Administration", null, new nmiDashboardTile { TileThumbnail = "FA5:f1c0", ForceLoad = true });
                 TheNMIEngine.AddFields(tInf, new List<TheFieldInfo>
                 {
                     {new TheFieldInfo() {FldOrder = 80, DataItem = "cdeMID", Flags = 0, Type = eFieldType.SmartLabel, Header = "MID/Owner", TileLeft = 2, TileTop = 2, TileWidth = 7, FldWidth = 6, Format = "<span style='font-size:12px'>MID:%cdeMID%<br>Owner:%cdeO%</span>"}},
@@ -288,12 +286,12 @@ namespace NMIService
                     {new TheFieldInfo() {FldOrder = 4, DataItem = "CDE_DETAILS", Flags = 2, Type = eFieldType.FormButton, TileLeft = 10, TileTop = 1}},
                 });
                 TheNMIEngine.AddTableButtons(tInf, true, 100, 0x22, 0);
-                TheFieldInfo tDl = TheNMIEngine.AddSmartControl(MyBaseThing, tInf, eFieldType.TileButton, 3, 2, 0x0, "", null, new ThePropertyBag() { "Thumbnail=FA3:f019", "TileLeft=11", "TileTop=1", "TileWidth=1", "TileHeight=1"});
+                TheFieldInfo tDl = TheNMIEngine.AddSmartControl(MyBaseThing, tInf, eFieldType.TileButton, 3, 2, 0x0, "", null, new ThePropertyBag() { "Thumbnail=FA3:f019", "TileLeft=11", "TileTop=1", "TileWidth=1", "TileHeight=1" });
                 tDl.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "DOWNLOAD", OnDownloadClick);
 
                 //Page Statistics TODO
-                TheFormInfo tPageDefs = new TheFormInfo(new Guid("{8B6ACC8C-66A8-4DC2-A33D-598F995B3EE9}"), eEngineName.NMIService, "Web Page Statistics", "nsCDEngine.Engines.NMIService.ThePageDefinition;:;100;:;true") {IsReadOnly = true, IsNotAutoLoading = true};
-                TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tPageDefs, "CMyTable", "Page Statistics", 4, 0x0, 0, "NMI Administration", null, new nmiDashboardTile { TileThumbnail="FA5:f478" });
+                TheFormInfo tPageDefs = new TheFormInfo(new Guid("{8B6ACC8C-66A8-4DC2-A33D-598F995B3EE9}"), eEngineName.NMIService, "Web Page Statistics", "nsCDEngine.Engines.NMIService.ThePageDefinition;:;100;:;true") { IsReadOnly = true, IsNotAutoLoading = true };
+                TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tPageDefs, "CMyTable", "Page Statistics", 4, 0x0, 0, "NMI Administration", null, new nmiDashboardTile { TileThumbnail = "FA5:f478" });
                 TheNMIEngine.AddFields(tPageDefs, new List<TheFieldInfo>
                 {
                     {new TheFieldInfo() {FldOrder = 2, DataItem = "Title", Flags = 0, Type = eFieldType.SingleEnded, Header = "Page Title", FldWidth = 3}},
@@ -305,8 +303,8 @@ namespace NMIService
                     {new TheFieldInfo() {FldOrder = 22, DataItem = "IsNotCached", cdeA = 0x80, Flags = 0, Type = eFieldType.SingleCheck, Header = "Not Cached", FldWidth = 1}},
                 });
 
-                tInf = new TheFormInfo(TheThing.GetSafeThingGuid(MyBaseThing, "SYSLOG"), eEngineName.NMIService, "System Log", "nsCDEngine.BaseClasses.TheEventLogEntry;:;50;:;true") {IsReadOnly = true, IsNotAutoLoading = true, GetFromFirstNodeOnly = true, PropertyBag=new nmiCtrlTableView { ShowFilterField=true } };
-                TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tInf, "CMyTable", "System Log", 10, 0x9, 128, TheNMIEngine.GetNodeForCategory(), null, new nmiDashboardTile { TileThumbnail="FA5:f15c" });
+                tInf = new TheFormInfo(TheThing.GetSafeThingGuid(MyBaseThing, "SYSLOG"), eEngineName.NMIService, "System Log", "nsCDEngine.BaseClasses.TheEventLogEntry;:;50;:;true") { IsReadOnly = true, IsNotAutoLoading = true, GetFromFirstNodeOnly = true, PropertyBag = new nmiCtrlTableView { ShowFilterField = true } };
+                TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tInf, "CMyTable", "System Log", 10, 0x9, 128, TheNMIEngine.GetNodeForCategory(), null, new nmiDashboardTile { TileThumbnail = "FA5:f15c" });
                 TheNMIEngine.AddFields(tInf, new List<TheFieldInfo>
                 {
                     {new TheFieldInfo() {FldOrder = 1, DataItem = "EventID", Flags = 0, Type = eFieldType.Number, Header = "ID", FldWidth = 2}},
@@ -318,7 +316,7 @@ namespace NMIService
                 });
 
                 tInf = new TheFormInfo(TheThing.GetSafeThingGuid(MyBaseThing, "MYVIEWS"), eEngineName.NMIService, "My Scenes", string.Format("TheThing;:;0;:;True;:;EngineName={0};DeviceType={1}", eEngineName.NMIService, eKnownDeviceTypes.TheNMIScene));
-                TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tInf, "CMyTable", "My Scenes", 5, 9, 0, TheNMIEngine.GetNodeForCategory(), null, new nmiDashboardTile { TileThumbnail="FA5:f302" });
+                TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tInf, "CMyTable", "My Scenes", 5, 9, 0, TheNMIEngine.GetNodeForCategory(), null, new nmiDashboardTile { TileThumbnail = "FA5:f302" });
                 TheNMIEngine.AddFields(tInf, new List<TheFieldInfo>
                 {
                     {new TheFieldInfo() {FldOrder = 1, DataItem = "", Flags = 2, Type = eFieldType.TileButton, Header = "Load Scene", FldWidth = 1, PropertyBag = new nmiCtrlTileButton() {OnClick = "cdeNMI.GetScene('%cdeMID%');", ClassName = "cdeTableButton", TileHeight = 1}}},
@@ -339,14 +337,14 @@ namespace NMIService
                     {new TheFieldInfo() {FldOrder = 10, DataItem = "MyPropertyBag.IsAbsolute.Value", Flags = 2, Type = eFieldType.SingleCheck, Header = "Absolute Positions", FldWidth = 1}},
                     {new TheFieldInfo() {FldOrder = 100, DataItem = "CDE_DELETE", Flags = 2, Type = eFieldType.TileButton }},
                 });
-                TheNMIEngine.AddSmartControl(MyBaseThing, tInf, eFieldType.TileButton, 1, 2, 0x0, "", null, new nmiCtrlTileButton() { Thumbnail="FA3:f022", NoTE = true, TileWidth = 1, TileHeight = 1, ClassName = "cdeTransitButton", OnClick = "TTS:<%cdeMID%>" });
+                TheNMIEngine.AddSmartControl(MyBaseThing, tInf, eFieldType.TileButton, 1, 2, 0x0, "", null, new nmiCtrlTileButton() { Thumbnail = "FA3:f022", NoTE = true, TileWidth = 1, TileHeight = 1, ClassName = "cdeTransitButton", OnClick = "TTS:<%cdeMID%>" });
 
 
                 if (TheBaseAssets.MyServiceHostInfo.IsUsingUserMapper)
                 {
                     UserManID = TheThing.GetSafeThingGuid(TheCDEngines.MyNMIService.GetBaseThing(), "USEMAN").ToString().ToLower();
-                    tInf = new TheFormInfo(TheCommonUtils.CGuid(UserManID), eEngineName.NMIService, "User Admin", "TheUserDetails") { AddTemplateType= "D270C52C-43AB-4613-9E92-8E08C60526E8",  IsNotAutoLoading = true, GetFromFirstNodeOnly = true, AddButtonText = "Add new User", RowTemplateType= "D270C52C-43AB-4613-9E92-8E08C60526E8", TileWidth=12 };
-                    TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tInf, "CMyTable", "Admin Users", 6, 9, 128, TheNMIEngine.GetNodeForCategory(), null, new nmiDashboardTile { TileThumbnail="FA5:f0c0" });
+                    tInf = new TheFormInfo(TheCommonUtils.CGuid(UserManID), eEngineName.NMIService, "User Admin", "TheUserDetails") { AddTemplateType = "D270C52C-43AB-4613-9E92-8E08C60526E8", IsNotAutoLoading = true, GetFromFirstNodeOnly = true, AddButtonText = "Add new User", RowTemplateType = "D270C52C-43AB-4613-9E92-8E08C60526E8", TileWidth = 12 };
+                    TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tInf, "CMyTable", "Admin Users", 6, 9, 128, TheNMIEngine.GetNodeForCategory(), null, new nmiDashboardTile { TileThumbnail = "FA5:f0c0" });
                     TheNMIEngine.AddFields(tInf, new List<TheFieldInfo>
                     {
                         {new TheFieldInfo() {FldOrder = 20, DataItem = "Name", Flags = 2, Type = eFieldType.SingleEnded, Header = "Name", FldWidth = 4}},
@@ -406,32 +404,32 @@ namespace NMIService
                 if (!TheBaseAssets.MyServiceHostInfo.IsCloudService)
                 {
 
-                    TheFormInfo tActivationForm = new TheFormInfo(TheThing.GetSafeThingGuid(MyBaseThing, "ActivationGuid"), eEngineName.NMIService, "", string.Format("TheThing;:;0;:;True;:;cdeMID={0}", MyBaseThing.cdeMID)) {DefaultView = eDefaultView.Form, PropertyBag=new nmiCtrlFormView { TileWidth=12 } };
-                    TheNMIEngine.AddFormToThingUX(TheNMIEngine.GetDashboardById(eActivationAndStatusDashGuid), MyBaseThing, tActivationForm, "CMyForm", "Activation", 3, 1, 0, TheNMIEngine.GetNodeForCategory(), null, new nmiDashboardTile { Caption="<span class='fa fa-5x'>&#xf13E;</span></br>Activate", Visibility=false, HidePins=true});
+                    TheFormInfo tActivationForm = new TheFormInfo(TheThing.GetSafeThingGuid(MyBaseThing, "ActivationGuid"), eEngineName.NMIService, "", string.Format("TheThing;:;0;:;True;:;cdeMID={0}", MyBaseThing.cdeMID)) { DefaultView = eDefaultView.Form, PropertyBag = new nmiCtrlFormView { TileWidth = 12 } };
+                    TheNMIEngine.AddFormToThingUX(TheNMIEngine.GetDashboardById(eActivationAndStatusDashGuid), MyBaseThing, tActivationForm, "CMyForm", "Activation", 3, 1, 0, TheNMIEngine.GetNodeForCategory(), null, new nmiDashboardTile { Caption = "<span class='fa fa-5x'>&#xf13E;</span></br>Activate", Visibility = false, HidePins = true });
 
                     //top tile
-                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileGroup, 10, 0, 0, "", null, new nmiCtrlTileGroup() {TileWidth = 12, TileHeight = 2, Background = "rgba(128,128,128,.1)", Style = "display:flex; flex-direction:row; align-content: baseline;"});
-                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.Picture, 11, 0, 0, "", null, new nmiCtrlPicture() {TileWidth = 2, TileHeight = 2, ParentFld = 10, Source = "Images/toplogo-150.png"});
-                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileGroup, 12, 0, 0, "", null, new nmiCtrlTileGroup() {TileWidth = 8, TileHeight = 2, ParentFld = 10, Style = "display:flex; align-items:flex-end "});
-                    mFormLabelField= TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.SmartLabel, 13, 0, 0, null, null, ThePropertyBag.Create(new nmiCtrlSmartLabel() {NoTE = true, Text = "Activate your " + TheBaseAssets.MyServiceHostInfo.ApplicationName, TileWidth = 8, TileHeight = 1, Background = "transparent", ParentFld = 12, Style = "font-size: 30px;"})); //2.4vw;" }));
-                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.Picture, 14, 0, 0, "", null, new nmiCtrlPicture() {TileWidth = 2, TileHeight = 2, Source = "Images/toplogo-150.png", ParentFld = 10});
+                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileGroup, 10, 0, 0, "", null, new nmiCtrlTileGroup() { TileWidth = 12, TileHeight = 2, Background = "rgba(128,128,128,.1)", Style = "display:flex; flex-direction:row; align-content: baseline;" });
+                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.Picture, 11, 0, 0, "", null, new nmiCtrlPicture() { TileWidth = 2, TileHeight = 2, ParentFld = 10, Source = "Images/toplogo-150.png" });
+                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileGroup, 12, 0, 0, "", null, new nmiCtrlTileGroup() { TileWidth = 8, TileHeight = 2, ParentFld = 10, Style = "display:flex; align-items:flex-end " });
+                    mFormLabelField = TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.SmartLabel, 13, 0, 0, null, null, ThePropertyBag.Create(new nmiCtrlSmartLabel() { NoTE = true, Text = "Activate your " + TheBaseAssets.MyServiceHostInfo.ApplicationName, TileWidth = 8, TileHeight = 1, Background = "transparent", ParentFld = 12, Style = "font-size: 30px;" })); //2.4vw;" }));
+                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.Picture, 14, 0, 0, "", null, new nmiCtrlPicture() { TileWidth = 2, TileHeight = 2, Source = "Images/toplogo-150.png", ParentFld = 10 });
 
-                    mRequestKeyFld= TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.SmartLabel, 16, 0, 0, "Request Key", "ActivationRequestKey", new nmiCtrlSmartLabel() {TileWidth = 10, TileHeight = 1, ParentFld = 20, FontSize = 24, VerticalAlignment = "Center"});
+                    mRequestKeyFld = TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.SmartLabel, 16, 0, 0, "Request Key", "ActivationRequestKey", new nmiCtrlSmartLabel() { TileWidth = 10, TileHeight = 1, ParentFld = 20, FontSize = 24, VerticalAlignment = "Center" });
 
                     if (string.IsNullOrEmpty(TheThing.GetSafePropertyString(MyBaseThing, "ActivationRequestKey")))
                         TheThing.SetSafePropertyString(MyBaseThing, "ActivationRequestKey", TheBaseAssets.MyActivationManager.GetActivationRequestKey(TheBaseAssets.MyServiceHostInfo.SKUID));
                     TheThing.SetSafePropertyString(MyBaseThing, "ActivationKey", "");
                     //mdl portion
-                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileGroup, 20, 0, 0, "", null, new nmiCtrlTileGroup() {TileWidth = 12, TileHeight = 3, Background = "rgba(128,128,128,.1)"}); //, ClassName = "cdeFlexCol cdeFlexCenter cdeTileGroup"
-                    TheFieldInfo tKey = TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.SingleEnded, 21, 2, 0, "Activation Key", "ActivationKey", new nmiCtrlSingleEnded() {TileWidth = 10, TileHeight = 1, HelpText = "Please enter a valid key to activate your Relay.", ParentFld = 20});
-                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileGroup, 22, 0, 0, "", null, new nmiCtrlTileGroup() {TileWidth = 12, TileHeight = 2, ParentFld = 20}); //, ClassName = "cdeFlexCol cdeFlexCenter cdeTileGroup"
+                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileGroup, 20, 0, 0, "", null, new nmiCtrlTileGroup() { TileWidth = 12, TileHeight = 3, Background = "rgba(128,128,128,.1)" }); //, ClassName = "cdeFlexCol cdeFlexCenter cdeTileGroup"
+                    TheFieldInfo tKey = TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.SingleEnded, 21, 2, 0, "Activation Key", "ActivationKey", new nmiCtrlSingleEnded() { TileWidth = 10, TileHeight = 1, HelpText = "Please enter a valid key to activate your Relay.", ParentFld = 20 });
+                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileGroup, 22, 0, 0, "", null, new nmiCtrlTileGroup() { TileWidth = 12, TileHeight = 2, ParentFld = 20 }); //, ClassName = "cdeFlexCol cdeFlexCenter cdeTileGroup"
 
                     //loading
-                    TheFieldInfo tLoader = TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileGroup, 30, 0, 0, "", null, new nmiCtrlTileGroup() {TileWidth = 12, TileHeight = 1, Background = "rgba(128,128,128,.1)", ClassName = "cdeFlexCol cdeFlexCenter cdeTileGroup", Visibility = false});
-                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.SmartLabel, 31, 0, 0, "<i class='fa faIcon fa-spin fa-4x'>&#xf013;</i>", null, new nmiCtrlSmartLabel() {TileWidth = 12, TileHeight = 1, ParentFld = 30, Background = "transparent;"});
+                    TheFieldInfo tLoader = TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileGroup, 30, 0, 0, "", null, new nmiCtrlTileGroup() { TileWidth = 12, TileHeight = 1, Background = "rgba(128,128,128,.1)", ClassName = "cdeFlexCol cdeFlexCenter cdeTileGroup", Visibility = false });
+                    TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.SmartLabel, 31, 0, 0, "<i class='fa faIcon fa-spin fa-4x'>&#xf013;</i>", null, new nmiCtrlSmartLabel() { TileWidth = 12, TileHeight = 1, ParentFld = 30, Background = "transparent;" });
 
-                    TheFieldInfo tResulter = TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileGroup, 32, 0, 0, "", null, new nmiCtrlTileGroup() {TileWidth = 12, TileHeight = 3, Background = "rgba(128,128,128,.1)", Visibility = false}); //ClassName = "cdeFlexCol cdeFlexCenter cdeTileGroup",
-                    TheFieldInfo tSuccess = TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.SmartLabel, 33, 0, 0, null, null, new nmiCtrlSmartLabel() {TileWidth = 10, TileHeight = 2, Background = "rgba(255,255,255,0.1)", ParentFld = 32, Style = "font-size:30px;"});
+                    TheFieldInfo tResulter = TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileGroup, 32, 0, 0, "", null, new nmiCtrlTileGroup() { TileWidth = 12, TileHeight = 3, Background = "rgba(128,128,128,.1)", Visibility = false }); //ClassName = "cdeFlexCol cdeFlexCenter cdeTileGroup",
+                    TheFieldInfo tSuccess = TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.SmartLabel, 33, 0, 0, null, null, new nmiCtrlSmartLabel() { TileWidth = 10, TileHeight = 2, Background = "rgba(255,255,255,0.1)", ParentFld = 32, Style = "font-size:30px;" });
 
                     TheFieldInfo tButRestart = null;
                     if (!TheCommonUtils.IsDeviceSenderType(TheBaseAssets.MyServiceHostInfo.MyDeviceInfo.SenderType))
@@ -448,7 +446,7 @@ namespace NMIService
                                 TheBaseAssets.MyApplication.MyISMRoot.Restart(false);
                         });
                     }
-                    TheFieldInfo tActivator = TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileButton, 23, 2, 0, "&nbsp;", null, new nmiCtrlTileButton() {Caption = "Activate Now", TileWidth = 10, TileHeight = 1, Background = "gray", ParentFld = 22, ClassName = "cdeLiveTile"});
+                    TheFieldInfo tActivator = TheNMIEngine.AddSmartControl(MyBaseThing, tActivationForm, eFieldType.TileButton, 23, 2, 0, "&nbsp;", null, new nmiCtrlTileButton() { Caption = "Activate Now", TileWidth = 10, TileHeight = 1, Background = "gray", ParentFld = 22, ClassName = "cdeLiveTile" });
                     string tActCookie = "Act" + TheCommonUtils.GetRandomUInt(0, 10000);
                     tActivator.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, tActCookie, (sender, para) =>
                     {
@@ -461,7 +459,7 @@ namespace NMIService
                         if (bSuccess)
                         {
                             TheNMIEngine.SetUXProperty(Guid.Empty, tSuccess.cdeMID, "Text=Thank you for activating your Relay! Click here to configure it.:;:Background=rgba(0,255,0,.2)");
-                            if (tButRestart!=null)
+                            if (tButRestart != null)
                                 TheNMIEngine.SetUXProperty(Guid.Empty, tButRestart.cdeMID, "Visibility=true");
                             TheNMIEngine.SetUXProperty(Guid.Empty, tActivator.cdeMID, "Visibility=false");
                             ChangeActivationForm(true);
@@ -477,7 +475,7 @@ namespace NMIService
                         ChangeActivationForm(false);
 
                     TheNMIEngine.AddPageDefinition(new ThePageDefinition(new Guid("{D514DC92-1108-4701-808D-1689537D9757}"), "/ACTIVATE", "Relay Activation", "nmiportal.html", Guid.Empty)
-                        {WPID = 10, IncludeCDE = true, RequireLogin = true,IsPublic=false, PortalGuid = eActivationAndStatusDashGuid, StartScreen = tActivationForm.cdeMID});
+                    { WPID = 10, IncludeCDE = true, RequireLogin = true, IsPublic = false, PortalGuid = eActivationAndStatusDashGuid, StartScreen = tActivationForm.cdeMID });
                 }
                 InitNMIAssets();
             }
@@ -489,7 +487,7 @@ namespace NMIService
         bool ActivateRelay()
         {
             string activationKey = TheThing.GetSafePropertyString(MyBaseThing, "ActivationKey");
-            return TheBaseAssets.MyActivationManager.ApplyActivationKey(activationKey,Guid.Empty,out var exp);
+            return TheBaseAssets.MyActivationManager.ApplyActivationKey(activationKey, Guid.Empty, out var exp);
         }
 
         void ChangeActivationForm(bool justActivated)
@@ -536,6 +534,7 @@ namespace NMIService
                     var MyNMIEditor = new TheNMIEditor(MyLiveThing);
                     TheThingRegistry.RegisterThing(MyNMIEditor);
                 }
+                TheCDEngines.MyNMIService.RegisterEvent(eEngineEvents.IncomingMessage, sinkNMIMessage);
                 MyBaseThing.LastMessage = "NMI Runtime started...";
                 MyBaseEngine.ProcessInitialized(); //Set the status of the Base Engine according to the status of the Things it manages
                 MyBaseEngine.SetStatusLevel(1);
@@ -552,6 +551,41 @@ namespace NMIService
             return true;
         }
 
+        void sinkNMIMessage(ICDEThing psender, object pIncoming)
+        {
+            if (!(pIncoming is TheProcessMessage pMsg)) return;
+            switch (pMsg.Message.TXT)   //string 2 cases
+            {
+                case "NMI_NODEPING":
+                    bool IsAuto = IsAutoTheme;
+                    if (!string.IsNullOrEmpty(pMsg.Message.PLS))
+                    {
+                        try
+                        {
+                            var u = TheCommonUtils.DeserializeJSONStringToObject<Dictionary<string, object>>(pMsg.Message.PLS);
+                            if (u.TryGetValue("ThemeName", out object tname))
+                            {
+                                if (TheCommonUtils.CStr(tname) == "Auto")
+                                    IsAuto = true;
+                            }
+                        }
+                        catch (Exception)
+                        { }
+                    }
+                    if (IsAuto)
+                    {
+                        if (SunriseSunset == null || SunriseSunset.Sunrise.Day != DateTimeOffset.Now.Day) //Calculate once a day
+                            SunriseSunset = SolarCalculator.Calculate();
+
+                        if (IsLightTheme != (DateTimeOffset.Now > SunriseSunset.Sunrise && DateTimeOffset.Now < SunriseSunset.Sunset))
+                        {
+                            IsLightTheme = !IsLightTheme;
+                            TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_THEME", IsLightTheme.ToString()));
+                        }
+                    }
+                    break;
+            }
+        }
 
 
 
@@ -563,7 +597,7 @@ namespace NMIService
             string[] cmd = pMSG.Message.PLS.Split(':');
             if (cmd.Length > 2)
             {
-                TheThing tThing = TheThingRegistry.GetThingByMID("*", TheCommonUtils.CGuid(cmd[2]),true);
+                TheThing tThing = TheThingRegistry.GetThingByMID("*", TheCommonUtils.CGuid(cmd[2]), true);
                 if (tThing == null) return;
 
                 TSM tFilePush = new TSM(eEngineName.ContentService, string.Format("CDE_FILE:{0}.JSON:application/json", tThing.FriendlyName))
@@ -606,9 +640,9 @@ namespace NMIService
                 }
                 var nameRoot = $"{tThing.FriendlyName}";
                 if (createCDEF)
-                { 
+                {
                     var zipStream = new MemoryStream();
-                    var zipArchive= new System.IO.Compression.ZipArchive(zipStream, System.IO.Compression.ZipArchiveMode.Create);
+                    var zipArchive = new System.IO.Compression.ZipArchive(zipStream, System.IO.Compression.ZipArchiveMode.Create);
 
                     string fileName;
                     if (!bAnswer)
@@ -640,11 +674,11 @@ namespace NMIService
                     var zipBytes = zipStream.GetBuffer();
 
                     TSM tFilePush = new TSM(eEngineName.ContentService, string.Format("CDE_FILE:{0}:application/zip", fileName))
-                        {
-                            SID = pMSG.Message.SID,
-                            PLS = "bin",
-                            PLB = zipBytes,
-                        };
+                    {
+                        SID = pMSG.Message.SID,
+                        PLS = "bin",
+                        PLB = zipBytes,
+                    };
                     TheCommCore.PublishToOriginator(pMSG.Message, tFilePush);
 
                 }
@@ -719,15 +753,15 @@ namespace NMIService
         private void CreateUserPreferences()
         {
             UserPrefID = new Guid("{E15AE1F2-69F3-42DC-97E8-B0CC2A8526A6}").ToString().ToLower();
-            TheFormInfo tMyUserSettingsForm = new TheFormInfo(TheCommonUtils.CGuid(UserPrefID), eEngineName.NMIService, "My Account", "TheUserDetails;:;0;:;True;:;cdeMID=%SESS:CID%") { DefaultView = eDefaultView.Form, GetFromFirstNodeOnly=true, PropertyBag= new nmiCtrlFormView { TileWidth=13 } };
+            TheFormInfo tMyUserSettingsForm = new TheFormInfo(TheCommonUtils.CGuid(UserPrefID), eEngineName.NMIService, "My Account", "TheUserDetails;:;0;:;True;:;cdeMID=%SESS:CID%") { DefaultView = eDefaultView.Form, GetFromFirstNodeOnly = true, PropertyBag = new nmiCtrlFormView { TileWidth = 13 } };
             TheNMIEngine.AddFormToThingUX(MyBaseThing, tMyUserSettingsForm, "CMyForm", "<span class='fa fa-5x'>&#xf013;</span></br>My Account", 1, 0x89, 0, "NMI Administration", null, null);
-            CreateUserFields(tMyUserSettingsForm,false);
+            CreateUserFields(tMyUserSettingsForm, false);
         }
 
         private void CreateUserTemplate()
         {
-            TheFormInfo tMyUserSettingsForm = new TheFormInfo(TheCommonUtils.CGuid("{D270C52C-43AB-4613-9E92-8E08C60526E8}"), eEngineName.NMIService, "Account Settings", null) { DefaultView = eDefaultView.Form, GetFromFirstNodeOnly=true, IsAlwaysEmpty=true,IsPostingOnSubmit=true, TableReference=UserManID, PropertyBag = new nmiCtrlFormView { TileWidth = 13 } };
-            TheNMIEngine.AddFormToThingUX(MyBaseThing, tMyUserSettingsForm, "CMyForm", "<span class='fa fa-5x'>&#xf013;</span></br>My Account", 1, 0x89, 0, "NMI Administration", null, new nmiDashboardTile { Visibility=false });
+            TheFormInfo tMyUserSettingsForm = new TheFormInfo(TheCommonUtils.CGuid("{D270C52C-43AB-4613-9E92-8E08C60526E8}"), eEngineName.NMIService, "Account Settings", null) { DefaultView = eDefaultView.Form, GetFromFirstNodeOnly = true, IsAlwaysEmpty = true, IsPostingOnSubmit = true, TableReference = UserManID, PropertyBag = new nmiCtrlFormView { TileWidth = 13 } };
+            TheNMIEngine.AddFormToThingUX(MyBaseThing, tMyUserSettingsForm, "CMyForm", "<span class='fa fa-5x'>&#xf013;</span></br>My Account", 1, 0x89, 0, "NMI Administration", null, new nmiDashboardTile { Visibility = false });
             CreateUserFields(tMyUserSettingsForm, true);
         }
 
@@ -738,17 +772,18 @@ namespace NMIService
             TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.SingleEnded, 20, 2, 0, "Name", "Name", new nmiCtrlSingleEnded() { TileHeight = 1, TileWidth = 6, FldWidth = 4, ParentFld = 10 });
 
             TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.eMail, 40, 2, 0, "Email", "EMail", new nmiCtrlSingleEnded() { TileHeight = 1, TileWidth = 6, ParentFld = 10 });
-            TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.Password, 50, 3, 0, "Password", "Password", new nmiCtrlPassword() { TileHeight = !IsAdmin?3:2, TileWidth = 6, ParentFld = 10, EnforceAndConfirm = true, RequireUpdateButton=!IsAdmin });
+            TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.Password, 50, 3, 0, "Password", "Password", new nmiCtrlPassword() { TileHeight = !IsAdmin ? 3 : 2, TileWidth = 6, ParentFld = 10, EnforceAndConfirm = true, RequireUpdateButton = !IsAdmin });
             if (TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("AllowPinLogin")))
             {
-                var Teto=TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.SmartLabel, 55, 0, 0, "Your TeTo:", "TeTo", new nmiCtrlSmartLabel() { ParentFld = 10, FontSize = 50, Foreground = "green", TileHeight = 1, TileFactorY = 1 });
-                TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.Password, 56, 3, 0, "Enter new Pin", "TempPin", new nmiCtrlPassword() { TileHeight = 1, TileWidth = 6, ParentFld = 10  });
-                GetProperty("TempPin", true).RegisterEvent2(eThingEvents.PropertyChangedByUX, (msg,sender) => {
-                    Teto.SetUXProperty(msg.Message.GetOriginator(),$"Text={TheThing.GetSafePropertyString(MyBaseThing, "TeTo")}");
+                var Teto = TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.SmartLabel, 55, 0, 0, "Your TeTo:", "TeTo", new nmiCtrlSmartLabel() { ParentFld = 10, FontSize = 50, Foreground = "green", TileHeight = 1, TileFactorY = 1 });
+                TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.Password, 56, 3, 0, "Enter new Pin", "TempPin", new nmiCtrlPassword() { TileHeight = 1, TileWidth = 6, ParentFld = 10 });
+                GetProperty("TempPin", true).RegisterEvent2(eThingEvents.PropertyChangedByUX, (msg, sender) =>
+                {
+                    Teto.SetUXProperty(msg.Message.GetOriginator(), $"Text={TheThing.GetSafePropertyString(MyBaseThing, "TeTo")}");
                 });
             }
             if (IsAdmin)
-                TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.CheckField, 70, 3, 128, "User Access Level", "AccessMask", ThePropertyBag.Create(new nmiCtrlCheckField() { MID=new Guid("{DD3DF621-ACAC-4B77-9856-87165138B028}"), Bits = 8, TileWidth = 6, FontSize=24, ParentFld = 10,TileFactorY=2, Options = "Service Guest;IT Guest;OT User;Service User;IT User;OT Admin; Service Admin;IT Admin" })); //, Options="A;B;C;D;E;F;G;H" 
+                TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.CheckField, 70, 3, 128, "User Access Level", "AccessMask", ThePropertyBag.Create(new nmiCtrlCheckField() { MID = new Guid("{DD3DF621-ACAC-4B77-9856-87165138B028}"), Bits = 8, TileWidth = 6, FontSize = 24, ParentFld = 10, TileFactorY = 2, Options = "Service Guest;IT Guest;OT User;Service User;IT User;OT Admin; Service Admin;IT Admin" })); //, Options="A;B;C;D;E;F;G;H" 
 
             TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.CollapsibleGroup, 100, 2, 0, "My Account", null, new nmiCtrlCollapsibleGroup() { TileWidth = 6, DoClose = false, IsSmall = true });
             TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.SmartLabel, 105, 2, 0, "Important:", null, new nmiCtrlSmartLabel() { ParentFld = 100, Text = "Changes made here require you to log-out/log-in to get in effect", FontSize = 20, Foreground = "red" });
@@ -781,15 +816,15 @@ namespace NMIService
                     var tMsg = para as TheProcessMessage;
                     if (tMsg == null)
                         return;
-                    if (!TheUserManager.SendACLToNMI(tMsg.Message.GetOriginator(), TheCommonUtils.CGuid(tMsg.Message.PLS.Split(':')[2]),tMsg.ClientInfo))
+                    if (!TheUserManager.SendACLToNMI(tMsg.Message.GetOriginator(), TheCommonUtils.CGuid(tMsg.Message.PLS.Split(':')[2]), tMsg.ClientInfo))
                         TheCommCore.PublishToNode(tMsg.Message.GetOriginator(), new TSM(eEngineName.NMIService, "NMI_INFO", $"Access denied or user not found"));
                 });
                 TheNMIEngine.AddTemplateButtons(MyBaseThing, tMyUserSettingsForm, -1, 10, 0);
                 tMyUserSettingsForm.RegisterEvent2(eUXEvents.OnShow, (tMsg, args) =>
                 {
-                    if (tMsg?.Message?.TXT?.Split(':')?.Length<2)
+                    if (tMsg?.Message?.TXT?.Split(':')?.Length < 2)
                         return;
-                    TheUserManager.SendACLToNMI(tMsg.Message.GetOriginator(), TheCommonUtils.CGuid(tMsg.Message.TXT.Split(':')[1]), tMsg.ClientInfo,true);
+                    TheUserManager.SendACLToNMI(tMsg.Message.GetOriginator(), TheCommonUtils.CGuid(tMsg.Message.TXT.Split(':')[1]), tMsg.ClientInfo, true);
                 });
             }
         }

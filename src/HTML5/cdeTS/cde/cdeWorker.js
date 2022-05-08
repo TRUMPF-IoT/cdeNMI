@@ -1,12 +1,3 @@
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 var dbits;
 var canary = 244837814094590;
 var j_lm = ((canary & 16777215) == 15715070);
@@ -856,13 +847,13 @@ function RSAEncrypt(d) {
 RSAKey.prototype.doPublic = RSADoPublic;
 RSAKey.prototype.setPublic = RSASetPublic;
 RSAKey.prototype.encrypt = RSAEncrypt;
-var MyWorkerContext = self;
+const MyWorkerContext = self;
 var cde;
 (function (cde) {
     function CInt(pInVal) {
         if (isNaN(pInVal) || !pInVal)
             return 0;
-        var retVal = 0;
+        let retVal = 0;
         try {
             retVal = parseInt(pInVal);
         }
@@ -876,7 +867,7 @@ var cde;
     function CDbl(pInVal) {
         if (isNaN(pInVal) || !pInVal)
             return 0;
-        var retVal = 0;
+        let retVal = 0;
         try {
             retVal = parseFloat(pInVal);
         }
@@ -906,8 +897,8 @@ var cde;
     }
     cde.IsNotSet = IsNotSet;
     function GetSubstringIndex(pInStr, pSubStr, pOccurance) {
-        var times = 0;
-        var index = 0;
+        let times = 0;
+        let index = 0;
         while (times < pOccurance && index !== -1) {
             index = pInStr.indexOf(pSubStr, index + pSubStr.length);
             times++;
@@ -916,35 +907,31 @@ var cde;
     }
     cde.GetSubstringIndex = GetSubstringIndex;
     function DateToString(inDate) {
-        var month = inDate.getMonth() + 1;
-        var day = inDate.getDate();
-        var year = inDate.getFullYear();
-        var hours = inDate.getHours();
-        var minutes = inDate.getMinutes();
-        var ampm = "AM";
+        const month = inDate.getMonth() + 1;
+        const day = inDate.getDate();
+        const year = inDate.getFullYear();
+        const hours = inDate.getHours();
+        const minutes = inDate.getMinutes();
+        let ampm = "AM";
         if (hours > 11) {
             ampm = "PM";
         }
         return month + "/" + day + "/" + year + " " + hours + ":" + minutes + " " + ampm;
     }
     cde.DateToString = DateToString;
-    var TheCoreQueueContent = (function () {
-        function TheCoreQueueContent(pEng, pTopic, pMsg) {
+    class TheCoreQueueContent {
+        constructor(pEng, pTopic, pMsg) {
             this.ENG = pEng;
             this.JMSG = JSON.stringify(pMsg);
             this.TOPIC = pTopic;
         }
-        return TheCoreQueueContent;
-    }());
+    }
     cde.TheCoreQueueContent = TheCoreQueueContent;
-    var TheISBConnect = (function () {
-        function TheISBConnect() {
-        }
-        return TheISBConnect;
-    }());
+    class TheISBConnect {
+    }
     cde.TheISBConnect = TheISBConnect;
-    var TheTimeouts = (function () {
-        function TheTimeouts() {
+    class TheTimeouts {
+        constructor() {
             this.HeartBeat = 30;
             this.PickupRate = 250;
             this.InitRate = 100;
@@ -952,23 +939,22 @@ var cde;
             this.PickupRateDelay = 1;
             this.WsTimeOut = 5000;
         }
-        TheTimeouts.prototype.EnterAdrenalin = function () {
+        EnterAdrenalin() {
             this.HeartBeat = 5;
             this.HeartBeatMissed = 30;
-        };
-        TheTimeouts.prototype.NormalHeartRate = function () {
+        }
+        NormalHeartRate() {
             this.HeartBeat = 30;
             this.HeartBeatMissed = 4;
-        };
-        TheTimeouts.prototype.EnterSleepMode = function () {
+        }
+        EnterSleepMode() {
             this.HeartBeat = 100;
             this.HeartBeatMissed = 3;
-        };
-        return TheTimeouts;
-    }());
+        }
+    }
     cde.TheTimeouts = TheTimeouts;
-    var TSM = (function () {
-        function TSM(pEng) {
+    class TSM {
+        constructor(pEng) {
             this.ENG = pEng;
             this.TIM = new Date();
             this.ORG = "";
@@ -981,62 +967,49 @@ var cde;
             this.OWN = "";
             this.GRO = "";
         }
-        TSM.GetOriginator = function (pTSM) {
+        static GetOriginator(pTSM) {
             if (!pTSM.ORG)
                 return "";
-            var t = pTSM.ORG.split(';');
+            const t = pTSM.ORG.split(';');
             return t[0];
-        };
-        return TSM;
-    }());
+        }
+    }
     cde.TSM = TSM;
-    var TheProcessMessage = (function () {
-        function TheProcessMessage(pTopic, pTSM) {
+    class TheProcessMessage {
+        constructor(pTopic, pTSM) {
             this.Topic = pTopic;
             this.Message = pTSM;
         }
-        return TheProcessMessage;
-    }());
+    }
     cde.TheProcessMessage = TheProcessMessage;
-    var TheDeviceMessage = (function () {
-        function TheDeviceMessage() {
-        }
-        return TheDeviceMessage;
-    }());
+    class TheDeviceMessage {
+    }
     cde.TheDeviceMessage = TheDeviceMessage;
-    var TheCDECredentials = (function () {
-        function TheCDECredentials() {
+    class TheCDECredentials {
+        constructor() {
             this.QUID = "";
             this.QPWD = "";
             this.QToken = null;
         }
-        return TheCDECredentials;
-    }());
+    }
     cde.TheCDECredentials = TheCDECredentials;
-    var TheMeshPicker = (function () {
-        function TheMeshPicker() {
-        }
-        return TheMeshPicker;
-    }());
+    class TheMeshPicker {
+    }
     cde.TheMeshPicker = TheMeshPicker;
-    var TheUserPreferences = (function () {
-        function TheUserPreferences() {
+    class TheUserPreferences {
+        constructor() {
             this.CurrentUserName = null;
             this.PortalScreen = null;
             this.StartScreen = null;
             this.HideHeader = false;
         }
-        return TheUserPreferences;
-    }());
+    }
     cde.TheUserPreferences = TheUserPreferences;
-    var TheNV = (function () {
-        function TheNV() {
-        }
-        return TheNV;
-    }());
+    class TheNV {
+    }
     cde.TheNV = TheNV;
-    var TheCommConfig = (function () {
-        function TheCommConfig(pWSTimeOut) {
+    class TheCommConfig {
+        constructor(pWSTimeOut) {
             this.NoISB = false;
             this.DisableRSA = false;
             this.RequestPath = null;
@@ -1051,11 +1024,10 @@ var cde;
             if (pWSTimeOut > 0)
                 this.TO.WsTimeOut = pWSTimeOut;
         }
-        return TheCommConfig;
-    }());
+    }
     cde.TheCommConfig = TheCommConfig;
-    var TheWHSI = (function () {
-        function TheWHSI() {
+    class TheWHSI {
+        constructor() {
             this.CurrentRSA = null;
             this.IsConnected = false;
             this.CallerCount = 0;
@@ -1069,11 +1041,10 @@ var cde;
             this.MyServiceUrl = '';
             this.IsUserLoggedIn = false;
         }
-        return TheWHSI;
-    }());
+    }
     cde.TheWHSI = TheWHSI;
-    var cdeWorker = (function () {
-        function cdeWorker(port) {
+    class cdeWorker {
+        constructor(port) {
             this.DCreds = null;
             this.MyConfig = null;
             this.MyHSI = new TheWHSI();
@@ -1098,38 +1069,34 @@ var cde;
             if (port)
                 this.AddPort(port);
         }
-        Object.defineProperty(cdeWorker.prototype, "IsConnected", {
-            get: function () { return this.MyHSI.IsConnected; },
-            set: function (value) {
-                if (this.MyHSI.IsConnected !== value) {
-                    this.MyHSI.IsConnected = value;
-                    this.UpdateHSI();
-                    this.FireEvent(true, "CDE_CONN_CHANGED", value);
-                }
-            },
-            enumerable: false,
-            configurable: true
-        });
-        cdeWorker.prototype.UpdateHSI = function () {
+        get IsConnected() { return this.MyHSI.IsConnected; }
+        set IsConnected(value) {
+            if (this.MyHSI.IsConnected !== value) {
+                this.MyHSI.IsConnected = value;
+                this.UpdateHSI();
+                this.FireEvent(true, "CDE_CONN_CHANGED", value);
+            }
+        }
+        UpdateHSI() {
             this.MyHSI.HasAutoLogin = (this.MyConfig && this.MyConfig.Creds !== null);
             this.MyHSI.CallerCount = this.MyPorts.length;
             this.WriteToIDB();
-        };
-        cdeWorker.prototype.SetTargetRelay = function (pTarget) {
+        }
+        SetTargetRelay(pTarget) {
             if (this.MyHSI.IsConnected)
                 return;
-            var tParts;
+            let tParts;
             try {
                 tParts = pTarget.split(';:;');
-                var t_1 = null;
-                t_1 = new URL(tParts[0]);
-                var tConf = this.MyConfig;
+                let t = null;
+                t = new URL(tParts[0]);
+                let tConf = this.MyConfig;
                 if (tConf === null)
                     tConf = new cde.TheCommConfig(0);
-                tConf.host = t_1.hostname;
+                tConf.host = t.hostname;
                 tConf.cdeTIM = new Date();
-                tConf.port = cde.CInt(t_1.port);
-                if (t_1.protocol.indexOf("s:", t_1.protocol.length - 2) !== -1) {
+                tConf.port = cde.CInt(t.port);
+                if (t.protocol.indexOf("s:", t.protocol.length - 2) !== -1) {
                     tConf.useTLS = true;
                     if (tConf.port === 0)
                         tConf.port = 443;
@@ -1149,13 +1116,13 @@ var cde;
                 return true;
             }
             catch (ex) {
-                var tErr = tParts[0] + " is not a valid Url";
+                const tErr = tParts[0] + " is not a valid Url";
                 this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:SetTargetRelay", tErr, 2);
                 this.FireEvent(true, "CDE_SETSTATUSMSG", tErr, 2);
             }
             return false;
-        };
-        cdeWorker.prototype.SetConfig = function (pConfig) {
+        }
+        SetConfig(pConfig) {
             if (this.MyHSI.IsConnected)
                 return;
             this.MyConfig = pConfig;
@@ -1170,9 +1137,8 @@ var cde;
             if (!this.MyConfig.host && this.MyConfig.uri) {
                 this.SetTargetRelay(this.MyConfig.uri);
             }
-        };
-        cdeWorker.prototype.StartCommunication = function (pConfig) {
-            var _this = this;
+        }
+        StartCommunication(pConfig) {
             if (this.MyHSI.IsConnected || this.HasStarted) {
                 if (this.MyHSI.IsConnected && this.HasStarted)
                     this.FireEvent(true, "CDE_CONN_CHANGED", true);
@@ -1180,106 +1146,105 @@ var cde;
             }
             this.IsConnectionDown = false;
             if (!this.MyDB) {
-                var req = indexedDB.open('cdeDB', 1);
-                req.onupgradeneeded = function (ev) {
-                    _this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", "In Upgrade Needed", 1);
-                    _this.MyDB = ev.target.result;
-                    if (!_this.MyDB.objectStoreNames.contains('CDEJS')) {
-                        _this.MyDB.createObjectStore('CDEJS', { keyPath: 'id' });
+                const req = indexedDB.open('cdeDB', 1);
+                req.onupgradeneeded = (ev) => {
+                    this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", "In Upgrade Needed", 1);
+                    this.MyDB = ev.target.result;
+                    if (!this.MyDB.objectStoreNames.contains('CDEJS')) {
+                        this.MyDB.createObjectStore('CDEJS', { keyPath: 'id' });
                     }
-                    _this.StartCommPhase2(pConfig);
+                    this.StartCommPhase2(pConfig);
                 };
-                req.onsuccess = function (ev) {
-                    _this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", "Open Success", 1);
-                    _this.MyDB = ev.target.result;
-                    var transaction = _this.MyDB.transaction(['CDEJS']);
-                    var objectStore = transaction.objectStore('CDEJS');
-                    var request = objectStore.get(1);
-                    request.onerror = function () {
-                        _this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", "Read of Idx1 failed", 3);
-                        _this.StartCommPhase2(pConfig);
+                req.onsuccess = (ev) => {
+                    this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", "Open Success", 1);
+                    this.MyDB = ev.target.result;
+                    const transaction = this.MyDB.transaction(['CDEJS']);
+                    const objectStore = transaction.objectStore('CDEJS');
+                    const request = objectStore.get(1);
+                    request.onerror = () => {
+                        this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", "Read of Idx1 failed", 3);
+                        this.StartCommPhase2(pConfig);
                     };
-                    request.onsuccess = function () {
-                        _this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", "Read Success", 1);
+                    request.onsuccess = () => {
+                        this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", "Read Success", 1);
                         if (request.result) {
-                            var tConfig = request.result.config;
+                            const tConfig = request.result.config;
                             if (tConfig.Creds && tConfig.Creds.QToken && tConfig.Creds.QToken !== "") {
                                 if (pConfig && pConfig.RequestPath) {
                                     tConfig.RequestPath = pConfig.RequestPath;
-                                    if (!_this.MyHSI.InitialNPA)
-                                        _this.MyHSI.InitialNPA = pConfig.RequestPath;
+                                    if (!this.MyHSI.InitialNPA)
+                                        this.MyHSI.InitialNPA = pConfig.RequestPath;
                                 }
                                 pConfig = tConfig;
-                                _this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State Restored', 1);
+                                this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State Restored', 1);
                             }
                             else {
-                                _this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State ignored', 1);
-                                _this.DeleteFromIDB();
+                                this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State ignored', 1);
+                                this.DeleteFromIDB();
                             }
-                            _this.StartCommPhase2(pConfig);
+                            this.StartCommPhase2(pConfig);
                         }
                         else {
-                            _this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'No data record', 2);
-                            _this.StartCommPhase2(pConfig);
+                            this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'No data record', 2);
+                            this.StartCommPhase2(pConfig);
                         }
                     };
                 };
-                req.onerror = function (ev) {
-                    _this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:error", "Error:" + ev, 3);
-                    _this.StartCommPhase2(pConfig);
+                req.onerror = (ev) => {
+                    this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:error", "Error:" + ev, 3);
+                    this.StartCommPhase2(pConfig);
                 };
             }
             else
                 this.StartCommPhase2(pConfig);
-        };
-        cdeWorker.prototype.StartCommPhase2 = function (pConfig) {
-            var _this = this;
+        }
+        StartCommPhase2(pConfig) {
             if (pConfig) {
                 this.SetConfig(pConfig);
             }
             if (this.MyConfig) {
                 if (cde.CBool(this.MyConfig.NoISB) === false) {
                     this.HasStarted = true;
-                    var tScheme = "http";
+                    let tScheme = "http";
                     if (this.MyConfig.useTLS === true)
                         tScheme += "s";
-                    this.MyHSI.MyServiceUrl = "".concat(tScheme, "://").concat(this.MyConfig.host, ":").concat(this.MyConfig.port);
-                    var isbEndpoint = "".concat(this.MyHSI.MyServiceUrl, "/MYISBCONNECT");
-                    this.GetGlobalResource(isbEndpoint, null, function (isbEnd, isbstr) {
-                        var isb = JSON.parse(isbstr);
+                    this.MyHSI.MyServiceUrl = `${tScheme}://${this.MyConfig.host}:${this.MyConfig.port}`;
+                    const isbEndpoint = `${this.MyHSI.MyServiceUrl}/MYISBCONNECT`;
+                    this.GetGlobalResource(isbEndpoint, null, (isbEnd, isbstr) => {
+                        const isb = JSON.parse(isbstr);
                         if (isb.ERR) {
-                            _this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:StartCommunication", "MyISBConnect returned: " + isb.ERR, 3);
-                            _this.FireEvent(true, "CDE_NO_CONNECT", "ISBConnect returned " + isb.ERR + ". Verify ISBConnect is allow on relay.");
+                            this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:StartCommunication", "MyISBConnect returned: " + isb.ERR, 3);
+                            this.FireEvent(true, "CDE_NO_CONNECT", "ISBConnect returned " + isb.ERR + ". Verify ISBConnect is allow on relay.");
                         }
                         else {
                             if (isb.WSP > 0) {
-                                var tscheme = "ws";
+                                let tscheme = "ws";
                                 if (isb.TLS === true)
                                     tscheme += "s";
-                                _this.MyConfig.wsuri = "".concat(tscheme, "://").concat(_this.MyConfig.host, ":").concat(isb.WSP);
+                                this.MyConfig.wsuri = `${tscheme}://${this.MyConfig.host}:${isb.WSP}`;
                             }
                             {
-                                var tscheme = "http";
+                                let tscheme = "http";
                                 if (isb.TLS === true)
                                     tscheme += "s";
-                                _this.MyFallbackServiceUrl = "".concat(tscheme, "://").concat(_this.MyConfig.host, ":").concat(_this.MyConfig.port);
+                                this.MyFallbackServiceUrl = `${tscheme}://${this.MyConfig.host}:${this.MyConfig.port}`;
                             }
-                            _this.MyConfig.RequestPath = isb.NPA;
-                            _this.MyHSI.InitialNPA = isb.NPA;
-                            _this.MyHSI.FirstNodeID = isb.FNI;
+                            this.MyConfig.RequestPath = isb.NPA;
+                            this.MyHSI.InitialNPA = isb.NPA;
+                            this.MyHSI.FirstNodeID = isb.FNI;
                             if (isb.ADR) {
-                                _this.MyHSI.AdminPWMustBeSet = true;
-                                _this.MyHSI.AdminRole = isb.ADR;
+                                this.MyHSI.AdminPWMustBeSet = true;
+                                this.MyHSI.AdminRole = isb.ADR;
                             }
                             if (cde.CDbl(isb.VER) > 4)
-                                _this.NMIVersion = cde.CDbl(isb.VER);
+                                this.NMIVersion = cde.CDbl(isb.VER);
                             else
-                                _this.NMIVersion = 4.0;
-                            _this.DoStartComm();
+                                this.NMIVersion = 4.0;
+                            this.DoStartComm();
                         }
-                    }, function (isbend, error) {
-                        _this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:StartCommunication", "MyISBConnect failed! :" + error, 3);
-                        _this.FireEvent(true, "CDE_NO_CONNECT", "ISBConnect failed. Verify ISBConnect is allow on relay.");
+                    }, (isbend, error) => {
+                        this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:StartCommunication", "MyISBConnect failed! :" + error, 3);
+                        this.FireEvent(true, "CDE_NO_CONNECT", "ISBConnect failed. Verify ISBConnect is allow on relay.");
                     });
                 }
             }
@@ -1287,48 +1252,47 @@ var cde;
                 this.HasStarted = true;
                 this.DoStartComm();
             }
-        };
-        cdeWorker.prototype.DoStartComm = function () {
-            var _this = this;
-            var IsStillWorking = false;
+        }
+        DoStartComm() {
+            let IsStillWorking = false;
             if (!this.MyConfig.TO) {
                 this.MyConfig.TO = new cde.TheTimeouts();
             }
-            var bStartup = this.StartupWS();
+            const bStartup = this.StartupWS();
             this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:DoStartComm", "Connect in final stage HB monitoring: " + bStartup);
-            this.MyHeartBeatMonitor = setInterval(function () {
-                if (IsStillWorking || _this.IsConnectionDown)
+            this.MyHeartBeatMonitor = setInterval(() => {
+                if (IsStillWorking || this.IsConnectionDown)
                     return;
                 IsStillWorking = true;
-                _this.HealthCounter++;
-                if ((!_this.UsesWebSockets || !_this.MyConfig.IsWSHBDisabled) && _this.HealthCounter % _this.MyConfig.TO.HeartBeat === 0) {
-                    if (_this.MyCoreQueue.length === 0) {
-                        _this.PickupNextMessage();
+                this.HealthCounter++;
+                if ((!this.UsesWebSockets || !this.MyConfig.IsWSHBDisabled) && this.HealthCounter % this.MyConfig.TO.HeartBeat === 0) {
+                    if (this.MyCoreQueue.length === 0) {
+                        this.PickupNextMessage();
                     }
-                    if (!_this.UsesWebSockets) {
-                        if (_this.IsConnected) {
-                            if (_this.HBCounter++ > _this.MyConfig.TO.HeartBeatMissed) {
-                                _this.IsConnected = false;
-                                _this.IsPosting = false;
-                                _this.HBCounter = 0;
+                    if (!this.UsesWebSockets) {
+                        if (this.IsConnected) {
+                            if (this.HBCounter++ > this.MyConfig.TO.HeartBeatMissed) {
+                                this.IsConnected = false;
+                                this.IsPosting = false;
+                                this.HBCounter = 0;
                             }
                         }
                         else {
-                            if (_this.DeadCounter++ > _this.MyConfig.TO.HeartBeatMissed * 3) {
-                                var reason = cde.DateToString(new Date()) + ": Connection Lost because Service is down or unreachable. Click ok to reload this page";
-                                _this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNode:StartCommunication", reason, 3);
-                                _this.EndSession(reason);
+                            if (this.DeadCounter++ > this.MyConfig.TO.HeartBeatMissed * 3) {
+                                const reason = cde.DateToString(new Date()) + ": Connection Lost because Service is down or unreachable. Click ok to reload this page";
+                                this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNode:StartCommunication", reason, 3);
+                                this.EndSession(reason);
                             }
                         }
                     }
                 }
-                if (_this.UsesWebSockets || ((_this.HealthCounter % _this.MyConfig.TO.PickupRateDelay) === 0 || _this.MyCoreQueue.length > 0))
-                    _this.SendNextMessage(null);
+                if (this.UsesWebSockets || ((this.HealthCounter % this.MyConfig.TO.PickupRateDelay) === 0 || this.MyCoreQueue.length > 0))
+                    this.SendNextMessage(null);
                 IsStillWorking = false;
             }, this.MyConfig.TO.PickupRate);
             this.FireEvent(true, "CDE_COMM_STARTED", null);
-        };
-        cdeWorker.prototype.SendTSM = function (tTSM, pTopic, pTarget, pSender) {
+        }
+        SendTSM(tTSM, pTopic, pTarget, pSender) {
             if (this.MyCoreQueue.length > 0 && (pTopic === "CDE_PICKUP" || !pTopic))
                 return;
             if ((tTSM.FLG & 4096) !== 0) {
@@ -1346,17 +1310,17 @@ var cde;
                     pTopic += "@" + this.Pre4209SID;
             }
             tTSM.SID = this.Pre4209SID;
-            var tDevMsg = new cde.TheDeviceMessage();
+            const tDevMsg = new cde.TheDeviceMessage();
             tDevMsg.TOP = pTopic ? pTopic : tTSM.ENG;
             tDevMsg.MSG = tTSM;
             this.MyCoreQueue.push(tDevMsg);
-        };
-        cdeWorker.prototype.SendQueued = function (pOwner, pTopic, pEngineName, pTXT, pPLS, pFLG, pQDX, pLVL, pTarget, pGRO, pSender) {
+        }
+        SendQueued(pOwner, pTopic, pEngineName, pTXT, pPLS, pFLG, pQDX, pLVL, pTarget, pGRO, pSender) {
             if (!pEngineName)
                 return;
             if (this.MyCoreQueue.length > 0 && (pTopic === "CDE_PICKUP" || !pTopic))
                 return;
-            var tTSM = new cde.TSM(pEngineName);
+            const tTSM = new cde.TSM(pEngineName);
             if (pTarget && pTarget !== "") {
                 pTopic = "CDE_SYSTEMWIDE";
                 if (this.Pre4209SID && this.Pre4209SID !== "")
@@ -1381,12 +1345,12 @@ var cde;
                 tTSM.PLS = pPLS;
             tTSM.QDX = pQDX;
             tTSM.ORG = this.MyStationID + (pSender ? ":" + pSender : "");
-            var tDevMsg = new cde.TheDeviceMessage();
+            const tDevMsg = new cde.TheDeviceMessage();
             tDevMsg.TOP = pTopic;
             tDevMsg.MSG = tTSM;
             this.MyCoreQueue.push(tDevMsg);
-        };
-        cdeWorker.prototype.Login = function (credentials) {
+        }
+        Login(credentials) {
             if (this.mLoginSent === true || !credentials)
                 return;
             if (!this.MyConfig)
@@ -1411,62 +1375,61 @@ var cde;
                     this.SendQueued(null, "CDE_TLOGIN" + credentials.QToken, "ContentService", null, null, 1, 1, 1, null, null);
                 }
                 else if (!credentials.QUID || credentials.QUID === "") {
-                    var cred = this.RSAEncrypt(credentials.QPWD, this.MyHSI.CurrentRSA);
+                    const cred = this.RSAEncrypt(credentials.QPWD, this.MyHSI.CurrentRSA);
                     this.SendQueued(null, "CDE_SETESID" + cred, "ContentService", null, null, 1, 1, 1, null, null);
                 }
                 else {
-                    var cred = this.RSAEncrypt("".concat(credentials.QUID, ":;:").concat(credentials.QPWD), this.MyHSI.CurrentRSA);
+                    const cred = this.RSAEncrypt(`${credentials.QUID}:;:${credentials.QPWD}`, this.MyHSI.CurrentRSA);
                     this.SendQueued(null, "CDE_LOGIN" + cred, "ContentService", null, null, 1, 1, 1, null, null);
                 }
                 this.mLoginSent = true;
                 this.MyConfig.Creds = new cde.TheCDECredentials();
             }
-        };
-        cdeWorker.prototype.SelectMesh = function (pMeshID) {
+        }
+        SelectMesh(pMeshID) {
             this.SendQueued(null, "CDE_MESHSELECT:" + pMeshID, "ContentService", null, null, 1, 1, 1, null, null);
-        };
-        cdeWorker.prototype.PickupNextMessage = function () {
-            var tDevMsg = new cde.TheDeviceMessage();
+        }
+        PickupNextMessage() {
+            const tDevMsg = new cde.TheDeviceMessage();
             tDevMsg.TOP = "";
             tDevMsg.MSG = null;
             this.MyCoreQueue.push(tDevMsg);
-        };
-        cdeWorker.prototype.SendNextMessage = function (MyQueuedMsg, pRetryPath) {
-            var _this = this;
+        }
+        SendNextMessage(MyQueuedMsg, pRetryPath) {
             if (!MyQueuedMsg && (this.IsPosting || this.MyCoreQueue.length === 0))
                 return;
             if (!this.UsesWebSockets && (!this.MyConfig.RequestPath || this.MyConfig.RequestPath === "") && !pRetryPath)
                 return;
             if (this.UsesWebSockets && this.IsWSConnected === false)
                 return;
-            var _loop_1 = function () {
-                this_1.IsPosting = true;
-                var uri = void 0;
+            do {
+                this.IsPosting = true;
+                let uri;
                 if (!MyQueuedMsg) {
-                    var telCnt = 0;
-                    var tDevList = [];
+                    let telCnt = 0;
+                    const tDevList = [];
                     do {
-                        tDevList[telCnt] = this_1.MyCoreQueue.shift();
+                        tDevList[telCnt] = this.MyCoreQueue.shift();
                         telCnt++;
-                    } while (this_1.MyCoreQueue.length > 0 && telCnt < 10);
+                    } while (this.MyCoreQueue.length > 0 && telCnt < 10);
                     MyQueuedMsg = new cde.TheCoreQueueContent("", "", tDevList);
-                    var tRPath = (pRetryPath ? pRetryPath : this_1.MyConfig.RequestPath);
-                    uri = this_1.MyFallbackServiceUrl + encodeURI(tRPath);
-                    if (this_1.UsesWebSockets === false && uri.substr(uri.length - 5, 5) === ".ashx")
+                    const tRPath = (pRetryPath ? pRetryPath : this.MyConfig.RequestPath);
+                    uri = this.MyFallbackServiceUrl + encodeURI(tRPath);
+                    if (this.UsesWebSockets === false && uri.substr(uri.length - 5, 5) === ".ashx")
                         uri = uri.substr(0, uri.length - 5);
                     if (MyQueuedMsg.TOPIC !== "")
                         uri += "?" + encodeURI(MyQueuedMsg.TOPIC);
                     MyQueuedMsg.RQP = uri;
-                    pRetryPath = this_1.MyConfig.RequestPath;
-                    this_1.MyConfig.RequestPath = "";
+                    pRetryPath = this.MyConfig.RequestPath;
+                    this.MyConfig.RequestPath = "";
                 }
                 else {
                     uri = MyQueuedMsg.RQP;
                 }
-                this_1.WriteToIDB();
-                if (this_1.UsesWebSockets) {
-                    this_1.MyWebSockets.send(MyQueuedMsg.JMSG);
-                    this_1.IsPosting = false;
+                this.WriteToIDB();
+                if (this.UsesWebSockets) {
+                    this.MyWebSockets.send(MyQueuedMsg.JMSG);
+                    this.IsPosting = false;
                     MyQueuedMsg = null;
                 }
                 else {
@@ -1481,85 +1444,78 @@ var cde;
                             headers: {
                                 "Content-Type": "application/json; charset=utf-8"
                             }
-                        }).then(function (resp) {
-                            resp.json().then(function (m) {
-                                var tMsg = m;
-                                _this.IsPosting = false;
-                                var IsPulsing = false;
+                        }).then((resp) => {
+                            resp.json().then((m) => {
+                                const tMsg = m;
+                                this.IsPosting = false;
+                                let IsPulsing = false;
                                 if (tMsg.length > 0)
-                                    for (var i = 0; i < tMsg.length; i++) {
+                                    for (let i = 0; i < tMsg.length; i++) {
                                         if (tMsg[i].CNT > 0)
                                             IsPulsing = true;
-                                        _this.IsPosting = !_this.ProcessDeviceMessage(tMsg[i], false);
+                                        this.IsPosting = !this.ProcessDeviceMessage(tMsg[i], false);
                                     }
                                 if (IsPulsing)
-                                    _this.SendNextMessage(null);
+                                    this.SendNextMessage(null);
                             });
-                        }).catch(function (error) {
-                            _this.PostError(MyQueuedMsg, error, pRetryPath);
+                        }).catch((error) => {
+                            this.PostError(MyQueuedMsg, error, pRetryPath);
                         });
                     }
                     else {
-                        var xhr_1 = new XMLHttpRequest();
-                        xhr_1.open('POST', uri);
-                        xhr_1.setRequestHeader('Content-Type', 'application/json');
-                        xhr_1.onload = function () {
-                            if (xhr_1.status === 200) {
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('POST', uri);
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.onload = () => {
+                            if (xhr.status === 200) {
                                 try {
-                                    var tMsg = JSON.parse(xhr_1.responseText);
-                                    _this.IsPosting = false;
-                                    var IsPulsing = false;
+                                    const tMsg = JSON.parse(xhr.responseText);
+                                    this.IsPosting = false;
+                                    let IsPulsing = false;
                                     if (tMsg.length > 0)
-                                        for (var i = 0; i < tMsg.length; i++) {
+                                        for (let i = 0; i < tMsg.length; i++) {
                                             if (tMsg[i].CNT > 0)
                                                 IsPulsing = true;
-                                            _this.IsPosting = !_this.ProcessDeviceMessage(tMsg[i], false);
+                                            this.IsPosting = !this.ProcessDeviceMessage(tMsg[i], false);
                                         }
                                     if (IsPulsing)
-                                        _this.SendNextMessage(null);
+                                        this.SendNextMessage(null);
                                 }
                                 catch (tErr) {
-                                    _this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:SendNextMessage", "Message Parse Error:" + tErr);
-                                    _this.PostError(MyQueuedMsg, "parse failed", pRetryPath);
+                                    this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:SendNextMessage", "Message Parse Error:" + tErr);
+                                    this.PostError(MyQueuedMsg, "parse failed", pRetryPath);
                                 }
                             }
-                            else if (xhr_1.status !== 200) {
-                                var tStat = "Message returned: " + xhr_1.status + " msg:" + xhr_1.statusText;
-                                _this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:SendNextMessage", tStat);
-                                _this.PostError(MyQueuedMsg, tStat, pRetryPath);
+                            else if (xhr.status !== 200) {
+                                const tStat = "Message returned: " + xhr.status + " msg:" + xhr.statusText;
+                                this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:SendNextMessage", tStat);
+                                this.PostError(MyQueuedMsg, tStat, pRetryPath);
                             }
                         };
-                        xhr_1.onerror = function () {
-                            var tStat = "Message returned: " + xhr_1.status + " msg:" + xhr_1.statusText;
-                            _this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:xhrError", tStat);
-                            _this.EndSession(tStat);
+                        xhr.onerror = () => {
+                            const tStat = "Message returned: " + xhr.status + " msg:" + xhr.statusText;
+                            this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:xhrError", tStat);
+                            this.EndSession(tStat);
                         };
-                        xhr_1.send(MyQueuedMsg.JMSG);
+                        xhr.send(MyQueuedMsg.JMSG);
                     }
-                    return "break";
-                }
-            };
-            var this_1 = this;
-            do {
-                var state_1 = _loop_1();
-                if (state_1 === "break")
                     break;
+                }
             } while (this.MyCoreQueue.length > 0);
-        };
-        cdeWorker.prototype.StartupWS = function () {
-            var _this = this;
+        }
+        StartupWS() {
             if (!this.MyConfig.wsuri)
                 return false;
-            var tUri = this.MyConfig.wsuri;
+            let tUri = this.MyConfig.wsuri;
             this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:StartupWS", "WS connect to: " + tUri);
             if (tUri.indexOf(".ashx") < 0)
                 tUri += encodeURI(this.MyConfig.RequestPath);
             try {
                 this.MyWebSockets = new WebSocket(tUri);
                 if (this.MyConfig.TO.WsTimeOut > 0) {
-                    setInterval(function () {
-                        if (!_this.IsWSConnected && _this.UsesWebSockets)
-                            _this.UsesWebSockets = false;
+                    setInterval(() => {
+                        if (!this.IsWSConnected && this.UsesWebSockets)
+                            this.UsesWebSockets = false;
                     }, this.MyConfig.TO.WsTimeOut);
                 }
             }
@@ -1569,83 +1525,83 @@ var cde;
             }
             if (this.MyWebSockets) {
                 this.UsesWebSockets = true;
-                this.MyWebSockets.onopen = function () {
-                    _this.FireEvent(true, "CDE_SETSTATUSMSG", "Connecting to WS...", 2);
-                    _this.MyWebSockets.send("[{\"MET\":0,\"TOP\":\"CDE_INITWS\",\"CNT\":0}]");
+                this.MyWebSockets.onopen = () => {
+                    this.FireEvent(true, "CDE_SETSTATUSMSG", "Connecting to WS...", 2);
+                    this.MyWebSockets.send("[{\"MET\":0,\"TOP\":\"CDE_INITWS\",\"CNT\":0}]");
                 };
-                this.MyWebSockets.onmessage = function (args) {
-                    if (!_this.UsesWebSockets)
+                this.MyWebSockets.onmessage = (args) => {
+                    if (!this.UsesWebSockets)
                         return;
-                    _this.IsWSConnected = true;
+                    this.IsWSConnected = true;
                     try {
                         if (args.data.substring(0, 1) !== '[') {
-                            _this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:OnMessage", "Strange Response from WServer:" + args.data);
+                            this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:OnMessage", "Strange Response from WServer:" + args.data);
                         }
                         else {
-                            var bIsLarge = false;
+                            let bIsLarge = false;
                             if (args.data.length > 500000) {
-                                _this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:OnMessage", "Very large Telegram received:" + args.data.length);
+                                this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:OnMessage", "Very large Telegram received:" + args.data.length);
                                 bIsLarge = true;
                             }
-                            var tMsg = JSON.parse(args.data);
+                            const tMsg = JSON.parse(args.data);
                             if (tMsg && tMsg.length > 0) {
-                                for (var i = 0; i < tMsg.length; i++) {
+                                for (let i = 0; i < tMsg.length; i++) {
                                     if (!tMsg[i].MSG && tMsg[i].TOP !== "") {
-                                        _this.FireEvent(true, "CDE_NEW_LOGENTRY", "StartUpWS:onMessage", tMsg[i].TOP);
+                                        this.FireEvent(true, "CDE_NEW_LOGENTRY", "StartUpWS:onMessage", tMsg[i].TOP);
                                         return;
                                     }
                                     else {
-                                        var tTops = tMsg[i].TOP.split(";:;");
-                                        if (tTops[0] === "CDE_CONNECT" && _this.MyConfig && _this.MyConfig.Creds) {
-                                            _this.MyHSI.CurrentRSA = tMsg[i].RSA;
-                                            _this.Login(_this.MyConfig.Creds);
+                                        const tTops = tMsg[i].TOP.split(";:;");
+                                        if (tTops[0] === "CDE_CONNECT" && this.MyConfig && this.MyConfig.Creds) {
+                                            this.MyHSI.CurrentRSA = tMsg[i].RSA;
+                                            this.Login(this.MyConfig.Creds);
                                             continue;
                                         }
                                     }
                                     if (bIsLarge)
-                                        _this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:OnMessage", "ORG:" + cde.TSM.GetOriginator(tMsg[i].MSG) + "TXT: " + tMsg[i].MSG.TXT);
-                                    _this.ProcessDeviceMessage(tMsg[i], true);
+                                        this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:OnMessage", "ORG:" + cde.TSM.GetOriginator(tMsg[i].MSG) + "TXT: " + tMsg[i].MSG.TXT);
+                                    this.ProcessDeviceMessage(tMsg[i], true);
                                 }
                             }
                         }
                     }
                     catch (e) {
-                        _this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:StartWS", "Error during OnMessage:" + e);
+                        this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:StartWS", "Error during OnMessage:" + e);
                     }
                 };
-                this.MyWebSockets.onclose = function () {
-                    if (_this.UsesWebSockets) {
-                        _this.UsesWebSockets = false;
-                        if (_this.IsWSConnected) {
-                            var tErr = cde.DateToString(new Date()) + (_this.mLoginSent ? " Relay refused login and closed connection" : " WS Communication was closed. You will need to login again");
-                            _this.FireEvent(true, "CDE_SETSTATUSMSG", tErr, 3);
-                            _this.FireEvent(true, "CDE_NEW_LOGENTRY", "StartUpWS:onclose", tErr);
-                            _this.EndSession(tErr);
+                this.MyWebSockets.onclose = () => {
+                    if (this.UsesWebSockets) {
+                        this.UsesWebSockets = false;
+                        if (this.IsWSConnected) {
+                            const tErr = cde.DateToString(new Date()) + (this.mLoginSent ? " Relay refused login and closed connection" : " WS Communication was closed. You will need to login again");
+                            this.FireEvent(true, "CDE_SETSTATUSMSG", tErr, 3);
+                            this.FireEvent(true, "CDE_NEW_LOGENTRY", "StartUpWS:onclose", tErr);
+                            this.EndSession(tErr);
                         }
                         else {
-                            var tErr = cde.DateToString(new Date()) + (_this.mLoginSent ? " a connection could not be established" : " WS Communication was closed. You will need to login again");
-                            _this.FireEvent(true, "CDE_SETSTATUSMSG", tErr, 3);
-                            _this.FireEvent(true, "CDE_NEW_LOGENTRY", "StartUpWS:onclose", tErr);
-                            _this.EndSession(tErr);
+                            const tErr = cde.DateToString(new Date()) + (this.mLoginSent ? " a connection could not be established" : " WS Communication was closed. You will need to login again");
+                            this.FireEvent(true, "CDE_SETSTATUSMSG", tErr, 3);
+                            this.FireEvent(true, "CDE_NEW_LOGENTRY", "StartUpWS:onclose", tErr);
+                            this.EndSession(tErr);
                         }
                     }
                 };
-                this.MyWebSockets.onerror = function () {
-                    if (_this.UsesWebSockets) {
-                        _this.UsesWebSockets = false;
-                        if (_this.IsWSConnected) {
-                            var tErr = cde.DateToString(new Date()) + " WS Communication was interrupted. You will need to login again";
-                            _this.FireEvent(true, "CDE_SETSTATUSMSG", tErr, 3);
-                            _this.FireEvent(true, "CDE_NEW_LOGENTRY", "StartUpWS:onerror", tErr);
-                            _this.EndSession(tErr);
+                this.MyWebSockets.onerror = () => {
+                    if (this.UsesWebSockets) {
+                        this.UsesWebSockets = false;
+                        if (this.IsWSConnected) {
+                            const tErr = cde.DateToString(new Date()) + " WS Communication was interrupted. You will need to login again";
+                            this.FireEvent(true, "CDE_SETSTATUSMSG", tErr, 3);
+                            this.FireEvent(true, "CDE_NEW_LOGENTRY", "StartUpWS:onerror", tErr);
+                            this.EndSession(tErr);
                         }
                     }
                 };
                 return true;
             }
             return false;
-        };
-        cdeWorker.prototype.EndSession = function (pReason) {
+        }
+        EndSession(pReason) {
             if (cde.CBool(this.IsConnectionDown))
                 return;
             clearInterval(this.MyHeartBeatMonitor);
@@ -1657,8 +1613,8 @@ var cde;
             this.HasStarted = false;
             this.DeleteFromIDB();
             this.FireEvent(true, "CDE_SESSION_ENDED", pReason);
-        };
-        cdeWorker.prototype.PostError = function (MyQueuedMsg, errorText, pRetryPath) {
+        }
+        PostError(MyQueuedMsg, errorText, pRetryPath) {
             this.IsPosting = false;
             if (!this.IsRetrying && errorText === "timeout") {
                 this.IsRetrying = true;
@@ -1668,17 +1624,17 @@ var cde;
                 if (MyQueuedMsg.ENG !== "") {
                     this.FireEvent(true, "CDE_ENGINE_GONE", MyQueuedMsg.ENG);
                 }
-                var tErr = cde.DateToString(new Date()) + " Communication was lost.You will need to login again";
+                const tErr = cde.DateToString(new Date()) + " Communication was lost.You will need to login again";
                 this.FireEvent(true, "CDE_SETSTATUSMSG", tErr, 3);
                 this.FireEvent(true, "CDE_NEW_LOGENTRY", "PostError", tErr);
                 this.EndSession(tErr);
             }
-        };
-        cdeWorker.prototype.ProcessDeviceMessage = function (tMsg, ViaWS) {
+        }
+        ProcessDeviceMessage(tMsg, ViaWS) {
             if (tMsg.MSG)
                 this.FireEvent(true, "CDE_INCOMING_MSG", new cde.TheProcessMessage(tMsg.TOP.split(":,:")[0], tMsg.MSG));
             if (ViaWS || tMsg.NPA) {
-                var IsHSIDirty = false;
+                let IsHSIDirty = false;
                 this.MyConfig.RequestPath = tMsg.NPA;
                 if (!this.MyHSI.InitialNPA)
                     this.MyHSI.InitialNPA = tMsg.NPA;
@@ -1698,8 +1654,8 @@ var cde;
                     this.MyStationID = tMsg.DID;
                     IsHSIDirty = true;
                 }
-                var tIsConnected = this.IsConnected;
-                var tJustLoggedIn = false;
+                let tIsConnected = this.IsConnected;
+                let tJustLoggedIn = false;
                 if (tMsg.TOP === 'ERR:CDE_LOGIN_FAILURE') {
                     this.MyHSI.IsUserLoggedIn = false;
                     this.mLoginSent = false;
@@ -1719,11 +1675,11 @@ var cde;
                     this.EndSession("Mesh Selection failed, please reload this page");
                 }
                 else if (tMsg.TOP.length > 12) {
-                    var tLogParts = tMsg.TOP.split(':');
+                    const tLogParts = tMsg.TOP.split(':');
                     if (!this.MyHSI.IsUserLoggedIn) {
                         if (tLogParts[0] === 'LOGIN_SUCCESS') {
                             this.MyHSI.UserPref = new cde.TheUserPreferences();
-                            var tScrParts = null;
+                            let tScrParts = null;
                             if (tLogParts.length > 1) {
                                 tScrParts = tLogParts[1].split(';');
                                 if (tScrParts.length > 1) {
@@ -1738,8 +1694,8 @@ var cde;
                                     this.MyHSI.UserPref.CurrentUserName = tLogParts[2];
                                     if (tLogParts.length > 3) {
                                         try {
-                                            var pos = cde.GetSubstringIndex(tMsg.TOP, ':', 3);
-                                            var tres = tMsg.TOP.substr(pos + 1);
+                                            const pos = cde.GetSubstringIndex(tMsg.TOP, ':', 3);
+                                            const tres = tMsg.TOP.substr(pos + 1);
                                             if (tres.length > 2 && tres.substr(0, 1) === "{")
                                                 this.MyHSI.UserPref = JSON.parse(tres);
                                             else
@@ -1771,8 +1727,8 @@ var cde;
                             this.mLoginSent = false;
                         }
                         else if (tLogParts[0] === 'SELECT_MESH') {
-                            var tMeshPicker = tMsg.TOP.substr('SELECT_MESH:'.length);
-                            var tMeshes = JSON.parse(tMeshPicker);
+                            const tMeshPicker = tMsg.TOP.substr('SELECT_MESH:'.length);
+                            const tMeshes = JSON.parse(tMeshPicker);
                             this.FireEvent(true, "CDE_SELECT_MESH", tMeshes);
                         }
                     }
@@ -1795,63 +1751,60 @@ var cde;
                     return true;
             }
             return false;
-        };
-        cdeWorker.prototype.RSAEncrypt = function (text, token) {
+        }
+        RSAEncrypt(text, token) {
             if (this.MyConfig.DisableRSA)
                 return text;
             if (!token || token.length === 0)
                 token = this.MyHSI.CurrentRSA;
             if (!token || token.length === 0)
                 return text;
-            var keys = token.split(',');
-            var key = new RSAKey();
+            const keys = token.split(',');
+            const key = new RSAKey();
             key.setPublic(keys[1], keys[0]);
             return key.encrypt(text);
-        };
-        cdeWorker.prototype.GetResourceStringAsync = function (pUri, pAddHeader) {
-            var _this = this;
-            this.GetGlobalResource("/ClientBin/" + pUri, pAddHeader, function (retMagic, res) {
-                _this.FireEvent(true, "GRS_" + retMagic, res);
-            }, function (pMagic, err) {
-                _this.FireEvent(true, "GRS_ERROR_" + pMagic, err);
+        }
+        GetResourceStringAsync(pUri, pAddHeader) {
+            this.GetGlobalResource("/ClientBin/" + pUri, pAddHeader, (retMagic, res) => {
+                this.FireEvent(true, "GRS_" + retMagic, res);
+            }, (pMagic, err) => {
+                this.FireEvent(true, "GRS_ERROR_" + pMagic, err);
             });
-        };
-        cdeWorker.prototype.GetGlobalResourceAsync = function (pUri, pAddHeader) {
-            var _this = this;
-            this.GetGlobalResource(pUri, pAddHeader, function (pMagic, res) {
-                _this.FireEvent(true, "GGR_" + pMagic, res);
-            }, function (pMagic, err) {
-                _this.FireEvent(true, "GGR_ERROR_" + pMagic, err);
+        }
+        GetGlobalResourceAsync(pUri, pAddHeader) {
+            this.GetGlobalResource(pUri, pAddHeader, (pMagic, res) => {
+                this.FireEvent(true, "GGR_" + pMagic, res);
+            }, (pMagic, err) => {
+                this.FireEvent(true, "GGR_ERROR_" + pMagic, err);
             });
-        };
-        cdeWorker.prototype.GetJSONAsync = function (pUri, pAddHeader) {
-            var _this = this;
-            this.GetGlobalResource(pUri, pAddHeader, function (pMagic, res) {
+        }
+        GetJSONAsync(pUri, pAddHeader) {
+            this.GetGlobalResource(pUri, pAddHeader, (pMagic, res) => {
                 try {
-                    var tJ = JSON.parse(res);
-                    _this.FireEvent(true, "GJ_" + pMagic, tJ);
+                    const tJ = JSON.parse(res);
+                    this.FireEvent(true, "GJ_" + pMagic, tJ);
                 }
                 catch (ex) {
-                    _this.FireEvent(true, "GJ_ERROR_" + pMagic, ex);
+                    this.FireEvent(true, "GJ_ERROR_" + pMagic, ex);
                 }
-            }, function (pMagic, err) {
-                _this.FireEvent(true, "GJ_ERROR_" + pMagic, err);
+            }, (pMagic, err) => {
+                this.FireEvent(true, "GJ_ERROR_" + pMagic, err);
             });
-        };
-        cdeWorker.prototype.GetGlobalResource = function (pResource, pAddHeader, pCallback, pErrorCallback) {
+        }
+        GetGlobalResource(pResource, pAddHeader, pCallback, pErrorCallback) {
             if (fetch) {
-                var fOptions = new Headers();
+                const fOptions = new Headers();
                 if (pAddHeader) {
-                    var tHeads = pAddHeader.split(';:;');
-                    for (var i = 0; i < tHeads.length; i++) {
-                        var tHed = tHeads[i].split('=');
+                    const tHeads = pAddHeader.split(';:;');
+                    for (let i = 0; i < tHeads.length; i++) {
+                        const tHed = tHeads[i].split('=');
                         if (tHed.length > 1)
                             fOptions.append(tHed[0], tHed[1]);
                     }
                 }
-                fetch(pResource, { headers: fOptions, cache: "no-store" }).then(function (d) {
+                fetch(pResource, { headers: fOptions, cache: "no-store" }).then(d => {
                     if (d.ok) {
-                        d.text().then(function (txt) {
+                        d.text().then(txt => {
                             pCallback(pResource, txt);
                         });
                     }
@@ -1859,57 +1812,57 @@ var cde;
                         if (pErrorCallback)
                             pErrorCallback(pResource, d.statusText);
                     }
-                }).catch(function (err) {
+                }).catch(err => {
                     if (pErrorCallback)
                         pErrorCallback(pResource, err);
                 });
             }
             else {
-                var xhr_2 = new XMLHttpRequest();
-                xhr_2.open('GET', pResource);
-                xhr_2.responseType = 'text';
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', pResource);
+                xhr.responseType = 'text';
                 if (pAddHeader) {
-                    var tHeads = pAddHeader.split(';:;');
-                    var tHasAccept = false;
-                    for (var i = 0; i < tHeads.length; i++) {
-                        var tHed = tHeads[i].split('=');
+                    const tHeads = pAddHeader.split(';:;');
+                    let tHasAccept = false;
+                    for (let i = 0; i < tHeads.length; i++) {
+                        const tHed = tHeads[i].split('=');
                         if (tHed[0] === "Accept")
                             tHasAccept = true;
                         if (tHed.length > 1) {
-                            xhr_2.setRequestHeader(tHed[0], tHed[1]);
+                            xhr.setRequestHeader(tHed[0], tHed[1]);
                         }
                     }
                     if (!tHasAccept)
-                        xhr_2.setRequestHeader("Accept", "*/*");
+                        xhr.setRequestHeader("Accept", "*/*");
                 }
-                xhr_2.onload = function () {
-                    if (xhr_2.status >= 200 && xhr_2.status < 400) {
+                xhr.onload = () => {
+                    if (xhr.status >= 200 && xhr.status < 400) {
                         if (pCallback)
-                            pCallback(pResource, xhr_2.responseText);
+                            pCallback(pResource, xhr.responseText);
                     }
                     else {
                         if (pErrorCallback)
-                            pErrorCallback(pResource, xhr_2.status + ":" + xhr_2.statusText);
+                            pErrorCallback(pResource, xhr.status + ":" + xhr.statusText);
                     }
                 };
-                xhr_2.onerror = function () {
+                xhr.onerror = () => {
                     if (pErrorCallback)
-                        pErrorCallback(pResource, xhr_2.status + ":" + xhr_2.statusText);
+                        pErrorCallback(pResource, xhr.status + ":" + xhr.statusText);
                 };
-                xhr_2.send();
+                xhr.send();
             }
-        };
-        cdeWorker.prototype.UpdateCustomSettings = function (pValues) {
+        }
+        UpdateCustomSettings(pValues) {
             if (this.MyConfig) {
-                for (var key in pValues) {
+                for (const key in pValues) {
                     this.MyConfig[key] = pValues[key];
                 }
                 this.WriteToIDB();
             }
-        };
-        cdeWorker.prototype.OnMessage = function (ev) {
+        }
+        OnMessage(ev) {
             try {
-                var message = ev.data;
+                const message = ev.data;
                 if (message.length > 1) {
                     switch (message[0]) {
                         case "SetTargetRelay":
@@ -1929,7 +1882,7 @@ var cde;
                             break;
                         case "Subscribe":
                             {
-                                var tTSM = new cde.TSM("ContentService");
+                                const tTSM = new cde.TSM("ContentService");
                                 tTSM.TXT = "CDE_SUBSCRIBE";
                                 tTSM.PLS = message[1];
                                 if (this.Pre4209SID && this.Pre4209SID !== "")
@@ -1939,7 +1892,7 @@ var cde;
                             break;
                         case "Unsubscribe":
                             {
-                                var tTSM = new cde.TSM("ContentService");
+                                const tTSM = new cde.TSM("ContentService");
                                 tTSM.TXT = "CDE_UNSUBSCRIBE";
                                 tTSM.PLS = message[1];
                                 if (this.Pre4209SID && this.Pre4209SID !== "")
@@ -1989,61 +1942,54 @@ var cde;
             catch (ee) {
                 this.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebWorker:OnMessage", ee, 3);
             }
-        };
-        cdeWorker.prototype.FireEvent = function (async, pEvent) {
-            var param = [];
-            for (var _i = 2; _i < arguments.length; _i++) {
-                param[_i - 2] = arguments[_i];
-            }
-            for (var i = 0; i < this.MyPorts.length; i++)
-                this.MyPorts[i].postMessage(__spreadArray([pEvent, this.MyHSI], param, true));
-        };
-        cdeWorker.prototype.UpdateCallerHSI = function (pSource) {
+        }
+        FireEvent(async, pEvent, ...param) {
+            for (let i = 0; i < this.MyPorts.length; i++)
+                this.MyPorts[i].postMessage([pEvent, this.MyHSI, ...param]);
+        }
+        UpdateCallerHSI(pSource) {
             this.UpdateHSI();
             this.FireEvent(true, "CDE_NEW_LOGENTRY", "UpdateHSI", pSource, 1);
             this.FireEvent(true, "CDE_UPDATE_HSI", pSource);
-        };
-        cdeWorker.prototype.AddPort = function (newPort) {
+        }
+        AddPort(newPort) {
             this.MyPorts.push(newPort);
-        };
-        cdeWorker.prototype.WriteToIDB = function () {
-            var _this = this;
+        }
+        WriteToIDB() {
             if (!this.MyDB) {
                 this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:WriteToIDB", 'IDB is not ready, yet', 3);
                 return;
             }
             this.MyConfig.cdeTIM = new Date();
-            var request = this.MyDB.transaction(['CDEJS'], 'readwrite')
+            const request = this.MyDB.transaction(['CDEJS'], 'readwrite')
                 .objectStore('CDEJS')
                 .put({ id: 1, config: this.MyConfig });
-            request.onsuccess = function () {
+            request.onsuccess = () => {
             };
-            request.onerror = function () {
-                _this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:WriteToIDB", 'The data has been written failed', 3);
+            request.onerror = () => {
+                this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:WriteToIDB", 'The data has been written failed', 3);
             };
-        };
-        cdeWorker.prototype.DeleteFromIDB = function () {
-            var _this = this;
+        }
+        DeleteFromIDB() {
             if (!this.MyDB) {
                 this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:DeleteFromIDB", 'IDB is not ready, yet', 3);
                 return;
             }
-            var request = this.MyDB.transaction(['CDEJS'], 'readwrite')
+            const request = this.MyDB.transaction(['CDEJS'], 'readwrite')
                 .objectStore('CDEJS')
                 .delete(1);
-            request.onsuccess = function () {
-                _this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:DeleteFromIDB", 'The data has been deleted', 1);
+            request.onsuccess = () => {
+                this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:DeleteFromIDB", 'The data has been deleted', 1);
             };
-        };
-        cdeWorker.MsgSendCounter = 0;
-        return cdeWorker;
-    }());
+        }
+    }
+    cdeWorker.MsgSendCounter = 0;
     cde.cdeWorker = cdeWorker;
 })(cde || (cde = {}));
 var MyWorker;
 MyWorkerContext.onconnect = function (e) {
-    var port = e.ports[0];
-    port.addEventListener('message', function (ev) {
+    const port = e.ports[0];
+    port.addEventListener('message', (ev) => {
         MyWorker.OnMessage(ev);
     });
     port.start();
