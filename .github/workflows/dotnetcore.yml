@@ -41,12 +41,12 @@ jobs:
       uses: gittools/actions/gitversion/setup@v0.9.9
       with:
           versionSpec: '5.6.6'
-    - env:
-        DOTNET_ROLL_FORWARD: Major
 
     - name: Use GitVersion
       id: gitversion # step id used as reference for output values
       uses: gittools/actions/gitversion/execute@v0.9.9
+      env:
+        DOTNET_ROLL_FORWARD: Major
 
     - name: Determine pre-release
       run: |
