@@ -4295,7 +4295,7 @@ var cdeNMI;
                     tDataRow = tScreenInfo.MyStorageMirror[pTEControlMyTRF.TableName][pTgtControl.MyTRF ? pTgtControl.MyTRF.RowNo : 0];
                     let tFldContentLC = cdeNMI.GetFldContent(tDataRow, pTgtControl.MyFieldInfo, tScreenInfo.IsGenerated, false);
                     if (!cde.IsNotSet(tFldContentLC)) {
-                        if (pTgtControl.MyFieldInfo && pTgtControl.MyFieldInfo && pTgtControl.MyFieldInfo.Type === cdeNMI.cdeControlType.Picture && tFldContentLC && tFldContentLC.length > 255)
+                        if (pTgtControl.MyFieldInfo && pTgtControl.MyFieldInfo.Type === cdeNMI.cdeControlType.Picture && tFldContentLC && tFldContentLC.length > 255)
                             tFldContentLC = "data:image/jpeg;base64," + tFldContentLC;
                         pTgtControl.SetProperty("iValue", tFldContentLC);
                     }
@@ -5770,7 +5770,6 @@ var cdeNMI;
                                 break;
                             case cdeNMI.cdeControlType.ThingPicker:
                                 return this.GetNameFromValue(pContent);
-                                break;
                             default:
                                 if (pContent && (pFieldInfo.Flags & 256) === 0)
                                     pContent = cdeNMI.cdeEscapeHtml(pContent);
@@ -9250,16 +9249,15 @@ var cdeNMI;
                         defaultValue = parseFloat(defaultValue);
                         propValue = parseFloat(propValue);
                         // Make the smallest value into 0 and remove the difference from both values, save it in "negative"
-                        if (propValue < 0 || defaultValue < 0) {
-                            negative = (propValue < defaultValue ? propValue : defaultValue);
-                            defaultValue = defaultValue - negative;
-                            propValue = propValue - negative;
-                        }
-                        else {
-                            negative = (propValue < defaultValue ? propValue : defaultValue);
-                            defaultValue = defaultValue - negative;
-                            propValue = propValue - negative;
-                        }
+                        //if (propValue < 0 || defaultValue < 0) {
+                        negative = (propValue < defaultValue ? propValue : defaultValue);
+                        defaultValue = defaultValue - negative;
+                        propValue = propValue - negative;
+                        //} else {
+                        //    negative = (propValue < defaultValue ? propValue : defaultValue);
+                        //    defaultValue = defaultValue - negative;
+                        //    propValue = propValue - negative;
+                        //}
                         if (defaultValue > propValue) {
                             newValue = defaultValue - this.EasyMeOut(timePassed, propValue, defaultValue, duration);
                             if (newValue < propValue)
@@ -10481,6 +10479,8 @@ var cdeNMI;
             }, 10000);
             window.addEventListener("message", (e) => {
                 try {
+                    if (e.origin !== "") //TODO: Must check with NMI Viewer app that uses this
+                        return;
                     if (!e.data)
                         return;
                     //let res = e.data;
@@ -13400,7 +13400,7 @@ var cdeNMI;
                 if (n.getUserMedia) {
                     this.mVideoSource.src = null;
                     n.getUserMedia({ video: true, audio: true }, (stream) => {
-                        this.mVideoSource.src = stream || stream; // Opera.
+                        this.mVideoSource.src = stream;
                         this.mVideo.play();
                     }, (error) => {
                         if (cdeNMI.MyPopUp)
@@ -21670,14 +21670,14 @@ var cdeNMI;
                     this.MyScreenInfo.MyStorageMirror[this.MyTableName] = null;
                 this.RefreshData(this.MyTableName, cde.CInt(this.GetProperty("CurrentPage")));
             }
-            else if ((pName === "TileWidth" || pName === "TileWidth") && this.mBaseDiv) {
+            else if (pName === "TileWidth" && this.mBaseDiv) {
                 pValue = cde.CInt(pValue);
                 if (pValue > 0) {
                     this.mBaseDiv.style.width = cdeNMI.GetSizeFromTile(pValue).toString() + "px";
                 }
                 this.mBaseDiv.style.overflowX = "auto";
             }
-            else if ((pName === "TileHeight" || pName === "TileHeight") && this.mBaseDiv) {
+            else if (pName === "TileHeight" && this.mBaseDiv) {
                 pValue = cde.CInt(pValue);
                 if (this.tableBody && cde.CInt(pValue) > 1) {
                     this.tableBody.style.height = cdeNMI.GetSizeFromTile(cde.CInt(pValue) - 1).toString() + "px";

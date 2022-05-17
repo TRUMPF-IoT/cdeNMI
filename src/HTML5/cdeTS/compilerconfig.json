@@ -34,5 +34,9 @@
   {
     "outputFile": "cde/CSS/MYSTYLESTY.css",
     "inputFile": "cde/CSS/MYSTYLESTY.scss"
+  },
+  {
+    "outputFile": "cde/CSS/choices.css",
+    "inputFile": "cde/CSS/choices.scss"
   }
 ]

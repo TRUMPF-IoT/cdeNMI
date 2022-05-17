@@ -857,7 +857,7 @@
                 if (n.getUserMedia) {
                     this.mVideoSource.src = null;
                     n.getUserMedia({ video: true, audio: true }, (stream) => {
-                        this.mVideoSource.src = stream || stream; // Opera.
+                        this.mVideoSource.src = stream;
                         this.mVideo.play();
                     }, (error) => {
                         if (cdeNMI.MyPopUp)

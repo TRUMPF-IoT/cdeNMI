@@ -979,17 +979,17 @@ namespace cdeNMI {
                         propValue = parseFloat(propValue);
 
                         // Make the smallest value into 0 and remove the difference from both values, save it in "negative"
-                        if (propValue < 0 || defaultValue < 0) {
+                        //if (propValue < 0 || defaultValue < 0) {
                             negative = (propValue < defaultValue ? propValue : defaultValue);
 
                             defaultValue = defaultValue - negative;
                             propValue = propValue - negative;
-                        } else {
-                            negative = (propValue < defaultValue ? propValue : defaultValue);
+                        //} else {
+                        //    negative = (propValue < defaultValue ? propValue : defaultValue);
 
-                            defaultValue = defaultValue - negative;
-                            propValue = propValue - negative;
-                        }
+                        //    defaultValue = defaultValue - negative;
+                        //    propValue = propValue - negative;
+                        //}
 
                         if (defaultValue > propValue) {
                             newValue = defaultValue - this.EasyMeOut(timePassed, propValue, defaultValue, duration);

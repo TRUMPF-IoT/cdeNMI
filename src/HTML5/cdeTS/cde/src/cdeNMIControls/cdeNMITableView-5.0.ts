@@ -475,13 +475,13 @@
                 if (this.MyScreenInfo)
                     this.MyScreenInfo.MyStorageMirror[this.MyTableName] = null;
                 this.RefreshData(this.MyTableName, cde.CInt(this.GetProperty("CurrentPage")));
-            } else if ((pName === "TileWidth" || pName === "TileWidth") && this.mBaseDiv) {
+            } else if (pName === "TileWidth" && this.mBaseDiv) {
                 pValue = cde.CInt(pValue);
                 if (pValue > 0) {
                     this.mBaseDiv.style.width = cdeNMI.GetSizeFromTile(pValue).toString() + "px";
                 }
                 this.mBaseDiv.style.overflowX = "auto";
-            } else if ((pName === "TileHeight" || pName === "TileHeight") && this.mBaseDiv) {
+            } else if (pName === "TileHeight" && this.mBaseDiv) {
                 pValue = cde.CInt(pValue);
                 if (this.tableBody && cde.CInt(pValue) > 1) {
                     this.tableBody.style.height = cdeNMI.GetSizeFromTile(cde.CInt(pValue) - 1).toString() + "px";

@@ -26,6 +26,8 @@
             }, 10000);
             window.addEventListener("message", (e: MessageEvent) => {
                 try {
+                    if (e.origin !== "") //TODO: Must check with NMI Viewer app that uses this
+                        return;
                     if (!e.data)
                         return;
                     //let res = e.data;

@@ -9,22 +9,22 @@
     a seperate .scss file.
 */
 @font-face {
-  font-family: 'robotothin';
+  font-family: "robotothin";
   src: url("../webfonts/Roboto-Thin-webfont.eot");
   src: url("../webfonts/Roboto-Thin-webfont.eot?#iefix") format("embedded-opentype"), url("../webfonts/Roboto-Thin-webfont.woff") format("woff"), url("../webfonts/Roboto-Thin-webfont.ttf") format("truetype");
   font-weight: lighter;
-  font-style: normal; }
-
+  font-style: normal;
+}
 @font-face {
-  font-family: 'C-Labs_Basis';
+  font-family: "C-Labs_Basis";
   src: url("../webfonts/C-Labs-Font_Basis.eot");
   src: url("../webfonts/C-Labs-Font_Basis.woff") format("woff"), url("../webfonts/C-Labs-Font_Basis.ttf") format("truetype");
   font-weight: normal;
-  font-style: normal; }
-
+  font-style: normal;
+}
 .cl {
   display: inline-block;
-  font: normal normal normal 14px/1 C-Labs_Basis;
+  font: normal normal normal 14px/1 C-Labs_Basis, sans-serif;
   font-size: inherit;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
@@ -32,79 +32,101 @@
   transform: translate(0, 0);
   top: 0px;
   left: 0px;
-  position: absolute; }
+  position: absolute;
+}
 
 .cl-font {
   display: inline-block;
-  font: normal normal normal 20px/1 C-Labs_Basis;
+  font: normal normal normal 20px/1 C-Labs_Basis, sans-serif;
   font-size: inherit;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; }
+  -moz-osx-font-smoothing: grayscale;
+}
 
 .cl-Logo:before {
-  content: "A"; }
+  content: "A";
+}
 
 .cl-B:before {
-  content: "B"; }
+  content: "B";
+}
 
 .cl-C:before {
-  content: "C"; }
+  content: "C";
+}
 
 .cl-D:before {
-  content: "D"; }
+  content: "D";
+}
 
 .cl-E:before {
-  content: "E"; }
+  content: "E";
+}
 
 .cl-F:before {
-  content: "F"; }
+  content: "F";
+}
 
 .cl-G:before {
-  content: "G"; }
+  content: "G";
+}
 
 .cl-H:before {
-  content: "H"; }
+  content: "H";
+}
 
 .cl-I:before {
-  content: "I"; }
+  content: "I";
+}
 
 .cl-J:before {
-  content: "J"; }
+  content: "J";
+}
 
 .cl-K:before {
-  content: "K"; }
+  content: "K";
+}
 
 i.cl-1x {
-  font-size: 1em; }
+  font-size: 1em;
+}
 
 i.cl-2x {
-  font-size: 2em; }
+  font-size: 2em;
+}
 
 i.cl-3x {
-  font-size: 3em; }
+  font-size: 3em;
+}
 
 i.cl-4x {
-  font-size: 4em; }
+  font-size: 4em;
+}
 
 i.cl-5x {
-  font-size: 5em; }
+  font-size: 5em;
+}
 
 .cdeDetailsButton::before {
-  font-family: "Font Awesome 5 Free";
+  font-family: "Font Awesome 5 Free", sans-serif;
   font-weight: 900;
   font-size: 3em;
-  content: "\f044"; }
+  content: "\f044";
+}
 
 .fa-rotate-45 {
   -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=1)";
-  transform: rotate(45deg); }
+  transform: rotate(45deg);
+}
 
 i.fa-5x {
-  font-size: 5em; }
+  font-size: 5em;
+}
 
 .mbsc-fr-overlay {
-  position: fixed; }
+  position: fixed;
+}
 
 [draggable] {
   -moz-user-select: none;
@@ -113,76 +135,91 @@ i.fa-5x {
   user-select: none;
   /* Required to make elements draggable in old WebKit */
   -khtml-user-drag: element;
-  -webkit-user-drag: element; }
+  -webkit-user-drag: element;
+}
 
 img.cdeTopLogo {
-  display: block; }
+  display: block;
+}
 
 img.cdeImgTile {
-  display: block; }
+  display: block;
+}
 
 div.cdeImgTile {
   display: block;
   float: left;
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 ul.cdeLogEntry {
   text-align: left;
-  list-style-type: none; }
+  list-style-type: none;
+}
 
 td.cdeLogEntry {
-  padding: .1em;
+  padding: 0.1em;
   border-bottom-style: solid;
-  border-bottom-width: 1px; }
+  border-bottom-width: 1px;
+}
 
 th.cdeLogEntryHeader {
-  padding: .1em;
+  padding: 0.1em;
   text-align: right;
   width: 20%;
   border-bottom-style: solid;
-  border-bottom-width: 1px; }
+  border-bottom-width: 1px;
+}
 
 div.MyBorder {
   border-style: solid;
   border-width: 1px;
-  padding: 1px 4px; }
+  padding: 1px 4px;
+}
 
 td.cdeImgCenter img {
   text-align: center;
-  margin: 0 auto; }
+  margin: 0 auto;
+}
 
 td.MyItemFont {
   font-size: 20px;
   margin-right: 4px;
   margin-top: 4px;
   padding: 0;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 .MyBulletFont {
-  font-family: 'robotothin', 'Segoe UI', Arial;
-  font-size: 20px; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+  font-size: 20px;
+}
 
 .MyBulletLink {
-  font-family: 'robotothin', 'Segoe UI', Arial;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-size: 16px;
   vertical-align: bottom;
-  text-align: right; }
+  text-align: right;
+}
 
 .MyContentFont {
   padding: 0;
   margin: 0 0 15px 0;
-  font-family: 'robotothin', 'Segoe UI', Arial;
-  font-size: 20px; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+  font-size: 20px;
+}
 
 .MyHeadlineFont {
   padding: 0;
   margin: 0;
-  font-family: 'robotothin', 'Segoe UI', Arial;
-  font-size: 36px; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+  font-size: 36px;
+}
 
 .MyLinkFont {
-  font-family: 'robotothin', 'Segoe UI', Arial;
-  font-size: 20px; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+  font-size: 20px;
+}
 
 table.MyFullTableCentered {
   border: 0;
@@ -191,7 +228,8 @@ table.MyFullTableCentered {
   width: 100%;
   height: 100%;
   margin-left: auto;
-  margin-right: auto; }
+  margin-right: auto;
+}
 
 /*div { //BAD! This needs to be left alone!
     margin: 0;
@@ -199,52 +237,61 @@ table.MyFullTableCentered {
 }*/
 h1.cdeHeadline {
   font-size: 36px;
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif;
-  font-weight: lighter; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+  font-weight: lighter;
+}
 
 h1.cdeHeadline2 {
   font-size: 24px;
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif;
-  font-weight: lighter; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+  font-weight: lighter;
+}
 
 h1.cdeDashCategory {
   font-size: 20px;
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   text-align: left;
   margin: 0;
   clear: left;
-  margin-top: 20px; }
+  margin-top: 20px;
+}
 
 p.cdeNormal {
   margin: 0;
   padding: 0;
   font-size: 20px;
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 button {
   padding: 0;
   border: 0;
   background: none;
-  float: left; }
+  float: left;
+}
 
 .cdeVertCenter {
   overflow: hidden;
   vertical-align: middle;
-  display: table-cell; }
+  display: table-cell;
+}
 
 div.cdeFormEntryComment {
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 .cdeNodeGone {
   opacity: 0.5;
   /* Safari, Opera */
   pointer-events: none;
-  filter: blur(5px); }
+  filter: blur(5px);
+}
 
 .md-ripple {
   overflow: hidden;
-  position: relative; }
+  position: relative;
+}
 
 .md-ripple-effect {
   pointer-events: none;
@@ -253,7 +300,8 @@ div.cdeFormEntryComment {
   width: 0;
   height: 0;
   border-radius: 100%;
-  z-index: 1; }
+  z-index: 1;
+}
 
 .cdeTileBreak {
   clear: left;
@@ -263,7 +311,8 @@ div.cdeFormEntryComment {
   float: left;
   border: none;
   width: 100%;
-  text-align: left; }
+  text-align: left;
+}
 
 .cdeFlexCol {
   display: -ms-flexbox;
@@ -274,7 +323,8 @@ div.cdeFormEntryComment {
   flex-direction: column;
   -webkit-flex-wrap: wrap;
   -ms-flex-wrap: wrap;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+}
 
 .cdeFlexRow {
   display: -ms-flexbox;
@@ -282,7 +332,8 @@ div.cdeFormEntryComment {
   display: flex;
   -webkit-flex-direction: row;
   -ms-flex-direction: row;
-  flex-direction: row; }
+  flex-direction: row;
+}
 
 .cdeFlexCenter {
   -webkit-flex-wrap: wrap;
@@ -293,17 +344,20 @@ div.cdeFormEntryComment {
   align-items: center;
   -webkit-justify-content: center;
   -ms-flex-pack: center;
-  justify-content: center; }
+  justify-content: center;
+}
 
 .cdeFlexStart {
   -webkit-justify-content: flex-start;
   -ms-flex-pack: start;
-  justify-content: flex-start; }
+  justify-content: flex-start;
+}
 
 .cdeFlexO0 {
   -webkit-order: 0;
   -ms-flex-order: 0;
-  order: 0; }
+  order: 0;
+}
 
 .cdeFlexLabel {
   display: flex;
@@ -311,44 +365,53 @@ div.cdeFormEntryComment {
   align-items: center;
   -webkit-order: 0;
   -ms-flex-order: 0;
-  order: 0; }
+  order: 0;
+}
 
 .cdeFlexO2 {
   -webkit-order: 2;
   -ms-flex-order: 2;
-  order: 2; }
+  order: 2;
+}
 
 .cde1PM {
   margin-left: 1px;
-  margin-bottom: 1px; }
+  margin-bottom: 1px;
+}
 
 .cdeSensorLabel {
   font-size: 16px;
   background-color: transparent;
-  text-align: left; }
+  text-align: left;
+}
 
 h1.cdeSensorLabel {
   margin-left: 20px;
-  margin-top: 10px; }
+  margin-top: 10px;
+}
 
 .cdeSelDevice {
   font-size: 15px;
-  margin-top: 22px; }
+  margin-top: 22px;
+}
 
 body.cdeBody {
   height: 100%;
   width: 100%;
   margin: auto;
   padding: 0;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 body.cdeLogBody {
-  background-image: none; }
+  background-image: none;
+}
 
 div.cdeNMIPortal {
   border: 0;
   padding: 0;
-  margin: 0 auto; }
+  margin: 0 auto;
+}
 
 div.cdeHeader {
   display: block;
@@ -356,7 +419,8 @@ div.cdeHeader {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 100; }
+  z-index: 100;
+}
 
 div.cdeSideBar {
   height: 100%;
@@ -365,56 +429,68 @@ div.cdeSideBar {
   z-index: 99;
   top: 0px;
   overflow: hidden;
-  width: 0px; }
+  width: 0px;
+}
 
 div.cdeMyHeaderTitleModern {
   margin-top: 6px;
   margin-left: 6px;
-  float: left; }
+  float: left;
+}
 
 span.cdeMyHeaderTitleModern {
   font-size: 24px;
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 div.cdeMyHeaderTitle {
   margin-top: 15px;
   margin-left: 15px;
-  float: left; }
+  float: left;
+}
 
 div.cdeHeaderButtonContentRight {
-  float: right; }
+  float: right;
+}
 
 span.cdeMyHeaderTitle {
   font-size: 36px;
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 .MyHeaderButton {
-  font-family: 'robotothin', 'Segoe UI', Arial;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   text-align: center;
   cursor: pointer;
   float: left;
   margin-right: 0;
   padding: 0;
   font-weight: lighter;
-  background: none; }
+  background: none;
+}
 
 .cdeScreenList {
   float: left;
   overflow-y: auto;
-  height: 100%; }
+  height: 100%;
+}
 
 .cdeScreenListButton {
   text-align: left;
-  font-size: 16px; }
+  font-size: 16px;
+}
 
 .cdeScreenListButtoninner {
-  margin-left: 9px; }
+  margin-left: 9px;
+}
 
 .cdeScreenListButtoninner:hover {
-  background-color: rgba(0, 0, 0, 0.1); }
+  background-color: rgba(0, 0, 0, 0.1);
+}
 
 .cdeClock {
-  font-family: 'robotothin', 'Segoe UI', Arial;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+  background: none;
   background-size: 100% 100%;
   text-align: center;
   cursor: pointer;
@@ -423,7 +499,7 @@ span.cdeMyHeaderTitle {
   margin-right: 0;
   padding: 0;
   font-weight: lighter;
-  background: none; }
+}
 
 .TemplateThing12x10 {
   box-shadow: 2px 2px rgba(0, 0, 0, 0.6);
@@ -434,7 +510,8 @@ span.cdeMyHeaderTitle {
   margin-top: 5px;
   float: left;
   box-sizing: content-box;
-  text-align: center; }
+  text-align: center;
+}
 
 .cdePopupTemplate {
   box-shadow: 2px 2px rgba(0, 0, 0, 0.6);
@@ -445,28 +522,34 @@ span.cdeMyHeaderTitle {
   margin-top: 5px;
   float: left;
   box-sizing: content-box;
-  text-align: center; }
+  text-align: center;
+}
 
 .cdeDlgTitleBar {
   text-align: center;
   font-size: 24px;
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 .CMyDashboard::-webkit-scrollbar {
-  display: none; }
+  display: none;
+}
 
 .cdeDashboardIFrame {
-  border: none; }
+  border: none;
+}
 
 .CMyDashboard {
   position: relative;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 div.CMyForm {
   margin: 0;
   display: table;
   position: relative;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 div.CMyTable {
   margin: 0;
@@ -474,46 +557,54 @@ div.CMyTable {
   display: block;
   border-radius: 6px;
   position: relative;
-  overflow: auto; }
+  overflow: auto;
+}
 
 div.cdeDivDraw {
   position: absolute;
   width: 32px;
   height: 32px;
   z-index: 95;
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 div.cdeBrowserTop {
   left: 0;
   right: 0;
   float: left;
   text-align: center;
-  margin: 0 auto; }
+  margin: 0 auto;
+}
 
 div.nmiScreen {
   position: fixed;
   bottom: 0;
-  margin: 0 auto; }
+  margin: 0 auto;
+}
 
 div.cdePinArea {
   height: 39px;
   margin-top: 0px;
-  text-align: center; }
+  text-align: center;
+}
 
 div.cdePinAreaTesla {
   height: 60px;
   margin-top: 0px;
-  text-align: center; }
+  text-align: center;
+}
 
 div.cdeAllPinArea {
-  margin-right: 7px; }
+  margin-right: 7px;
+}
 
 h1.cdeScreenTitle {
   font-size: 12px;
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   margin-left: 35px;
-  float: left; }
+  float: left;
+}
 
 div.cdeLogoffTopRight {
   display: block;
@@ -521,19 +612,23 @@ div.cdeLogoffTopRight {
   top: 0;
   left: 0;
   width: 234px;
-  z-index: 100; }
+  z-index: 100;
+}
 
 div.cdeBrowserBottom {
   position: fixed;
   bottom: 0;
-  margin: 0 auto; }
+  margin: 0 auto;
+}
 
 i.cdeFormPin {
   margin-right: 5px;
-  margin-top: 5px; }
+  margin-top: 5px;
+}
 
 .cdeButtonHover2:hover, .cdeButtonHover2:visited, .cdeButtonHover2:active, .cdeButtonHover2:focus, .cdeLiveTile:hover, .cdeLiveTile:visited, .cdeLiveTile:active, .cdeLiveTile:focus, .cdeLiveTileBar:hover, .cdeLiveTileBar:visited, .cdeLiveTileBar:active, .cdeLiveTileBar:focus, .cdeGlassButton:hover, .cdeGlassButton:visited, .cdeGlassButton:active, .cdeGlassButton:focus {
-  box-shadow: inset 1px 1px 1px #909192, 1px 1px 1px white; }
+  box-shadow: inset 1px 1px 1px #909192, 1px 1px 1px white;
+}
 
 div.cdeOverlay {
   filter: Alpha(Opacity=30);
@@ -544,7 +639,8 @@ div.cdeOverlay {
   left: 0;
   z-index: 1000;
   pointer-events: all;
-  background: rgba(0, 0, 0, 0.3); }
+  background: rgba(0, 0, 0, 0.3);
+}
 
 div.cdePopupOverlay {
   filter: Alpha(Opacity=30);
@@ -554,7 +650,8 @@ div.cdePopupOverlay {
   top: 0;
   left: 0;
   z-index: 1000;
-  pointer-events: all; }
+  pointer-events: all;
+}
 
 div.cdeDrawOverlay {
   filter: Alpha(Opacity=20);
@@ -564,7 +661,8 @@ div.cdeDrawOverlay {
   top: 0;
   left: 0;
   z-index: 90;
-  pointer-events: all; }
+  pointer-events: all;
+}
 
 div.ctrlTouchDraw {
   width: 100%;
@@ -575,113 +673,139 @@ div.ctrlTouchDraw {
   margin: 0;
   border-radius: 6px;
   opacity: 0.9;
-  float: left; }
+  float: left;
+}
 
 div.ctrlEndlessSlider {
   overflow: hidden;
   text-align: left;
   cursor: pointer;
-  float: left; }
+  float: left;
+}
 
 div.ctrlBarChart {
   overflow: hidden;
   text-align: left;
-  float: left; }
+  float: left;
+}
 
 div.ctrlShape {
   overflow: hidden;
-  float: left; }
+  float: left;
+}
 
 div.ctrlSmartLabel {
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   overflow: hidden;
   text-align: center;
   font-size: 48px;
-  float: left; }
+  float: left;
+}
 
 @keyframes cdeopacity {
   from {
-    opacity: 0; }
+    opacity: 0;
+  }
   to {
-    opacity: 1; } }
-
+    opacity: 1;
+  }
+}
 .cde-animate-fadeout {
-  animation: cdefadeoutkey 0.4s; }
+  animation: cdefadeoutkey 0.4s;
+}
 
 @keyframes cdefadeoutkey {
   from {
-    opacity: 1; }
+    opacity: 1;
+  }
   to {
-    opacity: 0; } }
-
+    opacity: 0;
+  }
+}
 .cde-animate-left {
   position: relative;
-  animation: cdeanimateleft 0.4s; }
+  animation: cdeanimateleft 0.4s;
+}
 
 @keyframes cdeanimateleft {
   from {
     left: -300px;
-    opacity: 0; }
+    opacity: 0;
+  }
   to {
     left: 0;
-    opacity: 1; } }
-
+    opacity: 1;
+  }
+}
 .cde-animate-right {
   position: relative;
-  animation: cdeanimateright 0.4s; }
+  animation: cdeanimateright 0.4s;
+}
 
 @keyframes cdeanimateright {
   from {
     right: -480px;
-    opacity: 0; }
+    opacity: 0;
+  }
   to {
     right: 0px;
-    opacity: 1; } }
-
+    opacity: 1;
+  }
+}
 .ctrlInput {
   position: relative;
-  float: left; }
+  float: left;
+}
 
 .scroll {
   border: 0;
-  border-collapse: collapse; }
-  .scroll tr {
-    display: flex; }
-  .scroll td {
-    padding: 3px;
-    flex: 1 auto;
-    border: 1px solid;
-    width: 1px;
-    word-wrap: break; }
-  .scroll thead tr:after {
-    content: '';
-    overflow-y: scroll;
-    visibility: hidden;
-    height: 0; }
-  .scroll thead th {
-    flex: 1 auto;
-    display: block;
-    border: 1px solid; }
-  .scroll tbody {
-    display: block;
-    width: 100%;
-    overflow-y: auto;
-    height: 200px; }
+  border-collapse: collapse;
+}
+.scroll tr {
+  display: flex;
+}
+.scroll td {
+  padding: 3px;
+  flex: 1 auto;
+  border: 1px solid;
+  width: 1px;
+  word-wrap: break;
+}
+.scroll thead tr:after {
+  content: "";
+  overflow-y: scroll;
+  visibility: hidden;
+  height: 0;
+}
+.scroll thead th {
+  flex: 1 auto;
+  display: block;
+  border: 1px solid;
+}
+.scroll tbody {
+  display: block;
+  width: 100%;
+  overflow-y: auto;
+  height: 200px;
+}
 
 .cdeWizardExplainer {
   font-size: 20px;
   text-align: left;
-  vertical-align: middle; }
+  vertical-align: middle;
+}
 
 .MyHeaderButtoninner {
-  font-size: 10px; }
+  font-size: 10px;
+}
 
 .cdeMeter {
   background: rgba(80, 80, 80, 0.5);
   -moz-border-radius: 25px;
   -webkit-border-radius: 25px;
   border-radius: 25px;
-  box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3); }
+  box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+}
 
 .cdeMeter > span {
   display: block;
@@ -711,186 +835,239 @@ div.ctrlSmartLabel {
   right: 0;
   overflow: hidden;
   margin-top: 10px;
-  margin-left: 10px; }
+  margin-left: 10px;
+}
 
 div.cdePinL1 {
-  height: 1px; }
+  height: 1px;
+}
 
 div.cdePinL2 {
-  height: 0; }
+  height: 0;
+}
 
 div.cdeTileTextSmall {
-  font-size: 12px; }
+  font-size: 12px;
+}
 
 .cdeTiles {
   border: none;
-  border-radius: 0px; }
+  border-radius: 0px;
+}
 
 .cdeDashPlate {
   background-image: none;
   border-radius: 20px;
-  float: left; }
+  float: left;
+}
 
 th.cdeTH {
   background-image: none;
   text-align: left;
-  font-size: 12px; }
+  font-size: 12px;
+}
 
 span.cdeInfoText {
-  font-size: 12px; }
+  font-size: 12px;
+}
 
 h1.cdeDashCategory {
-  height: 48px; }
+  height: 48px;
+}
 
 td.cdeTabEntry {
   text-align: left;
-  font-size: 20px; }
+  font-size: 20px;
+}
 
 td.cdeLogEntry,
 th.cdeLogEntryHeader {
-  border: 1px solid; }
+  border: 1px solid;
+}
 
 tr.rowOdd,
 tr.rowEven {
-  border-bottom: 1px solid; }
+  border-bottom: 1px solid;
+}
 
 div.ctrlDropUploader {
-  border: 2px dashed; }
+  border: 2px dashed;
+}
 
 div.ctrlDropUploaderHover {
-  border: 5px dashed; }
+  border: 5px dashed;
+}
 
 div.cdeTileEntry {
   border-top: 1px solid;
   border-bottom: 1px solid;
-  border-right: 1px solid; }
+  border-right: 1px solid;
+}
 
 .cdeTileEntryLabelSmall {
-  font-size: 15px; }
+  font-size: 15px;
+}
 
 div.hue {
   background: -moz-linear-gradient(top, #ff0000 0, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
   background: -o-linear-gradient(top, #ff0000 0, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
   background: -webkit-gradient(linear, left top, left bottom, from(#ff0000), color-stop(0.17, #ffff00), color-stop(0.33, #00ff00), color-stop(0.5, #00ffff), color-stop(0.67, #0000ff), color-stop(0.83, #ff00ff), to(#ff0000));
   background: -webkit-linear-gradient(top, #ff0000 0, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
-  background: linear-gradient(top, #ff0000 0, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%); }
+  background: linear-gradient(top, #ff0000 0, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+}
 
 .fa-border {
-  border-color: #eeeeee; }
+  border-color: #eeeeee;
+}
 
 .fa-inverse {
-  color: #ffffff; }
+  color: #ffffff;
+}
 
 .text-danger {
-  color: red; }
+  color: red;
+}
 
 td.cdeLogEntry {
-  border-bottom-color: #eaeaea; }
+  border-bottom-color: #eaeaea;
+}
 
 th.cdeLogEntryHeader {
-  border-bottom-color: #eaeaea; }
+  border-bottom-color: #eaeaea;
+}
 
 div.CMyAccord {
-  background-color: white; }
+  background-color: white;
+}
 
 .dwo {
-  background: rgba(0, 0, 0, 0.3); }
+  background: rgba(0, 0, 0, 0.3);
+}
 
 .cdeWizardLeft {
-  background-color: rgba(0, 0, 0, 0.5); }
+  background-color: rgba(0, 0, 0, 0.5);
+}
 
 .cdeWizardRight {
-  background-color: rgba(0, 0, 0, 0.2); }
+  background-color: rgba(0, 0, 0, 0.2);
+}
 
 .cdeWizardSpacer {
-  background-color: rgba(255, 255, 255, 0.2); }
+  background-color: rgba(255, 255, 255, 0.2);
+}
 
 .orange > span {
   background-color: #f1a165;
-  background-image: linear-gradient(to bottom, #f1a165, #f36d0a); }
+  background-image: linear-gradient(to bottom, #f1a165, #f36d0a);
+}
 
 .red > span {
   background-color: #f0a3a3;
-  background-image: linear-gradient(to bottom, #f0a3a3, #f42323); }
+  background-image: linear-gradient(to bottom, #f0a3a3, #f42323);
+}
 
 .md-ripple-effect {
-  background: #0797c4; }
+  background: #0797c4;
+}
 
 .cdeSensorLabel {
-  color: #888; }
+  color: #888;
+}
 
 .cdeSelDevice {
   background-color: #fafafa;
-  color: black; }
+  color: black;
+}
 
 div.cdeSensorTileOuterDiv4x3 {
-  background: rgba(90, 90, 90, 0.1); }
+  background: rgba(90, 90, 90, 0.1);
+}
 
 div.cdeSensorTileInnerDiv4x3 {
-  background: rgba(0, 0, 0, 0.01); }
+  background: rgba(0, 0, 0, 0.01);
+}
 
 .cdeLabelTile4x3 {
-  color: #888; }
+  color: #888;
+}
 
 .cdeValueTile4x3 {
-  color: white; }
+  color: white;
+}
 
 .cdeUnitTile4x3 {
-  color: black; }
+  color: black;
+}
 
 div.cdeNodeTile4x3 {
-  background-color: rgba(0, 0, 0, 0.2); }
+  background-color: rgba(0, 0, 0, 0.2);
+}
 
 .cdeLowerNodeName4x3 {
-  color: white; }
+  color: white;
+}
 
 div.cdeTopTile4x3 {
-  background: rgba(0, 0, 0, 0.5); }
+  background: rgba(0, 0, 0, 0.5);
+}
 
 body.cdeLogBody {
-  background-color: white; }
+  background-color: white;
+}
 
 div.cdeSideBar {
-  background-color: white; }
+  background-color: white;
+}
 
 .TemplateThing12x10 {
   background-color: rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 0, 0, 0.2); }
+  border-color: rgba(0, 0, 0, 0.2);
+}
 
 .cdeScreenListButtoninner:hover {
-  background-color: rgba(0, 0, 0, 0.1); }
+  background-color: rgba(0, 0, 0, 0.1);
+}
 
 .cdeEngineStatusRed {
   background-color: red;
-  color: white; }
+  color: white;
+}
 
 .cdeEngineStatusGreen {
   background-color: green;
-  color: white; }
+  color: white;
+}
 
 .cdeEngineStatusYellow {
   background-color: yellow;
-  color: black; }
+  color: black;
+}
 
 div.cdeDivDraw {
-  color: #404040; }
+  color: #404040;
+}
 
 div.cdePlaceHolder {
-  border-color: rgba(0, 0, 0, 0.2); }
+  border-color: rgba(0, 0, 0, 0.2);
+}
 
 .cdeApplicationBar {
-  border-color: rgba(0, 0, 0, 0.2); }
+  border-color: rgba(0, 0, 0, 0.2);
+}
 
 div.cdeDrawOverlay {
-  background: rgba(0, 0, 0, 0.2); }
+  background: rgba(0, 0, 0, 0.2);
+}
 
 .cdeClip {
   overflow: hidden;
-  text-overflow: ellipsis; }
+  text-overflow: ellipsis;
+}
 
 .cdeClip:hover {
   overflow: visible;
-  text-overflow: initial; }
+  text-overflow: initial;
+}
 
 .cdeInfoBlock {
   float: left;
@@ -901,7 +1078,8 @@ div.cdeDrawOverlay {
   border-radius: 5px;
   padding: 10px;
   min-height: 500px;
-  background: linear-gradient(340deg, rgba(29, 163, 209, 0.05) 13%, rgba(248, 248, 248, 0.9) 37%, rgba(235, 235, 235, 0.28) 78%); }
+  background: linear-gradient(340deg, rgba(29, 163, 209, 0.05) 13%, rgba(248, 248, 248, 0.9) 37%, rgba(235, 235, 235, 0.28) 78%);
+}
 
 .cdeLoginBlock {
   float: none;
@@ -910,14 +1088,17 @@ div.cdeDrawOverlay {
   box-shadow: rgba(0, 0, 0, 0.3) 0px 14px 35px;
   overflow: hidden;
   border-radius: 5px;
-  padding: 10px; }
+  padding: 10px;
+}
 
 .cdePickerLabel {
   font-size: 24px;
-  margin-top: 12px; }
+  margin-top: 12px;
+}
 
 .cdeExportLink {
-  font-size: small; }
+  font-size: small;
+}
 
 .cdeInfoBlockHeader {
   width: 100%;
@@ -925,19 +1106,22 @@ div.cdeDrawOverlay {
   margin-top: -10px;
   margin-Left: -10px;
   margin-bottom: 20px;
-  background-color: rgba(0, 0, 0, 0.15); }
+  background-color: rgba(0, 0, 0, 0.15);
+}
 
 .cdeInfoBlockHeaderText {
   font: caption;
   color: white;
   font-weight: bolder;
-  padding-left: 20px; }
+  padding-left: 20px;
+}
 
 .scroll td {
-  border-color: #aaa; }
-
+  border-color: #aaa;
+}
 .scroll thead th {
-  border-color: #000; }
+  border-color: #000;
+}
 
 .cdeLogoAnim {
   -webkit-animation: mymove 5s infinite;
@@ -950,23 +1134,27 @@ div.cdeDrawOverlay {
   animation-fill-mode: none;
   animation-play-state: running;
   position: fixed;
-  z-index: 1000; }
+  z-index: 1000;
+}
 
 @-webkit-keyframes mymove {
   50% {
-    font-size: 100px; } }
-
+    font-size: 100px;
+  }
+}
 @keyframes mymove {
   100% {
     font-size: 37px;
     left: 0px;
     top: 0px;
-    opacity: 0.3; } }
-
+    opacity: 0.3;
+  }
+}
 .cdeSideRightHeader {
   width: 480px;
   height: 49px;
-  text-align: right; }
+  text-align: right;
+}
 
 .cdeSideBarRight {
   width: 480px;
@@ -975,7 +1163,8 @@ div.cdeDrawOverlay {
   right: 0px;
   top: 0px;
   z-index: 999;
-  opacity: 0.9; }
+  opacity: 0.9;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -984,41 +1173,47 @@ div.cdeDrawOverlay {
  */
 input.cdeButton {
   font-size: 24px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   width: 300px;
   height: 55px;
   margin-right: 4px;
   margin-top: 4px;
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 .cdeDragButton {
   cursor: grab;
-  text-shadow: none; }
+  text-shadow: none;
+}
 
 .cdeNoButton,
 .cdeYesButton,
 .cdeOkButton {
   font-size: 20px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   text-align: center;
   cursor: pointer;
   background-color: rgba(33, 33, 33, 0.1);
-  color: white; }
+  color: white;
+}
 
 .cdeOkButton {
   margin: 0 auto;
   background-size: 100% 100%;
-  background-repeat: no-repeat; }
+  background-repeat: no-repeat;
+}
 
 .cdeNoButton {
-  float: left; }
+  float: left;
+}
 
 .cdeYesButton {
   float: right;
   background-size: 100% 100%;
-  background-repeat: no-repeat; }
+  background-repeat: no-repeat;
+}
 
 div.cdePinDiv,
 div.cdeUnpinDiv,
@@ -1031,80 +1226,96 @@ div.cdeDivRefresh {
   height: 32px;
   z-index: 10;
   color: #404040;
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 .cdeMutButton {
-  color: white; }
+  color: white;
+}
 
 .cdeEmptyButtoninner {
-  color: rgba(0, 0, 0, 0.5); }
+  color: rgba(0, 0, 0, 0.5);
+}
 
 .cdeDeleteButton,
 .cdeDetailButton,
 .cdeDropButton,
 .cdeLiveTileSmall {
   font-size: 16px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   text-align: center;
   float: left;
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 .cdeOuterTileButton {
   float: left;
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 .cdeDropButton {
-  margin: 5px; }
+  margin: 5px;
+}
 
 .cdeGlassButton {
   background-image: url("../Images/GlasButton.png");
   background-size: cover;
   font-size: 16px;
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   cursor: pointer;
   border: 0;
   padding: 0;
-  border-radius: 20px; }
+  border-radius: 20px;
+}
 
 .cdeTransitButton {
   color: white;
   background-color: rgba(0, 0, 255, 0.3);
-  border-radius: 20px; }
+  border-radius: 20px;
+}
 
 .cdeGoodActionButton {
   color: white;
   background-color: rgba(0, 255, 0, 0.3);
-  border-radius: 20px; }
+  border-radius: 20px;
+}
 
 .cdeBadActionButton {
   color: white;
   background-color: rgba(255, 0, 0, 0.3);
-  border-radius: 20px; }
+  border-radius: 20px;
+}
 
 .cdeTabSelected {
-  color: black; }
+  color: black;
+}
 
 .cdeTabNotSelected {
-  color: rgba(0, 0, 0, 0.3); }
+  color: rgba(0, 0, 0, 0.3);
+}
 
 .cdeTabButton {
   color: white;
   background-color: rgba(0, 0, 255, 0.3);
-  text-align: left; }
+  text-align: left;
+}
 
 .cdeTabButtoninner {
-  margin-left: 20px; }
+  margin-left: 20px;
+}
 
 .cdeLargeIcon {
-  margin-top: 10px; }
+  margin-top: 10px;
+}
 
 button.cdeLargeTile {
   font-size: 24px;
   margin-left: 20px;
   margin-right: 20px;
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1118,19 +1329,23 @@ div.ctrlCheckBox {
   display: block;
   text-align: center;
   margin: auto;
-  float: left; }
+  float: left;
+}
 
 div.ctrlCheckBoxInner {
   margin: 0 auto;
   vertical-align: middle;
   background-image: url("../Images/cdeInnerCheck.png");
-  background-size: 100% 100%; }
+  background-size: 100% 100%;
+}
 
 span.cdeCheckText {
-  font-size: xx-small; }
+  font-size: xx-small;
+}
 
 span.cdeCheckIcon {
-  font-size: 25px; }
+  font-size: 25px;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1139,7 +1354,8 @@ span.cdeCheckIcon {
  */
 .ctrlCheckField {
   position: relative;
-  float: left; }
+  float: left;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1148,58 +1364,67 @@ span.cdeCheckIcon {
  */
 div.cdeTileEntry {
   font-size: 20px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   width: 300px;
   height: 145px;
   text-align: center;
   margin-left: 145px;
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 div.cdeTileText {
   margin-left: 10%;
   margin-right: 10%;
   cursor: pointer;
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 div.cdeTileTextNoImg {
   margin-left: 10%;
   margin-right: 10%;
   cursor: pointer;
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 div.cdeTileTextSmall {
   cursor: pointer;
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 div.cdeTileEntryText {
   cursor: pointer;
   pointer-events: auto;
   width: inherit;
   height: inherit;
-  position: relative; }
+  position: relative;
+}
 
 div.cdeTiles {
   vertical-align: middle;
-  margin: 0; }
+  margin: 0;
+}
 
 .cdeDashCategory {
-  margin: 0; }
+  margin: 0;
+}
 
 .cdeLiveTile,
 .cdeLiveTileLong,
 .cdeLiveTileVeryLong {
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   text-align: center;
   float: left;
   cursor: pointer;
   /*background-color: rgba(0, 0, 0, 0.1);*/
   margin-left: 1px;
-  margin-bottom: 1px; }
+  margin-bottom: 1px;
+}
 
 .cdeLiveTileLong {
-  font-size: 20px; }
+  font-size: 20px;
+}
 
 .cdeLiveTile {
   font-size: 16px;
@@ -1208,7 +1433,8 @@ div.cdeTiles {
   background-size: 100% 100%;
   background-repeat: no-repeat;
   border-width: 1px;
-  border-style: solid; }
+  border-style: solid;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1220,7 +1446,8 @@ div.ctrlDropUploader {
   float: left;
   width: 100%;
   height: 100%;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 div.ctrlDropUploaderHover {
   margin: 0 auto;
@@ -1228,7 +1455,8 @@ div.ctrlDropUploaderHover {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  background-color: rgba(0, 0, 0, 0.2); }
+  background-color: rgba(0, 0, 0, 0.2);
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1239,7 +1467,8 @@ textarea.ctrlTextArea {
   font-size: 20px;
   overflow: auto;
   width: 100%;
-  height: 100%; }
+  height: 100%;
+}
 
 .cdeInvisible {
   max-width: 0;
@@ -1247,7 +1476,8 @@ textarea.ctrlTextArea {
   float: left;
   border: 0;
   background-color: transparent;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 input.cdeInputNumber {
   font-size: 20px;
@@ -1259,7 +1489,8 @@ input.cdeInputNumber {
   font-weight: bold;
   margin-bottom: 0;
   pointer-events: auto;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 input.cdeInput {
   font-size: 20px;
@@ -1270,7 +1501,8 @@ input.cdeInput {
   padding: 0;
   width: inherit;
   pointer-events: auto;
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 input.cdeInputCombo {
   font-size: 20px;
@@ -1281,32 +1513,38 @@ input.cdeInputCombo {
   padding: 0;
   width: 95%;
   pointer-events: auto;
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 input.cdeSmall {
   font-size: 14px;
   margin-top: 5px;
   height: 28px;
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 textarea.cdeSmall {
   font-size: 14px;
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 input.cdeInputCenter {
   text-align: center;
   font-weight: bold;
-  width: 100%; }
+  width: 100%;
+}
 
 div.cdeMTL {
   font-size: 12px;
-  font-family: 'robotothin', 'Segoe UI', Arial,sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   float: left;
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 .cdeValidateError {
-  background-color: red; }
+  background-color: red;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1314,24 +1552,28 @@ div.cdeMTL {
  * SPDX-License-Identifier: CC0-1.0
  */
 div.cdeFormTitle {
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 h1.cdeFormTitle {
   font-size: 20px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   text-align: left;
   margin: 0;
   clear: left;
-  margin-top: 20px; }
+  margin-top: 20px;
+}
 
 div.CMyCanvas {
   overflow: hidden;
   text-align: left;
-  position: absolute; }
+  position: absolute;
+}
 
 .cdeTableInline {
-  align-items: flex-start; }
+  align-items: flex-start;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1347,46 +1589,56 @@ div.cdeScreenPopup {
   display: block;
   vertical-align: middle;
   z-index: 1200;
-  background-color: rgba(33, 33, 33, 0.2); }
+  background-color: rgba(33, 33, 33, 0.2);
+}
 
 .cde-animate-popup {
   position: relative;
-  animation: animatepopup ease-out 0.4s; }
+  animation: animatepopup ease-out 0.4s;
+}
 
 @keyframes animatepopup {
   from {
     top: -150px;
-    opacity: 0; }
+    opacity: 0;
+  }
   to {
     top: 0;
-    opacity: 1; } }
-
+    opacity: 1;
+  }
+}
 div.cdeCenteredPopup {
-  margin: 0 auto; }
+  margin: 0 auto;
+}
 
 div.cdePopupContent41 {
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   display: block;
   width: 100%;
   font-size: 20px;
   text-align: center;
-  padding-bottom: 1em; }
+  padding-bottom: 1em;
+}
 
 div.cdePopupBackAlarm {
-  padding: 2em; }
+  padding: 2em;
+}
 
 div.cdePopupBackInfo {
-  padding: 2em; }
+  padding: 2em;
+}
 
 table.MyFullTable {
   padding-top: 1em;
   width: 100%;
-  border-spacing: 0; }
+  border-spacing: 0;
+}
 
 div.cdeCentered {
   margin: 0 auto;
   width: 476px;
-  background-image: url("../Images/GlasOverlay.png"); }
+  background-image: url("../Images/GlasOverlay.png");
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1396,12 +1648,14 @@ div.cdeCentered {
 div.ctrlProgressBar {
   width: inherit;
   height: inherit;
-  float: left; }
+  float: left;
+}
 
 progress.ctrlProgressBar {
   width: 100%;
   height: 100%;
-  float: left; }
+  float: left;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1410,7 +1664,8 @@ progress.ctrlProgressBar {
  */
 .cdeMeter {
   position: relative;
-  float: left; }
+  float: left;
+}
 
 .cdeMeter > span {
   display: block;
@@ -1435,7 +1690,8 @@ progress.ctrlProgressBar {
   right: 0;
   overflow: hidden;
   margin-top: 10px;
-  margin-left: 10px; }
+  margin-left: 10px;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1445,22 +1701,27 @@ progress.ctrlProgressBar {
 /** For styles related to color see MainBaseColors.scss or relevant skins */
 /** Table Header */
 thead.cdeFixedHeader {
-  display: block; }
+  display: block;
+}
 
 thead.cdeFixedHeader tr {
-  position: relative; }
+  position: relative;
+}
 
 tr.cdeHeaderRow {
-  background-image: none; }
+  background-image: none;
+}
 
 .cdeTHCell {
-  display: inline-block; }
+  display: inline-block;
+}
 
 .cdeMainTableHeader {
-  padding: 0px; }
+  padding: 0px;
+}
 
 th.cdeTH {
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   vertical-align: middle;
   background-color: rgba(0, 0, 0, 0.15);
@@ -1468,13 +1729,15 @@ th.cdeTH {
   padding: 0px;
   border-left: rgba(0, 0, 0, 0.1);
   border-left-width: 1px;
-  border-left-style: groove; }
+  border-left-style: groove;
+}
 
 /** Table Body */
 td {
   padding: 0;
   border: 0;
-  border-collapse: collapse; }
+  border-collapse: collapse;
+}
 
 /*tbody {
     overflow-y: auto;
@@ -1482,10 +1745,11 @@ td {
 }*/
 table.CMyTable {
   border-collapse: collapse;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   padding: inherit;
   font-weight: lighter;
-  text-decoration: none; }
+  text-decoration: none;
+}
 
 td.cdeTabEntry {
   font-size: 20px;
@@ -1493,105 +1757,126 @@ td.cdeTabEntry {
   border-left: rgba(0, 0, 0, 0.15);
   border-left-width: 1px;
   border-left-style: groove;
-  display: table-cell; }
+  display: table-cell;
+}
 
 tbody.cdeScrollBody {
-  display: block; }
+  display: block;
+}
 
 tbody.cdeScrollContent {
   overflow-y: scroll;
-  width: 100%; }
+  width: 100%;
+}
 
 tr.cdeRowEven {
-  background-color: rgba(0, 0, 0, 0.05); }
+  background-color: rgba(0, 0, 0, 0.05);
+}
 
 tr.cdeRowOdd {
-  background-color: rgba(0, 0, 0, 0.1); }
+  background-color: rgba(0, 0, 0, 0.1);
+}
 
 .cdeTDCell {
   position: relative;
   display: inline-block;
   overflow: hidden;
-  word-break: break-word; }
+  word-break: break-word;
+}
 
 .cdeInFormTable {
   height: inherit;
-  overflow-y: auto; }
+  overflow-y: auto;
+}
 
 table.cdeInlineTable {
   margin: 0;
   border-collapse: collapse;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   padding-bottom: inherit;
   padding-left: inherit;
   padding-right: inherit;
   padding-top: inherit;
   font-weight: lighter;
-  text-decoration: none; }
+  text-decoration: none;
+}
 
 div.cdeRelativeDiv {
-  position: relative; }
+  position: relative;
+}
 
 div.cdeTHsortup {
   border-bottom: 1px solid;
-  border-bottom-color: red; }
+  border-bottom-color: red;
+}
 
 div.cdeTHsortdn {
   border-top: 1px solid;
-  border-bottom-color: red; }
+  border-bottom-color: red;
+}
 
 tr.rowDeleted {
-  background-color: red; }
+  background-color: red;
+}
 
 .cdeTableButton {
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   text-align: center;
   cursor: pointer;
   font-size: 16px;
   background-size: 100% 100%;
-  background-repeat: no-repeat; }
+  background-repeat: no-repeat;
+}
 
 div.cdeTableContainer {
   clear: both;
-  overflow: auto; }
+  overflow: auto;
+}
 
 h1.cdeTableHeader {
   font-size: 20px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   pointer-events: none;
   text-align: right;
   margin-right: 10px;
-  margin-top: 0px; }
+  margin-top: 0px;
+}
 
 table.cdeHilite {
   margin: 1em;
   border-collapse: collapse;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   padding-bottom: inherit;
   padding-left: inherit;
   padding-right: inherit;
   padding-top: inherit;
   font-weight: normal;
-  text-decoration: none; }
+  text-decoration: none;
+}
 
 .cdeTableHeaderIcon {
-  font-size: 16px; }
+  font-size: 16px;
+}
 
 .cdeTableContainer {
-  overflow: auto; }
+  overflow: auto;
+}
 
 .cdeRefresher {
   font-size: 24px;
-  font-weight: bold; }
+  font-weight: bold;
+}
 
 .cdeFilterInput {
-  float: left; }
+  float: left;
+}
 
 .cdeFilterInputIcon {
   font-size: 12px;
-  margin-top: 8px; }
+  margin-top: 8px;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1601,38 +1886,45 @@ table.cdeHilite {
 div.cdeTileGroupHeader,
 div.cdeTileGroupHeaderSmall {
   background-color: rgba(0, 0, 0, 0.08);
-  color: black; }
+  color: black;
+}
 
 .cdeCollapsibleClosed {
-  border-radius: 20px; }
+  border-radius: 20px;
+}
 
 .cdeCollapsibleOpen {
-  border-radius: 20px 20px 0px 0px; }
+  border-radius: 20px 20px 0px 0px;
+}
 
 .cdeCloseGroup {
   border-radius: 0px 0px 20px 20px;
   background-color: rgba(0, 0, 0, 0.06);
-  width: 100%; }
+  width: 100%;
+}
 
 .cdeInsideCollapsible {
-  background-color: rgba(0, 0, 0, 0.01); }
+  background-color: rgba(0, 0, 0, 0.01);
+}
 
 span.cdeTileGroupHeader {
   font-size: 24px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
-  font-weight: bold;
-  margin-left: 20px;
-  text-overflow: ellipsis;
-  overflow: hidden; }
-
-span.cdeTileGroupHeaderSmall {
-  font-size: 16px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: bold;
   margin-left: 20px;
   text-overflow: ellipsis;
   overflow: hidden;
-  text-align: start; }
+}
+
+span.cdeTileGroupHeaderSmall {
+  font-size: 16px;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+  font-weight: bold;
+  margin-left: 20px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: start;
+}
 
 .cdeTileEntryLabel {
   text-overflow: ellipsis;
@@ -1640,23 +1932,25 @@ span.cdeTileGroupHeaderSmall {
   margin-left: 20px;
   text-align: left;
   font-size: 16px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
-  font-weight: bold; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+  font-weight: bold;
+}
 
 h1.cdeTileGroupHeader {
   font-size: 24px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: bold;
   text-align: left;
   float: left;
   margin-top: 20px;
   margin-left: 20px;
   text-overflow: ellipsis;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 h1.cdeTileGroupHeaderSmall {
   font-size: 16px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: bold;
   text-align: left;
   margin: 0;
@@ -1666,18 +1960,21 @@ h1.cdeTileGroupHeaderSmall {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  max-width: 370px; }
+  max-width: 370px;
+}
 
 div.ctrlTileGroup {
   vertical-align: middle;
   margin: 0;
   clear: left;
   -moz-border-radius: 6px;
-  border-radius: 6px; }
+  border-radius: 6px;
+}
 
 .cdeLiveTileSmall {
   width: 80px;
-  height: 80px; }
+  height: 80px;
+}
 
 .cdeInnerGroup {
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -1686,23 +1983,28 @@ div.ctrlTileGroup {
   background-color: rgba(0, 0, 0, 0.25);
   margin-left: 19px;
   margin-top: 19px;
-  margin-bottom: 19px; }
+  margin-bottom: 19px;
+}
 
 .cdeTileContainer {
-  float: left; }
+  float: left;
+}
 
 .cdeCollapsibleGroup {
   border: none;
   border-radius: 0px;
-  transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+  transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
 .cdeTileGroup {
   border: none;
-  border-radius: 0px; }
+  border-radius: 0px;
+}
 
 .cdeInnerForm {
   float: none;
-  background: rgba(255, 255, 255, 0.04); }
+  background: rgba(255, 255, 255, 0.04);
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1711,45 +2013,53 @@ div.ctrlTileGroup {
  */
 div.cdeTextCrop {
   overflow: hidden;
-  width: inherit; }
+  width: inherit;
+}
 
 div.cdeToast {
   opacity: 1;
   display: block;
   position: relative;
   background-color: rgba(33, 33, 33, 0.5);
-  width: inherit; }
+  width: inherit;
+}
 
 div.ToastTopic {
   text-align: center;
   width: 100%;
   font-size: 24px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
-  color: white; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+  color: white;
+}
 
 div.ToastText {
   text-align: center;
   width: 100%;
   font-size: 20px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 div.ToastDebug {
   width: 100%;
   font-size: 10px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 .cde-animate-bottom {
   position: relative;
-  animation: animatebottomcde 0.4s; }
+  animation: animatebottomcde 0.4s;
+}
 
 @keyframes animatebottomcde {
   from {
     bottom: -300px;
-    opacity: 0; }
+    opacity: 0;
+  }
   to {
     bottom: 0;
-    opacity: 1; } }
-
+    opacity: 1;
+  }
+}
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
  *
@@ -1760,39 +2070,45 @@ div.cdeToggleSwitch {
   display: flex;
   /*justify-content: center;*/
   align-items: center;
-  flex-direction: column; }
+  flex-direction: column;
+}
 
 .cdeSwitch input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
   height: 0;
-  width: 0; }
+  width: 0;
+}
 
 .cdeSwitchLabel {
- /* max-height: 25px;*/
+  max-height: 25px;
   word-wrap: break-word;
-  text-overflow: ellipsis; }
+  text-overflow: ellipsis;
+}
 
 .cdeSwitch {
   display: inline-block;
   font-size: 20px;
   height: 1.5em;
   width: 2.5em;
-  border-radius: 1em; }
-  .cdeSwitch div {
-    height: 1.5em;
-    width: 1.5em;
-    border-radius: 1em;
-    box-shadow: 0 0.1em 0.3em rgba(0, 0, 0, 0.3);
-    -webkit-transition: all 300ms;
-    -moz-transition: all 300ms;
-    transition: all 300ms; }
+  border-radius: 1em;
+}
+.cdeSwitch div {
+  height: 1.5em;
+  width: 1.5em;
+  border-radius: 1em;
+  box-shadow: 0 0.1em 0.3em rgba(0, 0, 0, 0.3);
+  -webkit-transition: all 300ms;
+  -moz-transition: all 300ms;
+  transition: all 300ms;
+}
 
 .toggleChecked > .cdeSwitch > div {
   -webkit-transform: translate3d(100%, 0, 0);
   -moz-transform: translate3d(100%, 0, 0);
-  transform: translate3d(100%, 0, 0); }
+  transform: translate3d(100%, 0, 0);
+}
 
 td .cdeToggleSwitch > .cdeSwitch {
   border-radius: 0;
@@ -1801,16 +2117,17 @@ td .cdeToggleSwitch > .cdeSwitch {
   margin: 25%;
   padding: 1em;
   width: auto;
-  height: auto; }
-
+  height: auto;
+}
 td .cdeToggleSwitch > .cdeSwitch > .cdeCheckboxInnerDiv {
   height: 0;
-  width: 0; }
-
+  width: 0;
+}
 td .toggleChecked > .cdeSwitch {
   background-image: url("../../Images/cdeInnerCheck.png");
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1819,7 +2136,8 @@ td .toggleChecked > .cdeSwitch {
  */
 .cdeToolTip {
   position: relative;
-  display: inline-block; }
+  display: inline-block;
+}
 
 /* Tooltip text */
 .cdeToolTip .cdeToolTipText {
@@ -1834,18 +2152,21 @@ td .toggleChecked > .cdeSwitch {
   position: absolute;
   z-index: 1;
   opacity: 0;
-  transition: opacity 1s; }
+  transition: opacity 1s;
+}
 
 /* Show the tooltip text when you mouse over the tooltip container */
 .cdeToolTip:hover .cdeToolTipText {
   visibility: visible;
-  opacity: 1; }
+  opacity: 1;
+}
 
 .cdeToolTip .cdeToolTipText {
   top: 100%;
   left: 50%;
   margin-left: -160px;
-  /* Use half of the width (120/2 = 60), to center the tooltip */ }
+  /* Use half of the width (120/2 = 60), to center the tooltip */
+}
 
 .cdeToolTip .cdeToolTipText::after {
   content: " ";
@@ -1856,7 +2177,8 @@ td .toggleChecked > .cdeSwitch {
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent black transparent; }
+  border-color: transparent transparent black transparent;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1866,13 +2188,15 @@ td .toggleChecked > .cdeSwitch {
 div.cdeLiveImg {
   display: block;
   font-size: 20px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
   font-weight: lighter;
   text-align: center;
-  float: left; }
+  float: left;
+}
 
 img.Blocked {
-  display: block; }
+  display: block;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1880,11 +2204,13 @@ img.Blocked {
  * SPDX-License-Identifier: CC0-1.0
  */
 div.flatpickr-wrapper {
-  width: 100%; }
+  width: 100%;
+}
 
 .flatpickr-monthSelect-months {
   margin: 10px 1px 3px 1px;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+}
 
 .flatpickr-monthSelect-month {
   background: none;
@@ -1904,51 +2230,62 @@ div.flatpickr-wrapper {
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   text-align: center;
-  width: 33%; }
+  width: 33%;
+}
 
 .flatpickr-monthSelect-month.disabled {
-  color: #eee; }
+  color: #eee;
+}
 
 .flatpickr-monthSelect-month.disabled:hover,
 .flatpickr-monthSelect-month.disabled:focus {
   cursor: not-allowed;
-  background: none !important; }
+  background: none !important;
+}
 
 .flatpickr-monthSelect-theme-dark {
-  background: #3f4458; }
+  background: #3f4458;
+}
 
 .flatpickr-monthSelect-theme-dark .flatpickr-current-month input.cur-year {
-  color: #fff; }
+  color: #fff;
+}
 
 .flatpickr-monthSelect-theme-dark .flatpickr-months .flatpickr-prev-month,
 .flatpickr-monthSelect-theme-dark .flatpickr-months .flatpickr-next-month {
   color: #fff;
-  fill: #fff; }
+  fill: #fff;
+}
 
 .flatpickr-monthSelect-theme-dark .flatpickr-monthSelect-month {
-  color: rgba(255, 255, 255, 0.95); }
+  color: rgba(255, 255, 255, 0.95);
+}
 
 .flatpickr-monthSelect-month:hover,
 .flatpickr-monthSelect-month:focus {
   background: #e6e6e6;
   cursor: pointer;
-  outline: 0; }
+  outline: 0;
+}
 
 .flatpickr-monthSelect-theme-dark .flatpickr-monthSelect-month:hover,
 .flatpickr-monthSelect-theme-dark .flatpickr-monthSelect-month:focus {
   background: #646c8c;
-  border-color: #646c8c; }
+  border-color: #646c8c;
+}
 
 .flatpickr-monthSelect-month.selected {
   background-color: #569ff7;
-  color: #fff; }
+  color: #fff;
+}
 
 .flatpickr-monthSelect-theme-dark .flatpickr-monthSelect-month.selected {
   background: #80cbc4;
   -webkit-box-shadow: none;
   box-shadow: none;
   color: #fff;
-  border-color: #80cbc4; }
+  border-color: #80cbc4;
+}
 
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
@@ -1957,13 +2294,15 @@ div.flatpickr-wrapper {
  */
 .cdeLoginScreen {
   box-sizing: content-box;
-  text-align: center; }
+  text-align: center;
+}
 
 .cdeLoginContent {
   position: relative;
   display: flex;
   align-items: center;
-  height: 80vh; }
+  height: 80vh;
+}
 
 .cdeLoginItemAnim {
   animation-name: cdeLoginItemAnimKeys;
@@ -1973,75 +2312,91 @@ div.flatpickr-wrapper {
   animation-iteration-count: 1;
   animation-direction: normal;
   animation-fill-mode: none;
-  animation-play-state: running; }
+  animation-play-state: running;
+}
 
 @keyframes cdeLoginItemAnimKeys {
   from {
-    opacity: 0; }
+    opacity: 0;
+  }
   to {
-    opacity: 1; } }
-
+    opacity: 1;
+  }
+}
 .cdeLogin-animate-zoom {
   animation-name: cdeanimatezoom;
-  animation-duration: .6s;
+  animation-duration: 0.6s;
   animation-timing-function: ease-in;
   animation-delay: 2s;
   animation-iteration-count: 1;
   animation-direction: normal;
   animation-fill-mode: none;
-  animation-play-state: running; }
+  animation-play-state: running;
+}
 
 @keyframes cdeanimatezoom {
   from {
-    transform: scale(1); }
+    transform: scale(1);
+  }
   to {
-    transform: scale(0); } }
-
+    transform: scale(0);
+  }
+}
 .cde-animate-login {
   animation-name: cdeanimloginkey;
-  animation-duration: .2s;
+  animation-duration: 0.2s;
   animation-timing-function: ease-in;
   animation-delay: 0s;
   animation-iteration-count: 1;
   animation-direction: normal;
   animation-fill-mode: none;
-  animation-play-state: running; }
+  animation-play-state: running;
+}
 
 @keyframes cdeanimloginkey {
   from {
     opacity: 0;
-    transform: scale(0); }
+    transform: scale(0);
+  }
   to {
     opacity: 1;
-    transform: scale(1); } }
-
+    transform: scale(1);
+  }
+}
 p.cdeSubText {
   margin-right: 20px;
   padding: 0;
   font-size: 12px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 td.cdeEngineStatusRed, td.cdeEngineStatusGreen, td.cdeEngineStatusYellow {
   text-align: left;
   font-size: 12px;
-  font-family: 'robotothin', 'Segoe UI', Arial, sans-serif; }
+  font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+}
 
 .cde-animate-shake {
   animation: cdeshakekeys 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
-  perspective: 1000px; }
+  perspective: 1000px;
+}
 
 @keyframes cdeshakekeys {
   10%, 90% {
-    transform: translate3d(-5px, 0, 0); }
+    transform: translate3d(-5px, 0, 0);
+  }
   20%, 80% {
-    transform: translate3d(10px, 0, 0); }
+    transform: translate3d(10px, 0, 0);
+  }
   30%, 50%, 70% {
-    transform: translate3d(-20px, 0, 0); }
+    transform: translate3d(-20px, 0, 0);
+  }
   40%, 60% {
-    transform: translate3d(20px, 0, 0); } }
-
+    transform: translate3d(20px, 0, 0);
+  }
+}
 /*
  * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
  *
@@ -2050,7 +2405,8 @@ td.cdeEngineStatusRed, td.cdeEngineStatusGreen, td.cdeEngineStatusYellow {
 div.cdeSensorTile4x3 {
   width: 312px;
   height: 234px;
-  margin: 0 auto; }
+  margin: 0 auto;
+}
 
 div.cdeSensorTileOuterDiv4x3 {
   width: 312px;
@@ -2059,7 +2415,8 @@ div.cdeSensorTileOuterDiv4x3 {
   justify-content: space-around;
   align-content: space-around;
   align-items: center;
-  border-radius: 20px; }
+  border-radius: 20px;
+}
 
 div.cdeSensorTileInnerDiv4x3 {
   width: 297px;
@@ -2068,31 +2425,36 @@ div.cdeSensorTileInnerDiv4x3 {
   flex-wrap: wrap;
   justify-content: space-around;
   align-content: space-around;
-  align-items: center; }
+  align-items: center;
+}
 
 div.cdeMainDivTile4x3 {
   width: 260px;
   height: 80px;
   display: flex;
   flex-wrap: nowrap;
-  align-items: center; }
+  align-items: center;
+}
 
 .cdeLabelTile4x3 {
   width: 260px;
   height: 15px;
-  font-size: 10px; }
+  font-size: 10px;
+}
 
 .cdeValueTile4x3 {
   width: 260px;
   height: 70px;
   font-size: 48px;
   text-align: center;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .cdeUnitTile4x3 {
   width: 260px;
   height: 15px;
-  font-size: 10px; }
+  font-size: 10px;
+}
 
 div.cdeNodeTile4x3 {
   width: 260px;
@@ -2101,11 +2463,13 @@ div.cdeNodeTile4x3 {
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .cdeLowerNodeName4x3 {
   font-size: 16px;
-  margin-top: 4px; }
+  margin-top: 4px;
+}
 
 div.cdeTopTile4x3 {
   width: 260px;
@@ -2114,13 +2478,15 @@ div.cdeTopTile4x3 {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-around;
-  align-items: center; }
+  align-items: center;
+}
 
 div.cdeStatusLightTile4x3 {
   opacity: 1;
   border-radius: 50%;
   width: 39px;
-  height: 39px; }
+  height: 39px;
+}
 
 .cdeTitleTile4x3 {
   font-size: 15px;
@@ -2128,8 +2494,10 @@ div.cdeStatusLightTile4x3 {
   word-wrap: break-word;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden; }
+  overflow: hidden;
+}
 
 .cdeImgTile4x3 {
   width: 50px;
-  height: 50px; }
+  height: 50px;
+}

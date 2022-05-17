@@ -24,7 +24,6 @@
     box-sizing: border-box;
     -ms-touch-action: manipulation;
     touch-action: manipulation;
-    background: #fff;
     -webkit-box-shadow: 1px 0 0 #e6e6e6,-1px 0 0 #e6e6e6,0 1px 0 #e6e6e6,0 -1px 0 #e6e6e6,0 3px 13px rgba(0,0,0,0.08);
     box-shadow: 1px 0 0 #e6e6e6,-1px 0 0 #e6e6e6,0 1px 0 #e6e6e6,0 -1px 0 #e6e6e6,0 3px 13px rgba(0,0,0,0.08);
 }
@@ -324,7 +323,6 @@
 
 .flatpickr-current-month {
     font-size: 135%;
-    line-height: inherit;
     font-weight: 300;
     color: inherit;
     position: absolute;
@@ -354,7 +352,6 @@
 
     .flatpickr-current-month .numInputWrapper {
         width: 6ch;
-        width: 7ch\0;
         display: inline-block;
     }
 
@@ -659,10 +656,6 @@ span.flatpickr-weekday {
     }
 
 .flatpickr-innerContainer {
-    display: block;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
