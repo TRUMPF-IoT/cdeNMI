@@ -978,18 +978,10 @@ namespace cdeNMI {
                         defaultValue = parseFloat(defaultValue);
                         propValue = parseFloat(propValue);
 
-                        // Make the smallest value into 0 and remove the difference from both values, save it in "negative"
-                        if (propValue < 0 || defaultValue < 0) {
                             negative = (propValue < defaultValue ? propValue : defaultValue);
 
                             defaultValue = defaultValue - negative;
                             propValue = propValue - negative;
-                        } else {
-                            negative = (propValue < defaultValue ? propValue : defaultValue);
-
-                            defaultValue = defaultValue - negative;
-                            propValue = propValue - negative;
-                        }
 
                         if (defaultValue > propValue) {
                             newValue = defaultValue - this.EasyMeOut(timePassed, propValue, defaultValue, duration);

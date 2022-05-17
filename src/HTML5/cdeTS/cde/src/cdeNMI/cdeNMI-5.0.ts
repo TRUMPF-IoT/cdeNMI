@@ -222,7 +222,7 @@
         });
         if (cde.MyBaseAssets.MyServiceHostInfo.RequestGeoLocation === true) {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
+                navigator.geolocation.getCurrentPosition((position) => { //NOSONAR GetLocation Lookup must be enabled on Server first
                     cde.MyCommChannel.SendQueued(null, eTheNMIEngine, eTheNMIEngine, "NMI_MY_LOCATION", (position.coords.longitude + ";" + position.coords.latitude + ";" + position.coords.accuracy), 0, 3, 0, null);
                 });
             }

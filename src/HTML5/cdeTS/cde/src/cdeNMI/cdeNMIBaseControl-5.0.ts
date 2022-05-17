@@ -1273,7 +1273,6 @@
                                 break;
                             case cdeControlType.ThingPicker:
                                 return this.GetNameFromValue(pContent);
-                                break;
                             default:
                                 if (pContent && (pFieldInfo.Flags & 256) === 0)
                                     pContent = cdeNMI.cdeEscapeHtml(pContent);

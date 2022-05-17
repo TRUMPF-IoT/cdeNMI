@@ -5,7 +5,6 @@
  */
 
 .flatpickr-calendar {
-    background: transparent;
     opacity: 0;
     display: none;
     text-align: center;
@@ -206,36 +205,12 @@
 
         .flatpickr-months .flatpickr-prev-month.flatpickr-prev-month,
         .flatpickr-months .flatpickr-next-month.flatpickr-prev-month {
-            /*
-      /*rtl:begin:ignore*/
-            /*
-      */
             left: 0;
-            /*
-      /*rtl:end:ignore*/
-            /*
-      */
         }
-        /*
-      /*rtl:begin:ignore*/
-        /*
-      /*rtl:end:ignore*/
         .flatpickr-months .flatpickr-prev-month.flatpickr-next-month,
         .flatpickr-months .flatpickr-next-month.flatpickr-next-month {
-            /*
-      /*rtl:begin:ignore*/
-            /*
-      */
             right: 0;
-            /*
-      /*rtl:end:ignore*/
-            /*
-      */
         }
-        /*
-      /*rtl:begin:ignore*/
-        /*
-      /*rtl:end:ignore*/
         .flatpickr-months .flatpickr-prev-month:hover,
         .flatpickr-months .flatpickr-next-month:hover {
             color: #eee;
@@ -353,7 +328,6 @@
 
 .flatpickr-current-month {
     font-size: 135%;
-    line-height: inherit;
     font-weight: 300;
     color: inherit;
     position: absolute;
@@ -736,10 +710,6 @@ span.flatpickr-weekday {
     }
 
 .flatpickr-innerContainer {
-    display: block;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -756,16 +726,12 @@ span.flatpickr-weekday {
 .flatpickr-time {
     text-align: center;
     outline: 0;
-    display: block;
     height: 0;
     line-height: 40px;
     max-height: 40px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     overflow: hidden;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
 }
 

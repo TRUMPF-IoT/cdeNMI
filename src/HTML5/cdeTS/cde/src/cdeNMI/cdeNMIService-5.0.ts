@@ -24,8 +24,10 @@
                     }
                 }
             }, 10000);
-            window.addEventListener("message", (e: MessageEvent) => {
+            window.addEventListener("message", (e: MessageEvent) => { //NOSONAR: Must check with NMI Viewer app that uses this
                 try {
+                    if (e.origin !== "") //NOSONAR: Must check with NMI Viewer app that uses this
+                        return;
                     if (!e.data)
                         return;
                     //let res = e.data;

@@ -32,7 +32,7 @@
 
 .cl {
     display: inline-block;
-    font: normal normal normal 14px/1 C-Labs_Basis;
+    font: normal normal normal 14px/1 C-Labs_Basis, sans-serif;
     font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
@@ -42,10 +42,10 @@
     left: 0px;
     position: absolute;
 }
- 
+
 .cl-font {
     display: inline-block;
-    font: normal normal normal 20px/1 C-Labs_Basis;
+    font: normal normal normal 20px/1 C-Labs_Basis, sans-serif;
     font-size: inherit;
     text-rendering: auto;
     -webkit-font-smoothing: antialiased;
@@ -116,7 +116,7 @@ i.cl-5x {
 // CDE Specific fa styles:
 
 .cdeDetailsButton::before {
-    font-family: "Font Awesome 5 Free";
+    font-family: "Font Awesome 5 Free", sans-serif;
     font-weight: 900;
     font-size: 3em;
     content: "\f044";
@@ -206,13 +206,13 @@ td.MyItemFont {
 
 // cde_NMIRunTime.cs
 .MyBulletFont {
-    font-family: 'robotothin', 'Segoe UI', Arial;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
     font-size: 20px;
 }
 
 // cde_NMIRunTime.cs
 .MyBulletLink {
-    font-family: 'robotothin', 'Segoe UI', Arial;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
     font-size: 16px;
     vertical-align: bottom;
     text-align: right;
@@ -222,7 +222,7 @@ td.MyItemFont {
 .MyContentFont {
     padding: 0;
     margin: 0 0 15px 0;
-    font-family: 'robotothin', 'Segoe UI', Arial;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
     font-size: 20px;
 }
 
@@ -230,13 +230,13 @@ td.MyItemFont {
 .MyHeadlineFont {
     padding: 0;
     margin: 0;
-    font-family: 'robotothin', 'Segoe UI', Arial;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
     font-size: 36px;
 }
 
 // cde_NMIRunTime.cs
 .MyLinkFont {
-    font-family: 'robotothin', 'Segoe UI', Arial;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
     font-size: 20px;
 }
 
@@ -500,7 +500,7 @@ span.cdeMyHeaderTitle {
 }
 
 .MyHeaderButton {
-    font-family: 'robotothin', 'Segoe UI', Arial;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
     text-align: center;
     cursor: pointer;
     float: left;
@@ -530,7 +530,8 @@ span.cdeMyHeaderTitle {
 }
 
 .cdeClock {
-    font-family: 'robotothin', 'Segoe UI', Arial;
+    font-family: 'robotothin', 'Segoe UI', Arial, sans-serif;
+    background: none;
     background-size: 100% 100%;
     text-align: center;
     cursor: pointer;
@@ -539,7 +540,6 @@ span.cdeMyHeaderTitle {
     margin-right: 0;
     padding: 0;
     font-weight: lighter;
-    background: none;
 }
 
 // INMIScreen Classes
@@ -991,7 +991,7 @@ div.hue {
     background: -o-linear-gradient(top, #ff0000 0, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
     background: -webkit-gradient(linear, left top, left bottom, from(#ff0000), color-stop(0.17, #ffff00), color-stop(0.33, #00ff00), color-stop(0.5, #00ffff), color-stop(0.67, #0000ff), color-stop(0.83, #ff00ff), to(#ff0000));
     background: -webkit-linear-gradient(top, #ff0000 0, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
-    background: linear-gradient(top, #ff0000 0, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+    background: linear-gradient(to top, #ff0000 0, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
 }
 
 .fa-border {
