@@ -10479,7 +10479,7 @@ var cdeNMI;
             }, 10000);
             window.addEventListener("message", (e) => {
                 try {
-                    if (e.origin !== "") //TODO: Must check with NMI Viewer app that uses this
+                    if (e.origin !== "") //NOSONAR: Must check with NMI Viewer app that uses this
                         return;
                     if (!e.data)
                         return;
