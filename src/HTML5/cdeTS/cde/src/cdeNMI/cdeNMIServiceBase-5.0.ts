@@ -159,7 +159,7 @@ namespace cdeNMI {
             }
             if (cde.MyBaseAssets.MyServiceHostInfo.DebugLevel > 0)
                 cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "FireEvent:EVAL", "UPDATE Plugin! eval() will be dropped in the future! Code: " + tJS);
-            eval(tJS);
+            eval(tJS); //NOSONAR known and will be removed in a future version
         }
 
         //////////////////////////////////////////////////////////////////////////////

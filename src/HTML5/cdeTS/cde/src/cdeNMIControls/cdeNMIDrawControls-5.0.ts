@@ -56,7 +56,7 @@
                 nocanvas.style.position = "absolute";
                 nocanvas.appendChild(document.createTextNode("Canvas drawing is not supported for your browser."));
                 this.mBaseDiv.appendChild(nocanvas);
-                return true;
+                return false;
             }
 
             if (!cde.CBool(this.GetSetting("NoBackBuffer"))) {
@@ -614,7 +614,7 @@
 
             let tColor: string = pTarget.GetProperty("Foreground");
             if (pTarget.GetProperty("UseRandomColor") === true)
-                tColor = cdeNMI.CColorToHex('rgb(' + Math.floor(Math.random() * 180) + ',' + Math.floor(Math.random() * 180) + ',' + Math.floor(Math.random() * 180) + ')');
+                tColor = cdeNMI.CColorToHex('rgb(' + Math.floor(Math.random() * 180) + ',' + Math.floor(Math.random() * 180) + ',' + Math.floor(Math.random() * 180) + ')'); //NOSONAR not crypto related
             const tSt: TheStrokePoint = new TheStrokePoint();
             tSt.DT = Math.ceil((new Date()).getTime() - (new Date(2014, 4, 1)).getTime());
             tSt.PG = pPointer.Identifier.toString();

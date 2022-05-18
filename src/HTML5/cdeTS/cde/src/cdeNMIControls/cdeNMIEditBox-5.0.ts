@@ -74,7 +74,7 @@
                     this.MyEditBox = document.createElement("input");
                     this.MyEditBox.style.cssFloat = "left";
                     if (!cde.CBool(this.GetProperty("EnableAutoFill")) && !cde.CBool(this.GetProperty("InTemplate"))) {
-                        this.MyEditBox.name = "EB" + cde.GuidToString(this.MyFieldInfo.cdeMID) + "_" + Math.floor((Math.random() * 1000) + 1)
+                        this.MyEditBox.name = "EB" + cde.GuidToString(this.MyFieldInfo.cdeMID) + "_" + Math.floor((Math.random() * 1000) + 1) //NOSONAR not crypto related
                         this.MyEditBox.autocomplete = "new-password";
                     }
                     this.mFrameDiv.appendChild(this.MyEditBox);
@@ -125,7 +125,7 @@
                                 this.MyConfirmBox.type = "password";
 
                                 if (!cde.CBool(this.GetProperty("EnableAutoFill")) && !cde.CBool(this.GetProperty("InTemplate"))) {
-                                    this.MyConfirmBox.name = "EB" + cde.GuidToString(this.MyFieldInfo.cdeMID) + "_" + Math.floor((Math.random() * 1000) + 1)
+                                    this.MyConfirmBox.name = "EB" + cde.GuidToString(this.MyFieldInfo.cdeMID) + "_" + Math.floor((Math.random() * 1000) + 1) //NOSONAR not crypto related
                                     this.MyConfirmBox.autocomplete = "new-password";
                                 }
                                 this.MyConfirmBox.addEventListener("focusin", () => {

@@ -79,7 +79,7 @@ sorttable = {
         for (var i = 0; i < headrow.length; i++) {
             // manually override the type with a sorttable_type attribute
             if (!headrow[i].className.match(/\bsorttable_nosort\b/)) { // skip this col
-                mtch = headrow[i].className.match(/\bsorttable_([a-z0-9]+)\b/);
+                mtch = headrow[i].className.match(/\bsorttable_([a-z0-9]+)\b/); 
                 if (mtch) { override = mtch[1]; }
                 if (mtch && typeof sorttable["sort_" + override] == 'function') {
                     headrow[i].sorttable_sortfunction = sorttable["sort_" + override];
@@ -212,31 +212,29 @@ sorttable = {
             return node.getAttribute("sorttable_customkey");
         }
         else if (typeof node.textContent != 'undefined' && !hasInputs) {
-            return node.textContent.replace(/^\s+|\s+$/g, '');
+            return node.textContent.replace(/^\s+|\s+$/g, ''); //NOSONAR Not Critical
         }
         else if (typeof node.innerText != 'undefined' && !hasInputs) {
-            return node.innerText.replace(/^\s+|\s+$/g, '');
+            return node.innerText.replace(/^\s+|\s+$/g, ''); //NOSONAR Not Critical
         }
         else if (typeof node.text != 'undefined' && !hasInputs) {
-            return node.text.replace(/^\s+|\s+$/g, '');
+            return node.text.replace(/^\s+|\s+$/g, ''); //NOSONAR Not Critical
         }
         else {
             switch (node.nodeType) {
                 case 3:
                     if (node.nodeName.toLowerCase() == 'input') {
-                        return node.value.replace(/^\s+|\s+$/g, '');
+                        return node.value.replace(/^\s+|\s+$/g, ''); //NOSONAR Not Critical
                     }
                 case 4:
-                    return node.nodeValue.replace(/^\s+|\s+$/g, '');
-                    break;
+                    return node.nodeValue.replace(/^\s+|\s+$/g, ''); //NOSONAR Not Critical
                 case 1:
                 case 11:
                     var innerText = '';
                     for (var i = 0; i < node.childNodes.length; i++) {
                         innerText += sorttable.getInnerText(node.childNodes[i]);
                     }
-                    return innerText.replace(/^\s+|\s+$/g, '');
-                    break;
+                    return innerText.replace(/^\s+|\s+$/g, '');  //NOSONAR Not Critical
                 default:
                     return '';
             }

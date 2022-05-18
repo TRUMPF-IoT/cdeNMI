@@ -99,7 +99,7 @@
 
             if (!this.MyControlTypeName) {
                 this.SetProperty("PlaceHolder", "Missing Type for UserControl");
-                return true;
+                return false;
             }
 
             if (!pTRF.FldInfo["RenderTarget"] && !pTRF.FldInfo["PlaceHolder"])
