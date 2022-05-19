@@ -101,7 +101,7 @@ namespace cde {
         AutoBom(blob) {
             // prepend BOM for UTF-8 XML and text/* types (including HTML)
             // note: your browser will automatically convert UTF-16 U+FEFF to EF BB BF
-            if (/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)) {
+            if (/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)) { //NOSONAR Not Critical
                 return new Blob([String.fromCharCode(0xFEFF), blob], { type: blob.type });
             }
             return blob;

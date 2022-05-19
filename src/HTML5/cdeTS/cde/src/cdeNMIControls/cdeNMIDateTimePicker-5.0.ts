@@ -34,7 +34,7 @@ namespace cdeNMI {
             this.MyEditBox.style.cssFloat = "left";
             this.MyEditBox.id = "DTP" + cde.GuidToString(this.MyFieldInfo.cdeMID)
             if (!cde.CBool(this.GetProperty("EnableAutoFill")) && !cde.CBool(this.GetProperty("InTemplate"))) {
-                this.MyEditBox.name = "EB" + cde.GuidToString(this.MyFieldInfo.cdeMID) + "_" + Math.floor((Math.random() * 1000) + 1)
+                this.MyEditBox.name = "EB" + cde.GuidToString(this.MyFieldInfo.cdeMID) + "_" + Math.floor((Math.random() * 1000) + 1)  //NOSONAR not crypto related
                 this.MyEditBox.autocomplete = "new-password";
             }
 

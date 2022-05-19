@@ -974,7 +974,7 @@ namespace cdeNMI {
                             defaultSuffix = null,
                             negative = 0;
 
-                        if (typeof defaultValue === 'string') defaultSuffix = defaultValue.replace(/^\-?[0-9\.]+(.*)$/, '$1');
+                        if (typeof defaultValue === 'string') defaultSuffix = defaultValue.replace(/^\-?[0-9\.]+(.*)$/, '$1'); //NOSONAR Not Critical
                         defaultValue = parseFloat(defaultValue);
                         propValue = parseFloat(propValue);
 
@@ -1019,7 +1019,7 @@ namespace cdeNMI {
                             propValue = properties[prop];
                             let propSuffix = null;
 
-                            if (typeof propValue === 'string') propSuffix = propValue.replace(/^\-?[0-9\.]+(.*)$/, '$1');
+                            if (typeof propValue === 'string') propSuffix = propValue.replace(/^\-?[0-9\.]+(.*)$/, '$1'); //NOSONAR Not Critical
 
                             propValue = parseFloat(propValue);
 
@@ -1039,7 +1039,7 @@ namespace cdeNMI {
         jsonDate = cde.CStr(jsonDate);
         if (jsonDate.substr(0, 2) === "\/") {
             const offset = new Date().getTimezoneOffset() * 60000;
-            const parts: RegExpExecArray = /\/Date\((-?\d+)([+-]\d{2})?(\d{2})?.*/.exec(jsonDate);
+            const parts: RegExpExecArray = /\/Date\((-?\d+)([+-]\d{2})?(\d{2})?.*/.exec(jsonDate); //NOSONAR Not Critical
 
             if (parts[2] === undefined)
                 parts[2] = "0";
@@ -1201,7 +1201,7 @@ namespace cdeNMI {
     export function Check4ValidEmail(email: string): boolean {
         if (!email || email.length === 0)
             return true;
-        const filter = new RegExp("[a-z0-9!#$%\&\'*+\x2F=?^_`{|}~-]+(?:\\.[a-z0-9!#$%\&\'*+\x2F=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+        const filter = new RegExp("[a-z0-9!#$%\&\'*+\x2F=?^_`{|}~-]+(?:\\.[a-z0-9!#$%\&\'*+\x2F=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"); //NOSONAR Not Critical
         if (!email || !filter.test(email.toLowerCase()) || email.substring(0, 1) === '.' || email.substring(email.length - 1, 1) === '.')
             return false;
         return true;
@@ -1251,7 +1251,7 @@ namespace cdeNMI {
         if (color.substr(0, 1) === '#') {
             return color;
         }
-        const digits = /(.*?)rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/.exec(color);
+        const digits = /(.*?)rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/.exec(color); //NOSONAR Not Critical
 
         const red = parseInt(digits[2]);
         const green = parseInt(digits[3]);
