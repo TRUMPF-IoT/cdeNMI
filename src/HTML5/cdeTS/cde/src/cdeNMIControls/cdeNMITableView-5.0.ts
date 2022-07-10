@@ -226,7 +226,6 @@
                 if (!this.mBaseDiv && !pTargetControl && this.MyScreenInfo.MyStorageMeta[this.MyTableName])
                     this.mBaseDiv = document.getElementById('Content_' + cde.GuidToString(this.MyScreenInfo.MyStorageMeta[this.MyTableName].TargetElement)) as HTMLDivElement;
                 if (!this.mBaseDiv) {
-                    //this.mBaseDiv = document.createElement("div");
                     if (this.MyTarget) {
                         this.mBaseDiv = this.MyTarget.GetContainerElement() as HTMLDivElement;
                         if (this.mBaseDiv && !this.mBaseDiv.id && this.MyFieldInfo) {
@@ -242,10 +241,8 @@
                 }
             }
             else {
-                //TODO: Use TileGroup and set Overflow to tru if required
                 this.mBaseDiv = document.createElement("div");
                 if (this.MyFieldInfo && cde.CInt(this.MyFieldInfo["TileHeight"]) > 0) {
-                    //this.mBaseDiv.style.height = cdeNMI.GetSizeFromTile(this.MyFieldInfo["TileHeight"]) + "px";
                     this.mBaseDiv.className = "cdeTableContainer";
                 } else {
                     this.mBaseDiv.style.height = "inherit";
@@ -275,7 +272,6 @@
                 if (!this.MyScreenInfo.MyStorageMirror[this.MyTableName]) {
                     this.DisplayHeader(this.mBaseDiv, "No Data Available, yet", this.GetSetting("IsLiveData"));
                     if (cdeNMI.MyEngine && this.MyTarget && this.MyTarget.MyFieldInfo) {
-                        //if (cde.CBool(this.MyFieldInfo["IsDropTarget"]) === true) debugger;
                         cdeNMI.MyEngine.PublishToNMI("NMI_GET_DATA:" + cde.GuidToString(this.MyTarget.MyFieldInfo.cdeMID) + ":CMyTable:" + this.MyTableName + ":" + this.MyScreenID + ":true:true", '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
                     }
                     return false;
@@ -344,11 +340,11 @@
 
             this.mColHeader = new Array<ctrlSmartLabel>();
             let tOrderBy: string[]
-            let tSortDescendin = false;
+            let tSortDescending = false;
             if (this.MyFormInfo.OrderBy) {
                 tOrderBy = this.MyFormInfo.OrderBy.split(' ');
                 if (tOrderBy.length > 1 && tOrderBy[1].toLocaleLowerCase() === "desc")
-                    tSortDescendin = true;
+                    tSortDescending = true;
             }
             let i: number;
             for (i = 0; i < this.mCurrentFormFieldsInfo.length; i++) {
@@ -388,14 +384,14 @@
                                 tTable.mColHeader[tTable.mSortFldID].SetProperty("ClassName", "");
                             }
                             tTable.mSortFldID = thisOb.MyFieldInfo.FldOrder;
-                            let tSortDescendin = false;
+                            tSortDescending = false;
                             if (!thisOb.GetProperty("ClassName") || thisOb.GetProperty("ClassName") === "cdeTHsortdn") {
                                 thisOb.SetProperty("ClassName", "cdeTHsortup");
-                                tSortDescendin = true;
+                                tSortDescending = true;
                             }
                             else
                                 thisOb.SetProperty("ClassName", "cdeTHsortdn");
-                            this.SortTableByProperty(tTable.MyScreenInfo.MyStorageMirror[tTable.MyTableName], tTable.mCurrentFormFieldsInfo[thisOb.MyFieldInfo.FldOrder].DataItem, cdeNMI.MyTCF.IsTypeNumeric(tTable.mCurrentFormFieldsInfo[thisOb.MyFieldInfo.FldOrder].Type), tSortDescendin);
+                            this.SortTableByProperty(tTable.MyScreenInfo.MyStorageMirror[tTable.MyTableName], tTable.mCurrentFormFieldsInfo[thisOb.MyFieldInfo.FldOrder].DataItem, cdeNMI.MyTCF.IsTypeNumeric(tTable.mCurrentFormFieldsInfo[thisOb.MyFieldInfo.FldOrder].Type), tSortDescending);
                             if (this.MyTableTitle)
                                 this.MyTableTitle.SetProperty("Visibility", false);
                             if (this.InfoText) {
@@ -409,7 +405,7 @@
                     });
                 }
                 if (this.MyFormInfo.OrderBy && this.mCurrentFormFieldsInfo[i].DataItem === tOrderBy[0]) {
-                    if (!tSortDescendin)
+                    if (!tSortDescending)
                         this.mColHeader[i].SetProperty("ClassName", "cdeTHsortdn");
                     else
                         this.mColHeader[i].SetProperty("ClassName", "cdeTHsortup");
@@ -423,7 +419,7 @@
             if (this.MyFormInfo.OrderBy) {
                 for (i = 0; i < this.mCurrentFormFieldsInfo.length; i++) {
                     if (this.mCurrentFormFieldsInfo[i] && this.mCurrentFormFieldsInfo[i].DataItem === tOrderBy[0]) {
-                        this.SortTableByProperty(this.MyScreenInfo.MyStorageMirror[this.MyTableName], this.mCurrentFormFieldsInfo[i].DataItem, cdeNMI.MyTCF.IsTypeNumeric(this.mCurrentFormFieldsInfo[i].Type), tSortDescendin);
+                        this.SortTableByProperty(this.MyScreenInfo.MyStorageMirror[this.MyTableName], this.mCurrentFormFieldsInfo[i].DataItem, cdeNMI.MyTCF.IsTypeNumeric(this.mCurrentFormFieldsInfo[i].Type), tSortDescending);
                         break;
                     }
                 }
@@ -433,7 +429,6 @@
             this.tableBody.className = "cdeScrollBody";
             const tH: number = cde.CInt(this.GetProperty("TileHeight"));
             if (tH > 0) {
-                //if (tH < 4) tH = 4;
                 this.tableBody.style.height = cdeNMI.GetSizeFromTile(tH - 1) + "px";
             }
             this.tableMain.appendChild(this.tableBody);
@@ -531,8 +526,6 @@
                 pHeaderTitle = "&nbsp;";
                 tAddHeadline = false;
             }
-            else
-                tAddHeadline = true;
             if (tAddHeadline) {
                 const tScr: INMIScreen = cdeNMI.MyScreenManager.GetScreenByID(this.MyTableName);
                 if (tScr && cde.CBool(tScr.GetProperty("HidePins")) === false) {
@@ -540,13 +533,13 @@
                     tAddHeadline = false;
                 } else {
                     this.MyTableTitle = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).Create(null, { PreInitBag: ["Element=h1"], PostInitBag: ["iValue=" + cdeNMI.GenerateFinalString(pHeaderTitle), "ClassName=cdeTableHeader"] });
-                    //ctrlSmartLabel.Create(null, null, null, cdeNMI.GenerateFinalString(pHeaderTitle), "h1", false, "cdeTableHeader");
                     if (this.MyFieldInfo && this.MyFieldInfo["TNClassName"])
                         this.MyTableTitle.SetProperty("ClassName", this.MyFieldInfo["TNClassName"]);
                 }
             }
 
             if (!pIsLiveData) {
+                let hasPaging = false;
                 if (!this.IsPropertyTable) {
                     if (tAddHeadline) {
                         const tRefreshBut = ctrlTileButton.Create(null, (e: PointerEvent) => {
@@ -559,6 +552,7 @@
                         tHeadTd.appendChild(tRefreshBut.GetElement());
                     }
                     if (cde.CInt(this.GetProperty("PageSize")) > 0) {
+                        hasPaging = true;
                         const tBut = ctrlTileButton.Create(null, () => {
                             if (!this.rowAdder && cde.CInt(this.GetProperty("CurrentPage")) > 0) {
                                 cdeNMI.ResetKeyCorder();
@@ -603,8 +597,14 @@
                         tBut4.SetProperty("TileFactorY", 2);
                         tHeadTd.appendChild(tBut4.GetElement());
                     }
-                    //else
-                    //  tAddHeadline = false;
+                }
+                if (cde.CBool(this.MyFieldInfo["ShowExportButton"])) {
+                    const tButEx = ctrlTileButton.Create(null, () => {
+                        this.RefreshData(this.MyTableName, cde.CInt(this.GetProperty("CurrentPage")), true, true);
+                    }, "<span class='fa cdeTableHeaderIcon'>&#xf019;</span>", 1, 1);
+                    tButEx.SetProperty("TileFactorX", 2);
+                    tButEx.SetProperty("TileFactorY", 2);
+                    tHeadTd.appendChild(tButEx.GetElement());
                 }
 
                 if (this.MyFormInfo && this.MyFormInfo.FormFields) {
@@ -660,7 +660,6 @@
         public UpdateBody(IsNewTable: boolean) {
             if (!IsNewTable) {
                 this.RemoveTableHooks();
-                //cdeNMI.MyEngine.RemoveTableHooks(this.MyTableControls);
             }
             this.MyTableControls = [];
             this.mTableRows = [];
@@ -675,13 +674,13 @@
                 this.tableBody.appendChild(tRow.GetElement());
                 const tDataRow = this.MyScreenInfo.MyStorageMirror[this.MyTableName][i];
                 this.mTableRows[tDataRow.cdeMID] = tRow;
-                for (let j = 0; j < this.mCurrentFormFieldsInfo.length; j++) {
-                    if (!this.mCurrentFormFieldsInfo[j] || (this.mCurrentFormFieldsInfo[j].Flags & 8) !== 0 || this.mCurrentFormFieldsInfo[j].Type === cdeControlType.FacePlate) continue;
+                let j = 0;
+                for (var tFldInfo of this.mCurrentFormFieldsInfo) {
+                    if (!tFldInfo || (tFldInfo.Flags & 8) !== 0 || tFldInfo.Type === cdeControlType.FacePlate) continue;
                     const tD: ctrlTableCell = ctrlTableCell.Create(null, null);
                     tRow.AppendChild(tD);
-                    const tFldInfo: cdeNMI.TheFieldInfo = this.mCurrentFormFieldsInfo[j];
                     if (!tFldInfo.FldOrder)
-                        tFldInfo.FldOrder = (j + 1) * 10;
+                        tFldInfo.FldOrder = (j++ + 1) * 10;
                     const tFldID: string = this.MyTableName + '_' + i + '_' + tFldInfo.FldOrder;
                     if ((tFldInfo.Flags & 2) !== 0)
                         tD.HookEvents(false);
@@ -751,14 +750,13 @@
                             case cdeControlType.Picture:
                                 if (tFldContent && (tFldContent.length > 512 || cde.CBool(ThePB.GetSetting(tFldInfo, "IsBlob"))))
                                     tFldContent = "data:image/jpeg;base64," + tFldContent;
-                                this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.Picture).Create(null, { PostInitBag: ["iValue=" + tFldContent] }); //ctrlZoomImage.Create(null, 0, 0, tFldContent);
+                                this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.Picture).Create(null, { PostInitBag: ["iValue=" + tFldContent] }); 
                                 if (cde.CInt(tFldInfo["FldWidth"]) > 0) {
                                     this.MyTableControls[i][tFldID].SetProperty("ControlTW", cde.CInt(tFldInfo["FldWidth"]));
                                     this.MyTableControls[i][tFldID].SetProperty("ControlTH", 1);
                                 }
                                 break;
                             case cdeControlType.Table:
-                                //this.MyTableControls[i][tFldID] = ctrlTableView.Create(null, this.MyScreenID, new TheTRF(this.MyTableName, i, tFldInfo), null, false, "cdeInlineTable");
                                 this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.Table).Create(null, { ScreenID: this.MyScreenID, TRF: new cdeNMI.TheTRF(this.MyTableName, i, tFldInfo), PostInitBag: ["InnerClassName=cdeInlineTable"] });
                                 break;
                             case cdeControlType.CanvasDraw:
@@ -770,7 +768,6 @@
                                 }
                                 break;
                             case cdeControlType.TouchDraw:
-                                // ctrlTouchDraw.Create(null, new TheTRF(this.MyTableName, i, tFldInfo), false, cde.CInt(tFldInfo["FldWidth"]) * cdeNMI.GetSizeFromTile(1), tFldInfo["TileHeight"] * cdeNMI.GetSizeFromTile(1), tFldContent);
                                 this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TouchDraw).Create(null, { TRF: new TheTRF(this.MyTableName, i, tFldInfo), PostInitBag: ["iValue=" + tFldContent] });
                                 break;
                             case cdeControlType.FormButton:
@@ -787,7 +784,6 @@
                                 break;
                             case cdeControlType.SingleCheck:
                                 this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SingleCheck).Create(this, { ScreenID: this.MyScreenID, TRF: new TheTRF(this.MyTableName, i, tFldInfo), PreInitBag: ["IsInTable=true"], PostInitBag: ["iValue=" + cde.CBool(tFldContent)] });
-                                //ctrlCheckBox.CreateOLD(null, this.MyScreenID, new TheTRF(this.MyTableName, i, tFldInfo), cde.CBool(tFldContent), "", false);
                                 this.MyTableControls[i][tFldID].SetProperty("UpdateTable", true);
                                 break;
                             case cdeControlType.CircularGauge:
@@ -821,7 +817,7 @@
                                 break;
                             case cdeControlType.CollapsibleGroup:
                             case cdeControlType.TileGroup:
-                                this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(null, { TRF: new TheTRF(this.MyTableName, i, tFldInfo) }); // ctrlTileGroup.Create(null, new TheTRF(this.MyTableName, i, tFldInfo));
+                                this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(null, { TRF: new TheTRF(this.MyTableName, i, tFldInfo) }); 
                                 this.MyTableControls[i][tFldID].SetProperty("ClassName", "cdeTileGroup");
                                 this.MyTableControls[i][tFldID].SetProperty("IsDivOnly", tFldInfo["IsDivOnly"]);
                                 this.MyTableControls[i][tFldID].SetProperty("iValue", tFldContent);
@@ -931,8 +927,8 @@
             return true;
         }
 
-        public RefreshData(pTableName: string, pPageNo: number, bForceReload = false) {
-            if (this.IsPropertyTable) {
+        public RefreshData(pTableName: string, pPageNo: number, bForceReload = false, pFileDownload=false) {
+            if (this.IsPropertyTable && pFileDownload!==true) {
                 this.RefreshPropTable(pTableName);
                 this.UpdateBody(true);
             }
@@ -949,8 +945,13 @@
                     let tFilter = this.GetProperty("CurrentFilter");
                     if (!tFilter)
                         tFilter = "";
-                    cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:' + tID + ':CMyTable:' + pTableName + ':' + this.MyScreenID + (bForceReload === true ? ":false:true" : ""), pPageNo.toString() + (tFilter.length > 0 ? (":;:" + tFilter) : ""), this.MyTRF ? this.MyTRF.GetNodeID() : null);
+                    let tData = "CMyTable";
+                    if (pFileDownload === true)
+                        tData = "CMyData";
+                    cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:' + tID + ':'+ tData +':' + pTableName + ':' + this.MyScreenID + (bForceReload === true ? ":false:true" : ""), pPageNo.toString() + (tFilter.length > 0 ? (":;:" + tFilter) : ""), this.MyTRF ? this.MyTRF.GetNodeID() : null);
                 }
+                if (pFileDownload === true)
+                    return;
                 if (this.MyTableTitle)
                     this.MyTableTitle.SetProperty("Visibility", false);
                 if (this.InfoText) {
@@ -975,19 +976,19 @@
         public TableHighlightRow() {
             if (document.getElementById && document.createTextNode) {
                 const tables = document.getElementsByTagName('table');
-                for (let i = 0; i < tables.length; i++) {
-                    if ((tables[i]).className === 'cdeHilite') {
-                        const trs = (tables[i]).getElementsByTagName('tr');
-                        for (let j = 0; j < trs.length; j++) {
-                            if ((trs[j]).parentNode.nodeName === 'TBODY') {
-                                (trs[j]).onmouseover = (ev) => {
-                                    const target = (ev.target || ev.srcElement) as HTMLElement;
+                for (var tTabs of tables) {
+                    if (tTabs.className === 'cdeHilite') {
+                        const trs = tTabs.getElementsByTagName('tr');
+                        for (var tRow of trs) {
+                            if (tRow.parentNode.nodeName === 'TBODY') {
+                                tRow.onmouseover = (ev) => {
+                                    const target = (ev.target) as HTMLElement;
                                     target.setAttribute("oldClass", target.className);
                                     target.className = 'cdeHilightRow';
                                     return false
                                 };
-                                (trs[j]).onmouseout = (ev) => {
-                                    const target = (ev.target || ev.srcElement) as HTMLElement;
+                                tRow.onmouseout = (ev) => {
+                                    const target = (ev.target) as HTMLElement;
                                     target.className = target.attributes["oldClass"].nodeValue;
                                     return false
                                 };
@@ -1023,8 +1024,8 @@
                 tTableRecord[0] = this.MyScreenInfo.MyStorageMirror[this.MyTableName][0].constructor();
             else
                 tTableRecord[0] = {};
-            for (let i = 0; i < this.mCurrentFormFieldsInfo.length; i++) {
-                const tFldInfo: cdeNMI.TheFieldInfo = this.mCurrentFormFieldsInfo[i];
+            for (var tFldInfo of this.mCurrentFormFieldsInfo) 
+            {
                 if (!tFldInfo)
                     continue;
                 const tFldID = this.MyTableName + "_" + tFldInfo.FldOrder;
@@ -1036,6 +1037,7 @@
                         case 4: //Checkbox
                             tVal = cde.CBool(this.MyAdderRow[tFldID].MyNMIControl.GetProperty("IsChecked"));
                             break;
+                        case 1:
                         default:
                             tVal = this.MyAdderRow[tFldID].MyNMIControl.GetProperty("Value");
                             break;
@@ -1078,7 +1080,7 @@
             for (let i = 0; i < this.mCurrentFormFieldsInfo.length; i++) {
                 const tFldInfo: cdeNMI.TheFieldInfo = this.mCurrentFormFieldsInfo[i];
                 this.rowAdder.className = "cdeHilightRow";
-                const cell3: ctrlTableCell = ctrlTableCell.Create(null, new TheTRF(this.MyTableName, 0, tFldInfo), this.rowAdder, tFCnt); //  this.rowAdder.insertCell(i);
+                const cell3: ctrlTableCell = ctrlTableCell.Create(null, new TheTRF(this.MyTableName, 0, tFldInfo), this.rowAdder, tFCnt); 
                 if ((this.mCurrentFormFieldsInfo[i].Flags & 8) !== 0) cell3.SetProperty("Visibility", false);
                 if (tFldInfo.DataItem === "CDE_DELETE") {
                     cell3.SetProperty("TileWidth", 1);
@@ -1136,7 +1138,7 @@
                     this.OnComplete(nextFile.size);
                 } else {
                     cdeNMI.MyToast.ShowToastMessage("Reading: " + nextFile.name);
-                    this.UploadFile(nextFile, status);
+                    this.UploadFile(nextFile);
                 }
             } else {
                 this.mBaseDiv.classList.remove('ctrlDropUploaderHover');
@@ -1146,7 +1148,7 @@
             this.UploadNext();
         }
 
-        UploadFile(file, status) {
+        UploadFile(file) {
             const reader = new FileReader();
             reader.onload = (evt) => {
                 const tres: any = reader.result;
@@ -1176,8 +1178,8 @@
         ProcessFiles(pFileList) {
             if (!pFileList || !pFileList.length || this.mFileList.length) return;
 
-            for (let i = 0; i < pFileList.length; i++) {
-                this.mFileList.push(pFileList[i]);
+            for (var tFile of pFileList) {
+                this.mFileList.push(tFile);
             }
             this.UploadNext();
         }

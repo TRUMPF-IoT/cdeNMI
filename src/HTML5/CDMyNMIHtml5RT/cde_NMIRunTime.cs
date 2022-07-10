@@ -222,12 +222,10 @@ namespace NMIService
                 if (MustExist) return;
                 if (pRealPage.Substring(1).Contains("/")) return;
                 if (string.IsNullOrEmpty(TheBaseAssets.MyServiceHostInfo.DefAccountPage)) return;
-                tPageDefinition = TheNMIEngine.GetPageByID(TheCommonUtils.CGuid(TheBaseAssets.MyServiceHostInfo.DefAccountPage)); // MyNMIModel.MyPageDefinitionsStore.MyMirrorCache.TheValues.First(s => s.cdeMID == TheCommonUtils.CGuid(TheBaseAssets.MyServiceHostInfo.DefAccountPage));
+                tPageDefinition = TheNMIEngine.GetPageByID(TheCommonUtils.CGuid(TheBaseAssets.MyServiceHostInfo.DefAccountPage)); 
             }
             if (tPageDefinition == null)
-                return; // "ERR:Page Definition not found!";
-                        //if (IsAutoTheme)
-                        //  tPageDefinition.IsLiteTheme = IsLightTheme;
+                return; 
 
             if (string.IsNullOrEmpty(tPageDefinition.ContentType))
                 tPageDefinition.ContentType = "text/html";

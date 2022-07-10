@@ -773,9 +773,13 @@ if (rng_pool == null) {
     rng_pptr = 0;
     var t;
     while (rng_pptr < rng_psize) {
-        const crypto = window.crypto || window.msCrypto;
-        var array = new Uint32Array(1);
-        t = Math.floor(65536 * crypto.getRandomValues(array));
+        if (typeof window === typeof undefined) {
+            t = Math.floor(65536 * Math.random());  //NOSONAR - window not available in Web Worker
+        } else {
+            const crypto = window.crypto || window.msCrypto;
+            var array = new Uint32Array(1);
+            t = Math.floor(65536 * crypto.getRandomValues(array));
+        }
         rng_pool[rng_pptr++] = t >>> 8;
         rng_pool[rng_pptr++] = t & 255
     }
@@ -894,5 +898,3 @@ function RSAEncrypt(d) {
 RSAKey.prototype.doPublic = RSADoPublic;
 RSAKey.prototype.setPublic = RSASetPublic;
 RSAKey.prototype.encrypt = RSAEncrypt;
-
-//module.exports = RSAKey; //LOCAL: Fix

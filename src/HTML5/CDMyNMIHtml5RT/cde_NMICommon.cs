@@ -15,30 +15,17 @@ using System.IO;
 
 namespace NMIService
 {
-    public partial class TheNMIHtml5RT : ICDEPlugin, ICDEThing, ICDENMIPlugin
+    public partial class TheNMIHtml5RT : ThePluginBase, ICDENMIPlugin
     {
         internal static readonly Guid eNMIPortalDashboard = new Guid("{E7DA71A1-496F-4B15-A8AB-969526341C7B}");
         internal static readonly Guid eNMIDashboard = new Guid("{FAFA22FF-96AC-42CF-B1DB-7C073053FC39}");
         internal static readonly Guid eActivationAndStatusDashGuid = new Guid("{1CF9A525-0126-4189-AF41-18C3609E5743}");
 
-
-        #region ICDEPlugin Methods
-        private IBaseEngine MyBaseEngine;
-
-        /// <summary>
-        /// Mandatory method returning the IBaseEngine interface
-        /// </summary>
-        /// <returns></returns>
-        public IBaseEngine GetBaseEngine()
-        {
-            return MyBaseEngine;
-        }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="pBase">The C-DEngine is creating a Host for this engine and hands it to the Plugin Service</param>
-        public void InitEngineAssets(IBaseEngine pBase)
+        public override void InitEngineAssets(IBaseEngine pBase)
         {
             MyBaseEngine = pBase;
             MyBaseEngine.SetEngineName(GetType().FullName);
@@ -47,85 +34,29 @@ namespace NMIService
             MyBaseEngine.AddCapability(eThingCaps.NMIEngine);
             MyBaseEngine.AddCapability(eThingCaps.NMIControls);
             MyBaseEngine.AddCapability(eThingCaps.MustBePresent);
-            MyBaseEngine.SetPluginInfo("This service provides a rich graphical UX - the NMI - based on HMTL5", 0, null, "toplogo-150.png", "C-Labs", "http://www.c-labs.com", new List<string> { "NMI Extension" });
+            MyBaseEngine.SetPluginInfo("This service provides a rich graphical UX - the NMI - based on HMTL5", 0, null, "toplogo-150.png", "C-Labs", "https://www.c-labs.com", new List<string> { "NMI Extension" });
             MyBaseEngine.SetCDEMinVersion(4.008);
             MyBaseEngine.SetEngineService(true);
             MyBaseEngine.GetEngineState().IsAllowedUnscopedProcessing = TheBaseAssets.MyServiceHostInfo.IsCloudService;
             MyBaseEngine.GetEngineState().IsAcceptingFilePush = true;
             MyBaseEngine.SetEngineID(new Guid("{4D6E5FE8-338E-4B3E-B98D-0FFFEB62FE63}"));
         }
-        #endregion
-
-        #region ICDEThing Methods
-        public void SetBaseThing(TheThing pThing)
-        {
-            MyBaseThing = pThing;
-        }
-        public TheThing GetBaseThing()
-        {
-            return MyBaseThing;
-        }
-        public cdeP GetProperty(string pName, bool DoCreate)
-        {
-            if (MyBaseThing != null)
-                return MyBaseThing.GetProperty(pName, DoCreate);
-            return null;
-        }
-        public cdeP SetProperty(string pName, object pValue)
-        {
-            if (MyBaseThing != null)
-                return MyBaseThing.SetProperty(pName, pValue);
-            return null;
-        }
-        public void RegisterEvent(string pName, Action<ICDEThing, object> pCallBack)
-        {
-            if (MyBaseThing != null)
-                MyBaseThing.RegisterEvent(pName, pCallBack);
-        }
-        public void UnregisterEvent(string pName, Action<ICDEThing, object> pCallBack)
-        {
-            if (MyBaseThing != null)
-                MyBaseThing.UnregisterEvent(pName, pCallBack);
-        }
-        public void FireEvent(string pEventName, ICDEThing sender, object pPara, bool FireAsync)
-        {
-            if (MyBaseThing != null)
-                MyBaseThing.FireEvent(pEventName, sender, pPara, FireAsync);
-        }
-        public bool HasRegisteredEvents(string pEventName)
-        {
-            if (MyBaseThing != null)
-                return MyBaseThing.HasRegisteredEvents(pEventName);
-            return false;
-        }
-        protected TheThing MyBaseThing;
-
-        protected bool mIsUXInitCalled;
-        protected bool mIsUXInitialized;
-        protected bool mIsInitCalled;
-        protected bool mIsInitialized;
-        public bool IsUXInit()
-        { return mIsUXInitialized; }
-        public bool IsInit()
-        { return mIsInitialized; }
-
-        #endregion
 
         private TheFieldInfo mRequestKeyFld;
         private TheFieldInfo mFormLabelField;
 
-        public void RegisterNMIControls()
+        public virtual void RegisterNMIControls()
         {
 
         }
 
-        public void RenderMainFrameTemplate(Guid pID)
+        public void RenderMainFrameTemplate(Guid TemplateID)
         {
-            if (pID != Guid.Empty)
-                MyMainFrameHtml = RenderMainFrameHtml(pID);
+            if (TemplateID != Guid.Empty)
+                MyMainFrameHtml = RenderMainFrameHtml(TemplateID);
         }
 
-        public bool CreateUX()
+        public override bool CreateUX()
         {
             if (mIsUXInitCalled) return false;
 
@@ -205,8 +136,6 @@ namespace NMIService
                     {new TheFieldInfo() {FldOrder = 62, DataItem = "QueueLength", Type = eFieldType.Number, Header = "Queue Length", FldWidth = 1}},
                 });
 
-
-                ///NEW in 4.1: Thing Registry Template
                 var ThingTemplate = new TheFormInfo(new Guid("{5EBDEB3A-B11B-467A-94D2-71148F4FEF18}"), eEngineName.NMIService, "The Thing Editor", "TheThing;:;")
                 { cdeA = 128, TableReference = $"{new Guid("{B510837F-3B75-4CF2-A900-D36C19113A13}")}", TileWidth = 12, DefaultView = eDefaultView.Form, IsNotAutoLoading = true, PropertyBag = new nmiCtrlFormTemplate { /*IsPopup=true*/ } };
                 TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, ThingTemplate, "CMyTable", "Thing Editor", 3, 9, 128, "NMI Administration", null, new nmiDashboardTile { ForceLoad = true, Visibility = false, HideFromSideBar = true/*, IsPopup=true coming with task 1301*/ });
@@ -216,13 +145,11 @@ namespace NMIService
                 TheFieldInfo tDlT = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 40, 2, 0x0, "", null, new nmiCtrlTileButton() { Thumbnail = "FA3:f019", NoTE = true, ClassName = "cdeGoodActionButton", TileWidth = 1 });
                 tDlT.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "DOWNLOAD", OnDownloadClick);
 
-                // TODO find a different font/icon for pipeline export  cloud-download-alt F381 download F019
                 TheFieldInfo tExportT = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 45, 2, 0x0, "", null, new nmiCtrlTileButton() { Thumbnail = "FA3:f14d", NoTE = true, ClassName = "cdeGoodActionButton", TileWidth = 1 });
                 tExportT.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "EXPORT", (t, p) => OnExportClick(t, p, false, false, false, false));
                 TheFieldInfo tExportTCDEF = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 46, 2, 0x0, "Export CDEF", null, new nmiCtrlTileButton() { NoTE = true, ClassName = "cdeGoodActionButton", TileWidth = 1 });
                 tExportTCDEF.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "EXPORTCDEF", (t, p) => OnExportClick(t, p, false, false, false, true));
 
-                // TODO find a different font/icon for pipeline export  cloud-download-alt F381 download F019
                 TheFieldInfo tExportGeneralizedT = TheNMIEngine.AddSmartControl(MyBaseThing, ThingTemplate, eFieldType.TileButton, 47, 2, 0x0, "Export Pipeline Generalized", null, new nmiCtrlTileButton() { NoTE = true, ClassName = "cdeGoodActionButton", TileWidth = 2 });
                 tExportGeneralizedT.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "EXPORTGENERALIZED", (t, p) => OnExportClick(t, p, true, false, false, false));
 
@@ -264,7 +191,7 @@ namespace NMIService
 
 
                 //Old ThingRegistry Table
-                tInf = new TheFormInfo(new Guid("{B510837F-3B75-4CF2-A900-D36C19113A13}"), eEngineName.NMIService, "The Thing Registry", "TheThing") { cdeA = 128, IsReadOnly = false, IsNotAutoLoading = true, PropertyBag = new nmiCtrlTableView { TemplateID = "5EBDEB3A-B11B-467A-94D2-71148F4FEF18", ShowFilterField = true } };
+                tInf = new TheFormInfo(new Guid("{B510837F-3B75-4CF2-A900-D36C19113A13}"), eEngineName.NMIService, "The Thing Registry", "TheThing") { cdeA = 128, IsReadOnly = false, IsNotAutoLoading = true, PropertyBag = new nmiCtrlTableView { TemplateID = "5EBDEB3A-B11B-467A-94D2-71148F4FEF18", ShowFilterField = true, ShowExportButton=true } };
                 TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tInf, "CMyTable", "Thing Registry", 3, 9, 128, "NMI Administration", null, new nmiDashboardTile { TileThumbnail = "FA5:f1c0", ForceLoad = true });
                 TheNMIEngine.AddFields(tInf, new List<TheFieldInfo>
                 {
@@ -289,7 +216,6 @@ namespace NMIService
                 TheFieldInfo tDl = TheNMIEngine.AddSmartControl(MyBaseThing, tInf, eFieldType.TileButton, 3, 2, 0x0, "", null, new ThePropertyBag() { "Thumbnail=FA3:f019", "TileLeft=11", "TileTop=1", "TileWidth=1", "TileHeight=1" });
                 tDl.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "DOWNLOAD", OnDownloadClick);
 
-                //Page Statistics TODO
                 TheFormInfo tPageDefs = new TheFormInfo(new Guid("{8B6ACC8C-66A8-4DC2-A33D-598F995B3EE9}"), eEngineName.NMIService, "Web Page Statistics", "nsCDEngine.Engines.NMIService.ThePageDefinition;:;100;:;true") { IsReadOnly = true, IsNotAutoLoading = true };
                 TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tPageDefs, "CMyTable", "Page Statistics", 4, 0x0, 0, "NMI Administration", null, new nmiDashboardTile { TileThumbnail = "FA5:f478" });
                 TheNMIEngine.AddFields(tPageDefs, new List<TheFieldInfo>
@@ -303,7 +229,7 @@ namespace NMIService
                     {new TheFieldInfo() {FldOrder = 22, DataItem = "IsNotCached", cdeA = 0x80, Flags = 0, Type = eFieldType.SingleCheck, Header = "Not Cached", FldWidth = 1}},
                 });
 
-                tInf = new TheFormInfo(TheThing.GetSafeThingGuid(MyBaseThing, "SYSLOG"), eEngineName.NMIService, "System Log", "nsCDEngine.BaseClasses.TheEventLogEntry;:;50;:;true") { IsReadOnly = true, IsNotAutoLoading = true, GetFromFirstNodeOnly = true, PropertyBag = new nmiCtrlTableView { ShowFilterField = true } };
+                tInf = new TheFormInfo(TheThing.GetSafeThingGuid(MyBaseThing, "SYSLOG"), eEngineName.NMIService, "System Log", "nsCDEngine.BaseClasses.TheEventLogEntry;:;50;:;true") { IsReadOnly = true, IsNotAutoLoading = true, GetFromFirstNodeOnly = true, PropertyBag = new nmiCtrlTableView { ShowFilterField = true, ShowExportButton=true } };
                 TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, tInf, "CMyTable", "System Log", 10, 0x9, 128, TheNMIEngine.GetNodeForCategory(), null, new nmiDashboardTile { TileThumbnail = "FA5:f15c" });
                 TheNMIEngine.AddFields(tInf, new List<TheFieldInfo>
                 {
@@ -487,7 +413,7 @@ namespace NMIService
         bool ActivateRelay()
         {
             string activationKey = TheThing.GetSafePropertyString(MyBaseThing, "ActivationKey");
-            return TheBaseAssets.MyActivationManager.ApplyActivationKey(activationKey, Guid.Empty, out var exp);
+            return TheBaseAssets.MyActivationManager.ApplyActivationKey(activationKey, Guid.Empty, out _);
         }
 
         void ChangeActivationForm(bool justActivated)
@@ -509,7 +435,7 @@ namespace NMIService
         private static string UserPrefID;
         private static string UserManID;
 
-        public bool Init()
+        public override bool Init()
         {
             if (mIsInitialized) return false;
             mIsInitialized = true;
@@ -534,7 +460,7 @@ namespace NMIService
                     var MyNMIEditor = new TheNMIEditor(MyLiveThing);
                     TheThingRegistry.RegisterThing(MyNMIEditor);
                 }
-                TheCDEngines.MyNMIService.RegisterEvent(eEngineEvents.IncomingMessage, sinkNMIMessage);
+                TheCDEngines.MyNMIService.RegisterEvent(eEngineEvents.IncomingMessage, SinkNMIMessage);
                 MyBaseThing.LastMessage = "NMI Runtime started...";
                 MyBaseEngine.ProcessInitialized(); //Set the status of the Base Engine according to the status of the Things it manages
                 MyBaseEngine.SetStatusLevel(1);
@@ -544,14 +470,7 @@ namespace NMIService
             return true;
         }
 
-        public bool Delete()
-        {
-            mIsInitialized = false;
-            // TODO Properly implement delete
-            return true;
-        }
-
-        void sinkNMIMessage(ICDEThing psender, object pIncoming)
+        void SinkNMIMessage(ICDEThing psender, object pIncoming)
         {
             if (!(pIncoming is TheProcessMessage pMsg)) return;
             switch (pMsg.Message.TXT)   //string 2 cases
@@ -570,7 +489,9 @@ namespace NMIService
                             }
                         }
                         catch (Exception)
-                        { }
+                        { 
+                            //Intentionally blank
+                        }
                     }
                     if (IsAuto)
                     {
@@ -591,7 +512,7 @@ namespace NMIService
 
         private void OnDownloadClick(ICDEThing pThing, object pPara)
         {
-            TheProcessMessage pMSG = pPara as TheProcessMessage;
+            TheProcessMessage pMSG = (TheProcessMessage)pPara;
             if (pMSG == null || pMSG.Message == null) return;
 
             string[] cmd = pMSG.Message.PLS.Split(':');
@@ -612,7 +533,7 @@ namespace NMIService
 
         private void OnExportClick(ICDEThing pThing, object pPara, bool bGeneralize, bool bRemoveDefaultedValuesFromConfig, bool bAnswer, bool createCDEF)
         {
-            TheProcessMessage pMSG = pPara as TheProcessMessage;
+            TheProcessMessage pMSG = (TheProcessMessage)pPara;
             if (pMSG == null || pMSG.Message == null) return;
 
 #if !CDE_NET4 && !CDE_NET35
@@ -709,28 +630,13 @@ namespace NMIService
 
                     }
                 }
-                //var pipelineConfig = tThing.GetThingPipelineConfigurationAsync(false).Result;
-                //if (pipelineConfig != null)
-                //{
-                //    var fileName = TheCommonUtils.cdeFixupFileName($"Config\\{tThing.FriendlyName}_{tThing.cdeMID}_{TheCommonUtils.GetTimeStamp()}.cdec");
-                //    try
-                //    {
-                //        TheCommonUtils.CreateDirectories(fileName);
-                //        System.IO.File.WriteAllText(fileName, TheCommonUtils.SerializeObjectToJSONString(pipelineConfig));
-                //    }
-                //    catch (Exception e)
-                //    {
-                //        TheCommCore.PublishToOriginator(pMSG.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", $"Error writing configuration to '{fileName}': {e.Message}"));
-                //    }
-
-                //}
             }
 #endif
         }
 
-        public void HandleMessage(ICDEThing sender, object pIncoming)
+        public override void HandleMessage(ICDEThing sender, object pIncoming)
         {
-            TheProcessMessage pMsg = pIncoming as TheProcessMessage;
+            TheProcessMessage pMsg = (TheProcessMessage)pIncoming;
             if (pMsg == null) return;
             switch (pMsg.Message.TXT)   //string 2 cases
             {
@@ -813,7 +719,7 @@ namespace NMIService
                 var but = TheNMIEngine.AddSmartControl(MyBaseThing, tMyUserSettingsForm, eFieldType.TileButton, 880, 130, 128, "Request User's ACL", null, new nmiCtrlComboBox() { NoTE = true, ParentFld = 800 });
                 but.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "REQLEV", (sender, para) =>
                 {
-                    var tMsg = para as TheProcessMessage;
+                    var tMsg = (TheProcessMessage)para;
                     if (tMsg == null)
                         return;
                     if (!TheUserManager.SendACLToNMI(tMsg.Message.GetOriginator(), TheCommonUtils.CGuid(tMsg.Message.PLS.Split(':')[2]), tMsg.ClientInfo))
@@ -824,7 +730,7 @@ namespace NMIService
                 {
                     if (tMsg?.Message?.TXT?.Split(':')?.Length < 2)
                         return;
-                    TheUserManager.SendACLToNMI(tMsg.Message.GetOriginator(), TheCommonUtils.CGuid(tMsg.Message.TXT.Split(':')[1]), tMsg.ClientInfo, true);
+                    TheUserManager.SendACLToNMI(TheCommonUtils.CGuid(tMsg?.Message?.GetOriginator()), TheCommonUtils.CGuid(tMsg?.Message?.TXT?.Split(':')[1]), tMsg?.ClientInfo, true);
                 });
             }
         }

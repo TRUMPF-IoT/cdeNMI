@@ -508,7 +508,6 @@ namespace cdeNMI {
                 pData = tScreenInfo.MyStorageMirror[pTRF.TableName][pTRF.RowNo];
         }
 
-        //let HasFound = false;
         if (pData && pData !== true) {
             if (outStr.indexOf('<%NN%>') >= 0) {
                 try {
@@ -531,7 +530,7 @@ namespace cdeNMI {
                                 } else if (outStr.indexOf('<%' + tBagItem + '%>') >= 0) {
                                     outStr = outStr.replace('<%' + tBagItem + '%>',
                                         myPropertyBag[tBagItem]["Value"]);
-                                } else if (outStr.indexOf('%' + tBagItem + '%') >= 0) {
+                                } else if (outStr.indexOf('%' + tBagItem + '%') >= 0 && myPropertyBag[tBagItem]["Value"]) {
                                     outStr = outStr
                                         .replace('%' + tBagItem + '%', myPropertyBag[tBagItem]["Value"]);
                                 }
@@ -551,7 +550,6 @@ namespace cdeNMI {
                             tInStr = outStr;
                             outStr = outStr.replace('<%' + index + '%>', GenerateFinalString(repl, pData, pTRF));
                         } while (tInStr !== outStr);
-                        //HasFound = true;
                     } else if (pData[index] &&
                         pData[index].MyFieldInfo &&
                         pData[index].MyFieldInfo.FldOrder &&
@@ -563,7 +561,6 @@ namespace cdeNMI {
                         const tVal = pData[index].GetProperty(tPropName);
                         if (tVal) {
                             outStr = tVal.toString();
-                            //HasFound = true;
                         }
                     } else if (outStr.indexOf('%' + index + '%') >= 0) {
                         repl = "";
@@ -576,7 +573,6 @@ namespace cdeNMI {
                             tInStr = outStr;
                             outStr = outStr.replace('%' + index + '%', GenerateFinalString(repl, pData, pTRF));
                         } while (tInStr !== outStr);
-                       // HasFound = true;
                     }
                 }
             }

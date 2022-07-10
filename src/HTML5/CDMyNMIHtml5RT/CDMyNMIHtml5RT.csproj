@@ -159,18 +159,9 @@
     <None Include="ClientBin\FAVICON.ICO" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <Reference Include="System.IO.Compression" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="C-DEngine" Version="5.*" />
     <!--<ProjectReference Include="..\..\025 - C-DEngine\C-DEngine\C-DEngine.csproj" />-->
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
-    <!-- Required for dotnet build -->
-    <PackageReference Include="jnm2.ReferenceAssemblies.net35" Version="1.0.1" />
   </ItemGroup>
 
   <Target Name="GetPackagingOutputs" />
