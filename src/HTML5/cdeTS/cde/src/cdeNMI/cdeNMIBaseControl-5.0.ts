@@ -35,8 +35,6 @@
             this.PropertyBag["TouchPoints"] = 0;
             this.PreventManipulation = false;
             this.PropertyBag["AreEventsHooked"] = false;
-
-            return;
         }
 
         public MyTarget: INMIControl = null;  //The parent Control
@@ -105,7 +103,6 @@
         public eventShapeRecognized(sender: INMIControl, pName: string, pScore: number) {
             if (!cde.MyBaseAssets.MyServiceHostInfo.RedPill)
                 return;
-            //TODO: New Feature: Control Updates and new controls
             if (pScore > 1) {
                 cdeNMI.ShowToastMessage("Name: " + pName + " Score:" + pScore.toFixed(2));
                 if (cde.MyEventLogger)
@@ -113,7 +110,6 @@
                 switch (pName) {
                     case "circle":
                     case "rightmouse": {
-                        //TODO: Send Properties of control to NMI Editor
                         this.SetProperty("Background", "pink");
                         const tSideBar = document.getElementById("cdeSideBarRight") as HTMLDivElement;
                         if (tSideBar && !tSideBar.classList.contains("cde-animate-right")) {
@@ -260,7 +256,7 @@
                 this.PropertyBag["ID"] = pValue; //Set ID to ThingID without setting root ID of the field - required for table updates
             } else if ((pName === "ID" || pName === "MID") && pValue && this.MyRootElement) {
                 this.MyRootElement.id = cde.GuidToString(pValue);
-                this.PropertyBag["ID"] = pValue; //TODO: TEST table Update scenarios
+                this.PropertyBag["ID"] = pValue; 
             } else if (pName === "ClassName" && (pValue || pValue === "") && this.MyRootElement) {
                 this.MyRootElement.className = pValue;
             } else if (pName === "AddClassName" && (pValue || pValue === "") && this.MyRootElement) {
@@ -417,7 +413,7 @@
                     myarray.push(item);
                 }
             }
-            const t = {
+            return {
                 "PropertyBag": myarray,
                 "ScreenID": this.MyScreenID,
                 "TRF": this.MyTRF,
@@ -425,7 +421,6 @@
                 "BaseType": this.MyBaseType,
                 "FieldInfo": this.MyFieldInfo
             };
-            return t;
         }
 
         /**

@@ -137,45 +137,27 @@ namespace cde {
                 for (let mh = 0; mh < this.MyEvents[pEvtName].length; mh++) {
                     if (this.MyEvents[pEvtName][mh]) {
                         try {
-                            switch (pEvtName) {
-                                default:
-                                    if (typeof this.MyEvents[pEvtName][mh] === "string") {
-                                        //const TargetControl = this;
-                                        const EventName = pEvtName;
-                                        //const Evt = params[0];
-                                        const Parameter = params.length > 1 ? params[1] : null;
-                                        const PropertyName = params.length > 2 ? params[2] : null;
+                            if (typeof this.MyEvents[pEvtName][mh] === "string") {
+                                const EventName = pEvtName;
+                                const Parameter = params.length > 1 ? params[1] : null;
+                                const PropertyName = params.length > 2 ? params[2] : null;
 
-                                        if (params.length < 3) {
-                                            if (cde.MyBaseAssets.MyServiceHostInfo.DebugLevel > 3)
-                                                debugger;
-                                        }
-                                        //if (FireAsync) {
-                                        //    cde.cdeRunAsync((pEvtName, params) => {
-                                        //        cdeEval(this.MyEvents[pEvtName][mh]);
-                                        //    }, 0, params, mh);
-                                        //}
-                                        //else
-                                        const tJS: string = this.MyEvents[EventName][mh];
-                                        if (tJS.substr(0, 3) === "JS:")
-                                            cdeEval(tJS.substr(3));
-                                        else {
-                                            cde.MyBaseAssets.FireEvent(FireAsync, "OnStringEvent", tJS, this, Parameter, PropertyName, params);
-                                        }
-                                    }
-                                    else {
-                                        /*if (FireAsync) {
-                                            cde.cdeRunAsync((pEvtName, params, mh) => {
-                                                this.MyEvents[pEvtName][mh](this, ...params);
-                                            }, 0, params, mh);
-                                        }
-                                        else*/
-                                        if (params.length > 0 && params[0] instanceof cde.TheProcessMessage)
-                                            this.MyEvents[pEvtName][mh](this, params[0]);
-                                        else
-                                            this.MyEvents[pEvtName][mh](this, ...params);
-                                    }
-                                    break;
+                                if (params.length < 3) {
+                                    if (cde.MyBaseAssets.MyServiceHostInfo.DebugLevel > 3)
+                                        debugger;
+                                }
+                                const tJS: string = this.MyEvents[EventName][mh];
+                                if (tJS.substr(0, 3) === "JS:")
+                                    cdeEval(tJS.substr(3));
+                                else {
+                                    cde.MyBaseAssets.FireEvent(FireAsync, "OnStringEvent", tJS, this, Parameter, PropertyName, params);
+                                }
+                            }
+                            else {
+                                if (params.length > 0 && params[0] instanceof cde.TheProcessMessage)
+                                    this.MyEvents[pEvtName][mh](this, params[0]);
+                                else
+                                    this.MyEvents[pEvtName][mh](this, ...params);
                             }
                         } catch (error) {
                             if (pEvtName !== "CDE_NEW_LOGENTRY")
@@ -445,7 +427,7 @@ namespace cde {
             if (cde.MyBaseAssets.MyCommStatus.UserPref && cde.MyBaseAssets.MyCommStatus.UserPref.PortalScreen)
                 return cde.MyBaseAssets.MyCommStatus.UserPref.PortalScreen;
             return this.mPortalScreen;
-        };
+        }
 
         mStartScreen: string = null;
         set StartScreen(value: string) { this.mStartScreen = value; }
@@ -453,7 +435,7 @@ namespace cde {
             if (cde.MyBaseAssets.MyCommStatus.UserPref && cde.MyBaseAssets.MyCommStatus.UserPref.StartScreen)
                 return cde.MyBaseAssets.MyCommStatus.UserPref.StartScreen;
             return this.mStartScreen;
-        };
+        }
 
         mCurrentLCID: number = null;
         set CurrentLCID(value: number) { this.mCurrentLCID = value; }
@@ -461,7 +443,7 @@ namespace cde {
             if (cde.MyBaseAssets.MyCommStatus.UserPref && cde.CInt(cde.MyBaseAssets.MyCommStatus.UserPref.LCID) > 0)
                 return cde.MyBaseAssets.MyCommStatus.UserPref.LCID;
             return this.mCurrentLCID;
-        };
+        }
 
         mHideHeader: boolean = null;
         set HideHeader(value: boolean) { this.mHideHeader = value; }
@@ -469,7 +451,7 @@ namespace cde {
             if (cde.MyBaseAssets.MyCommStatus.UserPref && cde.CBool(cde.MyBaseAssets.MyCommStatus.UserPref.HideHeader) === true)
                 return cde.CBool(cde.MyBaseAssets.MyCommStatus.UserPref.HideHeader);
             return this.mHideHeader;
-        };
+        }
 
         mAdminPWMustBeSet: boolean = null;
         set AdminPWMustBeSet(value: boolean) { this.mAdminPWMustBeSet = value; }
@@ -477,7 +459,7 @@ namespace cde {
             if (cde.CBool(cde.MyBaseAssets.MyCommStatus.AdminPWMustBeSet))
                 return true;
             return this.mAdminPWMustBeSet;
-        };
+        }
 
         mAdminRole: string = null;
         set AdminRole(value: string) { this.mAdminRole = value; }
@@ -485,7 +467,7 @@ namespace cde {
             if (cde.MyBaseAssets.MyCommStatus.AdminRole)
                 return cde.MyBaseAssets.MyCommStatus.AdminRole;
             return this.mAdminRole;
-        };
+        }
 
         //FirstNodeID: string = '';
         mFirstNodeID: string = null;
@@ -494,7 +476,7 @@ namespace cde {
             if (cde.MyBaseAssets.MyCommStatus.FirstNodeID)
                 return cde.MyBaseAssets.MyCommStatus.FirstNodeID;
             return this.mFirstNodeID;
-        };
+        }
 
         get IsUserLoggedIn(): boolean {         //True if a user is currently logged in
             if (cde.MyBaseAssets.MyCommStatus)
@@ -672,7 +654,7 @@ namespace cde {
                 while (p.length > 0) {
                     document.cookie = cookieBase + p.join('/');
                     p.pop();
-                };
+                }
                 d.shift();
             }
         }
