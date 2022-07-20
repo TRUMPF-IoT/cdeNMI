@@ -539,7 +539,6 @@
             }
 
             if (!pIsLiveData) {
-                let hasPaging = false;
                 if (!this.IsPropertyTable) {
                     if (tAddHeadline) {
                         const tRefreshBut = ctrlTileButton.Create(null, (e: PointerEvent) => {
@@ -552,7 +551,6 @@
                         tHeadTd.appendChild(tRefreshBut.GetElement());
                     }
                     if (cde.CInt(this.GetProperty("PageSize")) > 0) {
-                        hasPaging = true;
                         const tBut = ctrlTileButton.Create(null, () => {
                             if (!this.rowAdder && cde.CInt(this.GetProperty("CurrentPage")) > 0) {
                                 cdeNMI.ResetKeyCorder();
