@@ -384,7 +384,6 @@ namespace cde {
             if (!this.MyConfig.host && this.MyConfig.uri) {
                 this.SetTargetRelay(this.MyConfig.uri);
             }
-            //this.UpdateCallerHSI();
         }
 
         public StartCommunication(pConfig?: cde.TheCommConfig) {

@@ -91,7 +91,7 @@ namespace cdeNMI {
 
     //////// Animations //////////////////////////////
     export function cdeBlendInTiles(subClass: string) {
-        return; //TODO: Tiles Coming IN animation
+        return;
     }
 
 
@@ -122,7 +122,7 @@ namespace cdeNMI {
     export function UpdateClock(pFactor = 1): string {
         if (pFactor < 1) pFactor = 1;
         return moment().format("[<span style='font-size:" + (32 / pFactor) + "px; font-weight: bold;'>]HH:mm[</span></BR><span style='font-size:" + (24 / pFactor) + "px'>]YYYY-MM-DD");
-    };
+    }
 
     export function FormatDate(pDate: Date, pFormat: string): string {
         return moment(pDate).format(pFormat);
@@ -143,10 +143,9 @@ namespace cdeNMI {
         const l: HTMLAnchorElement = document.createElement("a");
         l.href = href;
         return l;
-    };
+    }
 
     export function RequestScopeID() {
-        //var tEdit: ctrlEditBox = ctrlEditBox.Create(null, null, new TheTRF("SecID", 1, new TheFieldInfo(cdeControlType.SingleEnded, -1, "SecID:", 2, "SCOPEREQ")), "", false, "cdeInput cdeInputCenter");
         const tEdit: cdeNMI.INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.Password).Create(null, { TRF: new cdeNMI.TheTRF("SecID", 1, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.SingleEnded, -1, "SecID:", 2, "SCOPEREQ")), PostInitBag: ["InnerClassName=cdeInput cdeInputCenter"] });
         if (cdeNMI.MyPopUp) {
             const tPopup: cdeNMI.INMIPopUp = cdeNMI.MyPopUp.Show('Are you sure you want to request a new Security ID?</br>All agents and nodes connected to this relay will have to update their corresponding IDs as well. If this is a secondary Relay, enter the ID of your primary relay here, otherwise leave this field blank',
@@ -213,7 +212,6 @@ namespace cdeNMI {
         let t;
         if (cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme) {
             schemes = document.getElementsByTagName("link");
-            //schemes = $('[cde=colorScheme]');
             for (i = 0; i < schemes.length; i++) {
                 if (!schemes[i].hasAttribute("lite"))
                     continue;
@@ -228,7 +226,6 @@ namespace cdeNMI {
             }
         }
         else {
-            //schemes = $('[cde=colorScheme]');
             schemes = document.getElementsByTagName("link");
             for (i = 0; i < schemes.length; i++) {
                 if (!schemes[i].hasAttribute("dark"))
@@ -356,7 +353,7 @@ namespace cdeNMI {
     export function CreateTCB(pTRF: cdeNMI.TheTRF, pName: string, pType: cdeNMI.cdeControlType = cdeNMI.cdeControlType.SingleEnded): cdeNMI.TheControlBlock {
         const tTCB: cdeNMI.TheControlBlock = new cdeNMI.TheControlBlock();
         tTCB.TargetID = "CNMIC" + (cdeNMI.MyNMISettings.IDCounter++);
-        tTCB.MyControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel); // new ctrlSmartLabel();  
+        tTCB.MyControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel); 
 
         let tFldContent = "";
         const tFldInfo: cdeNMI.TheFieldInfo = new cdeNMI.TheFieldInfo(cdeControlType.SmartLabel, 0, null);
@@ -387,12 +384,12 @@ namespace cdeNMI {
             if (pModelGUID && pModelGUID !== "") {
                 const tMod: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[pModelGUID];
                 for (const tIdx in cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo]) {
-                    const tTCB = cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo][tIdx] as cdeNMI.TheControlBlock;
-                    if (tTCB) {
+                    const tTCB2 = cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo][tIdx] as cdeNMI.TheControlBlock;
+                    if (tTCB2) {
                         if (!tMod.MyStorageMirror[tTabName][tRowID].hasOwnProperty('SecToken')) {
-                            const tCont = cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], tTCB.MyControl.MyFieldInfo, false, false);
-                            if (tTCB.MyControl.GetProperty("Value") !== tCont)
-                                tTCB.MyControl.SetProperty("iValue", tCont);
+                            const tCont = cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], tTCB2.MyControl.MyFieldInfo, false, false);
+                            if (tTCB2.MyControl.GetProperty("Value") !== tCont)
+                                tTCB2.MyControl.SetProperty("iValue", tCont);
                         }
                     }
                 }
@@ -441,7 +438,6 @@ namespace cdeNMI {
                 if (pVal && document.getElementById(ttcb.TargetID + "_TGT"))
                     (document.getElementById(ttcb.TargetID + "_TGT") as HTMLImageElement).src = cde.FixupPath(pVal);
             };
-            //    "if (params[2] && document.getElementById('" + tTCB.TargetID + "_TGT')) document.getElementById('" + tTCB.TargetID + "_TGT').src=cde.FixupPath(params[2])";  //TODO: replace with real function
             pFacePlate.HTML += "<span ID=" + tTCB.TargetID + "></span>";
         }
         while (true) {
@@ -457,7 +453,6 @@ namespace cdeNMI {
                 if (pVal && document.getElementById(ttcb.TargetID + "_TGT"))
                     (document.getElementById(ttcb.TargetID + "_TGT") as HTMLInputElement).value = pVal;
             };
-            //tTCB.OnIValueChanged = "if (params[2] && document.getElementById('" + tTCB.TargetID + "_TGT')) document.getElementById('" + tTCB.TargetID + "_TGT').value=params[2]";
             pFacePlate.HTML += "<span ID=" + tTCB.TargetID + "></span>";
         }
         while (true) {
@@ -471,9 +466,8 @@ namespace cdeNMI {
             tTCB.OnIValueChanged = (sender: INMIControl, pEvt, pVal) => {
                 const ttcb: TheControlBlock = sender.GetProperty("MyTCB");
                 if (pVal && document.getElementById(ttcb.TargetID + "_TGT"))
-                    (document.getElementById(ttcb.TargetID + "_TGT") as HTMLElement).style.cssText = pVal;
+                    document.getElementById(ttcb.TargetID + "_TGT").style.cssText = pVal;
             };
-            //tTCB.OnIValueChanged = "if (params[2] && document.getElementById('" + tTCB.TargetID + "_TGT')) document.getElementById('" + tTCB.TargetID + "_TGT').style.cssText=params[2]";
             pFacePlate.HTML += "<span ID=" + tTCB.TargetID + "></span>";
         }
         pFacePlate.HTML = cdeNMI.GenerateFinalString(pFacePlate.HTML, false, pFacePlate.TRF);
@@ -504,11 +498,10 @@ namespace cdeNMI {
         }
         if (pTRF && !pData) {
             const tScreenInfo: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[pTRF.ModelID];
-            if (tScreenInfo && pTRF && tScreenInfo.MyStorageMirror && tScreenInfo.MyStorageMirror[pTRF.TableName])
+            if (tScreenInfo && tScreenInfo.MyStorageMirror && tScreenInfo.MyStorageMirror[pTRF.TableName])
                 pData = tScreenInfo.MyStorageMirror[pTRF.TableName][pTRF.RowNo];
         }
 
-        //let HasFound = false;
         if (pData && pData !== true) {
             if (outStr.indexOf('<%NN%>') >= 0) {
                 try {
@@ -531,7 +524,7 @@ namespace cdeNMI {
                                 } else if (outStr.indexOf('<%' + tBagItem + '%>') >= 0) {
                                     outStr = outStr.replace('<%' + tBagItem + '%>',
                                         myPropertyBag[tBagItem]["Value"]);
-                                } else if (outStr.indexOf('%' + tBagItem + '%') >= 0) {
+                                } else if (outStr.indexOf('%' + tBagItem + '%') >= 0 && myPropertyBag[tBagItem]["Value"]) {
                                     outStr = outStr
                                         .replace('%' + tBagItem + '%', myPropertyBag[tBagItem]["Value"]);
                                 }
@@ -551,7 +544,6 @@ namespace cdeNMI {
                             tInStr = outStr;
                             outStr = outStr.replace('<%' + index + '%>', GenerateFinalString(repl, pData, pTRF));
                         } while (tInStr !== outStr);
-                        //HasFound = true;
                     } else if (pData[index] &&
                         pData[index].MyFieldInfo &&
                         pData[index].MyFieldInfo.FldOrder &&
@@ -563,7 +555,6 @@ namespace cdeNMI {
                         const tVal = pData[index].GetProperty(tPropName);
                         if (tVal) {
                             outStr = tVal.toString();
-                            //HasFound = true;
                         }
                     } else if (outStr.indexOf('%' + index + '%') >= 0) {
                         repl = "";
@@ -576,7 +567,6 @@ namespace cdeNMI {
                             tInStr = outStr;
                             outStr = outStr.replace('%' + index + '%', GenerateFinalString(repl, pData, pTRF));
                         } while (tInStr !== outStr);
-                       // HasFound = true;
                     }
                 }
             }
@@ -693,7 +683,9 @@ namespace cdeNMI {
                 if ((pFormField && cde.CBool(pFormField["ForceSet"])) || (tFldContent[tDataItem[tDataItem.length - 1]] !== pNewValue && (!pOldValues || pOldValues[tDataItem[tDataItem.length - 1]] !== pNewValue))) {
                     if (pOldValues && !pOldValues[tDataItem[tDataItem.length - 1]])
                         pOldValues[tDataItem[tDataItem.length - 1]] = tFldContent[tDataItem[tDataItem.length - 1]];
-                    tFldContent[tDataItem[tDataItem.length - 1]] = pNewValue;
+                    //testing for encrypt with ((pFormField.Flags & 1) != 0 && cde.MyContentEngine) 
+                     //  then encrypt with RSA tFldContent[tDataItem[tDataItem.length - 1]] = "&^CDEP5^&:" + cde.MyContentEngine.RSAEncrypt(pNewValue); //coming soon...RSA does fail at the moment else
+                    tFldContent[tDataItem[tDataItem.length - 1]] = pNewValue; //NOSONAR this is correct for now
                     tHasNewValue = true;
                 }
             }
@@ -741,7 +733,7 @@ namespace cdeNMI {
         const tFldName: string[] = pFormField.DataItem.split('.');
         let tFldContent: string;
         if (pIsDeepRow && tFldName.length > 1) {
-            let tFldRealName = tFldName[1]; //TODO: VALIDATE
+            let tFldRealName = tFldName[1]; 
             if (tFldName.length > 3) {
                 for (let i = 2; i < tFldName.length - 1; i++) {
                     tFldRealName += "." + tFldName[i];
@@ -784,7 +776,7 @@ namespace cdeNMI {
         try {
             const tFldName: string[] = pFormField.split('.');
             if (pIsDeepRow) {
-                let tFldRealName = tFldName[1]; //TODO: VALIDATE
+                let tFldRealName = tFldName[1]; 
                 if (tFldName.length > 3) {
                     for (let i = 2; i < tFldName.length - 1; i++) {
                         tFldRealName += "." + tFldName[i];
@@ -847,16 +839,16 @@ namespace cdeNMI {
         }
 
         MergeObject(...params: any[]): any {
-            var
+            const
                 self = this,
                 arraynew = {};
 
-            for (var ai in arguments) {
+            for (let ai in arguments) {
                 if (arguments.hasOwnProperty(ai)) {
-                    var array = arguments[ai];
-                    for (var index in array) {
+                    const array = arguments[ai];
+                    for (let index in array) {
                         if (array.hasOwnProperty(index)) {
-                            var value;
+                            let value;
                             if (array.hasOwnProperty(index)) {
                                 if (typeof array[index] === 'object' && arraynew[index] && typeof arraynew[index] === 'object'
                                 ) value = self.MergeObject(arraynew[index], array[index]);
@@ -921,10 +913,10 @@ namespace cdeNMI {
             setTimeout(() => {
                 this.EndWave(this.mItem);
             }, 100);
-        };
+        }
 
         EndWave(item: HTMLElement) {
-            const rippleWrapper = item.querySelector('.' + this.options.classes.rippleContainer) as HTMLElement;
+            const rippleWrapper = item.querySelector('.' + this.options.classes.rippleContainer);
             let ripples;
 
             if (rippleWrapper && rippleWrapper.children) {
@@ -938,7 +930,7 @@ namespace cdeNMI {
                     }, this.options.transition.duration);
                 });
             }
-        };
+        }
 
         EasyMeOut(pTime, pVal1, pVal2, pDura) {
             return pVal2 * (-Math.pow(2, -10 * pTime / pDura) + 1) + pVal1;
@@ -999,7 +991,7 @@ namespace cdeNMI {
                         if (negative !== 0) newValue = newValue + negative;
 
                         newValue = newValue + '';
-                        newValue = newValue.replace(/([0-9]+(\.[0-9]{0,3})?).*/, "$1");
+                        newValue = newValue.replace(/(\d+(\.\d{0,3})?).*/, "$1");
                         newValue = parseFloat(newValue);
 
                         if (defaultSuffix) {
@@ -1031,7 +1023,7 @@ namespace cdeNMI {
                     }
                 }
             }, 24);
-        };
+        }
     }
 
     export function cdeJsonDate2JSDate(jsonDate): Date {
@@ -1055,7 +1047,7 @@ namespace cdeNMI {
             else
                 return new Date(jsonDate);
         }
-    };
+    }
 
     export function DoesArrayContain(pArray: string[], pCont: string): boolean {
         for (let i = 0; i < pArray.length; i++) {
@@ -1116,7 +1108,7 @@ namespace cdeNMI {
             document.getElementById(pEleName).style.height = height + "px";
             document.getElementById(pEleName).style.width = wid + "px";
         }
-    };
+    }
 
     export function cdeSleep(ms) {
         const dt = new Date();
@@ -1201,7 +1193,7 @@ namespace cdeNMI {
     export function Check4ValidEmail(email: string): boolean {
         if (!email || email.length === 0)
             return true;
-        const filter = new RegExp("[a-z0-9!#$%\&\'*+\x2F=?^_`{|}~-]+(?:\\.[a-z0-9!#$%\&\'*+\x2F=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"); //NOSONAR Not Critical
+        const filter = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])"); //NOSONAR RFC5322 validation
         if (!email || !filter.test(email.toLowerCase()) || email.substring(0, 1) === '.' || email.substring(email.length - 1, 1) === '.')
             return false;
         return true;
@@ -1259,7 +1251,7 @@ namespace cdeNMI {
 
         const rgb = blue | (green << 8) | (red << 16);
         return digits[1] + '#' + rgb.toString(16);
-    };
+    }
 
     export function HasPlaceholderSupport(): boolean {
         const input = document.createElement('input');
@@ -1340,18 +1332,18 @@ namespace cdeNMI {
     // Converts from degrees to radians.
     export function toRadians(degrees) {
         return degrees * Math.PI / 180;
-    };
+    }
 
     // Converts from radians to degrees.
     export function toDegrees(radians) {
         return radians * 180 / Math.PI;
-    };
+    }
 
 
     export function ValidateIPaddress(inputText: string): boolean {
         if (!inputText || inputText.length === 0)
             return true;
-        const ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+        const ipformat = /^(25[0-5]|2[0-4]\d|[01]?\d\d?)\.(25[0-5]|2[0-4]\d|[01]?\d\d?)\.(25[0-5]|2[0-4]\d|[01]?\d\d?)\.(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
         if (inputText.match(ipformat)) {
             return true;
         }
@@ -1402,7 +1394,7 @@ namespace cdeNMI {
                 break;
             }
             if (element.getAttribute("cdemid") && !tResControl) {
-                const myNmiControl = cdeNMI.MyTCF.GetRegisteredControlGroup(element.getAttribute("cdemid")); // this.MyNMIControls[tOWN];
+                const myNmiControl = cdeNMI.MyTCF.GetRegisteredControlGroup(element.getAttribute("cdemid")); 
                 for (const tInfo in myNmiControl) {
                     if (myNmiControl.hasOwnProperty(tInfo)) {
                         tResControl = myNmiControl[tInfo];
