@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
 	  <PackageId>CDMyNMIHtml5RT</PackageId>
-    <Version>5.145.0$(cdeNugetSuffix)</Version>
+    <Version>5.147.0$(cdeNugetSuffix)</Version>
     <Authors>Chris Muench</Authors>
     <Company>C-Labs</Company>
     <Product>CDMyNMI HTML5 Runtime for $(TargetFramework)$(cdeDebugProductSuffix)</Product>

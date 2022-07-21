@@ -35,7 +35,7 @@ namespace NMIService
             MyBaseEngine.AddCapability(eThingCaps.NMIControls);
             MyBaseEngine.AddCapability(eThingCaps.MustBePresent);
             MyBaseEngine.SetPluginInfo("This service provides a rich graphical UX - the NMI - based on HMTL5", 0, null, "toplogo-150.png", "C-Labs", "https://www.c-labs.com", new List<string> { "NMI Extension" });
-            MyBaseEngine.SetCDEMinVersion(4.008);
+            MyBaseEngine.SetCDEMinVersion(5.147);
             MyBaseEngine.SetEngineService(true);
             MyBaseEngine.GetEngineState().IsAllowedUnscopedProcessing = TheBaseAssets.MyServiceHostInfo.IsCloudService;
             MyBaseEngine.GetEngineState().IsAcceptingFilePush = true;
