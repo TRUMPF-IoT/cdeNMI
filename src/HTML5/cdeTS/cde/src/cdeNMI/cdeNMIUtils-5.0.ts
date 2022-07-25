@@ -484,7 +484,7 @@ namespace cdeNMI {
     }
 
     export function GenerateFinalString(pInStr, pData?, pTRF?: cdeNMI.TheTRF, pKeepMacro?: boolean): string {
-        if (!pInStr) return null;
+        if (!pInStr) return pInStr;
         if (typeof pInStr !== "string") pInStr = pInStr.toString();
         let outStr: string = pInStr;
         if (outStr.indexOf('<%UN%>') >= 0) {
