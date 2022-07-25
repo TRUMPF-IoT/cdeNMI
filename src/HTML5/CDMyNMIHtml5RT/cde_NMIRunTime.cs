@@ -784,9 +784,8 @@ namespace NMIService
         public static SolarEvents Calculate()
         {
             var lat = 47;
-            //var lng = -122;
             var gDate = DateTime.Now;
-            var timeZone = TimeZoneInfo.Local; // .FindSystemTimeZoneById(timeZoneId);
+            var timeZone = TimeZoneInfo.Local; 
             var timeZoneOffset = timeZone.GetUtcOffset(gDate);
             var lng = timeZoneOffset.Hours * 17;
             var tzOffHr = timeZoneOffset.TotalHours;
