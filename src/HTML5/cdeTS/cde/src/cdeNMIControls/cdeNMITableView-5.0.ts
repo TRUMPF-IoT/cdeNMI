@@ -724,7 +724,7 @@
                     else {
                         let tFldContent = "";
                         if (tFldInfo.DataItem) {
-                            tFldContent = cdeNMI.GetFldContent(tDataRow, tFldInfo, this.MyFormInfo.IsGenerated, false);
+                            tFldContent = cdeNMI.GetFldContent(tDataRow, tFldInfo, this.MyFormInfo.IsGenerated);
                             if (tFldContent === undefined)
                                 tFldContent = "";
                         }
@@ -910,7 +910,7 @@
                         const tN = this.MyTableControls[tRowID][cc].GetProperty("DataItem");
                         if (tN && (!tMask || tMask.substr(cnt, 1) === '1')) {
                             if (!Object.prototype.hasOwnProperty.call(tMod.MyStorageMirror[tTabName][tRowID], 'SecToken'))
-                                this.MyTableControls[tRowID][cc].SetProperty("iValue", cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], this.MyTableControls[tRowID][cc].MyFieldInfo, this.MyFormInfo.IsGenerated, false)); //     tMod.MyStorageMirror[tTabName][tRowID][tN]);
+                                this.MyTableControls[tRowID][cc].SetProperty("iValue", cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], this.MyTableControls[tRowID][cc].MyFieldInfo, this.MyFormInfo.IsGenerated)); //     tMod.MyStorageMirror[tTabName][tRowID][tN]);
                         }
                         cnt++; //V5: This was missing!
                     }

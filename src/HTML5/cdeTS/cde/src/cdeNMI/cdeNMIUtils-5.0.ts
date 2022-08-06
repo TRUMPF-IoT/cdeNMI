@@ -367,7 +367,7 @@ namespace cdeNMI {
 
             const tMyScreenInfo = cdeNMI.MyNMIModels[pTRF.ModelID];
             if (tMyScreenInfo && tMyScreenInfo.MyStorageMirror[pTRF.TableName]) {
-                tFldContent = cdeNMI.GetFldContent(tMyScreenInfo.MyStorageMirror[pTRF.TableName][pTRF.RowNo], tFldInfo, false, false);
+                tFldContent = cdeNMI.GetFldContent(tMyScreenInfo.MyStorageMirror[pTRF.TableName][pTRF.RowNo], tFldInfo, false);
             }
         }
         const tTRF: cdeNMI.TheTRF = new cdeNMI.TheTRF(pTRF ? pTRF.TableName : "", pTRF ? pTRF.RowNo : 0, tFldInfo);
@@ -387,7 +387,7 @@ namespace cdeNMI {
                     const tTCB2 = cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo][tIdx] as cdeNMI.TheControlBlock;
                     if (tTCB2) {
                         if (!tMod.MyStorageMirror[tTabName][tRowID].hasOwnProperty('SecToken')) {
-                            const tCont = cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], tTCB2.MyControl.MyFieldInfo, false, false);
+                            const tCont = cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], tTCB2.MyControl.MyFieldInfo, false);
                             if (tTCB2.MyControl.GetProperty("Value") !== tCont)
                                 tTCB2.MyControl.SetProperty("iValue", tCont);
                         }
@@ -728,16 +728,14 @@ namespace cdeNMI {
         });
     }
 
-    export function GetFldContent(pTableRow, pFormField: cdeNMI.TheFieldInfo, pIsGenerated: boolean, pIsDeepRow: boolean): string {
+    export function GetFldContent(pTableRow, pFormField: cdeNMI.TheFieldInfo, pIsGenerated: boolean): string {
         if (!pFormField || !pFormField.DataItem || !pFormField.DataItem || !pTableRow) return null;
         const tFldName: string[] = pFormField.DataItem.split('.');
         let tFldContent: string;
-        if (pIsDeepRow && tFldName.length > 1) {
-            let tFldRealName = tFldName[1]; 
-            if (tFldName.length > 3) {
-                for (let i = 2; i < tFldName.length - 1; i++) {
-                    tFldRealName += "." + tFldName[i];
-                }
+        if (tFldName.length > 3) {
+            let tFldRealName = tFldName[1];
+            for (let i = 2; i < tFldName.length - 1; i++) {
+                tFldRealName += "." + tFldName[i];
             }
             tFldContent = pTableRow[tFldRealName];
         }
