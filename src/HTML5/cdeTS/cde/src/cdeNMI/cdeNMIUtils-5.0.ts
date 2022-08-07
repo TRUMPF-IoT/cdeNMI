@@ -732,12 +732,27 @@ namespace cdeNMI {
         if (!pFormField || !pFormField.DataItem || !pFormField.DataItem || !pTableRow) return null;
         const tFldName: string[] = pFormField.DataItem.split('.');
         let tFldContent: string;
-        if (tFldName.length > 3) {
+        if (tFldName.length > 3) { //SubProperties here
             let tFldRealName = tFldName[1];
             for (let i = 2; i < tFldName.length - 1; i++) {
                 tFldRealName += "." + tFldName[i];
             }
-            tFldContent = pTableRow[tFldRealName];
+            tFldContent = pTableRow[tFldName[0]];
+            if (tFldContent[tFldRealName]) {
+                tFldContent = tFldContent[tFldRealName];
+                tFldContent = tFldContent[tFldName[tFldName.length - 1]];
+            }
+            else {
+                const tSubProps = tFldRealName.split('].[');
+                let pBag = tFldContent;
+                let tMainProp = null;
+                for (let i = 0; i < tSubProps.length; i++) {
+                    tMainProp = pBag[tSubProps[i].replace('[', '').replace(']', '')];
+                    pBag = tMainProp.cdePB;
+                }
+                if (tMainProp)
+                    tFldContent = tMainProp[tFldName[tFldName.length - 1]];
+            }
         }
         else {
             if (tFldName[0] === "cdeN") {
