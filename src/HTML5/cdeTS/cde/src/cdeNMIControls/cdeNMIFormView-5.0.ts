@@ -88,7 +88,7 @@ namespace cdeNMI {
                                 const tN = this.MyFormControls[cc].GetProperty("DataItem");
                                 if (tN) {
                                     if (!Object.prototype.hasOwnProperty.call(tMod.MyStorageMirror[tTabName][tRowID], 'SecToken')) {
-                                        const tCont = cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], this.MyFormControls[cc].MyFieldInfo, this.MyScreenInfo.IsGenerated, false);
+                                        const tCont = cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], this.MyFormControls[cc].MyFieldInfo, this.MyScreenInfo.IsGenerated);
                                         if (this.MyFormControls[cc].GetProperty("Value") !== tCont)
                                             this.MyFormControls[cc].SetProperty("iValue", tCont);
                                     }

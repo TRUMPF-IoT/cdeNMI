@@ -356,7 +356,7 @@
                 let tDataRow = null;
                 if (tScreenInfo && tScreenInfo.MyStorageMirror[pTEControlMyTRF.TableName]) {
                     tDataRow = tScreenInfo.MyStorageMirror[pTEControlMyTRF.TableName][pTgtControl.MyTRF ? pTgtControl.MyTRF.RowNo : 0];
-                    let tFldContentLC: string = cdeNMI.GetFldContent(tDataRow, pTgtControl.MyFieldInfo, tScreenInfo.IsGenerated, false);
+                    let tFldContentLC: string = cdeNMI.GetFldContent(tDataRow, pTgtControl.MyFieldInfo, tScreenInfo.IsGenerated);
                     if (!cde.IsNotSet(tFldContentLC)) {
                         if (pTgtControl.MyFieldInfo && pTgtControl.MyFieldInfo.Type === cdeControlType.Picture && tFldContentLC && tFldContentLC.length > 255)
                             tFldContentLC = "data:image/jpeg;base64," + tFldContentLC;

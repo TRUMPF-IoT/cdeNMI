@@ -491,7 +491,7 @@
             cdeNMI.ResetKeyCorder();
 
             if (this.MyTRF && this.MyTRF.TableName && this.MyTRF.TableName !== "" && tModel) {
-                const tFldContent = cdeNMI.GetFldContent(tModel.MyStorageMirror[this.MyTRF.TableName][this.MyTRF.RowNo], this.MyFieldInfo, false, false);
+                const tFldContent = cdeNMI.GetFldContent(tModel.MyStorageMirror[this.MyTRF.TableName][this.MyTRF.RowNo], this.MyFieldInfo, false);
                 this.FireEvent(false, "OnValueChanged", pEvent, tFldContent, this.MyTRF);
             }
         }
