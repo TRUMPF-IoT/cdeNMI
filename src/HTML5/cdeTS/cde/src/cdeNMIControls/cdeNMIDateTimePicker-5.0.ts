@@ -109,7 +109,7 @@ namespace cdeNMI {
                         pickOptions.dateFormat = "H:i";
                         break;
                     case cdeControlType.DateTime:
-                        if (!cde.CBool(this.GetProperty("DateOnly"))) {
+                        if (cde.CBool(this.GetProperty("DateOnly"))) {
                             pickOptions.enableTime = false;
                         }
                         break;

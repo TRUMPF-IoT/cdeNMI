@@ -125,265 +125,272 @@
         }
 
         public SetProperty(pName: string, pValue) {
-            if (pName === "PreventManipulation") {
-                if (typeof pValue === "undefined" || cde.CBool(pValue)) {
-                    pValue = true;
+            try {
+                if (pName === "PreventManipulation") {
+                    if (typeof pValue === "undefined" || cde.CBool(pValue)) {
+                        pValue = true;
+                    }
+                    this.PreventManipulation = pValue;
+                    return;
                 }
-                this.PreventManipulation = pValue;
-                return;
-            }
-            if (pName === "PreventDefault" || pName === "EnableMT") {
-                if (typeof pValue === "undefined" || cde.CBool(pValue)) {
-                    pValue = true;
+                if (pName === "PreventDefault" || pName === "EnableMT") {
+                    if (typeof pValue === "undefined" || cde.CBool(pValue)) {
+                        pValue = true;
+                    }
+                    this.PreventDefault = pValue;
+                    return;
                 }
-                this.PreventDefault = pValue;
-                return;
-            }
 
-            let tOldValue = this.PropertyBag[pName];
+                let tOldValue = this.PropertyBag[pName];
 
-            if (pName === "iValue") {
-                tOldValue = this.PropertyBag["Value"];
-                this.PropertyBag["Value"] = pValue;
-                if (pValue !== tOldValue) {
-                    this.FireEvent(false, "OniValueChanged", "SetProperty", pValue, pName);
+                if (pName === "iValue") {
+                    tOldValue = this.PropertyBag["Value"];
+                    this.PropertyBag["Value"] = pValue;
+                    if (pValue !== tOldValue) {
+                        this.FireEvent(false, "OniValueChanged", "SetProperty", pValue, pName);
+                    }
+                    return;
                 }
-                return;
-            }
-            else
-                this.PropertyBag[pName] = pValue;
+                else
+                    this.PropertyBag[pName] = pValue;
 
-            if (pName === "OnThingEvent") {
-                this.RegisterSetP((pControl: cdeNMI.INMIControl, pMsg: cde.TheProcessMessage) => {
-                    if (pMsg.Message.TXT.substr(0, 4) === "SETP" || pMsg.Message.TXT.substr(0, 5) === "SETFP") {  //ThingProperties only
-                        const tProps: string[] = pMsg.Message.PLS.split(":;:");
-                        for (let i = 0; i < tProps.length; i++) {
-                            const pos: number = tProps[i].indexOf("=");
-                            let tPropName = "";
-                            let tPropValue: any=true;
-                            if (pos < 0) {
-                                tPropName = tProps[i];
-                                tPropValue = true;
-                            } else {
-                                if (pos > 0 && pos < tProps[i].length) {
-                                    tPropName = tProps[i].substr(0, pos);
-                                    if (pos < tProps[i].length + 1)
-                                        tPropValue = tProps[i].substr(pos + 1);
-                                    if (tPropName.substr(0, 11) === "&^CDESP1^&:")
-                                        continue;
-                                }
-                            }
-                            if (tPropName.length > 0) {
-                                if (tPropName === pControl.GetProperty("OnThingEvent")) {
-                                    pControl.SetProperty("iValue", tPropValue);
-                                    if (pControl.MyTRF && (pControl.MyTRF.ModelID || pControl.MyScreenID)) {
-                                        const tModel: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[pControl.MyTRF.ModelID ? pControl.MyTRF.ModelID : pControl.MyScreenID];
-                                        if (tModel && tModel.MyStorageMirror[pControl.MyTRF.TableName])
-                                            cdeNMI.UpdFldContent(tModel.MyStorageMirror[pControl.MyTRF.TableName][pControl.MyTRF.RowNo], pControl.MyFieldInfo, tPropValue, null);
-                                    } else {
-                                        const tCtrl: INMIControl = pControl.MyNMIControl;
-                                        if (tCtrl && tCtrl.MyTRF && tCtrl.MyScreenID) {
-                                            const tIModel: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[tCtrl.MyScreenID];
-                                            if (tIModel && tIModel.MyStorageMirror[tCtrl.MyTRF.TableName])
-                                                cdeNMI.UpdFldContent(tIModel.MyStorageMirror[tCtrl.MyTRF.TableName][tCtrl.MyTRF.RowNo], tCtrl.MyFieldInfo, tPropValue, null);
-                                        }
+                if (pName === "OnThingEvent") {
+                    this.RegisterSetP((pControl: cdeNMI.INMIControl, pMsg: cde.TheProcessMessage) => {
+                        if (pMsg.Message.TXT.substr(0, 4) === "SETP" || pMsg.Message.TXT.substr(0, 5) === "SETFP") {  //ThingProperties only
+                            const tProps: string[] = pMsg.Message.PLS.split(":;:");
+                            for (let i = 0; i < tProps.length; i++) {
+                                const pos: number = tProps[i].indexOf("=");
+                                let tPropName = "";
+                                let tPropValue: any = true;
+                                if (pos < 0) {
+                                    tPropName = tProps[i];
+                                    tPropValue = true;
+                                } else {
+                                    if (pos > 0 && pos < tProps[i].length) {
+                                        tPropName = tProps[i].substr(0, pos);
+                                        if (pos < tProps[i].length + 1)
+                                            tPropValue = tProps[i].substr(pos + 1);
+                                        if (tPropName.substr(0, 11) === "&^CDESP1^&:")
+                                            continue;
                                     }
-                                    this.FireEvent(true, "OnPropertyChanged", "SetProperty", tPropValue, "iValue");
+                                }
+                                if (tPropName.length > 0) {
+                                    if (tPropName === pControl.GetProperty("OnThingEvent")) {
+                                        pControl.SetProperty("iValue", tPropValue);
+                                        if (pControl.MyTRF && (pControl.MyTRF.ModelID || pControl.MyScreenID)) {
+                                            const tModel: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[pControl.MyTRF.ModelID ? pControl.MyTRF.ModelID : pControl.MyScreenID];
+                                            if (tModel && tModel.MyStorageMirror[pControl.MyTRF.TableName])
+                                                cdeNMI.UpdFldContent(tModel.MyStorageMirror[pControl.MyTRF.TableName][pControl.MyTRF.RowNo], pControl.MyFieldInfo, tPropValue, null);
+                                        } else {
+                                            const tCtrl: INMIControl = pControl.MyNMIControl;
+                                            if (tCtrl && tCtrl.MyTRF && tCtrl.MyScreenID) {
+                                                const tIModel: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[tCtrl.MyScreenID];
+                                                if (tIModel && tIModel.MyStorageMirror[tCtrl.MyTRF.TableName])
+                                                    cdeNMI.UpdFldContent(tIModel.MyStorageMirror[tCtrl.MyTRF.TableName][tCtrl.MyTRF.RowNo], tCtrl.MyFieldInfo, tPropValue, null);
+                                            }
+                                        }
+                                        this.FireEvent(true, "OnPropertyChanged", "SetProperty", tPropValue, "iValue");
+                                    }
                                 }
                             }
                         }
-                    }
-                });
-            }
-
-            if (pName === "OniValueChanged") {
-                this.RegisterEvent("OniValueChanged", pValue);
-                this.FireEvent(true, "OniValueChanged", "SetProperty", this.PropertyBag["Value"], "Value");
-            } else if (pName === "OnValueChanged") {
-                this.RegisterEvent("OnValueChanged", pValue);
-                return;
-            } else if (pName === "OnPropertyChanged") {
-                this.RegisterEvent("OnPropertyChanged", pValue);
-                return;
-            } else if (pName === "OnPropertySet") {
-                this.RegisterEvent("OnPropertySet", pValue);
-                return;
-            } else if (pName === "RegisterEvent") {
-                const tPara: string[] = pValue.split(":;:");
-                if (tPara.length > 1) {
-                    this.RegisterEvent(tPara[0], tPara[1]);
+                    });
                 }
-            } else if (pName === "Value") {
+
+                if (pName === "OniValueChanged") {
+                    this.RegisterEvent("OniValueChanged", pValue);
+                    this.FireEvent(true, "OniValueChanged", "SetProperty", this.PropertyBag["Value"], "Value");
+                } else if (pName === "OnValueChanged") {
+                    this.RegisterEvent("OnValueChanged", pValue);
+                    return;
+                } else if (pName === "OnPropertyChanged") {
+                    this.RegisterEvent("OnPropertyChanged", pValue);
+                    return;
+                } else if (pName === "OnPropertySet") {
+                    this.RegisterEvent("OnPropertySet", pValue);
+                    return;
+                } else if (pName === "RegisterEvent") {
+                    const tPara: string[] = pValue.split(":;:");
+                    if (tPara.length > 1) {
+                        this.RegisterEvent(tPara[0], tPara[1]);
+                    }
+                } else if (pName === "Value") {
+                    if (pValue !== tOldValue) {
+                        this.IsDirty = true;
+                        this.FireEvent(true, "OnValueChanged", "SetProperty", pValue, this.MyTRF);
+                        this.FireEvent(true, "OniValueChanged", "SetProperty", pValue, pName);
+                    }
+                } else if (pName === "Visibility" && this.MyRootElement) {
+                    pValue = cde.CBool(pValue);
+                    this.Visibility = pValue;
+                    if (typeof pValue === "undefined" || pValue) {
+                        this.MyRootElement.style.display = '';
+                        this.OnLoad(this.Visibility);
+                    }
+                    else {
+                        this.MyRootElement.style.display = 'none';
+                        this.OnUnload();
+                    }
+                } else if (pName === "IsOwnerDown") {
+                    if (pValue === true) {
+                        if (this.GetProperty(pName) === true)
+                            return;
+                        this.mOldClassName = this.MyRootElement.className;
+                        this.MyRootElement.className += " cdeNodeGone";
+                    }
+                    else {
+                        if (this.GetProperty(pName) !== true)
+                            return;
+                        this.MyRootElement.className = this.mOldClassName;
+                    }
+                } else if (pName === "Disabled" && this.MyRootElement) {
+                    this.IsDisabled = cde.CBool(pValue);
+                    if (this.IsDisabled) {
+                        this.MyRootElement.style.opacity = "0.5";
+                    }
+                    else {
+                        this.MyRootElement.style.opacity = "1.0";
+                    }
+                } else if (pName === "Draggable") {
+                    this.MyRootElement.draggable = cde.CBool(pValue);
+                } else if (pName === "TID") {
+                    this.PropertyBag["ID"] = pValue; //Set ID to ThingID without setting root ID of the field - required for table updates
+                } else if ((pName === "ID" || pName === "MID") && pValue && this.MyRootElement) {
+                    this.MyRootElement.id = cde.GuidToString(pValue);
+                    this.PropertyBag["ID"] = pValue;
+                } else if (pName === "ClassName" && (pValue || pValue === "") && this.MyRootElement) {
+                    this.MyRootElement.className = pValue;
+                } else if (pName === "AddClassName" && (pValue || pValue === "") && this.MyRootElement) {
+                    if (!this.MyRootElement.classList.contains(pValue))
+                        this.MyRootElement.classList.add(pValue);
+                } else if (pName === "RemoveClassName" && (pValue || pValue === "") && this.MyRootElement) {
+                    if (this.MyRootElement.classList.contains(pValue))
+                        this.MyRootElement.classList.remove(pValue);
+                } else if (pName === "TEClassName" && (pValue || pValue === "")) {
+                    if (this.MyTE && this.MyTE.MyNMIControl)
+                        this.MyTE.MyNMIControl.SetProperty("ClassName", pValue);
+                } else if (pName === "Display" && pValue && this.MyRootElement) {
+                    this.MyRootElement.style.display = pValue;
+                } else if (pName === "Style" && pValue && this.MyRootElement) {
+                    this.MyRootElement.style.cssText += pValue;
+                } else if (pName === "MaxHeight" && pValue && this.MyRootElement) {
+                    this.MyRootElement.style.maxHeight = pValue;
+                } else if (pName === "Opacity" && this.MyRootElement) {
+                    this.MyRootElement.style.opacity = pValue;
+                } else if (pName === "HorizontalAlignment" && this.MyRootElement) {
+                    this.MyRootElement.style.textAlign = pValue.toLowerCase();
+                } else if (pName === "VerticalAlignment" && this.MyRootElement) {
+                    this.MyRootElement.style.verticalAlign = pValue.toLowerCase();
+                } else if (pName === "Float" && this.MyRootElement) {
+                    this.MyRootElement.style.cssFloat = pValue;
+                } else if (pName === "FontSize" && this.MyRootElement) {
+                    this.MyRootElement.style.fontSize = pValue + "px";
+                } else if (pName === "Margin" && this.MyRootElement) {
+                    this.MyRootElement.style.margin = pValue + "px";
+                } else if (pName === "Z-Index" && this.MyRootElement) {
+                    //this.MyRootElement.style.position = "relative";       //V4.107: Why?????
+                    this.MyRootElement.style.zIndex = pValue.toString();
+                } else if (pName === "PixelWidth" && this.MyRootElement) {
+                    if (pValue) {
+                        if (pValue.toString().endsWith("px") || pValue.toString().endsWith("%") || pValue === "auto")
+                            this.MyRootElement.style.width = pValue;
+                        else
+                            this.MyRootElement.style.width = pValue + "px";
+                    }
+                } else if (pName === "PixelHeight" && this.MyRootElement) {
+                    if (pValue) {
+                        if (pValue.toString().endsWith("px") || pValue.toString().endsWith("%") || pValue === "auto")
+                            this.MyRootElement.style.height = pValue;
+                        else
+                            this.MyRootElement.style.height = pValue + "px";
+                    }
+                } else if (pName === "TileFactorX" && this.MyRootElement) {
+                    this.SetInitialWidth(1);
+                } else if (pName === "TileFactorY" && this.MyRootElement) {
+                    this.SetInitialHeight(1);
+                } else if (pName === "TileWidth" && this.MyRootElement) {
+                    pValue = cde.CInt(pValue);
+                    if (pValue === 0) pValue = 1;
+                    const tScrolRes = 0;
+                    this.SetWidth(this.MyRootElement, pValue, this.MyBaseType === cdeNMI.cdeControlType.Screen ? tScrolRes : (this.MyBaseType === cdeNMI.cdeControlType.TileEntry ? 0 : 1));
+                    //this.MyRootElement.style.width = cdeNMI.GetSizeFromTile(pValue).toString() + "px";
+                } else if (pName === "TileHeight" && this.MyRootElement) {
+                    pValue = cde.CInt(pValue);
+                    if (pValue < 0)
+                        this.MyRootElement.style.height = "inherit";
+                    else {
+                        if (pValue < 1) pValue = 1;
+                        this.SetHeight(this.MyRootElement, pValue, this.MyBaseType === cdeNMI.cdeControlType.Screen ? 0 : (this.MyBaseType === cdeNMI.cdeControlType.TileEntry ? 0 : 1));
+                        //this.MyRootElement.style.height = cdeNMI.GetSizeFromTile(pValue).toString() + "px";
+                    }
+                } else if (pName === "MaxTileWidth" && this.MyRootElement) {
+                    pValue = cde.CInt(pValue);
+                    let tMaxWid: number = cdeNMI.GetSizeFromTile(pValue);
+                    if (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 1 && this.MyBaseType === cdeNMI.cdeControlType.CollapsibleGroup && this.MyFieldInfo && this.MyFieldInfo.FldOrder === 1 && cde.CBool(this.GetProperty("UseMargin")) === true) {
+                        const tSegments: number = Math.floor(pValue / 6);
+                        if (tSegments > 0)
+                            tMaxWid += GetSizeFromTile(tSegments) / 2;
+                    }
+                    if (cdeNMI.MyScreenManager && cdeNMI.MyScreenManager.DocumentWidth > 0 && tMaxWid > cdeNMI.MyScreenManager.DocumentWidth)
+                        tMaxWid = cdeNMI.MyScreenManager.DocumentWidth - (GetSizeFromTile(1));
+                    this.MyRootElement.style.maxWidth = tMaxWid + "px";
+                } else if (pName === "BackgroundImage" && this.MyRootElement) {
+                    if (pValue.substr(0, 1) === "{") {
+                        let tPlanar: cdeNMI.ThePlanarImage = null;
+                        tPlanar = JSON.parse(pValue);
+                        this.MyRootElement.style.backgroundImage = "url('data:image/jpeg;base64," + tPlanar.Bits + "')";
+                    } else {
+                        this.MyRootElement.style.backgroundImage = "url('" + pValue + "')";
+                    }
+                } else if (pName === "TileLeft" && this.MyRootElement) {
+                    pValue = cde.CInt(pValue);
+                    this.MyRootElement.style.left = ((cdeNMI.GetSizeFromTile(1) * pValue) + (cdeNMI.MyNMISettings.TileMargin * ((pValue * 2) + 1))).toString() + "px";
+                } else if (pName === "TileTop" && this.MyRootElement) {
+                    pValue = cde.CInt(pValue);
+                    this.MyRootElement.style.top = ((cdeNMI.GetSizeFromTile(1) * pValue) + (cdeNMI.MyNMISettings.TileMargin * ((pValue * 2) + 1))).toString() + "px";
+                } else if (pName === "Top" && this.MyRootElement) {
+                    pValue = cde.CInt(pValue);
+                    this.MyRootElement.style.top = pValue.toString() + "px";
+                } else if (pName === "Left" && this.MyRootElement) {
+                    pValue = cde.CInt(pValue);
+                    this.MyRootElement.style.left = pValue.toString() + "px";
+                } else if (pName === "Right" && this.MyRootElement) {
+                    pValue = cde.CInt(pValue);
+                    this.MyRootElement.style.right = pValue.toString() + "px";
+                } else if (pName === "IsAbsolute" && this.MyRootElement) {
+                    if (cde.CBool(pValue)) {
+                        this.MyRootElement.style.position = "absolute";
+                    }
+                    else
+                        this.MyRootElement.style.position = "relative";
+                } else if (pName === "IsHitTestDisabled" && this.MyRootElement) {
+                    if (cde.CBool(pValue))
+                        this.MyRootElement.style.pointerEvents = 'none';
+                    else
+                        this.MyRootElement.style.pointerEvents = '';
+                } else if (pName === "NUITags" && pValue && cdeNMI.MyEngine) {
+                    const t: string[] = pValue.toString().split(';');
+                    for (let i = 0; i < t.length; i++)
+                        cdeNMI.MyNMINUITags[t[i]] = this;
+                } else if (pName === "EngineName" && pValue && pValue !== "") {
+                    this.MyEngineName = pValue;
+                } else if (pName === "cdeNMID" && pValue && pValue !== "") {
+                    cdeNMI.MyNMID[pValue] = this;
+                }
+
                 if (pValue !== tOldValue) {
-                    this.IsDirty = true;
-                    this.FireEvent(true, "OnValueChanged", "SetProperty", pValue, this.MyTRF);
-                    this.FireEvent(true, "OniValueChanged", "SetProperty", pValue, pName);
-                }
-            } else if (pName === "Visibility" && this.MyRootElement) {
-                pValue = cde.CBool(pValue);
-                this.Visibility = pValue;
-                if (typeof pValue === "undefined" || pValue) {
-                    this.MyRootElement.style.display = '';
-                    this.OnLoad(this.Visibility);
-                }
-                else {
-                    this.MyRootElement.style.display = 'none';
-                    this.OnUnload();
-                }
-            } else if (pName === "IsOwnerDown") {
-                if (pValue === true) {
-                    if (this.GetProperty(pName) === true)
-                        return;
-                    this.mOldClassName = this.MyRootElement.className;
-                    this.MyRootElement.className += " cdeNodeGone";
-                }
-                else {
-                    if (this.GetProperty(pName) !== true)
-                        return;
-                    this.MyRootElement.className = this.mOldClassName;
-                }
-            } else if (pName === "Disabled" && this.MyRootElement) {
-                this.IsDisabled = cde.CBool(pValue);
-                if (this.IsDisabled) {
-                    this.MyRootElement.style.opacity = "0.5";
-                }
-                else {
-                    this.MyRootElement.style.opacity = "1.0";
-                }
-            } else if (pName === "Draggable") {
-                this.MyRootElement.draggable = cde.CBool(pValue);
-            } else if (pName === "TID") {
-                this.PropertyBag["ID"] = pValue; //Set ID to ThingID without setting root ID of the field - required for table updates
-            } else if ((pName === "ID" || pName === "MID") && pValue && this.MyRootElement) {
-                this.MyRootElement.id = cde.GuidToString(pValue);
-                this.PropertyBag["ID"] = pValue; 
-            } else if (pName === "ClassName" && (pValue || pValue === "") && this.MyRootElement) {
-                this.MyRootElement.className = pValue;
-            } else if (pName === "AddClassName" && (pValue || pValue === "") && this.MyRootElement) {
-                if (!this.MyRootElement.classList.contains(pValue))
-                    this.MyRootElement.classList.add(pValue);
-            } else if (pName === "RemoveClassName" && (pValue || pValue === "") && this.MyRootElement) {
-                if (this.MyRootElement.classList.contains(pValue))
-                    this.MyRootElement.classList.remove(pValue);
-            } else if (pName === "TEClassName" && (pValue || pValue === "")) {
-                if (this.MyTE && this.MyTE.MyNMIControl)
-                    this.MyTE.MyNMIControl.SetProperty("ClassName", pValue);
-            } else if (pName === "Display" && pValue && this.MyRootElement) {
-                this.MyRootElement.style.display = pValue;
-            } else if (pName === "Style" && pValue && this.MyRootElement) {
-                this.MyRootElement.style.cssText += pValue;
-            } else if (pName === "Opacity" && this.MyRootElement) {
-                this.MyRootElement.style.opacity = pValue;
-            } else if (pName === "HorizontalAlignment" && this.MyRootElement) {
-                this.MyRootElement.style.textAlign = pValue.toLowerCase();
-            } else if (pName === "VerticalAlignment" && this.MyRootElement) {
-                this.MyRootElement.style.verticalAlign = pValue.toLowerCase();
-            } else if (pName === "Float" && this.MyRootElement) {
-                this.MyRootElement.style.cssFloat = pValue;
-            } else if (pName === "FontSize" && this.MyRootElement) {
-                this.MyRootElement.style.fontSize = pValue + "px";
-            } else if (pName === "Margin" && this.MyRootElement) {
-                this.MyRootElement.style.margin = pValue + "px";
-            } else if (pName === "Z-Index" && this.MyRootElement) {
-                //this.MyRootElement.style.position = "relative";       //V4.107: Why?????
-                this.MyRootElement.style.zIndex = pValue.toString();
-            } else if (pName === "PixelWidth" && this.MyRootElement) {
-                if (pValue) {
-                    if (pValue.toString().endsWith("px") || pValue.toString().endsWith("%") || pValue === "auto")
-                        this.MyRootElement.style.width = pValue;
-                    else
-                        this.MyRootElement.style.width = pValue + "px";
-                }
-            } else if (pName === "PixelHeight" && this.MyRootElement) {
-                if (pValue) {
-                    if (pValue.toString().endsWith("px") || pValue.toString().endsWith("%") || pValue === "auto")
-                        this.MyRootElement.style.height = pValue;
-                    else
-                        this.MyRootElement.style.height = pValue + "px";
-                }
-            } else if (pName === "TileFactorX" && this.MyRootElement) {
-                this.SetInitialWidth(1);
-            } else if (pName === "TileFactorY" && this.MyRootElement) {
-                this.SetInitialHeight(1);
-            } else if (pName === "TileWidth" && this.MyRootElement) {
-                pValue = cde.CInt(pValue);
-                if (pValue === 0) pValue = 1;
-                const tScrolRes = 0;
-                this.SetWidth(this.MyRootElement, pValue, this.MyBaseType === cdeNMI.cdeControlType.Screen ? tScrolRes : (this.MyBaseType === cdeNMI.cdeControlType.TileEntry ? 0 : 1));
-                //this.MyRootElement.style.width = cdeNMI.GetSizeFromTile(pValue).toString() + "px";
-            } else if (pName === "TileHeight" && this.MyRootElement) {
-                pValue = cde.CInt(pValue);
-                if (pValue < 0)
-                    this.MyRootElement.style.height = "inherit";
-                else {
-                    if (pValue < 1) pValue = 1;
-                    this.SetHeight(this.MyRootElement, pValue, this.MyBaseType === cdeNMI.cdeControlType.Screen ? 0 : (this.MyBaseType === cdeNMI.cdeControlType.TileEntry ? 0 : 1));
-                    //this.MyRootElement.style.height = cdeNMI.GetSizeFromTile(pValue).toString() + "px";
-                }
-            } else if (pName === "MaxTileWidth" && this.MyRootElement) {
-                pValue = cde.CInt(pValue);
-                let tMaxWid: number = cdeNMI.GetSizeFromTile(pValue);
-                if (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 1 && this.MyBaseType === cdeNMI.cdeControlType.CollapsibleGroup && this.MyFieldInfo && this.MyFieldInfo.FldOrder === 1 && cde.CBool(this.GetProperty("UseMargin")) === true) {
-                    const tSegments: number = Math.floor(pValue / 6);
-                    if (tSegments > 0)
-                        tMaxWid += GetSizeFromTile(tSegments) / 2;
-                }
-                if (cdeNMI.MyScreenManager && cdeNMI.MyScreenManager.DocumentWidth > 0 && tMaxWid > cdeNMI.MyScreenManager.DocumentWidth)
-                    tMaxWid = cdeNMI.MyScreenManager.DocumentWidth - (GetSizeFromTile(1));
-                this.MyRootElement.style.maxWidth = tMaxWid + "px";
-            } else if (pName === "BackgroundImage" && this.MyRootElement) {
-                if (pValue.substr(0, 1) === "{") {
-                    let tPlanar: cdeNMI.ThePlanarImage = null;
-                    tPlanar = JSON.parse(pValue);
-                    this.MyRootElement.style.backgroundImage = "url('data:image/jpeg;base64," + tPlanar.Bits + "')";
-                } else {
-                    this.MyRootElement.style.backgroundImage = "url('" + pValue + "')";
-                }
-            } else if (pName === "TileLeft" && this.MyRootElement) {
-                pValue = cde.CInt(pValue);
-                this.MyRootElement.style.left = ((cdeNMI.GetSizeFromTile(1) * pValue) + (cdeNMI.MyNMISettings.TileMargin * ((pValue * 2) + 1))).toString() + "px";
-            } else if (pName === "TileTop" && this.MyRootElement) {
-                pValue = cde.CInt(pValue);
-                this.MyRootElement.style.top = ((cdeNMI.GetSizeFromTile(1) * pValue) + (cdeNMI.MyNMISettings.TileMargin * ((pValue * 2) + 1))).toString() + "px";
-            } else if (pName === "Top" && this.MyRootElement) {
-                pValue = cde.CInt(pValue);
-                this.MyRootElement.style.top = pValue.toString() + "px";
-            } else if (pName === "Left" && this.MyRootElement) {
-                pValue = cde.CInt(pValue);
-                this.MyRootElement.style.left = pValue.toString() + "px";
-            } else if (pName === "Right" && this.MyRootElement) {
-                pValue = cde.CInt(pValue);
-                this.MyRootElement.style.right = pValue.toString() + "px";
-            } else if (pName === "IsAbsolute" && this.MyRootElement) {
-                if (cde.CBool(pValue)) {
-                    this.MyRootElement.style.position = "absolute";
-                }
-                else
-                    this.MyRootElement.style.position = "relative";
-            } else if (pName === "IsHitTestDisabled" && this.MyRootElement) {
-                if (cde.CBool(pValue))
-                    this.MyRootElement.style.pointerEvents = 'none';
-                else
-                    this.MyRootElement.style.pointerEvents = '';
-            } else if (pName === "NUITags" && pValue && cdeNMI.MyEngine) {
-                const t: string[] = pValue.toString().split(';');
-                for (let i = 0; i < t.length; i++)
-                    cdeNMI.MyNMINUITags[t[i]] = this;
-            } else if (pName === "EngineName" && pValue && pValue !== "") {
-                this.MyEngineName = pValue;
-            } else if (pName === "cdeNMID" && pValue && pValue !== "") {
-                cdeNMI.MyNMID[pValue] = this;
-            }
-
-            if (pValue !== tOldValue) {
-                this.FireEvent(true, "OnPropertyChanged", "SetProperty", pValue, pName);
-                const tS: cdeNMI.TheControlBlock = this.GetProperty(pName + "_TCB");
-                if (tS) {
-                    const tSpan: HTMLSpanElement = document.getElementById(tS.TargetID);
-                    if (tSpan) {
-                        tSpan.innerHTML = pValue;
+                    this.FireEvent(true, "OnPropertyChanged", "SetProperty", pValue, pName);
+                    const tS: cdeNMI.TheControlBlock = this.GetProperty(pName + "_TCB");
+                    if (tS) {
+                        const tSpan: HTMLSpanElement = document.getElementById(tS.TargetID);
+                        if (tSpan) {
+                            tSpan.innerHTML = pValue;
+                        }
                     }
                 }
+            }
+            catch (exe) {
+                cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "BaseControl:SetProperty", "Could not set property:" + exe);
             }
             this.FireEvent(true, "OnPropertySet", "SetProperty", pValue, pName);
         }

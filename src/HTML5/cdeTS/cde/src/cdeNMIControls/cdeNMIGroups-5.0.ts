@@ -561,14 +561,8 @@
                 let tNH: number = (cdeNMI.GetSizeFromTile(1));
                 if (!this.IsTesla && this.GetProperty("IsSmall"))
                     tNH /= 2;
-                //super.SetProperty("PixelHeight", tNH);
-                super.SetProperty("Style", "max-height:" + tNH + "px;");
-                if (doForce) {
-                    this.colOpen(null);
-                    this.OnUnload();
-                }
-                else
-                    super.GetElement().addEventListener("transitionend", this.colOpen, false);
+                super.SetProperty("Style", "max-height:" + tNH + "px");
+                this.colOpen(null);
             } else {
                 this.SetProperty("IsOpen", true);
                 if (this.mTitleGroup.GetElement().classList.contains("cdeCollapsibleClosed"))
@@ -580,12 +574,10 @@
                     let tNH: number = (cdeNMI.GetSizeFromTile(super.GetProperty("TileHeight")));
                     if (!this.IsTesla && this.GetProperty("IsSmall"))
                         tNH /= 2;
-                    //super.SetProperty("PixelHeight", tNH);
                     super.SetProperty("Style", "max-height:" + tNH + "px;");
                 }
                 else {
-                    //super.SetProperty("PixelHeight", "auto");
-                    super.SetProperty("Style", "max-height:3840px;");
+                    super.SetProperty("Style", "max-height:none;");
                 }
                 this.OnLoad();
             }
