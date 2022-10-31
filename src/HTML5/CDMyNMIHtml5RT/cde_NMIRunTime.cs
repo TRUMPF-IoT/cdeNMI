@@ -28,7 +28,12 @@ namespace NMIService
         {
             if (TheBaseAssets.MyServiceHostInfo.ContentTemplate != Guid.Empty)
                 MyMainFrameHtml = RenderMainFrameHtml(TheBaseAssets.MyServiceHostInfo.ContentTemplate);
-
+            else
+            {
+                var url = TheBaseAssets.MySettings.GetSetting("MainContentTemplate");
+                if (!string.IsNullOrEmpty(url))
+                    MyMainFrameHtml = TheCommonUtils.CArray2UTF8String(TheCommonUtils.GetSystemResource(null, url));
+            }
         }
 
         private void InterceptHttpRequestSiteMap(TheRequestData pRequest)
@@ -742,7 +747,11 @@ namespace NMIService
             if (TheBaseAssets.MyServiceHostInfo.AzureAnalytics != Guid.Empty)
                 tStr.Append(InsertAzureAnalytics());
             if (pPage.IncludeCDE)
+            {
                 tStr.Append("</head><body class=\"cdeBody\">");
+                if (!string.IsNullOrEmpty(pComposite))
+                    tStr.Append(pComposite);
+            }
             else
                 tStr.Append(pComposite.Replace("<%=DASHBOARD%>", ""));
             return tStr.ToString();
