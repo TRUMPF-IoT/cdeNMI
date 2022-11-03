@@ -1423,7 +1423,7 @@
             }
 
             this.mDivSideBar = document.getElementById("cdeSideBar");
-            if (!this.mDivSideBar) {
+            if (!this.mDivSideBar && cde.MyBaseAssets.MyServiceHostInfo.ShowClassic!==true) {
                 this.mDivSideBar = document.createElement("div");
                 this.mDivSideBar.id = "cdeSideBar";
                 this.mDivSideBar.className = "cdeSideBar";
@@ -1474,7 +1474,8 @@
 
             const tIconGroup: INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(null, { PreInitBag: ["ControlTW=4", "ControlTH=1", "TileFactorY=2"] });
             tIconGroup.SetProperty("ClassName", "cdeSideTiles");
-            this.mDivSideBar.appendChild(tIconGroup.GetElement());
+            if (this.mDivSideBar)
+                this.mDivSideBar.appendChild(tIconGroup.GetElement());
 
             const tHomeButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(tIconGroup, { PreInitBag: ["ControlTW=1", "ControlTH=1", "TileFactorX=2", "TileFactorY=2"], PostInitBag: ["Title=<span class='fa' style='font-size:24px'>&#xf015;</span>", "ClassName=cdeVertCenter"] });
             tHomeButton.SetProperty("OnClick", (sender: INMIControl, e: PointerEvent, tPs: ThePointer) => {
@@ -1607,7 +1608,8 @@
             this.mDivScreenList = document.createElement("div");
             this.mDivScreenList.className = "cdeScreenList";
             this.mDivScreenList.id = "cdeScreenList";
-            this.mDivSideBar.appendChild(this.mDivScreenList);
+            if (this.mDivSideBar)
+                this.mDivSideBar.appendChild(this.mDivScreenList);
 
             cdeNMI.ApplyTheme();
         }
@@ -1685,6 +1687,8 @@
 
 
         ToggleSideBar(pSetState: number) {
+            if (!this.mDivSideBar)
+                return;
             if (pSetState >= 0)
                 this.mSideBarState = pSetState;
             switch (this.mSideBarState) {
