@@ -750,7 +750,7 @@ namespace NMIService
             {
                 tStr.Append("</head><body class=\"cdeBody\">");
                 if (!string.IsNullOrEmpty(pComposite))
-                    tStr.Append(pComposite);
+                    tStr.Append(pComposite.Replace("<%=DASHBOARD%>", ""));
             }
             else
                 tStr.Append(pComposite.Replace("<%=DASHBOARD%>", ""));

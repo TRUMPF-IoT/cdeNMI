@@ -189,7 +189,7 @@
 
                 let tSizeX = 3; if (cde.CInt(this.MyFieldInfo["TileWidth"]) < 3) tSizeX = 1;
                 let tSizeX1 = 3; if (cde.CInt(this.MyFieldInfo["TileWidth"]) > 3) tSizeX1 = cde.CInt(this.MyFieldInfo["TileWidth"]) - 3;
-                for (let index = 0; index < (this.IsNMIOnly ? 2 : 3); index++) {
+                for (let index = 0; index < (this.IsNMIOnly ? 2 : 4); index++) {
                     switch (index) {
                         case 0:
                             this.MyMetaData.FormFields[index] = new cdeNMI.TheFieldInfo(1, tSizeX, "Name");
@@ -205,9 +205,15 @@
                             this.MyMetaData.FormFields[index].FormID = "PROPTABLEInline";
                             break;
                         case 2:
-                            this.MyMetaData.FormFields[index] = new cdeNMI.TheFieldInfo(21, 8, "Time");
+                            this.MyMetaData.FormFields[index] = new cdeNMI.TheFieldInfo(21, 3, "Time");
                             this.MyMetaData.FormFields[index].FldOrder = 3;
                             this.MyMetaData.FormFields[index].DataItem = "cdeCTIM";
+                            this.MyMetaData.FormFields[index].Flags = 0;
+                            break;
+                        case 3:
+                            this.MyMetaData.FormFields[index] = new cdeNMI.TheFieldInfo(1, 3, "Meta");
+                            this.MyMetaData.FormFields[index].FldOrder = 4;
+                            this.MyMetaData.FormFields[index].DataItem = "cdeM";
                             this.MyMetaData.FormFields[index].Flags = 0;
                             break;
                     }
