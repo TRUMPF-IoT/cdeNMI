@@ -405,7 +405,6 @@ var CDMyC3;
             this.myPropertyBag = pPropertyBag;
             this.myChartScreen = cdeNMI.ctrlTileGroup.Create(pTargetElem, null);
             this.myChartContainer = cdeNMI.ctrlTileGroup.Create(this.myChartScreen, null, null);
-            debugger;
             this.myChartCanvas = document.createElement("canvas");
             this.myChartCanvas.width = 0;
             this.myChartCanvas.height = 0;
