@@ -367,18 +367,24 @@ var CDMyC3;
                 this.mSeriesNames = cde.cdeEval("(" + this.GetProperty("SeriesNames") + ")");
             else
                 this.mSeriesNames = [{ name: 'Data', lineColor: 'rgba(0,255,0,0.39)' }];
-            let wid = cdeCommonUtils.CInt(this.GetProperty("ControlTW"));
-            if (wid === 0)
-                wid = null;
-            else
-                wid = cdeNMI.GetSizeFromTile(wid);
-            let hei = cdeCommonUtils.CInt(this.GetProperty("ControlTH"));
-            if (hei === 0)
-                hei = null;
-            else
-                hei = cdeNMI.GetSizeFromTile(hei);
-            this.myChartContainer.SetProperty("TileWidth", this.GetProperty("ControlTW"));
-            this.myChartContainer.SetProperty("TileHeight", this.GetProperty("ControlTH"));
+            let wid = cdeCommonUtils.CInt(this.GetProperty("PixelWidth"));
+            if (wid === 0) {
+                wid = cdeCommonUtils.CInt(this.GetProperty("ControlTW"));
+                if (wid === 0)
+                    wid = null;
+                else
+                    wid = cdeNMI.GetSizeFromTile(wid);
+                this.myChartContainer.SetProperty("TileWidth", this.GetProperty("ControlTW"));
+            }
+            let hei = cdeCommonUtils.CInt(this.GetProperty("PixelHeight"));
+            if (hei === 0) {
+                hei = cdeCommonUtils.CInt(this.GetProperty("ControlTH"));
+                if (hei === 0)
+                    hei = null;
+                else
+                    hei = cdeNMI.GetSizeFromTile(hei);
+                this.myChartContainer.SetProperty("TileHeight", this.GetProperty("ControlTH"));
+            }
             this.myChartCanvas.width = wid;
             this.myChartCanvas.height = hei;
             this.mTimeSeries = new Array();

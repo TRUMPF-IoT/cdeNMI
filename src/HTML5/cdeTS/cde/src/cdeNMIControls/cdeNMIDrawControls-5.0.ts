@@ -176,7 +176,7 @@
                 } catch (error) {
                     cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNMI:ctrlCanvasDraw", "DrawCanvas-AddShape :" + error);
                 }
-            } else if ((pName === "DrawShapes" || pName==="SetShapes") && pValue) {
+            } else if ((pName === "DrawShapes" || pName === "SetShapes") && pValue) {
                 try {
                     if (pName === "SetShapes")
                         this.ClearPicture();
@@ -281,7 +281,7 @@
                 }
                 this.WidthRatio = pValue / this.MyWidth;
                 bDrawCanvas = true;
-            } else if (pName === "AbsHeight") {
+            } else if (pName === "AbsHeight" || pName === "PixelHeight") {
                 pValue = cde.CInt(pValue);
                 if (this.fgcanvas && this.fgcanvas.height !== pValue) {
                     this.fgcanvas.style.height = pValue + "px";
@@ -294,7 +294,7 @@
                 this.MyHeight = pValue;
                 this.HeightRatio = 1;
                 bDrawCanvas = true;
-            } else if (pName === "AbsWidth") {
+            } else if (pName === "AbsWidth" || pName === "PixelWidth") {
                 pValue = cde.CInt(pValue);
                 if (this.fgcanvas && this.fgcanvas.width !== pValue) {
                     this.fgcanvas.style.width = pValue + "px";
