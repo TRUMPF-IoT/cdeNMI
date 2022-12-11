@@ -617,6 +617,8 @@ var CDMyC3;
                 this.myChartControl = c3.generate(this.myChartConfig);
             }
             else {
+                if (cdeCommonUtils.CBool(this.GetProperty("UpdateData")))
+                    this.myChartControl.unload();
                 let tArgs = {};
                 if (this.GetProperty("DataOptions")) {
                     tArgs = JSON.parse(this.GetProperty("DataOptions"));
