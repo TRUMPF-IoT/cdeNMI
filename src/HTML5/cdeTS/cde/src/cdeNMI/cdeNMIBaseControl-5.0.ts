@@ -313,7 +313,6 @@
                     if (pValue === 0) pValue = 1;
                     const tScrolRes = 0;
                     this.SetWidth(this.MyRootElement, pValue, this.MyBaseType === cdeNMI.cdeControlType.Screen ? tScrolRes : (this.MyBaseType === cdeNMI.cdeControlType.TileEntry ? 0 : 1));
-                    //this.MyRootElement.style.width = cdeNMI.GetSizeFromTile(pValue).toString() + "px";
                 } else if (pName === "TileHeight" && this.MyRootElement) {
                     pValue = cde.CInt(pValue);
                     if (pValue < 0)
@@ -321,7 +320,6 @@
                     else {
                         if (pValue < 1) pValue = 1;
                         this.SetHeight(this.MyRootElement, pValue, this.MyBaseType === cdeNMI.cdeControlType.Screen ? 0 : (this.MyBaseType === cdeNMI.cdeControlType.TileEntry ? 0 : 1));
-                        //this.MyRootElement.style.height = cdeNMI.GetSizeFromTile(pValue).toString() + "px";
                     }
                 } else if (pName === "MaxTileWidth" && this.MyRootElement) {
                     pValue = cde.CInt(pValue);
@@ -1323,6 +1321,8 @@
         }
 
         public SetInitialWidth(tMargin = 1): number {
+            if (cde.CInt(this.GetSetting("PixelWidth")) != 0)
+                return cde.CInt(this.GetSetting("PixelWidth"));
             //SIZING: Needs to be the same on all SF Controls
             let tW: number = cde.CInt(this.GetSetting("ControlTW"));
             if (tW === 0 && this.GetProperty("ControlTW"))
@@ -1335,6 +1335,8 @@
         }
 
         public SetInitialHeight(tMargin = 1): number {
+            if (cde.CInt(this.GetSetting("PixelHeight")) != 0)
+                return cde.CInt(this.GetSetting("PixelHeight"));
             let tH: number = cde.CInt(this.GetSetting("ControlTH"));
             if (tH === 0 && this.GetProperty("ControlTH"))
                 tH = cde.CInt(this.GetProperty("ControlTH"));

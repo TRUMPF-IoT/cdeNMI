@@ -17,10 +17,10 @@
 
         MyControlTypeName: string = null;
         public MyTEContainer: INMIControl = null;
-        public MyTEContent: INMIControl = null; // ctrlTileGroup = null;
+        public MyTEContent: INMIControl = null; 
 
         mOldClassName: string = null;
-        public MyTELabel: INMIControl = null; // ctrlTileGroup = null;
+        public MyTELabel: INMIControl = null; 
         mTEContentOuter: INMIControl = null;
         public DontHideLabel: boolean;
 
@@ -34,8 +34,6 @@
                 this.MyTEContainer.GetElement().setAttribute("cdefo", cde.CStr(pTRF.FldInfo.FldOrder));
                 this.MyTEContainer.GetElement().setAttribute("cdemid", cde.GuidToString(pTRF.FldInfo.cdeMID));
             }
-            //this.MyTEContainer.GetElement().style.zoom = cde.MyBaseAssets.MyServiceHostInfo.TileScale.toString();
-
             this.MyTELabel = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(this.MyTEContainer, { ScreenID: pScreenID });
             this.MyTELabel.SetProperty("LabelElement", "span");
             this.MyTELabel.SetProperty("LabelClassName", "cdeTileEntryLabel");
@@ -48,30 +46,33 @@
 
             this.SetElement(this.MyTEContainer.GetElement(), false, this.MyTEContent.GetElement(), true);
             if (pTRF.FldInfo["RenderTarget"]) {
-                this.SetProperty("Visibility", false);
+                this.SetProperty("Visibility", false); 
             }
 
-            let tTileWidth: number = cde.CInt(this.GetSetting("TileWidth"));
-            if (tTileWidth <= 0) {
-                if (cde.CBool(this.GetSetting("InheritWidth"))) {
-                    if (pTargetControl.GetProperty("ControlTW"))
-                        tTileWidth = pTargetControl.GetProperty("ControlTW");
-                    else
-                        tTileWidth = Math.round(pTargetControl.GetElement().clientWidth / cdeNMI.GetSizeFromTile(1));
-                } else {
-                    if (tTileWidth === 0)
-                        tTileWidth = 6;
+            if (cde.CInt(this.GetSetting("PixelWidth")) == 0) {
+                let tTileWidth: number = cde.CInt(this.GetSetting("TileWidth"));
+                if (tTileWidth <= 0) {
+                    if (cde.CBool(this.GetSetting("InheritWidth"))) {
+                        if (pTargetControl.GetProperty("ControlTW"))
+                            tTileWidth = pTargetControl.GetProperty("ControlTW");
+                        else
+                            tTileWidth = Math.round(pTargetControl.GetElement().clientWidth / cdeNMI.GetSizeFromTile(1));
+                    } else {
+                        if (tTileWidth === 0)
+                            tTileWidth = 6;
+                    }
                 }
+                //if (cde.CInt(this.GetSetting("TileWidth")) >= 0)
+                this.SetProperty("TileWidth", tTileWidth);
             }
-            //if (cde.CInt(this.GetSetting("TileWidth")) >= 0)
-            this.SetProperty("TileWidth", tTileWidth);
 
-
-            let tTileHeight = 1;
-            if (cde.CInt(this.GetSetting("TileHeight")) > 0)
-                tTileHeight = this.GetSetting("TileHeight");
-            if (cde.CInt(this.GetSetting("TileHeight")) >= 0)
-                this.SetProperty("TileHeight", tTileHeight);
+            if (cde.CInt(this.GetSetting("PixelHeight")) == 0) {
+                let tTileHeight = 1;
+                if (cde.CInt(this.GetSetting("TileHeight")) > 0)
+                    tTileHeight = this.GetSetting("TileHeight");
+                if (cde.CInt(this.GetSetting("TileHeight")) >= 0)
+                    this.SetProperty("TileHeight", tTileHeight);
+            }
 
             this.MyControlTypeName = pTRF.FldInfo["ControlType"];
             if (this.MyControlTypeName) {
@@ -179,6 +180,12 @@
             if (pName === "TileWidth" || pName === "NoTE") {
                 if (cde.CInt(this.GetProperty("TileWidth")) < cde.CInt(this.GetProperty("MinTileWidth")))
                     return;
+
+                if (pName=="NoTE" && cde.CInt(this.GetSetting("PixelWidth")) > 0) {
+                    if (!this.DontHideLabel)
+                        this.MyTELabel.SetProperty("Visibility", false);
+                    return;
+                }
 
                 let tScale = 1;
                 if (cde.CInt(this.GetProperty("TileFactorX")) > 1)
