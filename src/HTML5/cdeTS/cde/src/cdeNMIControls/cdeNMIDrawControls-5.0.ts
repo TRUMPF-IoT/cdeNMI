@@ -1425,7 +1425,6 @@
 
             this.mBaseCtrl = cdeNMI.MyTCF.CreateBaseControl().Create(pTargetControl, { TRF: this.MyTRF });
             this.mBaseCtrl.SetElement(document.createElement("div") as HTMLElement);
-            //this.mBaseCtrl.SetInitialSize(1);
             this.mBaseCtrl.GetElement().className = "ctrlBarChart";
             this.mBaseCtrl.GetElement().style.position = "relative";
 
