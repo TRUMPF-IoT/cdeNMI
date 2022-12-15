@@ -212,20 +212,24 @@
                     }
                 }
             } else if (pName === "TileFactorX") {
-                const tFX = cde.CInt(pValue);
-                if (tFX > 1) {
-                    pValue = cde.CInt(this.GetProperty("ControlTW"));
-                    if (pValue === 0) pValue = 1;
-                    pValue = cdeNMI.GetSizeFromTile(pValue);
-                    this.SetProperty("AbsWidth", pValue / tFX);
+                if (cde.CInt(this.GetProperty("PixelWidth")) == 0) {
+                    const tFX = cde.CInt(pValue);
+                    if (tFX > 1) {
+                        pValue = cde.CInt(this.GetProperty("ControlTW"));
+                        if (pValue === 0) pValue = 1;
+                        pValue = cdeNMI.GetSizeFromTile(pValue);
+                        this.SetProperty("AbsWidth", pValue / tFX);
+                    }
                 }
             } else if (pName === "TileFactorY") {
-                const tFX = cde.CInt(pValue);
-                if (tFX > 1) {
-                    pValue = cde.CInt(this.GetProperty("ControlTH"));
-                    if (pValue === 0) pValue = 1;
-                    pValue = cdeNMI.GetSizeFromTile(pValue);
-                    this.SetProperty("AbsHeight", pValue / tFX);
+                if (cde.CInt(this.GetProperty("PixelHeight")) == 0) {
+                    const tFX = cde.CInt(pValue);
+                    if (tFX > 1) {
+                        pValue = cde.CInt(this.GetProperty("ControlTH"));
+                        if (pValue === 0) pValue = 1;
+                        pValue = cdeNMI.GetSizeFromTile(pValue);
+                        this.SetProperty("AbsHeight", pValue / tFX);
+                    }
                 }
             } else if (pName === "DrawMargin") {
                 const tMarg: number = cde.CDbl(pValue);
@@ -248,19 +252,23 @@
                     this.fgcanvas.width = tWi;
                 }
             } else if (pName === "ControlTW") {
-                let tFX = cde.CInt(this.GetProperty("TileFactorX"));
-                if (tFX === 0) tFX = 1;
-                pValue = cde.CInt(pValue);
-                if (pValue === 0) pValue = 1;
-                pValue = cdeNMI.GetSizeFromTile(pValue);
-                this.SetProperty("AbsWidth", pValue / tFX);
+                if (cde.CInt(this.GetProperty("PixelWidth")) == 0) {
+                    let tFX = cde.CInt(this.GetProperty("TileFactorX"));
+                    if (tFX === 0) tFX = 1;
+                    pValue = cde.CInt(pValue);
+                    if (pValue === 0) pValue = 1;
+                    pValue = cdeNMI.GetSizeFromTile(pValue);
+                    this.SetProperty("AbsWidth", pValue / tFX);
+                }
             } else if (pName === "ControlTH") {
-                let tFX = cde.CInt(this.GetProperty("TileFactorY"));
-                if (tFX === 0) tFX = 1;
-                pValue = cde.CInt(pValue);
-                if (pValue === 0) pValue = 1;
-                pValue = cdeNMI.GetSizeFromTile(pValue);
-                this.SetProperty("AbsHeight", pValue / tFX);
+                if (cde.CInt(this.GetProperty("PixelHeight")) == 0) {
+                    let tFX = cde.CInt(this.GetProperty("TileFactorY"));
+                    if (tFX === 0) tFX = 1;
+                    pValue = cde.CInt(pValue);
+                    if (pValue === 0) pValue = 1;
+                    pValue = cdeNMI.GetSizeFromTile(pValue);
+                    this.SetProperty("AbsHeight", pValue / tFX);
+                }
             } else if (pName === "CanvasHeight") {
                 pValue = cde.CInt(pValue);
                 if (this.fgcanvas && this.fgcanvas.height !== pValue) {
@@ -1417,7 +1425,7 @@
 
             this.mBaseCtrl = cdeNMI.MyTCF.CreateBaseControl().Create(pTargetControl, { TRF: this.MyTRF });
             this.mBaseCtrl.SetElement(document.createElement("div") as HTMLElement);
-            this.mBaseCtrl.SetInitialSize(1);
+            //this.mBaseCtrl.SetInitialSize(1);
             this.mBaseCtrl.GetElement().className = "ctrlBarChart";
             this.mBaseCtrl.GetElement().style.position = "relative";
 
