@@ -13,315 +13,333 @@
           * This control is NOT and input control for Form or Table
          * (4.1 Ready!)
          */
-    export class ctrlCanvasDraw extends TheNMIBaseControl {
-        constructor(pTRF?: TheTRF) {
-            super(null, pTRF);
-        }
+     export class ctrlCanvasDraw extends TheNMIBaseControl {
+         constructor(pTRF?: TheTRF) {
+             super(null, pTRF);
+         }
 
-        bgcanvas: HTMLCanvasElement = null;
-        fgcanvas: HTMLCanvasElement = null;
-        bgctx: CanvasRenderingContext2D = null;
-        fgctx: CanvasRenderingContext2D = null;
-        redrawPending = false;
-        foregroundPolylines: TheDrawingObject[] = new Array<TheDrawingObject>();
-        mBaseDiv: HTMLDivElement = null;
+         bgcanvas: HTMLCanvasElement = null;
+         fgcanvas: HTMLCanvasElement = null;
+         bgctx: CanvasRenderingContext2D = null;
+         fgctx: CanvasRenderingContext2D = null;
+         redrawPending = false;
+         foregroundPolylines: TheDrawingObject[] = new Array<TheDrawingObject>();
+         mBaseDiv: HTMLDivElement = null;
 
-        public WidthRatio = 1;
-        public HeightRatio = 1;
+         public WidthRatio = 1;
+         public HeightRatio = 1;
 
-        public MyWidth = 0;
-        public MyHeight = 0;
+         public MyWidth = 0;
+         public MyHeight = 0;
 
-        private MyBackDrawObjects: TheDrawingObject[];
+         private MyBackDrawObjects: TheDrawingObject[];
 
-        tObjPointer = -1;
-        tStrokePointer = 0;
-        tAsyncStrokes: TheDrawingObject[] = null;
-        MyFirstPoint: TheDrawingPoint = null;
+         tObjPointer = -1;
+         tStrokePointer = 0;
+         tAsyncStrokes: TheDrawingObject[] = null;
+         MyFirstPoint: TheDrawingPoint = null;
 
-        public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
-            this.MyBaseType = cdeControlType.CanvasDraw;
-            super.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
+         public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
+             this.MyBaseType = cdeControlType.CanvasDraw;
+             super.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
 
-            let tBase: HTMLElement = null;
-            if (this.MyTarget)
-                this.mBaseDiv = this.MyTarget.GetContainerElement() as HTMLDivElement;
-            else {
-                this.mBaseDiv = document.createElement("div");
-                tBase = this.mBaseDiv;
-            }
+             let tBase: HTMLElement = null;
+             if (this.MyTarget)
+                 this.mBaseDiv = this.MyTarget.GetContainerElement() as HTMLDivElement;
+             else {
+                 this.mBaseDiv = document.createElement("div");
+                 tBase = this.mBaseDiv;
+             }
 
-            if (!this.DoesSupportsCanvas) {
-                const nocanvas = document.createElement("div");
-                nocanvas.style.position = "absolute";
-                nocanvas.appendChild(document.createTextNode("Canvas drawing is not supported for your browser."));
-                this.mBaseDiv.appendChild(nocanvas);
-                return false;
-            }
+             if (!this.DoesSupportsCanvas) {
+                 const nocanvas = document.createElement("div");
+                 nocanvas.style.position = "absolute";
+                 nocanvas.appendChild(document.createTextNode("Canvas drawing is not supported for your browser."));
+                 this.mBaseDiv.appendChild(nocanvas);
+                 return false;
+             }
 
-            if (!cde.CBool(this.GetSetting("NoBackBuffer"))) {
-                this.bgcanvas = document.createElement("canvas");
-                this.bgcanvas.width = 0;
-                this.bgcanvas.height = 0;
-                this.bgctx = this.bgcanvas.getContext("2d");
-                if (!tBase)
-                    this.bgcanvas.style.position = "relative";
-                this.bgcanvas.style.top = "0px";
-                this.bgcanvas.style.left = "0px";
-                this.mBaseDiv.appendChild(this.bgcanvas);
-            }
+             if (!cde.CBool(this.GetSetting("NoBackBuffer"))) {
+                 this.bgcanvas = document.createElement("canvas");
+                 this.bgcanvas.width = 0;
+                 this.bgcanvas.height = 0;
+                 this.bgctx = this.bgcanvas.getContext("2d");
+                 if (!tBase)
+                     this.bgcanvas.style.position = "relative";
+                 this.bgcanvas.style.top = "0px";
+                 this.bgcanvas.style.left = "0px";
+                 this.mBaseDiv.appendChild(this.bgcanvas);
+             }
 
-            this.fgcanvas = document.createElement("canvas");
-            this.fgctx = this.fgcanvas.getContext("2d");
-            this.fgcanvas.width = 0;
-            this.fgcanvas.height = 0;
-            if (!cde.CBool(this.GetSetting("IsInTable")))
-                this.fgcanvas.style.position = "absolute";
-            this.fgcanvas.style.top = "0px";
-            this.fgcanvas.style.left = "0px";
+             this.fgcanvas = document.createElement("canvas");
+             this.fgctx = this.fgcanvas.getContext("2d");
+             this.fgcanvas.width = 0;
+             this.fgcanvas.height = 0;
+             if (!cde.CBool(this.GetSetting("IsInTable")))
+                 this.fgcanvas.style.position = "absolute";
+             this.fgcanvas.style.top = "0px";
+             this.fgcanvas.style.left = "0px";
 
-            this.SetProperty("Foreground", "#000000");
+             this.SetProperty("Foreground", "#000000");
 
-            this.mBaseDiv.appendChild(this.fgcanvas);
-            this.PreventManipulation = true;
-            this.SetElement(tBase ? tBase : this.fgcanvas);
+             this.mBaseDiv.appendChild(this.fgcanvas);
+             this.PreventManipulation = true;
+             this.SetElement(tBase ? tBase : this.fgcanvas);
 
-            return true;
-        }
+             return true;
+         }
 
 
 
-        public SetProperty(pName: string, pValue) {
-            let bDrawCanvas = false;
-            let tShape: TheDrawingObject = null;
-            if (pName === "DataContextSilent") {
-                super.SetProperty("DataContext", pValue);
-            }
-            else {
-                if (pName === "Style") {
-                    if (this.bgcanvas)
-                        this.bgcanvas.style.cssText += pValue;
-                    if (this.fgcanvas)
-                        this.fgcanvas.style.cssText += pValue;
-                }
-                else {
-                    if ((pName === "Value" || pName === "iValue") && pValue) {
-                        const tV: string = pValue.toString();
-                        if (tV.substr(0, 3) === "SH:") {
-                            this.SetProperty("SetShapes", tV.substr(3));
-                            return;
-                        }
-                    }
-                    super.SetProperty(pName, pValue);
-                }
-            }
+         public SetProperty(pName: string, pValue) {
+             let bDrawCanvas = false;
+             let tShape: TheDrawingObject = null;
+             let bHasPW = cde.CInt(this.GetProperty("PixelWidth")) > 0;
+             let bHasPH = cde.CInt(this.GetProperty("PixelHeight")) > 0
+             if (pName === "DataContextSilent") {
+                 super.SetProperty("DataContext", pValue);
+             }
+             else {
+                 if (pName === "Style") {
+                     if (this.bgcanvas)
+                         this.bgcanvas.style.cssText += pValue;
+                     if (this.fgcanvas)
+                         this.fgcanvas.style.cssText += pValue;
+                 }
+                 else {
+                     if ((pName === "Value" || pName === "iValue") && pValue) {
+                         const tV: string = pValue.toString();
+                         if (tV.substr(0, 3) === "SH:") {
+                             this.SetProperty("SetShapes", tV.substr(3));
+                             return;
+                         }
+                     }
+                     super.SetProperty(pName, pValue);
+                 }
+             }
 
-            if (pName === "OnPointerDown") {
-                if (pValue) {
-                    this.PreventDefault = true;
-                    this.HookEvents(false);
-                }
-                this.RegisterEvent("PointerDown", pValue);
-            } else if (pName === "OnPointerMove") {
-                if (pValue) {
-                    this.PreventDefault = true;
-                    this.HookEvents(false);
-                }
-                this.RegisterEvent("PointerMove", pValue);
-            } else if (pName === "OnPointerUp") {
-                if (pValue) {
-                    this.PreventDefault = true;
-                    this.HookEvents(false);
-                }
-                this.RegisterEvent("PointerUp", pValue);
-            } else if (pName === "OnPointerCancel") {
-                if (pValue) {
-                    this.PreventDefault = true;
-                    this.HookEvents(false);
-                }
-                this.RegisterEvent("PointerCancel", pValue);
-            } else if (pName === "OnKeyDown") {
-                if (pValue) {
-                    this.PreventDefault = true;
-                    this.HookEvents(false);
-                }
-                this.RegisterEvent("KeyDown", pValue);
-            } else if (pName === "OnKeyUp") {
-                if (pValue) {
-                    this.PreventDefault = true;
-                    this.HookEvents(false);
-                }
-                this.RegisterEvent("KeyUp", pValue);
-            } else if (pName === "IsVertical") {
-                if (typeof pValue === "undefined" || cde.CBool(pValue)) {
-                    pValue = true;
-                    super.SetProperty("IsVertical", pValue);
-                }
-                this.DrawCanvasBackground();
-            } else if (pName === "IsInverted") {
-                if (typeof pValue === "undefined" || cde.CBool(pValue)) {
-                    pValue = true;
-                    super.SetProperty("IsInverted", pValue);
-                }
-                this.DrawCanvasBackground();
-            } else if (pName === "Background") {
-                this.DrawCanvasBackground();
-            } else if (pName === "AddShape") {
-                try {
-                    tShape = JSON.parse(pValue);
-                    if (tShape) {
-                        this.AddDrawingObject(tShape);
-                        bDrawCanvas = true;
-                    }
-                } catch (error) {
-                    cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNMI:ctrlCanvasDraw", "DrawCanvas-AddShape :" + error);
-                }
-            } else if ((pName === "DrawShapes" || pName === "SetShapes") && pValue) {
-                try {
-                    if (pName === "SetShapes")
-                        this.ClearPicture();
-                    const tShapes: TheDrawingObject[] = JSON.parse(pValue);
-                    for (let i = 0; i < tShapes.length; i++) {
-                        this.AddDrawingObject(tShapes[i], tShapes[i].ID + i.toString(), i < tShapes.length - 1);
-                    }
-                    bDrawCanvas = true;
-                } catch (error) {
-                    cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNMI:ctrlCanvasDraw", "DrawCanvas-DrawShapes :" + error);
-                }
-            } else if (pName === "DrawShape" && pValue) {
-                try {
-                    tShape = JSON.parse(pValue);
-                    if (tShape) {
-                        this.AddDrawingObject(tShape, tShape.ID);
-                        bDrawCanvas = true;
-                    }
-                } catch (error) {
-                    cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNMI:ctrlCanvasDraw", "DrawCanvas-DrawShape :" + error);
-                }
-            } else if (pName === "SetShape") {
-                if (pValue) {
-                    this.ClearPicture();
-                    try {
-                        tShape = JSON.parse(pValue);
-                        if (tShape) {
-                            this.AddDrawingObject(tShape);
-                            bDrawCanvas = true;
-                        }
-                    } catch (error) {
-                        cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNMI:ctrlCanvasDraw", "DrawCanvas-SetShape :" + error);
-                    }
-                }
-            } else if (pName === "TileFactorX") {
-                const tFX = cde.CInt(pValue);
-                if (tFX > 1) {
-                    pValue = cde.CInt(this.GetProperty("ControlTW"));
-                    if (pValue === 0) pValue = 1;
-                    pValue = cdeNMI.GetSizeFromTile(pValue);
-                    this.SetProperty("AbsWidth", pValue / tFX);
-                }
-            } else if (pName === "TileFactorY") {
-                const tFX = cde.CInt(pValue);
-                if (tFX > 1) {
-                    pValue = cde.CInt(this.GetProperty("ControlTH"));
-                    if (pValue === 0) pValue = 1;
-                    pValue = cdeNMI.GetSizeFromTile(pValue);
-                    this.SetProperty("AbsHeight", pValue / tFX);
-                }
-            } else if (pName === "DrawMargin") {
-                const tMarg: number = cde.CDbl(pValue);
-                const tHe: number = this.MyHeight - (tMarg * 2)
-                const tWi: number = this.MyWidth - (tMarg * 2)
-                if (this.bgcanvas) {
-                    this.bgcanvas.style.top = tMarg.toString() + "px";
-                    this.bgcanvas.style.left = tMarg.toString() + "px";
-                    this.bgcanvas.style.height = tHe + "px";
-                    this.bgcanvas.height = tHe;
-                    this.bgcanvas.style.width = tWi + "px";
-                    this.bgcanvas.width = tWi;
-                }
-                if (this.fgcanvas) {
-                    this.fgcanvas.style.top = tMarg.toString() + "px";
-                    this.fgcanvas.style.left = tMarg.toString() + "px";
-                    this.fgcanvas.style.height = tHe + "px";
-                    this.fgcanvas.height = tHe;
-                    this.fgcanvas.style.width = tWi + "px";
-                    this.fgcanvas.width = tWi;
-                }
-            } else if (pName === "ControlTW") {
-                let tFX = cde.CInt(this.GetProperty("TileFactorX"));
-                if (tFX === 0) tFX = 1;
-                pValue = cde.CInt(pValue);
-                if (pValue === 0) pValue = 1;
-                pValue = cdeNMI.GetSizeFromTile(pValue);
-                this.SetProperty("AbsWidth", pValue / tFX);
-            } else if (pName === "ControlTH") {
-                let tFX = cde.CInt(this.GetProperty("TileFactorY"));
-                if (tFX === 0) tFX = 1;
-                pValue = cde.CInt(pValue);
-                if (pValue === 0) pValue = 1;
-                pValue = cdeNMI.GetSizeFromTile(pValue);
-                this.SetProperty("AbsHeight", pValue / tFX);
-            } else if (pName === "CanvasHeight") {
-                pValue = cde.CInt(pValue);
-                if (this.fgcanvas && this.fgcanvas.height !== pValue) {
-                    this.fgcanvas.height = pValue;
-                }
-                if (this.bgcanvas && this.bgcanvas.height !== pValue) {
-                    this.bgcanvas.height = pValue;
-                }
-                this.HeightRatio = cde.CDbl(pValue) / this.MyHeight;
-                bDrawCanvas = true;
-            } else if (pName === "CanvasWidth") {
-                pValue = cde.CInt(pValue);
-                if (this.fgcanvas && this.fgcanvas.width !== pValue) {
-                    this.fgcanvas.width = pValue;
-                }
-                if (this.bgcanvas && this.bgcanvas.width !== pValue) {
-                    this.bgcanvas.width = pValue;
-                }
-                this.WidthRatio = pValue / this.MyWidth;
-                bDrawCanvas = true;
-            } else if (pName === "AbsHeight" || pName === "PixelHeight") {
-                pValue = cde.CInt(pValue);
-                if (this.fgcanvas && this.fgcanvas.height !== pValue) {
-                    this.fgcanvas.style.height = pValue + "px";
-                    this.fgcanvas.height = pValue;
-                }
-                if (this.bgcanvas && this.bgcanvas.height !== pValue) {
-                    this.bgcanvas.style.height = pValue + "px";
-                    this.bgcanvas.height = pValue;
-                }
-                this.MyHeight = pValue;
-                this.HeightRatio = 1;
-                bDrawCanvas = true;
-            } else if (pName === "AbsWidth" || pName === "PixelWidth") {
-                pValue = cde.CInt(pValue);
-                if (this.fgcanvas && this.fgcanvas.width !== pValue) {
-                    this.fgcanvas.style.width = pValue + "px";
-                    this.fgcanvas.width = pValue;
-                }
-                if (this.bgcanvas && this.bgcanvas.width !== pValue) {
-                    this.bgcanvas.style.width = pValue + "px";
-                    this.bgcanvas.width = pValue;
-                }
-                this.MyWidth = pValue;
-                this.WidthRatio = 1;
-                bDrawCanvas = true;
-            } else if (pName === "YRatio" && this.fgcanvas) {
-                const tRat = cde.CDbl(this.fgcanvas.style.width.substr(0, this.fgcanvas.style.width.length - 2)) / cde.CDbl(pValue);
-                this.fgcanvas.style.height = tRat + "px";
-                this.MyHeight = tRat;
-            }
+             if (pName === "OnPointerDown") {
+                 if (pValue) {
+                     this.PreventDefault = true;
+                     this.HookEvents(false);
+                 }
+                 this.RegisterEvent("PointerDown", pValue);
+             } else if (pName === "OnPointerMove") {
+                 if (pValue) {
+                     this.PreventDefault = true;
+                     this.HookEvents(false);
+                 }
+                 this.RegisterEvent("PointerMove", pValue);
+             } else if (pName === "OnPointerUp") {
+                 if (pValue) {
+                     this.PreventDefault = true;
+                     this.HookEvents(false);
+                 }
+                 this.RegisterEvent("PointerUp", pValue);
+             } else if (pName === "OnPointerCancel") {
+                 if (pValue) {
+                     this.PreventDefault = true;
+                     this.HookEvents(false);
+                 }
+                 this.RegisterEvent("PointerCancel", pValue);
+             } else if (pName === "OnKeyDown") {
+                 if (pValue) {
+                     this.PreventDefault = true;
+                     this.HookEvents(false);
+                 }
+                 this.RegisterEvent("KeyDown", pValue);
+             } else if (pName === "OnKeyUp") {
+                 if (pValue) {
+                     this.PreventDefault = true;
+                     this.HookEvents(false);
+                 }
+                 this.RegisterEvent("KeyUp", pValue);
+             } else if (pName === "IsVertical") {
+                 if (typeof pValue === "undefined" || cde.CBool(pValue)) {
+                     pValue = true;
+                     super.SetProperty("IsVertical", pValue);
+                 }
+                 this.DrawCanvasBackground();
+             } else if (pName === "IsInverted") {
+                 if (typeof pValue === "undefined" || cde.CBool(pValue)) {
+                     pValue = true;
+                     super.SetProperty("IsInverted", pValue);
+                 }
+                 this.DrawCanvasBackground();
+             } else if (pName === "Background") {
+                 this.DrawCanvasBackground();
+             } else if (pName === "AddShape") {
+                 try {
+                     tShape = JSON.parse(pValue);
+                     if (tShape) {
+                         this.AddDrawingObject(tShape);
+                         bDrawCanvas = true;
+                     }
+                 } catch (error) {
+                     cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNMI:ctrlCanvasDraw", "DrawCanvas-AddShape :" + error);
+                 }
+             } else if ((pName === "DrawShapes" || pName === "SetShapes") && pValue) {
+                 try {
+                     if (pName === "SetShapes")
+                         this.ClearPicture();
+                     const tShapes: TheDrawingObject[] = JSON.parse(pValue);
+                     for (let i = 0; i < tShapes.length; i++) {
+                         this.AddDrawingObject(tShapes[i], tShapes[i].ID + i.toString(), i < tShapes.length - 1);
+                     }
+                     bDrawCanvas = true;
+                 } catch (error) {
+                     cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNMI:ctrlCanvasDraw", "DrawCanvas-DrawShapes :" + error);
+                 }
+             } else if (pName === "DrawShape" && pValue) {
+                 try {
+                     tShape = JSON.parse(pValue);
+                     if (tShape) {
+                         this.AddDrawingObject(tShape, tShape.ID);
+                         bDrawCanvas = true;
+                     }
+                 } catch (error) {
+                     cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNMI:ctrlCanvasDraw", "DrawCanvas-DrawShape :" + error);
+                 }
+             } else if (pName === "SetShape") {
+                 if (pValue) {
+                     this.ClearPicture();
+                     try {
+                         tShape = JSON.parse(pValue);
+                         if (tShape) {
+                             this.AddDrawingObject(tShape);
+                             bDrawCanvas = true;
+                         }
+                     } catch (error) {
+                         cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeNMI:ctrlCanvasDraw", "DrawCanvas-SetShape :" + error);
+                     }
+                 }
+             } else if (pName === "TileFactorX") {
+                 if (!bHasPW) {
+                     const tFX = cde.CInt(pValue);
+                     if (tFX > 1) {
+                         pValue = cde.CInt(this.GetProperty("ControlTW"));
+                         if (pValue === 0) pValue = 1;
+                         pValue = cdeNMI.GetSizeFromTile(pValue);
+                         this.SetProperty("AbsWidth", pValue / tFX);
+                     }
+                 }
+             } else if (pName === "TileFactorY") {
+                 if (!bHasPH) {
+                     const tFX = cde.CInt(pValue);
+                     if (tFX > 1) {
+                         pValue = cde.CInt(this.GetProperty("ControlTH"));
+                         if (pValue === 0) pValue = 1;
+                         pValue = cdeNMI.GetSizeFromTile(pValue);
+                         this.SetProperty("AbsHeight", pValue / tFX);
+                     }
+                 }
+             } else if (pName === "DrawMargin") {
+                 const tMarg: number = cde.CDbl(pValue);
+                 const tHe: number = this.MyHeight - (tMarg * 2)
+                 const tWi: number = this.MyWidth - (tMarg * 2)
+                 if (this.bgcanvas) {
+                     this.bgcanvas.style.top = tMarg.toString() + "px";
+                     this.bgcanvas.style.left = tMarg.toString() + "px";
+                     this.bgcanvas.style.height = tHe + "px";
+                     this.bgcanvas.height = tHe;
+                     this.bgcanvas.style.width = tWi + "px";
+                     this.bgcanvas.width = tWi;
+                 }
+                 if (this.fgcanvas) {
+                     this.fgcanvas.style.top = tMarg.toString() + "px";
+                     this.fgcanvas.style.left = tMarg.toString() + "px";
+                     this.fgcanvas.style.height = tHe + "px";
+                     this.fgcanvas.height = tHe;
+                     this.fgcanvas.style.width = tWi + "px";
+                     this.fgcanvas.width = tWi;
+                 }
+             } else if (pName === "ControlTW") {
+                 this.SetDrawWidth(pValue);
+             } else if (pName === "ControlTH") {
+                 this.SetDrawHeight(pValue);
+             } else if (pName === "CanvasHeight") {
+                 pValue = cde.CInt(pValue);
+                 if (this.fgcanvas && this.fgcanvas.height !== pValue) {
+                     this.fgcanvas.height = pValue;
+                 }
+                 if (this.bgcanvas && this.bgcanvas.height !== pValue) {
+                     this.bgcanvas.height = pValue;
+                 }
+                 this.HeightRatio = cde.CDbl(pValue) / this.MyHeight;
+                 bDrawCanvas = true;
+             } else if (pName === "CanvasWidth") {
+                 pValue = cde.CInt(pValue);
+                 if (this.fgcanvas && this.fgcanvas.width !== pValue) {
+                     this.fgcanvas.width = pValue;
+                 }
+                 if (this.bgcanvas && this.bgcanvas.width !== pValue) {
+                     this.bgcanvas.width = pValue;
+                 }
+                 this.WidthRatio = pValue / this.MyWidth;
+                 bDrawCanvas = true;
+             } else if (pName === "AbsHeight" || pName === "PixelHeight") {
+                 pValue = cde.CInt(pValue);
+                 if (this.fgcanvas && this.fgcanvas.height !== pValue) {
+                     this.fgcanvas.style.height = pValue + "px";
+                     this.fgcanvas.height = pValue;
+                 }
+                 if (this.bgcanvas && this.bgcanvas.height !== pValue) {
+                     this.bgcanvas.style.height = pValue + "px";
+                     this.bgcanvas.height = pValue;
+                 }
+                 this.MyHeight = pValue;
+                 this.HeightRatio = 1;
+                 bDrawCanvas = true;
+             } else if (pName === "AbsWidth" || pName === "PixelWidth") {
+                 pValue = cde.CInt(pValue);
+                 if (this.fgcanvas && this.fgcanvas.width !== pValue) {
+                     this.fgcanvas.style.width = pValue + "px";
+                     this.fgcanvas.width = pValue;
+                 }
+                 if (this.bgcanvas && this.bgcanvas.width !== pValue) {
+                     this.bgcanvas.style.width = pValue + "px";
+                     this.bgcanvas.width = pValue;
+                 }
+                 this.MyWidth = pValue;
+                 this.WidthRatio = 1;
+                 bDrawCanvas = true;
+             } else if (pName === "YRatio" && this.fgcanvas) {
+                 const tRat = cde.CDbl(this.fgcanvas.style.width.substr(0, this.fgcanvas.style.width.length - 2)) / cde.CDbl(pValue);
+                 this.fgcanvas.style.height = tRat + "px";
+                 this.MyHeight = tRat;
+             }
 
-            if (!bDrawCanvas && pName === "DataContextSilent")
-                bDrawCanvas = false;
-            else
-                bDrawCanvas = true;
+             if (!bDrawCanvas && pName === "DataContextSilent")
+                 bDrawCanvas = false;
+             else
+                 bDrawCanvas = true;
 
-            if (bDrawCanvas) {
-                this.RequestRedraw();
-            }
-        }
+             if (bDrawCanvas) {
+                 this.RequestRedraw();
+             }
+         }
+
+         SetDrawWidth(pValue: number) {
+             if (cde.CInt(this.GetProperty("PixelWidth")) == 0) {
+                 let tFX = cde.CInt(this.GetProperty("TileFactorX"));
+                 if (tFX === 0) tFX = 1;
+                 pValue = cde.CInt(pValue);
+                 if (pValue === 0) pValue = 1;
+                 pValue = cdeNMI.GetSizeFromTile(pValue);
+                 this.SetProperty("AbsWidth", pValue / tFX);
+             }
+         }
+
+         SetDrawHeight(pValue: number) {
+             if (cde.CInt(this.GetProperty("PixelHeight")) == 0) {
+                 let tFX = cde.CInt(this.GetProperty("TileFactorY"));
+                 if (tFX === 0) tFX = 1;
+                 pValue = cde.CInt(pValue);
+                 if (pValue === 0) pValue = 1;
+                 pValue = cdeNMI.GetSizeFromTile(pValue);
+                 this.SetProperty("AbsHeight", pValue / tFX);
+             }
+         }
 
         public ApplySkin() {
             this.ResizeCanvas();
@@ -1417,7 +1435,6 @@
 
             this.mBaseCtrl = cdeNMI.MyTCF.CreateBaseControl().Create(pTargetControl, { TRF: this.MyTRF });
             this.mBaseCtrl.SetElement(document.createElement("div") as HTMLElement);
-            this.mBaseCtrl.SetInitialSize(1);
             this.mBaseCtrl.GetElement().className = "ctrlBarChart";
             this.mBaseCtrl.GetElement().style.position = "relative";
 
