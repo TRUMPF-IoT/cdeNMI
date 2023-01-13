@@ -189,7 +189,10 @@ namespace cdeNMI {
                         }
 
                         //Calculate TRF of Control
-                        const tTRF: TheTRF = new TheTRF(this.MyStorageName, tCurrentRow, tFldInfo);
+                        const tOwnerThingID: string = cde.GuidToString(tFldInfo.cdeO);
+                        if (tOwnerThingID != this.MyStorageName)
+                            debugger;
+                        const tTRF: TheTRF = new TheTRF(tOwnerThingID, tCurrentRow, tFldInfo);
                         tTRF.RowID = tRowID;
                         tTRF.ModelID = this.MyScreenID;
                         tFldInfo["IsInTable"] = false;
@@ -207,11 +210,11 @@ namespace cdeNMI {
                                                 tLocalOnly = true;
                                             }
                                             //Checks rules after each ValueChange. tLocalOnly is true for Templates and Wizards
-                                            this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyStorageName, sender.MyTRF ? sender.MyTRF.RowNo : 0, this.MyFormControls, tLocalOnly, false); //if IsPostingOnSubmit is true, no push to node
+                                            this.ValidateRules(this.MyScreenID, this.MyTableName, tOwnerThingID, sender.MyTRF ? sender.MyTRF.RowNo : 0, this.MyFormControls, tLocalOnly, false); //if IsPostingOnSubmit is true, no push to node
                                         });
                                         if (e.MyBaseType === cdeControlType.TileButton && cde.CBool(e.GetProperty("IsSubmit")) === true) {   //Wizard and Template submit
                                             e.SetProperty("OnClick", (sender: INMIControl) => {
-                                                this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyStorageName, sender.MyTRF ? sender.MyTRF.RowNo : 0, this.MyFormControls, false, true); //Submit button pushed - all values will be written and sent to Node
+                                                this.ValidateRules(this.MyScreenID, this.MyTableName, tOwnerThingID, sender.MyTRF ? sender.MyTRF.RowNo : 0, this.MyFormControls, false, true); //Submit button pushed - all values will be written and sent to Node
                                                 if (!this.PropertyBag["FinishPage"] && !this.PropertyBag["ProcessingPage"]) {
                                                     if (this.PropertyBag["FinishScreenID"]) {
                                                         const tScrParts = this.PropertyBag["FinishScreenID"];
