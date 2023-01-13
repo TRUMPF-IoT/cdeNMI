@@ -400,7 +400,6 @@ namespace cdeNMI {
 
 
     export function DoParseHTML(pTable, pFacePlate: cdeNMI.TheFaceWait) {
-        if (!pTable) return;
         let tSeg: cde.TheSegment;
         let tTCB: cdeNMI.TheControlBlock;
         while (true) {

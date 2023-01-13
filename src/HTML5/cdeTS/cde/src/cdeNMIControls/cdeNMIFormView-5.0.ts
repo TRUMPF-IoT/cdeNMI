@@ -27,7 +27,7 @@ namespace cdeNMI {
             this.MyBaseType = cdeControlType.FormView;
             super.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
 
-            if (!this.MyTRF) {
+            if (!this.MyTRF) { 
                 return false;
             }
 
@@ -170,8 +170,7 @@ namespace cdeNMI {
                             tRowID = this.MyScreenInfo.MyStorageMirror[this.MyStorageName][tCurrentRow].cdeMID;
                     }
                     const tFormFields: TheFieldInfo[] = cdeNMI.SortArrayByProperty<TheFieldInfo>(this.MyFormInfo.FormFields, "FldOrder", true, false);
-                    for (let j = 0; j < tFormFields.length; j++) {
-                        const tFldInfo: TheFieldInfo = tFormFields[j];
+                    for (const tFldInfo of tFormFields) {
                         if (tFldInfo && (tFldInfo.Flags & 16) !== 0) continue;   //Skip if NoShowInForm is set
                         const tFldID: string = this.MyStorageName + '_' + tCurrentRow + '_' + tFldInfo.FldOrder;
 
@@ -189,9 +188,12 @@ namespace cdeNMI {
                         }
 
                         //Calculate TRF of Control
-                        const tOwnerThingID: string = cde.GuidToString(tFldInfo.cdeO);
-                        if (tOwnerThingID != this.MyStorageName)
-                            debugger;
+                        let tOwnerThingID = this.MyStorageName;
+                        const tO = cde.GuidToString(tFldInfo.cdeO);
+                        if (tOwnerThingID != tO && tFldInfo.Type === 58) {
+
+                            tOwnerThingID = tO;
+                        }
                         const tTRF: TheTRF = new TheTRF(tOwnerThingID, tCurrentRow, tFldInfo);
                         tTRF.RowID = tRowID;
                         tTRF.ModelID = this.MyScreenID;
@@ -199,7 +201,7 @@ namespace cdeNMI {
                         switch (tFldInfo.Type) {
                             default:
                                 {
-                                    const tTE: INMITileEntry = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(fldParent, { ScreenID: this.MyScreenID, TRF: tTRF }) as INMITileEntry; // ctrlTileEntry.Create(fldParent, tTRF, null, this.MyScreenID);
+                                    const tTE: INMITileEntry = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(fldParent, { ScreenID: this.MyScreenID, TRF: tTRF }) as INMITileEntry; 
                                     this.MyFormControls[tFldID] = tTE;
                                     tTE.MyDataView = this;
                                     tTE.CreateControl(tFldID, (e: INMIControl) => {
@@ -210,11 +212,11 @@ namespace cdeNMI {
                                                 tLocalOnly = true;
                                             }
                                             //Checks rules after each ValueChange. tLocalOnly is true for Templates and Wizards
-                                            this.ValidateRules(this.MyScreenID, this.MyTableName, tOwnerThingID, sender.MyTRF ? sender.MyTRF.RowNo : 0, this.MyFormControls, tLocalOnly, false); //if IsPostingOnSubmit is true, no push to node
+                                            this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyStorageName, sender.MyTRF ? sender.MyTRF.RowNo : 0, this.MyFormControls, tLocalOnly, false); //if IsPostingOnSubmit is true, no push to node
                                         });
                                         if (e.MyBaseType === cdeControlType.TileButton && cde.CBool(e.GetProperty("IsSubmit")) === true) {   //Wizard and Template submit
                                             e.SetProperty("OnClick", (sender: INMIControl) => {
-                                                this.ValidateRules(this.MyScreenID, this.MyTableName, tOwnerThingID, sender.MyTRF ? sender.MyTRF.RowNo : 0, this.MyFormControls, false, true); //Submit button pushed - all values will be written and sent to Node
+                                                this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyStorageName, sender.MyTRF ? sender.MyTRF.RowNo : 0, this.MyFormControls, false, true); //Submit button pushed - all values will be written and sent to Node
                                                 if (!this.PropertyBag["FinishPage"] && !this.PropertyBag["ProcessingPage"]) {
                                                     if (this.PropertyBag["FinishScreenID"]) {
                                                         const tScrParts = this.PropertyBag["FinishScreenID"];
@@ -263,7 +265,7 @@ namespace cdeNMI {
                                 this.MyFormControls[tFldID].SetProperty("ClassName", "cdeTileGroup");
                                 break;
                             case cdeControlType.FormButton:
-                                switch (tFormFields[j].DataItem) {
+                                switch (tFldInfo.DataItem) {
                                     case "CDE_DELETE":
                                         if (tFldInfo["TableReference"]) {
                                             this.MyFormControls[tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(fldParent, { PreInitBag: ["ControlTW=1", "ControlTH=1"], PostInitBag: ["Title=<span class='fa fa-3x'>&#xf1f8;</span>", "ClassName=cdeBadActionButton cdeDeleteButton"] });
