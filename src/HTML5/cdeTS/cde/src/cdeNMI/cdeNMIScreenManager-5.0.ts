@@ -916,13 +916,15 @@
             if (pMSG && (typeof (pMSG.PLS) === "object" || (pMSG.PLS !== "" && pMSG.PLS !== "[]"))) {
                 const tParts = pMSG.PLS.split(":-MODELUPDATE-:");
                 const pMSGPLS: string = tParts[0];
-                if (!tModel.MyStorageMirror[tTableName] || cde.CBool(bForceInitData) === true) // 
+                if (!tModel.MyStorageMirror[tTableName] || cde.CBool(bForceInitData) === true) {
                     tModel.MyStorageMirror[tTableName] = (typeof (pMSGPLS) === "object" ? pMSGPLS : JSON.parse(pMSGPLS));
+                    cdeNMI.MyEngine.FireEvent(false, "RecordUpdated_" + tTableName + "_" + 0, tModelId, tTableName, 0);
+                }
                 else {
                     const tTable = (typeof (pMSGPLS) === "object" ? pMSGPLS : JSON.parse(pMSGPLS));
                     for (let c = 0; c < tTable.length; c++) {
                         const tLen: number = tModel.MyStorageMirror[tTableName].length;
-                        let tFoundOne = false;
+                        let tFoundOne = false; 
                         for (let tc = 0; tc < tLen; tc++) {
                             if (tModel.MyStorageMirror[tTableName][tc].cdeMID === tTable[c].cdeMID) {
                                 tModel.MyStorageMirror[tTableName][tc] = tTable[c];
@@ -932,6 +934,7 @@
                         }
                         if (!tFoundOne)
                             tModel.MyStorageMirror[tTableName][tLen] = tTable[c];
+                        cdeNMI.MyEngine.FireEvent(false, "RecordUpdated_" + tTableName + "_" + tLen, tModelId, tTableName, tLen);
                     }
                 }
                 if (tParts.length > 1 && tModel.MyStorageMeta && (tModel.MyStorageMeta[tTableName] || cde.CBool(bForceInitData) === true)) {
@@ -1093,19 +1096,19 @@
                             tExiting[cdeNMI.MyNMIModels[tModelId].MyDashPanels[j].cdeMID] = false;
                         }
                     }
-                    for (let i = 0; i < tModel.MyDashPanels.length; i++) {
+                    for (const element of tModel.MyDashPanels) {
                         let tFoundOne = false;
                         for (j = 0; j < cdeNMI.MyNMIModels[tModelId].MyDashPanels.length; j++) {
-                            if (tModel.MyDashPanels[i].cdeMID === cdeNMI.MyNMIModels[tModelId].MyDashPanels[j].cdeMID) {
-                                cdeNMI.MyNMIModels[tModelId].MyDashPanels[j] = tModel.MyDashPanels[i];
+                            if (element.cdeMID === cdeNMI.MyNMIModels[tModelId].MyDashPanels[j].cdeMID) {
+                                cdeNMI.MyNMIModels[tModelId].MyDashPanels[j] = element;
                                 tFoundOne = true;
                                 tExiting[cdeNMI.MyNMIModels[tModelId].MyDashPanels[j].cdeMID] = true;
                                 break;
                             }
                         }
                         if (!tFoundOne) {
-                            cdeNMI.MyNMIModels[tModelId].MyDashPanels.push(tModel.MyDashPanels[i]);
-                            tExiting[tModel.MyDashPanels[i].cdeMID] = true;
+                            cdeNMI.MyNMIModels[tModelId].MyDashPanels.push(element);
+                            tExiting[element.cdeMID] = true;
                         }
                     }
                     for (j = cdeNMI.MyNMIModels[tModelId].MyDashPanels.length - 1; j >= 0; j--) {
