@@ -465,21 +465,30 @@ namespace cdeNMI {
                     element.MyControl.SetProperty("OniValueChanged", element.OnIValueChanged);
             }
         }
-        cdeNMI.MyEngine.RegisterEvent("RecordUpdated_" + pFacePlate.TRF.TableName + "_" + pFacePlate.TRF.RowNo, (pSI, pModelGUID, tTabName, tRowID, pDirtyMask) => {
+        if (pFacePlate && pFacePlate.TRF) {
+            cdeNMI.MyEngine.RegisterEvent("RecordUpdated_" + pFacePlate.TRF.TableName + "_" + pFacePlate.TRF.RowNo, (pSI, pModelGUID, tTabName, tRowID, pDirtyMask) => {
+                UpdateFldsFromTable(pModelGUID, tTabName, tRowID);
+            });
+            UpdateFldsFromTable(pFacePlate.TRF.ModelID, pFacePlate.TRF.TableName, pFacePlate.TRF.RowNo);
+        } 
+
+        function UpdateFldsFromTable(pModelGUID: any, tTabName: any, tRowID: any) {
             if (pModelGUID && pModelGUID !== "") {
                 const tMod = cdeNMI.MyNMIModels[pModelGUID];
-                for (const tIdx in cdeNMI.MyTCBs[tTabName + "_" + tRowID]) {
-                    const tTCB2 = cdeNMI.MyTCBs[tTabName + "_" + tRowID][tIdx];
-                    if (tTCB2) {
-                        if (!tMod.MyStorageMirror[tTabName][tRowID].hasOwnProperty('SecToken')) {
-                            const tCont = cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], tTCB2.MyControl.MyFieldInfo, false);
-                            if (tTCB2.MyControl.GetProperty("Value") !== tCont)
-                                tTCB2.MyControl.SetProperty("iValue", tCont);
+                if (tMod.MyStorageMirror[tTabName] && tMod.MyStorageMirror[tTabName][tRowID]) {
+                    for (const tIdx in cdeNMI.MyTCBs[tTabName + "_" + tRowID]) {
+                        const tTCB2 = cdeNMI.MyTCBs[tTabName + "_" + tRowID][tIdx];
+                        if (tTCB2) {
+                            if (!tMod.MyStorageMirror[tTabName][tRowID].hasOwnProperty('SecToken')) {
+                                const tCont = cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], tTCB2.MyControl.MyFieldInfo, false);
+                                if (tTCB2.MyControl.GetProperty("Value") !== tCont)
+                                    tTCB2.MyControl.SetProperty("iValue", tCont);
+                            }
                         }
                     }
                 }
             }
-        });
+        }
     }
 
     export function GenerateFinalString(pInStr, pData?, pTRF?: cdeNMI.TheTRF, pKeepMacro?: boolean): string {

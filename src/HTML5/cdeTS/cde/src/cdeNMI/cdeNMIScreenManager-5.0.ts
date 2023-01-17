@@ -328,8 +328,11 @@
                     tScreen.SetProperty("IsPinned", this.CurrentView.Screens[i].IsPinned);
                     this.ShowHideScreen(tScreen, this.CurrentView.Screens[i].IsVisible);
                     tScreen.SetProperty("FldOrder", this.CurrentView.Screens[i].FldOrder);
-                    if (this.CurrentView.Screens[i].IsVisible)
+                    if (this.CurrentView.Screens[i].IsVisible) {
                         cntVisibleScreens++;
+                        if (cdeNMI.MyEngine)
+                            cdeNMI.MyEngine.PublishToNMI("NMI_SHOW_SCREEN", tScreen.MyScreenID, tScreen.MyFieldInfo ? tScreen.MyFieldInfo.cdeN : null);
+                    }
                 } else {
                     if (cdeNMI.MyEngine)
                         cdeNMI.MyEngine.GetScreenMeta(this.CurrentView.Screens[i].DashID, false);
