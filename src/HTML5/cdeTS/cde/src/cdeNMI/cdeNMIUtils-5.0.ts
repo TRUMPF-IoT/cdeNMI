@@ -380,27 +380,11 @@ namespace cdeNMI {
         cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo].push(tTCB);
         cdeNMI.ThePB.SetRawProperty(tTCB.MyControl, "OnThingEvent", tTRF.TableName + ";" + pName);
 
-        cdeNMI.MyEngine.RegisterEvent("RecordUpdated_" + tTRF.TableName + "_" + pTRF.RowNo, (pSI: cdeNMI.INMIControl, pModelGUID: string, tTabName: string, tRowID: number, pDirtyMask: string) => {
-            if (pModelGUID && pModelGUID !== "") {
-                const tMod: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[pModelGUID];
-                for (const tIdx in cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo]) {
-                    const tTCB2 = cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo][tIdx] as cdeNMI.TheControlBlock;
-                    if (tTCB2) {
-                        if (!tMod.MyStorageMirror[tTabName][tRowID].hasOwnProperty('SecToken')) {
-                            const tCont = cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], tTCB2.MyControl.MyFieldInfo, false);
-                            if (tTCB2.MyControl.GetProperty("Value") !== tCont)
-                                tTCB2.MyControl.SetProperty("iValue", tCont);
-                        }
-                    }
-                }
-            }
-        });
         return tTCB;
     }
 
 
     export function DoParseHTML(pTable, pFacePlate: cdeNMI.TheFaceWait) {
-        if (!pTable) return;
         let tSeg: cde.TheSegment;
         let tTCB: cdeNMI.TheControlBlock;
         while (true) {
@@ -472,13 +456,37 @@ namespace cdeNMI {
         }
         pFacePlate.HTML = cdeNMI.GenerateFinalString(pFacePlate.HTML, false, pFacePlate.TRF);
         pFacePlate.TargetControl.GetContainerElement().innerHTML = pFacePlate.HTML;
-        for (let i = 0; i < pFacePlate.TargetControl.MySubControls.length; i++) {
-            const tELE: HTMLElement = document.getElementById(pFacePlate.TargetControl.MySubControls[i].TargetID);
+        for (const element of pFacePlate.TargetControl.MySubControls) {
+            const tELE: HTMLElement = document.getElementById(element.TargetID);
             if (tELE) {
                 const tP: HTMLElement = tELE.parentElement;
-                tP.replaceChild(pFacePlate.TargetControl.MySubControls[i].MyControl.GetElement(), tELE);
-                if (pFacePlate.TargetControl.MySubControls[i].OnIValueChanged)
-                    pFacePlate.TargetControl.MySubControls[i].MyControl.SetProperty("OniValueChanged", pFacePlate.TargetControl.MySubControls[i].OnIValueChanged);
+                tP.replaceChild(element.MyControl.GetElement(), tELE);
+                if (element.OnIValueChanged)
+                    element.MyControl.SetProperty("OniValueChanged", element.OnIValueChanged);
+            }
+        }
+        if (pFacePlate && pFacePlate.TRF) {
+            cdeNMI.MyEngine.RegisterEvent("RecordUpdated_" + pFacePlate.TRF.TableName + "_" + pFacePlate.TRF.RowNo, (pSI, pModelGUID, tTabName, tRowID, pDirtyMask) => {
+                UpdateFldsFromTable(pModelGUID, tTabName, tRowID);
+            });
+            UpdateFldsFromTable(pFacePlate.TRF.ModelID, pFacePlate.TRF.TableName, pFacePlate.TRF.RowNo);
+        } 
+
+        function UpdateFldsFromTable(pModelGUID: any, tTabName: any, tRowID: any) {
+            if (pModelGUID && pModelGUID !== "") {
+                const tMod = cdeNMI.MyNMIModels[pModelGUID];
+                if (tMod.MyStorageMirror[tTabName] && tMod.MyStorageMirror[tTabName][tRowID]) {
+                    for (const tIdx in cdeNMI.MyTCBs[tTabName + "_" + tRowID]) {
+                        const tTCB2 = cdeNMI.MyTCBs[tTabName + "_" + tRowID][tIdx];
+                        if (tTCB2) {
+                            if (!tMod.MyStorageMirror[tTabName][tRowID].hasOwnProperty('SecToken')) {
+                                const tCont = cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], tTCB2.MyControl.MyFieldInfo, false);
+                                if (tTCB2.MyControl.GetProperty("Value") !== tCont)
+                                    tTCB2.MyControl.SetProperty("iValue", tCont);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
