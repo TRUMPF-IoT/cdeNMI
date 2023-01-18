@@ -191,8 +191,11 @@ namespace cdeNMI {
                         let tOwnerThingID = this.MyStorageName;
                         const tO = cde.GuidToString(tFldInfo.cdeO);
                         if (tOwnerThingID != tO && tFldInfo.Type === 58) {
-
-                            tOwnerThingID = tO;
+                            const fO = tFldInfo["FaceOwner"];
+                            if (fO)
+                                tOwnerThingID = cde.GuidToString(fO);
+                            else
+                                tOwnerThingID = tO;
                         }
                         const tTRF: TheTRF = new TheTRF(tOwnerThingID, tCurrentRow, tFldInfo);
                         tTRF.RowID = tRowID;
