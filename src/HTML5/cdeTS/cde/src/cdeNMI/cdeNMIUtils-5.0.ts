@@ -440,11 +440,11 @@ namespace cdeNMI {
             pFacePlate.HTML += "<span ID=" + tTCB.TargetID + "></span>";
         }
         while (true) {
-            tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, 'cdeTAG="<%S:', "%>");
+            tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, 'cdeTAG="<%S:', '%>"');
             if (tSeg === null) break;
             tTCB = CreateTCB(pFacePlate.TRF, tSeg.Inner);
             pFacePlate.TargetControl.MySubControls.push(tTCB);
-            pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "style='" + tTCB.MyControl.GetProperty("Value") + ";' ID='" + tTCB.TargetID + "_TGT'");
+            pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "style='" + tTCB.MyControl.GetProperty("Value") + "' ID='" + tTCB.TargetID + "_TGT'");
             tTCB.MyControl.SetProperty("Visibility", false);
             tTCB.MyControl.SetProperty("MyTCB", tTCB);
             tTCB.OnIValueChanged = (sender: INMIControl, pEvt, pVal) => {
