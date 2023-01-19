@@ -38,7 +38,7 @@ namespace cdeNMI {
             this.MyScreenInfo = cdeNMI.MyNMIModels[this.MyScreenID];
             const pClassName = 'CMyForm';
 
-            let tRenderTarget: string = null; // this.GetSetting("RenderTarget");
+            let tRenderTarget: string = null; 
             if (!tRenderTarget)
                 tRenderTarget = 'Inline_' + cde.GuidToString(this.MyTableName);
             const tDiv: HTMLDivElement = document.getElementById(tRenderTarget) as HTMLDivElement;
@@ -75,7 +75,7 @@ namespace cdeNMI {
                 this.MyScreenInfo.IsLiveForm = true;
 
             if (!this.MyScreenInfo.IsLiveForm && !this.MyScreenInfo.MyStorageMirror[this.MyStorageName] && !this.MyScreenInfo.MyStorageMeta[this.MyTableName]) {
-                this.formMain = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(this); //ctrlTileGroup.Create(this, null);
+                this.formMain = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(this);
                 cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).Create(this.formMain, { PreInitBag: ["Element=h1"], PostInitBag: ["iValue=Neither meta-data nor storage data defined"] });
             }
             else {
@@ -127,7 +127,7 @@ namespace cdeNMI {
                         tC.SetProperty("ClassName", "cdeRelativeDiv");
                     }
                     this.formMain = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(tC); 
-                    (this.formMain as any).cdeMID = this.MyScreenInfo.cdeMID; //TODO: Verify what cdeMID is required here?
+                    (this.formMain as any).cdeMID = this.MyScreenInfo.cdeMID; 
                     if (this.MyFieldInfo && this.MyFieldInfo["TitleClassName"])
                         this.formMain.SetProperty("LabelClassName", this.MyFieldInfo["TitleClassName"]);
                     else
@@ -156,11 +156,8 @@ namespace cdeNMI {
                         tC.SetProperty("TileWidth", this.formMain.GetProperty("TileWidth"));
                         tC.SetProperty("TileHeight", this.formMain.GetProperty("TileHeight"));
                     } else {
-                        //if (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform != 1) {
-                        //this.formMain.GetElement().style.marginRight = (cdeNMI.GetSizeFromTile(1) / 2) + "px";
                         this.formMain.GetElement().style.width = "fit-content";
                         this.formMain.GetElement().style.maxWidth = "unset";
-                        //}
                     }
 
                     let tRowID: string = null;
@@ -189,22 +186,62 @@ namespace cdeNMI {
 
                         //Calculate TRF of Control
                         let tOwnerThingID = this.MyStorageName;
-                        const tO = cde.GuidToString(tFldInfo.cdeO);
-                        if (tOwnerThingID != tO && tFldInfo.Type === 58) {
-                            const fO = tFldInfo["FaceOwner"];
-                            if (fO)
-                                tOwnerThingID = cde.GuidToString(fO);
-                            else
-                                tOwnerThingID = tO;
-                        }
                         const tTRF: TheTRF = new TheTRF(tOwnerThingID, tCurrentRow, tFldInfo);
                         tTRF.RowID = tRowID;
                         tTRF.ModelID = this.MyScreenID;
                         tFldInfo["IsInTable"] = false;
                         switch (tFldInfo.Type) {
+                            case cdeControlType.Table:
+                                {
+                                    const tTE: INMITileEntry = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(fldParent, { ScreenID: this.MyScreenID, TRF: tTRF, PostInitBag: ["ContentOuterClassName=cdeTableInline", "ContainerClassName=cdeTableTEContainer"] }) as INMITileEntry;
+                                    this.MyFormControls[tFldID] = tTE;
+                                    if (cdeNMI.MyTCF)
+                                        cdeNMI.MyTCF.RegisterControl(cde.GuidToString(tFldInfo.cdeMID), "TE", tTE);
+                                    tTE.MyDataView = this;
+                                    tTE.CreateControl(tFldID, () => {
+                                        //ignored
+                                    });
+                                    if (tFldInfo && tFldInfo.PropertyBag && tFldInfo.PropertyBag.length > 0) {
+                                        cdeNMI.ThePB.SetPropertiesFromBag(tTE, tFldInfo.PropertyBag, null, false, false);
+                                    }
+                                }
+                                continue;
+                            case cdeControlType.CollapsibleGroup:
+                                this.MyFormControls[tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.CollapsibleGroup).Create(fldParent, { TRF: tTRF }); 
+                                if (bUseMargin === true)
+                                    this.MyFormControls[tFldID].SetProperty("UseMargin", true);
+                                break;
+                            case cdeControlType.TileGroup:
+                                this.MyFormControls[tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(fldParent, { TRF: tTRF });  
+                                this.MyFormControls[tFldID].SetProperty("ClassName", "cdeTileGroup");
+                                break;
+                            case cdeControlType.FormButton:
+                                switch (tFldInfo.DataItem) {
+                                    case "CDE_DELETE":
+                                        if (tFldInfo["TableReference"]) {
+                                            this.MyFormControls[tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(fldParent, { PreInitBag: ["ControlTW=1", "ControlTH=1"], PostInitBag: ["Title=<span class='fa fa-3x'>&#xf1f8;</span>", "ClassName=cdeBadActionButton cdeDeleteButton"] });
+                                            this.MyFormControls[tFldID].SetProperty("OnClick", (pSender: INMIControl, evt: KeyboardEvent) => {
+                                                const tMe: INMIDataView = pSender as INMIDataView;
+                                                if (evt.shiftKey) {
+                                                    tMe.DeleteRecord(tMe.MyDataRow);
+                                                    cdeNMI.MyScreenManager.TransitToScreen(tFldInfo["TableReference"]);
+                                                } else {
+                                                    if (cdeNMI.MyPopUp)
+                                                        cdeNMI.MyPopUp.Show('Are you sure you want to delete this record? ', false, null, 1, () => {
+                                                            tMe.DeleteRecord(tMe.MyDataRow);
+                                                            cdeNMI.MyScreenManager.TransitToScreen(tFldInfo["TableReference"]);
+                                                        }, null, tMe.MyDataRow, tMe);
+                                                }
+                                            });
+                                            if (!this.MyDataRow)
+                                                this.MyFormControls[tFldID].SetProperty("Disabled", true);
+                                        }
+                                        break;
+                                }
+                                break;
                             default:
                                 {
-                                    const tTE: INMITileEntry = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(fldParent, { ScreenID: this.MyScreenID, TRF: tTRF }) as INMITileEntry; 
+                                    const tTE: INMITileEntry = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(fldParent, { ScreenID: this.MyScreenID, TRF: tTRF }) as INMITileEntry;
                                     this.MyFormControls[tFldID] = tTE;
                                     tTE.MyDataView = this;
                                     tTE.CreateControl(tFldID, (e: INMIControl) => {
@@ -242,55 +279,6 @@ namespace cdeNMI {
                                     });
                                 }
                                 continue;
-                            case cdeControlType.Table:
-                                {
-                                    const tTE: INMITileEntry = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(fldParent, { ScreenID: this.MyScreenID, TRF: tTRF, PostInitBag: ["ContentOuterClassName=cdeTableInline", "ContainerClassName=cdeTableTEContainer"] }) as INMITileEntry; // ctrlTileEntry.Create(fldParent, tTRF, null, this.MyScreenID);
-                                    this.MyFormControls[tFldID] = tTE;
-                                    if (cdeNMI.MyTCF)
-                                        cdeNMI.MyTCF.RegisterControl(cde.GuidToString(tFldInfo.cdeMID), "TE", tTE);
-                                    tTE.MyDataView = this;
-                                    tTE.CreateControl(tFldID, () => {
-                                        //ignored
-                                    });
-                                    if (tFldInfo && tFldInfo.PropertyBag && tFldInfo.PropertyBag.length > 0) {
-                                        cdeNMI.ThePB.SetPropertiesFromBag(tTE, tFldInfo.PropertyBag, null, false, false);
-                                        //(tScreenInfo && tScreenInfo.MyStorageMirror[pTEControlMyTRF.TableName]) ? tScreenInfo.MyStorageMirror[pTEControlMyTRF.TableName][pTgtControl.MyTRF ? pTgtControl.MyTRF.RowNo : 0] : null,
-                                    }
-                                }
-                                continue;
-                            case cdeControlType.CollapsibleGroup:
-                                this.MyFormControls[tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.CollapsibleGroup).Create(fldParent, { TRF: tTRF }); //cdeNMI.ctrlCollapsibleGroup.Create(fldParent, tTRF);
-                                if (bUseMargin === true)
-                                    this.MyFormControls[tFldID].SetProperty("UseMargin", true);
-                                break;
-                            case cdeControlType.TileGroup:
-                                this.MyFormControls[tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(fldParent, { TRF: tTRF });  //cdeNMI.ctrlTileGroup.Create(fldParent, tTRF);
-                                this.MyFormControls[tFldID].SetProperty("ClassName", "cdeTileGroup");
-                                break;
-                            case cdeControlType.FormButton:
-                                switch (tFldInfo.DataItem) {
-                                    case "CDE_DELETE":
-                                        if (tFldInfo["TableReference"]) {
-                                            this.MyFormControls[tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(fldParent, { PreInitBag: ["ControlTW=1", "ControlTH=1"], PostInitBag: ["Title=<span class='fa fa-3x'>&#xf1f8;</span>", "ClassName=cdeBadActionButton cdeDeleteButton"] });
-                                            this.MyFormControls[tFldID].SetProperty("OnClick", (pSender: INMIControl, evt: KeyboardEvent) => {
-                                                const tMe: INMIDataView = pSender as INMIDataView;
-                                                if (evt.shiftKey) {
-                                                    tMe.DeleteRecord(tMe.MyDataRow);
-                                                    cdeNMI.MyScreenManager.TransitToScreen(tFldInfo["TableReference"]);
-                                                } else {
-                                                    if (cdeNMI.MyPopUp)
-                                                        cdeNMI.MyPopUp.Show('Are you sure you want to delete this record? ', false, null, 1, () => {
-                                                            tMe.DeleteRecord(tMe.MyDataRow);
-                                                            cdeNMI.MyScreenManager.TransitToScreen(tFldInfo["TableReference"]);
-                                                        }, null, tMe.MyDataRow, tMe);
-                                                }
-                                            });
-                                            if (!this.MyDataRow)
-                                                this.MyFormControls[tFldID].SetProperty("Disabled", true);
-                                        }
-                                        break;
-                                }
-                                break;
                         }
                         cdeNMI.MyTCF.SetControlEssentials(this.MyFormControls[tFldID], this.MyFormControls[tFldID], tTRF);
                     }
@@ -306,10 +294,8 @@ namespace cdeNMI {
 
         OnLoad(bIsVisible?: boolean) {
             if (this.GetProperty("TTSCookie") && cdeNMI.MyScreenManager) {
-                //cdeNMI.MyToast.ShowToastMessage("Form loaded with ID:" + this.GetProperty("TTSCookie"));
                 const tRID: string = this.GetProperty("TTSCookie");
                 this.SetProperty("TTSCookie", null);
-                //cdeNMI.MyEngine.PublishToNMI("NMI_GET_DATA:" + this.MyTableName + ":CMyForm:" + this.MyTableName + ":" + this.GetProperty("TTSCookie") +":true:false", '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
                 cdeNMI.MyScreenManager.CreateDataViewScreen(this.MyScreenInfo, null, this.MyTableName, this.GetProperty("ExtraInfo"), this.MyTableName, false, tRID);
                 return;
             } else {
@@ -365,8 +351,7 @@ namespace cdeNMI {
             if (!this.MyFormInfo)
                 return;
             const tFormFields: TheFieldInfo[] = cdeNMI.SortArrayByProperty<TheFieldInfo>(this.MyFormInfo.FormFields, "FldOrder", true, false);
-            for (let j = 0; j < tFormFields.length; j++) {
-                const tFldInfo: TheFieldInfo = tFormFields[j];
+            for (const tFldInfo of tFormFields) {
                 if (tFldInfo && (tFldInfo.Flags & 16) !== 0) continue;
 
                 if (tFldInfo["RenderTarget"]) {

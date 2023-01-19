@@ -34,9 +34,7 @@ namespace cdeNMI {
     declare const moment;    //Moment.JS dependency
 
     export function StopPointerEvents(evt: Event) {
-        if (!evt) evt = window.event;
         if (!evt) return;
-        evt.cancelBubble = true;
         if (evt.stopPropagation) evt.stopPropagation();
         if (evt.preventDefault) evt.preventDefault();
     }
@@ -218,7 +216,7 @@ namespace cdeNMI {
                 t = schemes[i].attributes["lite"];
                 if (t) {
                     const tN: string = cde.MyBaseAssets.MyCommStatus.InitialNPA;
-                    schemes[i].setAttribute("href", t.nodeValue + (!tN ? "" : "?SID=" + tN.substr(4, tN.length - (4 + (tN.indexOf(".ashx") > 0 ? 5 : 0)))));
+                    schemes[i].setAttribute("href", t.nodeValue + (!tN ? "" : "?SID=" + tN.substring(4, tN.length - ((tN.indexOf(".ashx") > 0 ? 5 : 0)))));
                 }
             }
             if (cdeNMI.MyScreenManager) {
@@ -233,7 +231,7 @@ namespace cdeNMI {
                 t = schemes[i].attributes["dark"];
                 if (t) {
                     const tN: string = cde.MyBaseAssets.MyCommStatus.InitialNPA;
-                    schemes[i].setAttribute("href", t.nodeValue + (!tN ? "" : "?SID=" + tN.substr(4, tN.length - (4 + (tN.indexOf(".ashx") > 0 ? 5 : 0)))));
+                    schemes[i].setAttribute("href", t.nodeValue + (!tN ? "" : "?SID=" + tN.substring(4, tN.length - ((tN.indexOf(".ashx") > 0 ? 5 : 0)))));
                 }
             }
             if (cdeNMI.MyScreenManager) {
@@ -254,8 +252,8 @@ namespace cdeNMI {
             tFileCSS = cde.FixupPath(pCSSFileLite).toLowerCase();
         const links = document.getElementsByTagName("link");
         if (links.length > 0) {
-            for (let i = 0; i < links.length; i++) {
-                if (links[i].getAttribute("href").toLowerCase() === tFileCSS)
+            for (const element of links) {
+                if (element.getAttribute("href").toLowerCase() === tFileCSS)
                     return;
             }
         }
@@ -269,7 +267,7 @@ namespace cdeNMI {
             fileref.setAttribute("lite", cde.FixupPath(pCSSFileLite));
         fileref.setAttribute("cde", "colorScheme");
         const tN: string = cde.MyBaseAssets.MyCommStatus.InitialNPA;
-        fileref.setAttribute("href", tFileCSS + (!tN ? "" : "?SID=" + tN.substr(4, tN.length - (4 + (tN.indexOf(".ashx") > 0 ? 5 : 0)))));
+        fileref.setAttribute("href", tFileCSS + (!tN ? "" : "?SID=" + tN.substring(4, tN.length - ((tN.indexOf(".ashx") > 0 ? 5 : 0)))));
         const tHead = document.getElementsByTagName("head")[0];
         tHead.insertBefore(fileref, tHead.childNodes[0]);
     }
@@ -295,8 +293,7 @@ namespace cdeNMI {
         if (tParas.length > 2) {
             const tMyScreenInfo: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[cde.GuidToString('FAFA22FF-96AC-42CF-B1DB-7C073053FC39')]; //Possible has to come from Paras
             if (!tMyScreenInfo || !tMyScreenInfo.MyStorageMirror[MyTableName]) return "";
-            for (let row = 0; row < tMyScreenInfo.MyStorageMirror[MyTableName].length; row++) {
-                const tRow = tMyScreenInfo.MyStorageMirror[MyTableName][row];
+            for (const tRow of tMyScreenInfo.MyStorageMirror[MyTableName]) {
                 const tSearch: string = cdeNMI.GetFldContentByName(tRow, "MyPropertyBag." + tParas[0] + ".Value", false);
                 if (!tSearch || tSearch.length === 0) continue;
                 if (cde.GuidToString(tSearch) !== cde.GuidToString(tParas[1])) continue;
@@ -330,10 +327,10 @@ namespace cdeNMI {
         if (pos < 0) return null;
         const posEnd: number = pInStr.indexOf(pEnd, pos + pStart.length);
         if (posEnd < 0) return null;
-        const Outer = pInStr.substr(pos, (posEnd - pos) + pEnd.length);
+        const Outer = pInStr.substring(pos, posEnd + pEnd.length);
         if (Outer.length < pStart.length + pEnd.length + 1)
             return null;
-        return Outer.substr(pStart.length, Outer.length - (pStart.length + pEnd.length));
+        return Outer.substring(pStart.length, Outer.length - pEnd.length);
     }
 
     export function ReturnStringSegment(pHTML: string, pStart: string, pEnd: string): cde.TheSegment {
@@ -343,10 +340,10 @@ namespace cdeNMI {
         if (pos < 0) return null;
         const posEnd: number = pHTML.indexOf(pEnd, pos + pStart.length);
         if (posEnd < 0) return null;
-        tSeg.Outer = pHTML.substr(pos, (posEnd - pos) + pEnd.length);
+        tSeg.Outer = pHTML.substring(pos, posEnd + pEnd.length);
         if (tSeg.Outer.length < pStart.length + pEnd.length + 1)
             return null;
-        tSeg.Inner = tSeg.Outer.substr(pStart.length, tSeg.Outer.length - (pStart.length + pEnd.length));
+        tSeg.Inner = tSeg.Outer.substring(pStart.length, tSeg.Outer.length - pEnd.length);
         return tSeg;
     }
 
@@ -358,7 +355,12 @@ namespace cdeNMI {
         let tFldContent = "";
         const tFldInfo: cdeNMI.TheFieldInfo = new cdeNMI.TheFieldInfo(cdeControlType.SmartLabel, 0, null);
         tFldInfo.DataItem = "MyPropertyBag." + pName + ".Value";
+        let tOwnerThingID = "";
         if (pTRF && pTRF.FldInfo) {
+            tOwnerThingID = cde.GuidToString(pTRF.FldInfo.cdeO);
+            const fO = pTRF.FldInfo["FaceOwner"];
+            if (fO)
+                tOwnerThingID = cde.GuidToString(fO);
             tFldInfo.cdeO = pTRF.FldInfo.cdeO;
             tFldInfo.FormID = cde.GuidToString(pTRF.TableName);
             tFldInfo.cdeN = pTRF.FldInfo.cdeN;
@@ -366,11 +368,11 @@ namespace cdeNMI {
             tFldInfo["Element"] = "span";
 
             const tMyScreenInfo = cdeNMI.MyNMIModels[pTRF.ModelID];
-            if (tMyScreenInfo && tMyScreenInfo.MyStorageMirror[pTRF.TableName]) {
-                tFldContent = cdeNMI.GetFldContent(tMyScreenInfo.MyStorageMirror[pTRF.TableName][pTRF.RowNo], tFldInfo, false);
+            if (tMyScreenInfo && tMyScreenInfo.MyStorageMirror[tOwnerThingID]) {
+                tFldContent = cdeNMI.GetFldContent(tMyScreenInfo.MyStorageMirror[tOwnerThingID][pTRF.RowNo], tFldInfo, false);
             }
         }
-        const tTRF: cdeNMI.TheTRF = new cdeNMI.TheTRF(pTRF ? pTRF.TableName : "", pTRF ? pTRF.RowNo : 0, tFldInfo);
+        const tTRF: cdeNMI.TheTRF = new cdeNMI.TheTRF(tOwnerThingID, pTRF ? pTRF.RowNo : 0, tFldInfo);
         tTRF.ModelID = pTRF ? pTRF.ModelID : null;
         tTCB.MyControl.InitControl(null, tTRF);
         tTCB.MyControl.SetProperty("iValue", tFldContent);
@@ -378,7 +380,8 @@ namespace cdeNMI {
         if (!cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo])
             cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo] = [];
         cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo].push(tTCB);
-        cdeNMI.ThePB.SetRawProperty(tTCB.MyControl, "OnThingEvent", tTRF.TableName + ";" + pName);
+        pTRF.TableName = tTRF.TableName;
+        cdeNMI.ThePB.SetRawProperty(tTCB.MyControl, "OnThingEvent", tTRF.FldInfo.cdeO + ";" + pName);
 
         return tTCB;
     }
@@ -601,8 +604,8 @@ namespace cdeNMI {
         if (!pKeepMacro) {
             while (outStr.indexOf("<%") >= 0) {
                 if (outStr.indexOf("%>") > 0) {
-                    const tPre: string = outStr.substr(0, outStr.indexOf("<%"));
-                    outStr = tPre + outStr.substr(outStr.indexOf("%>") + 2);
+                    const tPre: string = outStr.substring(0, outStr.indexOf("<%"));
+                    outStr = tPre + outStr.substring(outStr.indexOf("%>") + 2);
                 }
                 else
                     break;
@@ -754,8 +757,8 @@ namespace cdeNMI {
                 const tSubProps = tFldRealName.split('].[');
                 let pBag = tFldContent;
                 let tMainProp = null;
-                for (let i = 0; i < tSubProps.length; i++) {
-                    tMainProp = pBag[tSubProps[i].replace('[', '').replace(']', '')];
+                for (const element of tSubProps) {
+                    tMainProp = pBag[element.replace('[', '').replace(']', '')];
                     pBag = tMainProp.cdePB;
                 }
                 if (tMainProp)
@@ -829,8 +832,8 @@ namespace cdeNMI {
     export function RemoveCookies() {
         const res = document.cookie;
         const multiple = res.split(";");
-        for (let i = 0; i < multiple.length; i++) {
-            const key = multiple[i].split("=");
+        for (const element of multiple) {
+            const key = element.split("=");
             document.cookie = key[0] + " =; expires = Thu, 01 Jan 1970 00:00:00 UTC";
         }
     }
@@ -1047,10 +1050,10 @@ namespace cdeNMI {
         }
     }
 
-    export function cdeJsonDate2JSDate(jsonDate): Date {
-        if (jsonDate instanceof Date) return jsonDate;
-        jsonDate = cde.CStr(jsonDate);
-        if (jsonDate.substr(0, 2) === "\/") {
+    export function cdeJsonDate2JSDate(jsonDateIn): Date {
+        if (jsonDateIn instanceof Date) return jsonDateIn;
+        const jsonDate:string = cde.CStr(jsonDateIn);
+        if (jsonDate.substring(0, 2) === "\/") {
             const offset = new Date().getTimezoneOffset() * 60000;
             const parts: RegExpExecArray = /\/Date\((-?\d+)([+-]\d{2})?(\d{2})?.*/.exec(jsonDate); //NOSONAR Not Critical
 
@@ -1063,16 +1066,16 @@ namespace cdeNMI {
             return new Date(+parts[1] + offset + parseInt(parts[2]) * 3600000 + parseInt(parts[3]) * 60000);
         }
         else {
-            if (jsonDate.substr(0, 1) === "/")
-                return new Date(parseInt(jsonDate.substr(6)));
+            if (jsonDate.substring(0, 1) === "/")
+                return new Date(parseInt(jsonDate.substring(6)));
             else
                 return new Date(jsonDate);
         }
     }
 
     export function DoesArrayContain(pArray: string[], pCont: string): boolean {
-        for (let i = 0; i < pArray.length; i++) {
-            if (pArray[i] === pCont) return true;
+        for (const element of pArray) {
+            if (element === pCont) return true;
         }
         return false;
     }
@@ -1107,9 +1110,9 @@ namespace cdeNMI {
                 return pSortDescending ? d > c ? 1 : -1 : d < c ? 1 : -1;
             });
 
-            for (let i = 0; i < tuples.length; i++) {
-                const tkey = tuples[i][0];
-                const tvalue = tuples[i][1];
+            for (const element of tuples) {
+                const tkey = element[0];
+                const tvalue = element[1];
                 pOutArray[tkey] = tvalue;
             }
         }
@@ -1214,7 +1217,7 @@ namespace cdeNMI {
     export function Check4ValidEmail(email: string): boolean {
         if (!email || email.length === 0)
             return true;
-        const filter = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])"); //NOSONAR RFC5322 validation
+        const filter = /([!#-'*+\/-9=?A-Z^-~-]+(.[!#-'*+\/-9=?A-Z^-~-]+)*|"([]!#-[^-~ \t]|(\[\t -~]))+")@([!#-'*+\/-9=?A-Z^-~-]+(.[!#-'*+\/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])/; //NOSONAR RFC5322 validation
         if (!email || !filter.test(email.toLowerCase()) || email.substring(0, 1) === '.' || email.substring(email.length - 1, 1) === '.')
             return false;
         return true;
@@ -1261,7 +1264,7 @@ namespace cdeNMI {
     }
 
     export function CColorToHex(color: string): string {
-        if (color.substr(0, 1) === '#') {
+        if (color.substring(0, 1) === '#') {
             return color;
         }
         const digits = /(.*?)rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/.exec(color); //NOSONAR Not Critical
@@ -1310,10 +1313,10 @@ namespace cdeNMI {
             let bc;
             if (!IsNumeric) {
                 const tProps: Array<string> = property.split(',');
-                for (let i = 0; i < tProps.length; i++) {
-                    ac = a[tProps[i]];
+                for (const element of tProps) {
+                    ac = a[element];
                     if (!ac) ac = "";
-                    bc = b[tProps[i]];
+                    bc = b[element];
                     if (!bc) bc = "";
                     if (c && c.length > 0) c += ".";
                     c += ac.toString();
