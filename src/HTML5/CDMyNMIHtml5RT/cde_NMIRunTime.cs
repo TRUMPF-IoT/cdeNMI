@@ -669,7 +669,8 @@ namespace NMIService
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.EnablePinLogin=true;");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.ResourcePath='{TheBaseAssets.MyServiceHostInfo.ResourcePath}';");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.HideHeader={(!pPage.IncludeHeaderButtons).ToString().ToLower()};");
-                tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.DoAllowAnonymous={(pPage.IsPublic || TheBaseAssets.MyServiceHostInfo.AllowAnonymousAccess).ToString().ToLower()};");
+                if ((TheBaseAssets.MyServiceHostInfo.AllowAnonymousAccess && !TheBaseAssets.MyServiceHostInfo.IsCloudService) || pPage.IsPublic)
+                    tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.DoAllowAnonymous={(pPage.IsPublic || TheBaseAssets.MyServiceHostInfo.AllowAnonymousAccess).ToString().ToLower()};");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin={TheBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin.ToString().ToLower()};");
 
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.HasInternetAccess={TheBaseAssets.MyServiceHostInfo.HasInternetAccess.ToString().ToLower()};");
