@@ -82,11 +82,11 @@ namespace cde {
     }
 
     export function cdeEval(pCode: string, ...param) {
-        if (pCode.substr(0, 1) === "[") {
+        if (pCode.substring(0, 1) === "[") {
             return JSON.parse(pCode.replace(/'/g, "\""));
         }
-        if (pCode.substr(0, 2) === "([" || pCode.substr(0, 2) === "({") {
-            const tJ = pCode.substr(1, pCode.length - 2);
+        if (pCode.substring(0, 2) === "([" || pCode.substring(0, 2) === "({") {
+            const tJ = pCode.substring(1, pCode.length - 1);
             return JSON.parse(tJ.replace(/'/g, "\""));
         }
         return Function('"use strict";return (' + pCode + ')')(...param);
@@ -147,8 +147,8 @@ namespace cde {
                                         debugger;
                                 }
                                 const tJS: string = this.MyEvents[EventName][mh];
-                                if (tJS.substr(0, 3) === "JS:")
-                                    cdeEval(tJS.substr(3));
+                                if (tJS.substring(0, 3) === "JS:")
+                                    cdeEval(tJS.substring(3));
                                 else {
                                     cde.MyBaseAssets.FireEvent(FireAsync, "OnStringEvent", tJS, this, Parameter, PropertyName, params);
                                 }
@@ -396,6 +396,7 @@ namespace cde {
         ShowClassic = false;
         ScreenManagerClass: string = null;
         ShowLogInConsole = false;
+        ReloadAfterLogout = 0;
         ApplicationTitle = "";
         MainConfigScreen = "";
         TileSize = 78;
@@ -551,7 +552,7 @@ namespace cde {
         let tPa = "";
         if (cde.MyBaseAssets.MyServiceHostInfo.ResourcePath) {
             tPa = cde.MyBaseAssets.MyServiceHostInfo.ResourcePath;
-            if (pInPath.substr(0, 1) !== "/")
+            if (pInPath.substring(0, 1) !== "/")
                 tPa += "/";
         }
         if (cde.MyBaseAssets.MyCommStatus.MyServiceUrl && document.location.origin !== cde.MyBaseAssets.MyCommStatus.MyServiceUrl) {
@@ -560,7 +561,7 @@ namespace cde {
             else
                 tPa = cde.MyBaseAssets.MyCommStatus.MyServiceUrl;
         }
-        if ((tPa.length > 0 && tPa.substr(tPa.length - 1, 1) !== "/") && !pInPath.startsWith("/") && !pInPath.toLowerCase().startsWith("http"))
+        if ((tPa.length > 0 && tPa.substring(tPa.length - 1) !== "/") && !pInPath.startsWith("/") && !pInPath.toLowerCase().startsWith("http"))
             tPa += "/";
         return tPa + pInPath;
     }
@@ -645,10 +646,10 @@ namespace cde {
 
     export function DeleteAllCookies() {
         const cookies = document.cookie.split("; ");
-        for (let c = 0; c < cookies.length; c++) {
+        for (const element of cookies) {
             const d = window.location.hostname.split(".");
             while (d.length > 0) {
-                const cookieBase = encodeURIComponent(cookies[c].split(";")[0].split("=")[0]) + '=; expires=Thu, 01-Jan-1970 00:00:01 GMT; domain=' + d.join('.') + ' ;path=';
+                const cookieBase = encodeURIComponent(element.split(";")[0].split("=")[0]) + '=; expires=Thu, 01-Jan-1970 00:00:01 GMT; domain=' + d.join('.') + ' ;path=';
                 const p = location.pathname.split('/');
                 document.cookie = cookieBase + '/';
                 while (p.length > 0) {

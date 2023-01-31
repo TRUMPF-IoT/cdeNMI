@@ -543,31 +543,28 @@ namespace NMIService
             tStr.Append("<meta content=\"en-us\" http-equiv=\"Content-Language\" /><meta charset=\"UTF-8\"> ");
             tStr.Append("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" >");
             string tPlat = "W";
-            //if (pWebPlatform > 0)
+            if (string.IsNullOrEmpty(PageScale))
             {
+                PageScale = TheBaseAssets.MySettings.GetSetting("PageScale");
                 if (string.IsNullOrEmpty(PageScale))
-                {
-                    PageScale = TheBaseAssets.MySettings.GetSetting("PageScale");
-                    if (string.IsNullOrEmpty(PageScale))
-                        PageScale = "1.0;0.5;1.0;0.5;1.0;1.0;0.5;0.5;1.0";
-                    PlatformScale = PageScale.Split(';');
-                }
-                string tScale = "1.0";
-                if (PlatformScale?.Length > (int)pWebPlatform) tScale = PlatformScale[(int)pWebPlatform];
-                switch (pWebPlatform)
-                {
-                    case eWebPlatform.Mobile: tPlat = "P"; break;
-                    case eWebPlatform.HoloLens: tPlat = "H"; break;
-                    case eWebPlatform.XBox: tPlat = "X"; break;
-                    case eWebPlatform.TeslaXS: tPlat = "T"; break;
-                    case eWebPlatform.TizenFamilyHub: tPlat = "FH"; break;
-                    case eWebPlatform.TizenTV: tPlat = "TY"; break;
-                    case eWebPlatform.Bot: tPlat = null; break;
-                    default:
-                        break;
-                }
-                tStr.Append($"<meta name=\"viewport\" content=\"width=device-width, initial-scale={tScale}, maximum-scale={tScale}\">");
+                    PageScale = "1.0;0.5;1.0;0.5;1.0;1.0;0.5;0.5;1.0";
+                PlatformScale = PageScale.Split(';');
             }
+            string tScale = "1.0";
+            if (PlatformScale?.Length > (int)pWebPlatform) tScale = PlatformScale[(int)pWebPlatform];
+            switch (pWebPlatform)
+            {
+                case eWebPlatform.Mobile: tPlat = "P"; break;
+                case eWebPlatform.HoloLens: tPlat = "H"; break;
+                case eWebPlatform.XBox: tPlat = "X"; break;
+                case eWebPlatform.TeslaXS: tPlat = "T"; break;
+                case eWebPlatform.TizenFamilyHub: tPlat = "FH"; break;
+                case eWebPlatform.TizenTV: tPlat = "TY"; break;
+                case eWebPlatform.Bot: tPlat = null; break;
+                default:
+                    break;
+            }
+            tStr.Append($"<meta name=\"viewport\" content=\"width=device-width, initial-scale={tScale}, maximum-scale={tScale}\">");
 
             if (pPage.IncludeCDE)
             {
@@ -637,7 +634,6 @@ namespace NMIService
                             tStartScreen = tConnect.SSC;
                     }
                 }
-                //TODO: Coming from Preferences:
                 string ScreenTemplate = "TemplateThing12x10";
                 bool ShowClassic = false;
                 bool RedPill = TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("RedPill"));
@@ -650,15 +646,17 @@ namespace NMIService
                 if (TheUserManager.DoesAdminRequirePWD(pPage.AdminRole) && TheScopeManager.GetScrambledScopeID() != "")
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.LoginDisallowed={true.ToString().ToLower()};");
                 else
-                    tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.AdminPWMustBeSet={ TheUserManager.DoesAdminRequirePWD(pPage.AdminRole).ToString().ToLower()};");
+                    tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.AdminPWMustBeSet={TheUserManager.DoesAdminRequirePWD(pPage.AdminRole).ToString().ToLower()};");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.DoesRequireConfiguration={TheBaseAssets.MyServiceHostInfo.RequiresConfiguration.ToString().ToLower()};");
-                //tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.FirstNodeID='{TheBaseAssets.MyServiceHostInfo.MyDeviceInfo.DeviceID}';");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.IsWSHBDisabled={TheBaseAssets.MyServiceHostInfo.IsWSHBDisabled.ToString().ToLower()};");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.WebPlatform={((int)pWebPlatform)};");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.ScreenClassName='{ScreenTemplate}';");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.ShowClassic={ShowClassic.ToString().ToLower()};");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.RedPill={RedPill.ToString().ToLower()};");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.DebugLevel={debugLevel};");
+                var ts = TheCommonUtils.CInt(TheBaseAssets.MySettings.GetSetting("ReloadAfterLogout"));
+                if (ts > 0)
+                    tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.ReloadAfterLogout={ts};");
                 if (TheBaseAssets.MySettings.HasSetting("ShowLogInConsole"))
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.ShowLogInConsole={TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("ShowLogInConsole")).ToString().ToLower()};");
                 if (TheBaseAssets.MySettings.HasSetting("DisableWebWorker"))
@@ -669,7 +667,8 @@ namespace NMIService
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.EnablePinLogin=true;");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.ResourcePath='{TheBaseAssets.MyServiceHostInfo.ResourcePath}';");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.HideHeader={(!pPage.IncludeHeaderButtons).ToString().ToLower()};");
-                tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.DoAllowAnonymous={(pPage.IsPublic || TheBaseAssets.MyServiceHostInfo.AllowAnonymousAccess).ToString().ToLower()};");
+                if ((TheBaseAssets.MyServiceHostInfo.AllowAnonymousAccess && !TheBaseAssets.MyServiceHostInfo.IsCloudService) || pPage.IsPublic)
+                    tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.DoAllowAnonymous={(pPage.IsPublic || TheBaseAssets.MyServiceHostInfo.AllowAnonymousAccess).ToString().ToLower()};");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin={TheBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin.ToString().ToLower()};");
 
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.HasInternetAccess={TheBaseAssets.MyServiceHostInfo.HasInternetAccess.ToString().ToLower()};");
@@ -793,9 +792,8 @@ namespace NMIService
         public static SolarEvents Calculate()
         {
             var lat = 47;
-            //var lng = -122;
             var gDate = DateTime.Now;
-            var timeZone = TimeZoneInfo.Local; // .FindSystemTimeZoneById(timeZoneId);
+            var timeZone = TimeZoneInfo.Local; // .FindSystemTimeZoneById(timeZoneId)
             var timeZoneOffset = timeZone.GetUtcOffset(gDate);
             var lng = timeZoneOffset.Hours * 17;
             var tzOffHr = timeZoneOffset.TotalHours;
