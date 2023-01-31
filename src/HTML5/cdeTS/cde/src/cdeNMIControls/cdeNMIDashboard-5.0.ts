@@ -242,7 +242,6 @@
                     tTileButton.RegisterNMIControl();
                     this.mDashboardScreen.MyChildren[cde.GuidToString(tDashPanels[i].cdeMID)] = tTileButton;
                     tTileButton.SetProperty("cdeMID", tDashPanels[i].cdeMID);
-                    //if (tCookie) tTileButton.SetProperty("Cookie", tCookie)
                     if (tDashPanels[i].PropertyBag) {
                         ThePB.SetPropertiesFromBag(tTileButton, tDashPanels[i].PropertyBag, tDashPanels); //ok..is after InitControl
                         if (tTileButton.GetProperty("IsRefresh"))
