@@ -199,10 +199,6 @@
                             tTargetScreen.SetProperty("HidePins", cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tDashPanels[i].PropertyBag, "HidePins")));
                             tTargetScreen.SetProperty("HidePinPins", cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tDashPanels[i].PropertyBag, "HidePinPins")));
                             tTargetScreen.SetProperty("IsPopup", cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tDashPanels[i].PropertyBag, "IsPopup")));
-                            if (cdeNMI.ThePB.GetValueFromBagByName(tDashPanels[i].PropertyBag, "DefaultPortal") != null)
-                                tTargetScreen.SetProperty("DefaultPortal", cde.CStr(cdeNMI.ThePB.GetValueFromBagByName(tDashPanels[i].PropertyBag, "DefaultPortal")));
-                            else
-                                tTargetScreen.SetProperty("DefaultPortal", tTargetScreen.GetProperty("cdeMID"));
                             tOnClick = (pSender: INMIControl, evt:MouseEvent, pointer:cdeNMI.ThePointer) => {
                                 if (cdeNMI.MyScreenManager) {
                                     if (evt.button === 2) 
@@ -242,7 +238,10 @@
                     tTileButton.RegisterNMIControl();
                     this.mDashboardScreen.MyChildren[cde.GuidToString(tDashPanels[i].cdeMID)] = tTileButton;
                     tTileButton.SetProperty("cdeMID", tDashPanels[i].cdeMID);
-                    //if (tCookie) tTileButton.SetProperty("Cookie", tCookie)
+                    if (cdeNMI.ThePB.GetValueFromBagByName(tDashPanels[i].PropertyBag, "DefaultPortal") != null)
+                        tTileButton.SetProperty("DefaultPortal", cde.CStr(cdeNMI.ThePB.GetValueFromBagByName(tDashPanels[i].PropertyBag, "DefaultPortal")));
+                    else
+                        tTileButton.SetProperty("DefaultPortal", tDashPanels[i].cdeMID);
                     if (tDashPanels[i].PropertyBag) {
                         ThePB.SetPropertiesFromBag(tTileButton, tDashPanels[i].PropertyBag, tDashPanels); //ok..is after InitControl
                         if (tTileButton.GetProperty("IsRefresh"))
