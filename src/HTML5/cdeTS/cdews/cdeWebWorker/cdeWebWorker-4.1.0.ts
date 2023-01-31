@@ -420,7 +420,6 @@ namespace cde {
                     request.onsuccess = () => {
                         this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", "Read Success", 1);
                         if (request.result) {
-                            //this.MyHSI = request.result.whsi;
                             const tConfig: cde.TheCommConfig = request.result.config;
                             if (tConfig.Creds && tConfig.Creds.QToken && tConfig.Creds.QToken !== "") { //If state is younger than 1minute - use it
                                 if (pConfig && pConfig.RequestPath) {
@@ -428,8 +427,14 @@ namespace cde {
                                     if (!this.MyHSI.InitialNPA)
                                         this.MyHSI.InitialNPA = pConfig.RequestPath;
                                 }
-                                pConfig = tConfig;
-                                this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State Restored', 1);
+                                if (pConfig && (pConfig.uri != tConfig.uri || pConfig.wsuri != tConfig.wsuri || pConfig.host != tConfig.host)) {
+                                    this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State ignored - host has changed', 1);
+                                    this.DeleteFromIDB();
+                                }
+                                else {
+                                    pConfig = tConfig;
+                                    this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State Restored', 1);
+                                }
                             }
                             else {
                                 this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State ignored', 1);
@@ -568,8 +573,6 @@ namespace cde {
             }
             tTSM.SID = this.Pre4209SID;
 
-            //console.log("SendTSM Topic:" + pTopic);
-
             const tDevMsg: cde.TheDeviceMessage = new cde.TheDeviceMessage();
             tDevMsg.TOP = pTopic ? pTopic : tTSM.ENG;
             tDevMsg.MSG = tTSM;
@@ -593,7 +596,6 @@ namespace cde {
                 if (this.Pre4209SID && this.Pre4209SID !== "")
                     pTopic += "@" + this.Pre4209SID;
             }
-            //console.log("SendQueued Topic:" + pTopic);
             tTSM.SID = this.Pre4209SID;
             tTSM.OWN = pOwner;
             tTSM.FLG = pFLG;
@@ -684,8 +686,8 @@ namespace cde {
 
                     const tRPath = (pRetryPath ? pRetryPath : this.MyConfig.RequestPath);
                     uri = this.MyFallbackServiceUrl + encodeURI(tRPath);
-                    if (this.UsesWebSockets === false && uri.substr(uri.length - 5, 5) === ".ashx")
-                        uri = uri.substr(0, uri.length - 5);
+                    if (this.UsesWebSockets === false && uri.substring(uri.length - 5) === ".ashx")
+                        uri = uri.substring(0, uri.length - 5);
                     if (MyQueuedMsg.TOPIC !== "")
                         uri += "?" + encodeURI(MyQueuedMsg.TOPIC);
                     MyQueuedMsg.RQP = uri;
@@ -956,15 +958,14 @@ namespace cde {
                                 }
                                 if (!cde.IsNotSet(tScrParts[0])) {
                                     this.MyHSI.LastStartScreen = tScrParts[0];
-                                    //this.MyHSI.UserPref.ShowClassic = true; //With Deep Link always show old SM
                                 }
                                 if (tLogParts.length > 2) {
                                     this.MyHSI.UserPref.CurrentUserName = tLogParts[2];
                                     if (tLogParts.length > 3) {
                                         try {
                                             const pos = cde.GetSubstringIndex(tMsg.TOP, ':', 3);
-                                            const tres = tMsg.TOP.substr(pos + 1);
-                                            if (tres.length > 2 && tres.substr(0, 1) === "{")
+                                            const tres = tMsg.TOP.substring(pos + 1);
+                                            if (tres.length > 2 && tres.substring(0, 1) === "{")
                                                 this.MyHSI.UserPref = JSON.parse(tres);
                                             else
                                                 this.MyHSI.UserPref.LCID = cde.CInt(tres); //OLD NMIs
@@ -976,16 +977,14 @@ namespace cde {
                             }
                             if (this.MyConfig["LPS"]) {
                                 this.MyHSI.LastPortalScreen = this.MyConfig["LPS"];
-                                //this.MyHSI.UserPref.PortalScreen = this.MyConfig["LPS"];
                             }
                             if (this.MyConfig["LSSC"]) {
                                 this.MyHSI.LastStartScreen = this.MyConfig["LSSC"];
-                                //this.MyHSI.UserPref.StartScreen = this.MyConfig["LSSC"];
                             }
                             this.MyHSI.IsUserLoggedIn = true;
                             this.MyHSI.UserPref.ScreenParts = tScrParts;
                             this.Pre4209SID = tMsg.SID; //For FirstNodes pre 4.209
-                            if (tMsg.SID && tMsg.SID.substr(0, 2) === "UT") {
+                            if (tMsg.SID && tMsg.SID.substring(0, 2) === "UT") {
                                 this.Pre4209SID = null;
                                 this.MyConfig.Creds = new cde.TheCDECredentials();
                                 this.MyConfig.Creds.QToken = tMsg.SID;
@@ -995,7 +994,7 @@ namespace cde {
                             IsHSIDirty = true;
                             this.mLoginSent = false;
                         } else if (tLogParts[0] === 'SELECT_MESH') {
-                            const tMeshPicker: string = tMsg.TOP.substr('SELECT_MESH:'.length);
+                            const tMeshPicker: string = tMsg.TOP.substring('SELECT_MESH:'.length);
                             const tMeshes: Array<cde.TheMeshPicker> = JSON.parse(tMeshPicker);
                             this.FireEvent(true, "CDE_SELECT_MESH", tMeshes);
                         }
@@ -1249,7 +1248,7 @@ namespace cde {
                 .put({ id: 1, config: this.MyConfig }); //whsi: this.MyHSI,
 
             request.onsuccess = () => {
-                //this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:WriteToIDB", 'The data has been written successfully',1);
+                //this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:WriteToIDB", 'The data has been written successfully',1)
             };
 
             request.onerror = () => {

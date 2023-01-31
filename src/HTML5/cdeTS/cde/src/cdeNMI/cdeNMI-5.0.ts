@@ -24,34 +24,7 @@
                     console.log(pText);
             });
         }
-        //cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "ScreenInfo", window.innerWidth + "," + window.innerHeight +" Doc:"+ screen.width+","+screen.height);
 
-        //document.onkeydown = (evt) => {
-        //    const keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : evt.keyCode;
-        //    switch (keyCode) {
-        //        case 13:
-        //            if (cdeNMI.Key13Event !== null)
-        //                cdeNMI.Key13Event(evt);
-        //            cdeNMI.Key13Event = null;
-        //            break;
-        //        case 27:
-        //            //For escape.
-        //            if (cdeNMI.Key27Event !== null)
-        //                cdeNMI.Key27Event(evt);
-        //            cdeNMI.Key27Event = null;
-        //            break;
-        //        case 10009: //Tizen back
-        //            if (cdeNMI.MyScreenManager)
-        //                cdeNMI.MyScreenManager.NavigateBack(false);
-        //            break;
-        //        case 39: //right
-        //            cdeNMI.focusNextElement(false);
-        //            break;
-        //        case 37: //left
-        //            cdeNMI.focusNextElement(true);
-        //            break;
-        //    }
-        //};
 
         //Step 1: Register all overrides (can be done in StartEngine of custom Engines)
         if (cde.MyBaseAssets.MyServiceHostInfo.ShowClassic)
@@ -88,7 +61,7 @@
             tConfig.DisableRSA = cde.CBool(cde.MyBaseAssets.MyServiceHostInfo.DisableRSA);
             if (cde.MyBaseAssets.MyServiceHostInfo.AutoConnectRelay === "INCDE") {
                 tConfig.RequestPath = "<%=ISBPATH%>";
-                if (tConfig.RequestPath.substr(0, 3) === "<%=")
+                if (tConfig.RequestPath.substring(0, 3) === "<%=")
                     tConfig.RequestPath = null;
                 tConfig.uri = cde.MyBaseAssets.MyCommStatus.MyServiceUrl;
                 tConfig.wsuri = cde.MyBaseAssets.MyServiceHostInfo.MyWSServiceUrl;
@@ -125,8 +98,7 @@
                     document.body.innerHTML = "";
                     if (tLogView)
                         document.body.appendChild(tLogView);
-                    //var t = cde.TheBaseAssets.IsConnectionDown();
-                    cdeNMI.ShowMessage(pReason, "Please refresh this page to login again")
+                    cdeNMI.ShowMessage(pReason, "Please refresh this page to login again", true)
                 }
             });
             cde.MyCommChannel.RegisterEvent("CDE_NO_CONNECT", (sender, pReason: string) => {
@@ -138,13 +110,19 @@
             cdeNMI.CreatePortalControls();
     }
 
-    export function ShowMessage(pStatus: string, pReason: string) {
+    export function ShowMessage(pStatus: string, pReason: string, bAllowReload:boolean=false) {
         cde.MyBaseAssets.MyServiceHostInfo.LoginDisallowed = true;
         cdeNMI.MyLoginScreen = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.LoginScreen, true) as cdeNMI.INMILoginScreen;
         if (cdeNMI.MyLoginScreen) {
             cdeNMI.MyLoginScreen.SetProperty("StatusText", pStatus);
             cdeNMI.MyLoginScreen.SetProperty("ReasonText", pReason);
             cdeNMI.MyLoginScreen.Create(null);
+
+            if (bAllowReload && cde.MyBaseAssets.MyServiceHostInfo.ReloadAfterLogout > 0) {
+                setInterval(() => {
+                    cdeNMI.ResetBrowserToPortal();
+                }, cde.MyBaseAssets.MyServiceHostInfo.ReloadAfterLogout * 1000);
+            }
         }
     }
 

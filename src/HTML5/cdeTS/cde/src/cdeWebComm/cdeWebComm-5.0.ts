@@ -161,8 +161,14 @@ namespace cdeWEB {
                                     if (!this.MyHSI.InitialNPA)
                                         this.MyHSI.InitialNPA = pConfig.RequestPath;
                                 }
-                                pConfig = tConfig;
-                                this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State Restored', 1);
+                                if (pConfig && (pConfig.uri != tConfig.uri || pConfig.wsuri != tConfig.wsuri || pConfig.host != tConfig.host)) {
+                                    this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State ignored - host has changed', 1);
+                                    this.DeleteFromIDB();
+                                }
+                                else {
+                                    pConfig = tConfig;
+                                    this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State Restored', 1);
+                                }
                             }
                             else {
                                 this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State ignored', 1);
@@ -483,9 +489,9 @@ namespace cdeWEB {
                                 this.IsPosting = false;
                                 let IsPulsing = false;
                                 if (tMsg.length > 0)
-                                    for (let i = 0; i < tMsg.length; i++) {
-                                        if (tMsg[i].CNT > 0) IsPulsing = true;
-                                        this.IsPosting = !this.ProcessDeviceMessage(tMsg[i], false);
+                                    for (const element of tMsg) {
+                                        if (element.CNT > 0) IsPulsing = true;
+                                        this.IsPosting = !this.ProcessDeviceMessage(element, false);
                                     }
                                 if (IsPulsing)
                                     this.SendNextMessage(null);
@@ -504,9 +510,9 @@ namespace cdeWEB {
                                     this.IsPosting = false;
                                     let IsPulsing = false;
                                     if (tMsg.length > 0)
-                                        for (let i = 0; i < tMsg.length; i++) {
-                                            if (tMsg[i].CNT > 0) IsPulsing = true;
-                                            this.IsPosting = !this.ProcessDeviceMessage(tMsg[i], false);
+                                        for (const element of tMsg) {
+                                            if (element.CNT > 0) IsPulsing = true;
+                                            this.IsPosting = !this.ProcessDeviceMessage(element, false);
                                         }
                                     if (IsPulsing)
                                         this.SendNextMessage(null);
@@ -574,24 +580,24 @@ namespace cdeWEB {
                             }
                             const tMsg: cde.TheDeviceMessage[] = JSON.parse(args.data);
                             if (tMsg && tMsg.length > 0) {
-                                for (let i = 0; i < tMsg.length; i++) {
-                                    if (!tMsg[i].MSG && tMsg[i].TOP !== "") {
-                                        cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "StartUpWS:onMessage", tMsg[i].TOP);
+                                for (const element of tMsg) {
+                                    if (!element.MSG && element.TOP !== "") {
+                                        cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "StartUpWS:onMessage", element.TOP);
                                         return;
                                     } else {
-                                        const tTops: string[] = tMsg[i].TOP.split(";:;");
+                                        const tTops: string[] = element.TOP.split(";:;");
                                         if (tTops[0] === "CDE_CONNECT" && this.MyConfig && this.MyConfig.Creds) {
-                                            this.MyHSI.CurrentRSA = tMsg[i].RSA;
+                                            this.MyHSI.CurrentRSA = element.RSA;
                                             this.Login(this.MyConfig.Creds);
                                             continue;
                                         }
                                     }
                                     if (bIsLarge)
-                                        cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:OnMessage", "ORG:" + cde.TSM.GetOriginator(tMsg[i].MSG) + "TXT: " + tMsg[i].MSG.TXT);
-                                    this.ProcessDeviceMessage(tMsg[i], true);
+                                        cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "cdeWebComm:OnMessage", "ORG:" + cde.TSM.GetOriginator(element.MSG) + "TXT: " + element.MSG.TXT);
+                                    this.ProcessDeviceMessage(element, true);
                                 }
                             } else {
-                                //debugger;
+                                //debugger
                             }
                         }
                     }
@@ -660,7 +666,7 @@ namespace cdeWEB {
                 let tIsConnected = this.IsConnected;
                 let tJustLoggedIn = false;
                 if (tMsg.TOP === 'ERR:CDE_LOGIN_FAILURE') {
-                    //debugger;
+                    //debugger
                     this.MyHSI.UserPref = null;
                     this.mLoginSent = false;
                     this.MyConfig.Creds = null;
@@ -693,15 +699,14 @@ namespace cdeWEB {
                                 }
                                 if (!cde.IsNotSet(tScrParts[0])) {
                                     this.MyHSI.LastStartScreen = tScrParts[0];
-                                    //this.MyHSI.UserPref.ShowClassic = true; //With Deep Link always show old SM
                                 }
                                 if (tLogParts.length > 2) {
                                     this.MyHSI.UserPref.CurrentUserName = tLogParts[2];
                                     if (tLogParts.length > 3) {
                                         try {
                                             const pos = cde.GetSubstringIndex(tMsg.TOP, ':', 3);
-                                            const tres = tMsg.TOP.substr(pos + 1);
-                                            if (tres.length > 2 && tres.substr(0, 1) === "{")
+                                            const tres = tMsg.TOP.substring(pos + 1);
+                                            if (tres.length > 2 && tres.substring(0, 1) === "{")
                                                 this.MyHSI.UserPref = JSON.parse(tres);
                                             else
                                                 this.MyHSI.UserPref.LCID = cde.CInt(tres); //OLD NMIs
@@ -713,15 +718,13 @@ namespace cdeWEB {
                             }
                             if (this.MyConfig["LPS"]) {
                                 this.MyHSI.LastPortalScreen = this.MyConfig["LPS"];
-                                //this.MyHSI.UserPref.PortalScreen = this.MyConfig["LPS"];
                             }
                             if (this.MyConfig["LSSC"]) {
                                 this.MyHSI.LastStartScreen = this.MyConfig["LSSC"];
-                                //this.MyHSI.UserPref.StartScreen = this.MyConfig["LSSC"];
                             }
                             this.MyHSI.UserPref.ScreenParts = tScrParts;
                             this.Pre4209SID = tMsg.SID; //For FirstNodes pre 4.209
-                            if (tMsg.SID && tMsg.SID.substr(0, 2) === "UT") {
+                            if (tMsg.SID && tMsg.SID.substring(0, 2) === "UT") {
                                 this.Pre4209SID = null;
                                 this.MyConfig.Creds = new cde.TheCDECredentials();
                                 this.MyConfig.Creds.QToken = tMsg.SID;
@@ -731,7 +734,7 @@ namespace cdeWEB {
                             IsHSIDirty = true;
                             this.mLoginSent = false;
                         } else if (tLogParts[0] === 'SELECT_MESH') {
-                            const tMeshPicker: string = tMsg.TOP.substr('SELECT_MESH:'.length);
+                            const tMeshPicker: string = tMsg.TOP.substring('SELECT_MESH:'.length);
                             const tMeshes: Array<cde.TheMeshPicker> = JSON.parse(tMeshPicker);
                             this.FireEvent(true, "CDE_SELECT_MESH", tMeshes);
                         }
@@ -837,8 +840,8 @@ namespace cdeWEB {
                 const fOptions: Headers = new Headers();
                 if (pAddHeader) {
                     const tHeads: string[] = pAddHeader.split(';:;');
-                    for (let i = 0; i < tHeads.length; i++) {
-                        const tHed: string[] = tHeads[i].split('=');
+                    for (const element of tHeads) {
+                        const tHed: string[] = element.split('=');
                         if (tHed.length > 1)
                             fOptions.append(tHed[0], tHed[1]);
                     }
@@ -863,8 +866,8 @@ namespace cdeWEB {
                 if (pAddHeader) {
                     const tHeads: string[] = pAddHeader.split(';:;');
                     let tHasAccept = false;
-                    for (let i = 0; i < tHeads.length; i++) {
-                        const tHed: string[] = tHeads[i].split('=');
+                    for (const element of tHeads) {
+                        const tHed: string[] = element.split('=');
                         if (tHed[0] === "Accept")
                             tHasAccept = true;
                         if (tHed.length > 1) {
@@ -912,7 +915,7 @@ namespace cdeWEB {
                 .put({ id: 1, config: this.MyConfig }); //whsi: this.MyHSI,
 
             request.onsuccess = () => {
-                //cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:WriteToIDB", 'The data has been written successfully', 1);
+                //cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:WriteToIDB", 'The data has been written successfully', 1)
             };
 
             request.onerror = () => {
