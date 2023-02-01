@@ -50,11 +50,7 @@
         public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
             this.MyBaseType = cdeControlType.Screen;
             super.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
-            //if (cde.CBool(this.GetSetting("AllowDrag")))
-            //    debugger;
-
             let tRenderTarget: string = this.GetSetting("RenderTarget");
-           // if (tRenderTarget) debugger;
             this.divDragContent = document.getElementById("Screen_" + this.MyScreenID) as HTMLDivElement;
             if (!this.divDragContent) {
                 this.divDragContent = document.createElement("div");
@@ -75,7 +71,6 @@
                         document.body.insertBefore(tMainDash, document.body.firstChild);
                     else
                         document.appendChild(document.createElement("body")).appendChild(tMainDash);
-                    //this.FireEvent(true,"CDE_LOG_EVENT","TheNMIScreen:InitControl", "Homing Dashboard not found. Requires a DIV with ID='MyDashboard'")
                 }
                 if (cde.CBool(this.GetSetting("AllowDrag"))) {
                     this.MyScreenDIV = document.createElement('div');
@@ -105,7 +100,6 @@
                 this.MyScreenDIV.style.width = "100%";
             }
             this.divDragContent.classList.add("cde-animate-opacity");
-            //this.SetElement(this.MyScreenDIV);
 
             if (!cde.CBool(this.GetSetting("NeverHide")) && !cde.CBool(this.GetSetting("HidePins")) && !cde.MyBaseAssets.MyServiceHostInfo.HideHeader && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 2 && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 4) {
 
@@ -392,7 +386,6 @@
         }
 
         closeDragElement(e: Event) {
-            //cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "closedrag", "closed");
             e.stopPropagation();
             e.preventDefault();
             this.IsDragging = false;
@@ -421,7 +414,6 @@
                 return;
             }
             this.IsDragging = true;
-            //cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "ElemetDrag", this.pos1 + "," + this.pos2 + "," + this.pos3 + "," + this.pos4 + " OT:" + this.MyScreenDIV.offsetTop + " OL:" + this.MyScreenDIV.offsetLeft);
             // set the element's new position:
             this.oldTop = (this.oldTop - this.pos2)
             this.oldLeft = (this.oldLeft - this.pos1)
@@ -446,13 +438,13 @@
                 tStr = JSON.stringify(tScene);
             }
             if (cdeNMI.MyEngine)
-                cdeNMI.MyEngine.PublishToNMI("NMI_SAVE_HOMESCENE", tStr);   //TODO: Either do per User or general. If per user: this needs cdeN of user!
+                cdeNMI.MyEngine.PublishToNMI("NMI_SAVE_HOMESCENE", tStr);   
             cdeNMI.ShowToastMessage("Home Scene saved!");
         }
 
         public SetInitialized(bRegisterOnly: boolean) {
             this.mIsInitialized = true;
-            if (cdeNMI.MyScreenManager && !cde.CBool(this.GetSetting("NeverHide"))) // !this.G.HasRenderTarget)
+            if (cdeNMI.MyScreenManager && !cde.CBool(this.GetSetting("NeverHide"))) 
                 cdeNMI.MyScreenManager.RegisterScreen(this.MyScreenID, this, bRegisterOnly);
             this.ResizePopup();
         }
@@ -509,7 +501,7 @@
                 }
             }
             if (pName === "Visibility" && cde.CBool(pValue) === false) {
-                //debugger;
+                //debugger
             }
             if (pName === "ClassName" && this.GetContainerElement()) {
                 this.GetContainerElement().className = pValue;
@@ -625,7 +617,7 @@
             if (!this.GetContainerElement()) return;
             const tScripEle: HTMLCollectionOf<HTMLStyleElement> = this.GetContainerElement().getElementsByTagName("style");
             if (tScripEle.length > 0) {
-                (tScripEle[0] as HTMLStyleElement).innerText = pStyle;
+                tScripEle[0].innerText = pStyle;
             } else {
                 const s: HTMLStyleElement = document.createElement('style');
                 s.type = "text/css";
@@ -637,14 +629,14 @@
             if (!this.GetContainerElement()) return;
             const tScripEle: HTMLCollectionOf<HTMLStyleElement> = this.GetContainerElement().getElementsByTagName("style");
             if (tScripEle.length > 0) {
-                (tScripEle[0] as HTMLStyleElement).innerText = pStyle;
+                tScripEle[0].innerText = pStyle;
             }
         }
         public RemoveCSSInView() {
             if (!this.GetContainerElement()) return;
             const tScripEle: HTMLCollectionOf<HTMLStyleElement> = this.GetContainerElement().getElementsByTagName("style");
             if (tScripEle.length > 0) {
-                (tScripEle[0] as HTMLStyleElement).parentElement.removeChild(tScripEle[0]);
+                tScripEle[0].parentElement.removeChild(tScripEle[0]);
             }
         }
 

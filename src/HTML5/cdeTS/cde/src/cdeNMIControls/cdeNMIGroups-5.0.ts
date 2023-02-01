@@ -66,13 +66,13 @@
                     }
                     if (this.MyBaseType !== cdeControlType.CollapsibleGroup && cde.CBool(this.GetProperty("IsDivOnly"))) {
                         if (tNewVal && tNewVal.startsWith("FA") && tNewVal.length === 8) {
-                            tNewVal = "<i class='fa faIcon " + (tNewVal.substr(3, 1) === "S" ? "fa-spin " : "") + "fa-" + tNewVal.substr(2, 1) + "x'>&#x" + tNewVal.substr(4, tNewVal.length - 4) + ";</i>";
+                            tNewVal = "<i class='fa faIcon " + (tNewVal.substr(3, 1) === "S" ? "fa-spin " : "") + "fa-" + tNewVal.substr(2, 1) + "x'>&#x" + tNewVal.substring(4) + ";</i>";
                         }
                         this.divTiles.innerHTML = tNewVal;
                         this.divTiles.style.cssFloat = "none";
                     } else {
                         if (!cde.CBool(this.GetProperty("HideCaption"))) {
-                            if (!this.h1Title) { //ctrlSmartLabel.Create(null, null, null, "", "h1");
+                            if (!this.h1Title) { 
                                 let titleEle = "h1";
                                 if (this.GetProperty("LabelElement"))
                                     titleEle = this.GetProperty("LabelElement");
@@ -104,12 +104,8 @@
             } else if (pName === "OnClick" && pValue) {
                 this.PreventManipulation = true;
                 this.HookEvents(false);
-                //if (pValue && (typeof (pValue) == 'string') && pValue.toString().substr(0, 4) == "TTS:")
-                //    pValue = "cdeNMI.MyScreenManager.TransitToScreen('" + pValue.substr(4) + "', true)";
-                //this.eventOnClick = pValue;
                 this.RegisterEvent("OnClick", pValue);
                 this.RegisterEvent("PointerUp", this.DoFireClick);
-                //this.eventPointerUp = this.DoFireClick;
             } else if (pName === "OnHover" && pValue) {
                 this.GetElement().addEventListener("mouseenter", (evt) => this.onHover(evt));
                 this.RegisterEvent("OnHover", pValue);
@@ -239,6 +235,7 @@
         mExpandLeftButton: INMIControl = null;
         mExpandRightButton: INMIControl = null;
         mDragButton: INMIControl = null;
+        mContentGroup: INMIControl = null;
         pos1 = 0;
         pos2 = 0;
         pos3 = 0;
@@ -250,7 +247,6 @@
         IsTesla = false;
 
         public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
-            //if (pTRF && pTRF.FldInfo) pTRF.FldInfo["AllowDrag"] = true; //test of all collabsible draggable
             this.SetTRF(pTRF, pPropertyBag);
             super.InitControl(pTargetControl, null, null, pScreenID);
             this.MyBaseType = cdeControlType.CollapsibleGroup;
@@ -260,7 +256,7 @@
             if (!this.GetSetting("TileWidth") && this.GetSetting("MinTileWidth"))
                 this.SetProperty("TileWidth", this.GetSetting("MinTileWidth"));
 
-            this.IsTesla = false; // (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform == 5);
+            this.IsTesla = false; 
 
             this.mTitleGroup = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup);
             const tGrpInfo: TheFieldInfo = new TheFieldInfo(cdeControlType.TileGroup, (pTRF && pTRF.FldInfo) ? pTRF.FldInfo.Flags : 2, null);
@@ -291,16 +287,16 @@
                 }
             });
 
-            const tContentGroup: INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup);
-            tContentGroup.InitControl(this);
-            tContentGroup.SetProperty("ClassName", "cdeInsideCollapsible");
-            tContentGroup.GetElement().style.width = "inherit";
+            this.mContentGroup = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup);
+            this.mContentGroup.InitControl(this);
+            this.mContentGroup.SetProperty("ClassName", "cdeInsideCollapsible");
+            this.mContentGroup.GetElement().style.width = "inherit";
 
             const tCloseGroup: INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup);
             tCloseGroup.InitControl(this);
             tCloseGroup.GetElement().style.height = (cdeNMI.GetSizeFromTile(1) / 4) + "px";
             tCloseGroup.SetProperty("ClassName", "cdeCloseGroup");
-            this.SetElement(this.GetElement(), false, tContentGroup.GetElement());
+            this.SetElement(this.GetElement(), false, this.mContentGroup.GetElement());
 
             this.mTitleGroup.RegisterEvent("PointerUp", (pControl: cdeNMI.INMIControl, evt) => {
                 if (evt.type === "mousedown" || this.IsDragging)
@@ -323,7 +319,6 @@
                         this.ResizeParentsUp(this, tW);
                         this.FireResize(tW);
                     }
-                    //this.HasFired = true;
                     evt.stopPropagation();
                 });
                 this.mExpandLeftButton.SetProperty("Float", "right");
@@ -342,7 +337,6 @@
                         this.ResizeChildrenDown(this, tW);
                         this.FireResize(tW);
                     }
-                    //this.HasFired = true;
                     evt.stopPropagation();
                 });
                 this.mExpandRightButton.SetProperty("Float", "right");
@@ -383,7 +377,6 @@
                     this.oldz = this.MyRootElement.style.zIndex;
                     this.MyRootElement.style.zIndex = "4000";
                     this.oldBC = this.GetElement().style.backgroundColor;
-                    //this.GetElement().style.height = "0px"; //< simulates removal of control and reflow start
                     this.GetElement().style.backgroundColor = "rgba(0,0,0,.4)";
                     document.onpointermove = (evt) => { this.elementDrag(evt); };
                 });
@@ -420,6 +413,8 @@
                 this.mTitleGroup.SetProperty("Visibility", false);
             } else if (pName === "CaptionBackground") {
                 this.mTitleGroup.SetProperty("Background", pValue);
+            } else if (pName === "ContentBackground") {
+                this.mContentGroup.SetProperty("Background", pValue);
             } else if (pName === "LabelForeground") {
                 this.mTitleGroup.SetProperty(pName, pValue);
                 if (this.mExpandLeftButton)
@@ -464,7 +459,7 @@
             document.onpointerup = null;
 
             this.MyRootElement.style.zIndex = this.oldz;
-            //TODO: Snap control infront of the control its on - except it was right infront of it
+            //Snap control infront of the control its on - except it was right infront of it
             this.MyRootElement.style.top = "0px";
             this.MyRootElement.style.left = "0px";
             this.GetElement().style.backgroundColor = this.oldBC;
