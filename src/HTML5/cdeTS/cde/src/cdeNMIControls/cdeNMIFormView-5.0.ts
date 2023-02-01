@@ -135,10 +135,16 @@ namespace cdeNMI {
                     this.formMain.SetProperty("IsSmall", true);
                     this.formMain.SetProperty("Float", "none");
                     this.formMain.SetProperty("HidePins", true);
-                    if (this.MyFormInfo.IsUsingAbsolute) {
-                        this.formMain.SetProperty("ClassName", "CMyCanvas");
-                    } else {
-                        this.formMain.SetProperty("ClassName", "cdeInnerForm")
+                    const icn = cdeNMI.ThePB.GetValueFromBagByName(this.MyFormInfo.PropertyBag, "InnerClassName");
+                    if (icn) {
+                        this.formMain.SetProperty("ClassName", icn);
+                    }
+                    else {
+                        if (this.MyFormInfo.IsUsingAbsolute) {
+                            this.formMain.SetProperty("ClassName", "CMyCanvas");
+                        } else {
+                            this.formMain.SetProperty("ClassName", "cdeInnerForm")
+                        }
                     }
 
                     //Set Form Properties from Bag

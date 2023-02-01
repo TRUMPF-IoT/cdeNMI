@@ -988,16 +988,29 @@
                 }
                 if (tScreen) {
                     if (tFTS === true) {
+                        let tRatio = 1.0;
                         this.MyRootElement.style.transformOrigin = "top left";
+
                         let tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidth"));
                         if (tWid > 0)
                             tWid = cdeNMI.GetSizeFromTile(tWid);
                         else
                             tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelWidth"));
-                        if (tWid > 0 && cdeNMI.MyScreenManager && cdeNMI.MyScreenManager.DocumentWidth > 0) {
-                            const tRatio = (cdeNMI.MyScreenManager.DocumentWidth - cdeNMI.GetSizeFromTile(1)) / tWid;
-                            this.MyRootElement.style.transform = "scale("+ tRatio +")";
+                        if (tWid > 0) 
+                            tRatio = document.body.clientWidth / tWid;
+
+                        let tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileHeight"));
+                        if (tHei > 0)
+                            tHei = cdeNMI.GetSizeFromTile(tHei);
+                        else
+                            tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelHeight"));
+                        if (tHei > 0) {
+                            const tRatioH = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) / tHei;
+                            if (tRatioH < tRatio)
+                                tRatio = tRatioH;
                         }
+                        if (tRatio != 1.0)
+                            this.MyRootElement.style.transform = "scale(" + tRatio + ")";
                     }
                     tBaseControl.OnLoaded();
                     if (tBaseControl && tBaseControl.MyFieldInfo)
