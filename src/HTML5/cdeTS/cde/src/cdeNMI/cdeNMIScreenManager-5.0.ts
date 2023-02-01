@@ -1043,8 +1043,8 @@
             if (pModel && pModel.MyStorageInfo) {
                 if (!cdeNMI.MyNMIModels[tModelId].MyStorageMeta)
                     cdeNMI.MyNMIModels[tModelId].MyStorageMeta = [];
-                for (let i = 0; i < pModel.MyStorageInfo.length; i++) { //Check if there is better Way!
-                    cdeNMI.MyNMIModels[tModelId].MyStorageMeta[tModelId] = pModel.MyStorageInfo[i];
+                for (const element of pModel.MyStorageInfo) { //Check if there is better Way!
+                    cdeNMI.MyNMIModels[tModelId].MyStorageMeta[tModelId] = element;
                 }
             }
             const pTarget: cdeNMI.INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.BaseControl);
