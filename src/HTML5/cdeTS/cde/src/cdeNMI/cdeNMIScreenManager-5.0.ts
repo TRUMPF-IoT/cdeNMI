@@ -86,7 +86,6 @@
             }
 
             document.onkeydown = (evt) => {
-                //var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : evt.keyCode;
                 const keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : evt.keyCode;
                 if (keyCode === 13) {
                     if (cdeNMI.Key13Event !== null)
@@ -255,11 +254,8 @@
             tGroup.SetProperty("ClassName", "cdeTextCrop");
             const tFld2: TheFieldInfo = new TheFieldInfo(cdeControlType.SingleEnded, -1, "Name:", 2);
             tFld2.FormID = "SAVEVIEW";
-            //var tEdit: ctrlEditBox = ctrlEditBox.Create(tGroup, null, new TheTRF("SceneName", 1, tFld2), "My View", false, "cdeInput cdeInputCenter");
             const tEdit: INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SingleEnded).Create(tGroup, { TRF: new TheTRF("SceneName", 1, tFld2), PostInitBag: ["ClassName=cdeInput cdeInputCenter", "iValue=My Scene"] })
-            //ctrlSmartLabel.Create(tGroup, null, null, "Make Scene available to all user:");
             cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).Create(tGroup, { PostInitBag: ["iValue=Make Scene available to all user:"] });
-            //var tCheck: ctrlCheckBox = ctrlCheckBox.Create(tGroup, null, new TheTRF("IsPublic", 2, new TheFieldInfo(cdeControlType.SingleCheck, 3, "Is Public:", 2)), false, "yes");
             const tCheck = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SingleCheck).Create(tGroup, { TRF: new TheTRF("IsPublic", 2, new TheFieldInfo(cdeControlType.SingleCheck, 3, "Is Public:", 2)), PostInitBag: ["Title=yes"] })
             tCheck.SetProperty("Style", "float:none;");
             if (cdeNMI.MyPopUp) {
@@ -286,7 +282,7 @@
                         }
                         const tStr: string = JSON.stringify(tScene);
                         if (cdeNMI.MyEngine) {
-                            cdeNMI.MyEngine.PublishToNMI("NMI_SAVE_SCENE:" + tSceeneName, tStr); //TODO: Add User Node ID
+                            cdeNMI.MyEngine.PublishToNMI("NMI_SAVE_SCENE:" + tSceeneName, tStr); 
                             cdeNMI.ShowToastMessage("Scene " + tSceeneName + " saved!");
                         }
                     }
@@ -306,7 +302,6 @@
             this.CurrentView = pView;
             if (cde.MyBaseAssets.MyServiceHostInfo.StartScreen)
                 this.StartView = this.CurrentView;
-            //this.ShowView();
         }
 
         public ShowView() {
@@ -448,9 +443,9 @@
             pID = cde.GuidToString(pID);
             const tModel: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[pScreenID];
             if (!tModel) return null;
-            for (let i = 0; i < tModel.MyDashPanels.length; i++) {
-                if (cde.GuidToString(tModel.MyDashPanels[i].cdeMID) === pID) {
-                    return tModel.MyDashPanels[i];
+            for (const element of tModel.MyDashPanels) {
+                if (cde.GuidToString(element.cdeMID) === pID) {
+                    return element;
                 }
             }
             return null;
@@ -654,7 +649,7 @@
                             this.MyPopupOverlay.SetProperty("ClassName", "cdePopupOverlay");
                             this.CurrentScreen.GetElement().style.position = "absolute";
                             this.CurrentScreen.GetElement().style.zIndex = "1100";
-                            this.CurrentScreen.GetElement().style.left = (window.innerWidth / 2 - (this.CurrentScreen.GetElement().clientWidth / 2) + "px"); //TODO: Dont use hardcoded size 12
+                            this.CurrentScreen.GetElement().style.left = (window.innerWidth / 2 - (this.CurrentScreen.GetElement().clientWidth / 2) + "px");
                             this.CurrentScreen.GetElement().className = "cdePopupTemplate cde-animate-opacity";
                             this.CurrentScreen.SetProperty("ClassName", "cdePopupContent");
                             this.CurrentScreen.SetProperty("OldScreen", tOldScreen.MyScreenID);
@@ -672,11 +667,6 @@
                             }
                         }
 
-                        //if (this.CurrentScreen.GetContainerElement() &&
-                        //    this.CurrentScreen.GetProperty("IsDashboard") != true &&
-                        //    this.CurrentScreen.GetContainerElement().clientWidth > cdeNMI.GetSizeFromTile(18)) //12 Must be device Width Dependent
-                        //    this.CurrentScreen.ShowFullscreen(true);
-                        //else
                         this.CurrentScreen.ShowFullscreen(false);
                         if (this.CurrentScreen.GetProperty("IsFullScreen"))
                             cdeNMI.TogglePortalFull(true);
@@ -875,15 +865,15 @@
 
         public IsScreenInView(pCurrentView: TheNMIScene, pID: string): boolean {
             if (!pCurrentView) return true;
-            for (let i = 0; i < pCurrentView.Screens.length; i++) {
-                if (pCurrentView.Screens[i].ID === pID) {
-                    const tScreen: INMIScreen = this.GetScreenByID(pCurrentView.Screens[i].ID);
+            for (const element of pCurrentView.Screens) {
+                if (element.ID === pID) {
+                    const tScreen: INMIScreen = this.GetScreenByID(element.ID);
                     if (tScreen) {
-                        tScreen.SetProperty("IsPinned", pCurrentView.Screens[i].IsPinned);
-                        this.ShowHideScreen(tScreen, pCurrentView.Screens[i].IsVisible);
-                        tScreen.SetProperty("FldOrder", pCurrentView.Screens[i].FldOrder);
+                        tScreen.SetProperty("IsPinned", element.IsPinned);
+                        this.ShowHideScreen(tScreen, element.IsVisible);
+                        tScreen.SetProperty("FldOrder", element.FldOrder);
                     }
-                    return pCurrentView.Screens[i].IsVisible;
+                    return element.IsVisible;
                 }
             }
             return false;
@@ -925,18 +915,18 @@
                 }
                 else {
                     const tTable = (typeof (pMSGPLS) === "object" ? pMSGPLS : JSON.parse(pMSGPLS));
-                    for (let c = 0; c < tTable.length; c++) {
+                    for (const element of tTable) {
                         const tLen: number = tModel.MyStorageMirror[tTableName].length;
                         let tFoundOne = false; 
                         for (let tc = 0; tc < tLen; tc++) {
-                            if (tModel.MyStorageMirror[tTableName][tc].cdeMID === tTable[c].cdeMID) {
-                                tModel.MyStorageMirror[tTableName][tc] = tTable[c];
+                            if (tModel.MyStorageMirror[tTableName][tc].cdeMID === element.cdeMID) {
+                                tModel.MyStorageMirror[tTableName][tc] = element;
                                 tFoundOne = true;
                                 break;
                             }
                         }
                         if (!tFoundOne)
-                            tModel.MyStorageMirror[tTableName][tLen] = tTable[c];
+                            tModel.MyStorageMirror[tTableName][tLen] = element;
                         cdeNMI.MyEngine.FireEvent(false, "RecordUpdated_" + tTableName + "_" + tLen, tModelId, tTableName, tLen);
                     }
                 }
@@ -965,6 +955,7 @@
                 const tTRF: TheTRF = cdeNMI.TheTRF.FromScreenForm(tModel, tTableName);
                 if (tFormInfo.IsAlwaysEmpty === true)
                     tTRF.RowNo = -1;
+                const tFTS = cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "FitToScreen"));
                 const tRef = cde.GuidToString(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TableReference"));
                 if (!pRowMID && tScreen && tScreen.GetProperty("TTSCookie")) {
                     pRowMID = tScreen.GetProperty("TTSCookie");
@@ -988,7 +979,7 @@
                     }
                 }
 
-                tBaseControl = cdeNMI.MyTCF.CreateNMIControl(tTRF.FldInfo.Type).Create(pTarget, { ScreenID: cde.GuidToString(tModel.MyDashboard.cdeMID), TRF: tTRF, PreInitBag: ["ExtraInfo=" + pExtraInfo, (tRef ? "TableReference=" + tRef : "")], PostInitBag: tFormInfo.PropertyBag }) as INMIDataView;
+                tBaseControl = cdeNMI.MyTCF.CreateNMIControl(tTRF.FldInfo.Type).Create(pTarget, { ScreenID: cde.GuidToString(tModel.MyDashboard.cdeMID), TRF: tTRF, PreInitBag: ["ExtraInfo=" + pExtraInfo, (tFTS===true ? "FitToScreen=" + tFTS : ""), (tRef ? "TableReference=" + tRef : "")], PostInitBag: tFormInfo.PropertyBag }) as INMIDataView;
                 if (tBaseControl && cdeNMI.MyTCF && pTarget) {
                     const tableTE = cdeNMI.MyTCF.GetRegisteredControl(pTarget.MyScreenID, "TE") as cdeNMI.INMITileEntry;
                     if (tableTE) {
@@ -996,6 +987,18 @@
                     }
                 }
                 if (tScreen) {
+                    if (tFTS === true) {
+                        this.MyRootElement.style.transformOrigin = "top left";
+                        let tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidth"));
+                        if (tWid > 0)
+                            tWid = cdeNMI.GetSizeFromTile(tWid);
+                        else
+                            tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelWidth"));
+                        if (tWid > 0 && cdeNMI.MyScreenManager && cdeNMI.MyScreenManager.DocumentWidth > 0) {
+                            const tRatio = (cdeNMI.MyScreenManager.DocumentWidth - cdeNMI.GetSizeFromTile(1)) / tWid;
+                            this.MyRootElement.style.transform = "scale("+ tRatio +")";
+                        }
+                    }
                     tBaseControl.OnLoaded();
                     if (tBaseControl && tBaseControl.MyFieldInfo)
                         cdeNMI.ThePB.SetPropertiesFromBag(tScreen, tBaseControl.MyFieldInfo.PropertyBag, null, false, false);
@@ -1013,8 +1016,7 @@
                 if (tScreen) {
                     const tToFetch: string = tTableName + ":CMyForm:" + tTableName + ":" + cde.GuidToString(tScreen.GetProperty("DashID")) + ":true:false";
                     if (cdeNMI.MyEngine) {
-                        //cdeNMI.MyEngine.AddDataToFetch(tToFetch); //TODO: this was working before...some ID must be wrong
-                        //cdeNMI.MyEngine.CheckDataToFetch(tTableName);
+                        //debugger
                     } else {
                         this.FireEvent(true, "FetchData", tToFetch);
                     }
@@ -1041,7 +1043,7 @@
             if (pModel && pModel.MyStorageInfo) {
                 if (!cdeNMI.MyNMIModels[tModelId].MyStorageMeta)
                     cdeNMI.MyNMIModels[tModelId].MyStorageMeta = [];
-                for (let i = 0; i < pModel.MyStorageInfo.length; i++) { //TODO: Check if there is better Way!
+                for (let i = 0; i < pModel.MyStorageInfo.length; i++) { //Check if there is better Way!
                     cdeNMI.MyNMIModels[tModelId].MyStorageMeta[tModelId] = pModel.MyStorageInfo[i];
                 }
             }
@@ -1049,7 +1051,7 @@
             pTarget.MyScreenID = tModelId;
             const pTargetElem: HTMLElement = document.getElementById('Content_' + cde.GuidToString(tModelId));
             if (!pTargetElem) {
-                //cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "TheNMIService:OnHandleMessage", "Target Element for Live Screen not found " + tModelId);
+                //debugger 
             } else {
                 const tTRF: TheTRF = cdeNMI.TheTRF.FromScreenForm(pModel, tModelId);
                 pTarget.SetElement(pTargetElem);
@@ -1126,8 +1128,8 @@
             if (tModel && tModel.MyStorageInfo) {
                 if (!cdeNMI.MyNMIModels[tModelId].MyStorageMeta)
                     cdeNMI.MyNMIModels[tModelId].MyStorageMeta = [];
-                for (let i = 0; i < tModel.MyStorageInfo.length; i++) { //TODO: Check if there is better Way!
-                    cdeNMI.MyNMIModels[tModelId].MyStorageMeta[cde.GuidToString(tModel.MyStorageInfo[i].AssociatedClassName)] = tModel.MyStorageInfo[i];
+                for (const element of tModel.MyStorageInfo) { //Check if there is better Way!
+                    cdeNMI.MyNMIModels[tModelId].MyStorageMeta[cde.GuidToString(element.AssociatedClassName)] = element;
                 }
             }
             if (IsModelReady) {
@@ -1193,7 +1195,6 @@
             } else {
                 tTitle = this.mDivHeaderTitle.innerHTML;
             }
-            //this.MyHeaderTitle = ctrlSmartLabel.Create(null, null, null, this.cdeHeaderTitleTD.innerHTML, "span", false, "cdeMyHeaderTitle");
             this.MyHeaderTitle = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).Create(null, { PreInitBag: ["Element=span"], PostInitBag: ["iValue=" + tTitle, "ClassName=cdeMyHeaderTitle"] });
             this.mDivHeaderTitle.innerHTML = "";
             this.mDivHeaderTitle.appendChild(this.MyHeaderTitle.GetElement());
@@ -1247,7 +1248,7 @@
                             }
                             const tStr: string = JSON.stringify(tScene);
                             if (cdeNMI.MyEngine) {
-                                cdeNMI.MyEngine.PublishToNMI("NMI_SAVE_HOMESCENE", tStr); //TODO: Add User Node ID
+                                cdeNMI.MyEngine.PublishToNMI("NMI_SAVE_HOMESCENE", tStr);
                                 cdeNMI.ShowToastMessage("My Home Scene updated!");
                             }
                         }
@@ -1450,7 +1451,6 @@
             } else {
                 tTitle = this.mDivHeaderTitle.innerHTML;
             }
-            //this.MyHeaderTitle = ctrlSmartLabel.Create(null, null, null, this.cdeHeaderTitleTD.innerHTML, "span", false, "cdeMyHeaderTitle");
             this.MyHeaderTitle = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).Create(null, { PreInitBag: ["Element=span"], PostInitBag: ["iValue=" + tTitle, "ClassName=cdeMyHeaderTitleModern"] });
             this.mDivHeaderTitle.innerHTML = "";
             this.mDivHeaderTitle.appendChild(this.MyHeaderTitle.GetElement());
@@ -1523,7 +1523,7 @@
                             }
                             const tStr: string = JSON.stringify(tScene);
                             if (cdeNMI.MyEngine) {
-                                cdeNMI.MyEngine.PublishToNMI("NMI_SAVE_HOMESCENE", tStr);   //TODO: add User Node ID
+                                cdeNMI.MyEngine.PublishToNMI("NMI_SAVE_HOMESCENE", tStr);   
                                 cdeNMI.ShowToastMessage("My Home Scene updated!");
                             }
                         }
@@ -1609,8 +1609,6 @@
                 const tPortal = document.getElementById("MyNMIPortal") as HTMLDivElement;
                 tPortal.style.marginTop = "0px";
             }
-            //this.CreateLoginButtonOnly();
-
             this.mDivScreenList = document.createElement("div");
             this.mDivScreenList.className = "cdeScreenList";
             this.mDivScreenList.id = "cdeScreenList";
@@ -1659,8 +1657,8 @@
                         if (tTitle.indexOf("fa fa") > 0 && tTitle.length > 32) {
                             const tP = tTitle.indexOf("</i>");
                             if (tP >= 0) {
-                                tIcon = tTitle.substr(0, tP + 4).replace("fa-5x", "fa-2x");
-                                tTitle = cdeNMI.StripHTML(tTitle.substr(tP + 4));
+                                tIcon = tTitle.substring(0, tP + 4).replace("fa-5x", "fa-2x");
+                                tTitle = cdeNMI.StripHTML(tTitle.substring(tP + 4));
                             }
                         } else {
                             tTitle = nTitle;

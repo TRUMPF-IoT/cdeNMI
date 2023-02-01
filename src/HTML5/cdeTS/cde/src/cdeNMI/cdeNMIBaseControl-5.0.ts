@@ -329,7 +329,7 @@
                         if (tSegments > 0)
                             tMaxWid += GetSizeFromTile(tSegments) / 2;
                     }
-                    if (cdeNMI.MyScreenManager && cdeNMI.MyScreenManager.DocumentWidth > 0 && tMaxWid > cdeNMI.MyScreenManager.DocumentWidth)
+                    if (!cde.CBool(this.GetProperty("FitToScreen")) && cdeNMI.MyScreenManager && cdeNMI.MyScreenManager.DocumentWidth > 0 && tMaxWid > cdeNMI.MyScreenManager.DocumentWidth)
                         tMaxWid = cdeNMI.MyScreenManager.DocumentWidth - (GetSizeFromTile(1));
                     this.MyRootElement.style.maxWidth = tMaxWid + "px";
                 } else if (pName === "BackgroundImage" && this.MyRootElement) {
@@ -1401,7 +1401,8 @@
                     if (tSegments > 0)
                         tWid += GetSizeFromTile(tSegments) / 2;
                 }
-                if (!tDontCheckMaxWidth && cdeNMI.MyScreenManager && cdeNMI.MyScreenManager.DocumentWidth > 0 && tWid > cdeNMI.MyScreenManager.DocumentWidth)
+                const tFTS = cde.CBool(this.GetProperty("FitToScreen"));
+                if (!tDontCheckMaxWidth && !tFTS && cdeNMI.MyScreenManager && cdeNMI.MyScreenManager.DocumentWidth > 0 && tWid > cdeNMI.MyScreenManager.DocumentWidth)
                     tWid = cdeNMI.MyScreenManager.DocumentWidth - (GetSizeFromTile(1));
                 if (pElement) {
                     pElement.style.width = tWid + "px";
@@ -1409,8 +1410,7 @@
                 }
                 return tWid;
             } else {
-                //if (pElement)
-                //pElement.style.width = "inherit";
+                //debugger
             }
             return -1;
         }
