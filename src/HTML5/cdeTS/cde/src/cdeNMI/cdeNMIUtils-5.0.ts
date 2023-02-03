@@ -457,6 +457,22 @@ namespace cdeNMI {
             };
             pFacePlate.HTML += "<span ID=" + tTCB.TargetID + "></span>";
         }
+        while (true) {
+            tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, 'cdeTAG="<%C:', '%>"');
+            if (tSeg === null) break;
+            tTCB = CreateTCB(pFacePlate.TRF, tSeg.Inner);
+            pFacePlate.TargetControl.MySubControls.push(tTCB);
+            pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "class='" + tTCB.MyControl.GetProperty("Value") + "' ID='" + tTCB.TargetID + "_TGT'");
+            tTCB.MyControl.SetProperty("Visibility", false);
+            tTCB.MyControl.SetProperty("MyTCB", tTCB);
+            tTCB.OnIValueChanged = (sender: INMIControl, pEvt, pVal) => {
+                const ttcb: TheControlBlock = sender.GetProperty("MyTCB");
+                if (pVal && document.getElementById(ttcb.TargetID + "_TGT"))
+                    document.getElementById(ttcb.TargetID + "_TGT").className = pVal;
+            };
+            pFacePlate.HTML += "<span ID=" + tTCB.TargetID + "></span>";
+        }
+
         pFacePlate.HTML = cdeNMI.GenerateFinalString(pFacePlate.HTML, false, pFacePlate.TRF);
         pFacePlate.TargetControl.GetContainerElement().innerHTML = pFacePlate.HTML;
         for (const element of pFacePlate.TargetControl.MySubControls) {
