@@ -371,17 +371,17 @@ namespace cdeNMI {
             if (tMyScreenInfo && tMyScreenInfo.MyStorageMirror[tOwnerThingID]) {
                 tFldContent = cdeNMI.GetFldContent(tMyScreenInfo.MyStorageMirror[tOwnerThingID][pTRF.RowNo], tFldInfo, false);
             }
-        }
-        const tTRF: cdeNMI.TheTRF = new cdeNMI.TheTRF(tOwnerThingID, pTRF ? pTRF.RowNo : 0, tFldInfo);
-        tTRF.ModelID = pTRF ? pTRF.ModelID : null;
-        tTCB.MyControl.InitControl(null, tTRF);
-        tTCB.MyControl.SetProperty("iValue", tFldContent);
+            const tTRF: cdeNMI.TheTRF = new cdeNMI.TheTRF(tOwnerThingID, pTRF ? pTRF.RowNo : 0, tFldInfo);
+            tTRF.ModelID = pTRF ? pTRF.ModelID : null;
+            tTCB.MyControl.InitControl(null, tTRF);
+            tTCB.MyControl.SetProperty("iValue", tFldContent);
 
-        if (!cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo])
-            cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo] = [];
-        cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo].push(tTCB);
-        pTRF.TableName = tTRF.TableName;
-        cdeNMI.ThePB.SetRawProperty(tTCB.MyControl, "OnThingEvent", tTRF.FldInfo.cdeO + ";" + pName);
+            if (!cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo])
+                cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo] = [];
+            cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo].push(tTCB);
+            pTRF.TableName = tTRF.TableName;
+            cdeNMI.ThePB.SetRawProperty(tTCB.MyControl, "OnThingEvent", tFldInfo.cdeO + ";" + pName);
+        }
 
         return tTCB;
     }

@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <Version>5.145.0</Version>
+    <Version>5.161.0</Version>
     <Authors>Chris Muench</Authors>
     <Company>C-Labs</Company>
     <Product>C-DMyC3</Product>
     <Description>C3 Chart Controls for the C-DEngine ($(TargetFramework))</Description>
-    <Copyright>(C) 2017-2022 C-Labs</Copyright>
+    <Copyright>(C) 2017-2023 C-Labs</Copyright>
     <AssemblyName>CDMyC3</AssemblyName>
     <RootNamespace>CDMyC3</RootNamespace>
     <!-- Set if you want to have a Nuget created automatically -->
