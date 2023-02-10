@@ -989,7 +989,7 @@
                 if (tScreen) {
                     if (tFTS === true) {
                         let tRatio = 1.0;
-                        this.MyRootElement.style.transformOrigin = "top left";
+                        tScreen.GetElement().style.transformOrigin = "top left";
 
                         let tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidth"));
                         if (tWid > 0)
@@ -997,7 +997,7 @@
                         else
                             tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelWidth"));
                         if (tWid > 0) 
-                            tRatio = document.body.clientWidth / tWid;
+                            tRatio = (document.body.clientWidth-20) / tWid;
 
                         let tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileHeight"));
                         if (tHei > 0)
@@ -1010,7 +1010,7 @@
                                 tRatio = tRatioH;
                         }
                         if (tRatio != 1.0)
-                            this.MyRootElement.style.transform = "scale(" + tRatio + ")";
+                            tScreen.GetElement().style.transform = "scale(" + tRatio + ")";
                     }
                     tBaseControl.OnLoaded();
                     if (tBaseControl && tBaseControl.MyFieldInfo)

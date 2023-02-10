@@ -347,7 +347,8 @@ namespace cdeNMI {
         return tSeg;
     }
 
-    export function CreateTCB(pTRF: cdeNMI.TheTRF, pName: string, pType: cdeNMI.cdeControlType = cdeNMI.cdeControlType.SingleEnded): cdeNMI.TheControlBlock {
+    export function CreateTCB(pFacePlate: cdeNMI.TheFaceWait, pName: string, pType: cdeNMI.cdeControlType = cdeNMI.cdeControlType.SingleEnded): cdeNMI.TheControlBlock {
+        const pTRF: cdeNMI.TheTRF = pFacePlate.TRF;
         const tTCB: cdeNMI.TheControlBlock = new cdeNMI.TheControlBlock();
         tTCB.TargetID = "CNMIC" + (cdeNMI.MyNMISettings.IDCounter++);
         tTCB.MyControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel); 
@@ -371,21 +372,33 @@ namespace cdeNMI {
             if (tMyScreenInfo && tMyScreenInfo.MyStorageMirror[tOwnerThingID]) {
                 tFldContent = cdeNMI.GetFldContent(tMyScreenInfo.MyStorageMirror[tOwnerThingID][pTRF.RowNo], tFldInfo, false);
             }
+            const tTRF: cdeNMI.TheTRF = new cdeNMI.TheTRF(tOwnerThingID, pTRF ? pTRF.RowNo : 0, tFldInfo);
+            tTRF.ModelID = pTRF ? pTRF.ModelID : null;
+            tTCB.MyControl.InitControl(null, tTRF);
+            tTCB.MyControl.SetProperty("iValue", tFldContent);
+
+            if (!cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo])
+                cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo] = [];
+            cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo].push(tTCB);
+            pTRF.TableName = tTRF.TableName;
+            cdeNMI.ThePB.SetRawProperty(tTCB.MyControl, "OnThingEvent", tFldInfo.cdeO + ";" + pName);
         }
-        const tTRF: cdeNMI.TheTRF = new cdeNMI.TheTRF(tOwnerThingID, pTRF ? pTRF.RowNo : 0, tFldInfo);
-        tTRF.ModelID = pTRF ? pTRF.ModelID : null;
-        tTCB.MyControl.InitControl(null, tTRF);
-        tTCB.MyControl.SetProperty("iValue", tFldContent);
-
-        if (!cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo])
-            cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo] = [];
-        cdeNMI.MyTCBs[tTRF.TableName + "_" + pTRF.RowNo].push(tTCB);
-        pTRF.TableName = tTRF.TableName;
-        cdeNMI.ThePB.SetRawProperty(tTCB.MyControl, "OnThingEvent", tTRF.FldInfo.cdeO + ";" + pName);
-
+        pFacePlate.TargetControl.MySubControls.push(tTCB);
         return tTCB;
     }
 
+    export function ParseTagMacro(pFacePlate: cdeNMI.TheFaceWait, pMacro: string, pTag: string, pEncloser:string=""): cdeNMI.TheControlBlock {
+        if (!pMacro) return null;
+
+        let tSeg: cde.TheSegment = cdeNMI.ReturnStringSegment(pFacePlate.HTML, pMacro, '%>'+ pEncloser);
+        if (tSeg === null) return null;
+        let tTCB: cdeNMI.TheControlBlock = CreateTCB(pFacePlate, tSeg.Inner);
+        pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, pTag + tTCB.MyControl.GetProperty("Value") + '" ID="' + tTCB.TargetID + "_TGT"+ pEncloser);
+        tTCB.MyControl.SetProperty("Visibility", false);
+        tTCB.MyControl.SetProperty("MyTCB", tTCB);
+        pFacePlate.HTML += "<span ID=" + tTCB.TargetID + "></span>";
+        return tTCB;
+    }
 
     export function DoParseHTML(pTable, pFacePlate: cdeNMI.TheFaceWait) {
         let tSeg: cde.TheSegment;
@@ -401,62 +414,53 @@ namespace cdeNMI {
         while (true) {
             tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, "<%C21:", "%>");
             if (tSeg === null) break;
-            tTCB = CreateTCB(pFacePlate.TRF, tSeg.Inner, cdeNMI.cdeControlType.DateTime);
-            pFacePlate.TargetControl.MySubControls.push(tTCB);
+            tTCB = CreateTCB(pFacePlate, tSeg.Inner, cdeNMI.cdeControlType.DateTime);
             pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "<span ID=" + tTCB.TargetID + "></span>");
         }
         while (true) {
             tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, "<%C20:", "%>");
             if (tSeg === null) break;
-            tTCB = CreateTCB(pFacePlate.TRF, tSeg.Inner);
-            pFacePlate.TargetControl.MySubControls.push(tTCB);
+            tTCB = CreateTCB(pFacePlate, tSeg.Inner);
             pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "<span ID=" + tTCB.TargetID + "></span>");
         }
         while (true) {
-            tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, "<%I:", "%>");
-            if (tSeg === null) break;
-            tTCB = CreateTCB(pFacePlate.TRF, tSeg.Inner);
-            pFacePlate.TargetControl.MySubControls.push(tTCB);
-            pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, tTCB.MyControl.GetProperty("Value") + '" ID="' + tTCB.TargetID + '_TGT');
-            tTCB.MyControl.SetProperty("Visibility", false);
-            tTCB.MyControl.SetProperty("MyTCB", tTCB);
+            tTCB = cdeNMI.ParseTagMacro(pFacePlate, '<%I:', '');
+            if (tTCB === null) break;
             tTCB.OnIValueChanged = (sender: INMIControl, pEvt, pVal) => {
                 const ttcb: TheControlBlock = sender.GetProperty("MyTCB");
                 if (pVal && document.getElementById(ttcb.TargetID + "_TGT"))
                     (document.getElementById(ttcb.TargetID + "_TGT") as HTMLImageElement).src = cde.FixupPath(pVal);
             };
-            pFacePlate.HTML += "<span ID=" + tTCB.TargetID + "></span>";
         }
         while (true) {
-            tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, "<%V:", "%>");
-            if (tSeg === null) break;
-            tTCB = CreateTCB(pFacePlate.TRF, tSeg.Inner);
-            pFacePlate.TargetControl.MySubControls.push(tTCB);
-            pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, tTCB.MyControl.GetProperty("Value") + '" ID="' + tTCB.TargetID + '_TGT');
-            tTCB.MyControl.SetProperty("Visibility", false);
-            tTCB.MyControl.SetProperty("MyTCB", tTCB);
+            tTCB = cdeNMI.ParseTagMacro(pFacePlate, '<%V:', '');
+            if (tTCB === null) break;
             tTCB.OnIValueChanged = (sender: INMIControl, pEvt, pVal) => {
                 const ttcb: TheControlBlock = sender.GetProperty("MyTCB");
                 if (pVal && document.getElementById(ttcb.TargetID + "_TGT"))
                     (document.getElementById(ttcb.TargetID + "_TGT") as HTMLInputElement).value = pVal;
             };
-            pFacePlate.HTML += "<span ID=" + tTCB.TargetID + "></span>";
         }
-        while (true) {
-            tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, 'cdeTAG="<%S:', '%>"');
-            if (tSeg === null) break;
-            tTCB = CreateTCB(pFacePlate.TRF, tSeg.Inner);
-            pFacePlate.TargetControl.MySubControls.push(tTCB);
-            pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "style='" + tTCB.MyControl.GetProperty("Value") + "' ID='" + tTCB.TargetID + "_TGT'");
-            tTCB.MyControl.SetProperty("Visibility", false);
-            tTCB.MyControl.SetProperty("MyTCB", tTCB);
+        while (true)
+        {
+            tTCB = cdeNMI.ParseTagMacro(pFacePlate, 'cdeTAG="<%S:', 'style="', '"');
+            if (tTCB === null) break;
             tTCB.OnIValueChanged = (sender: INMIControl, pEvt, pVal) => {
                 const ttcb: TheControlBlock = sender.GetProperty("MyTCB");
                 if (pVal && document.getElementById(ttcb.TargetID + "_TGT"))
                     document.getElementById(ttcb.TargetID + "_TGT").style.cssText = pVal;
             };
-            pFacePlate.HTML += "<span ID=" + tTCB.TargetID + "></span>";
         }
+        while (true) {
+            tTCB = cdeNMI.ParseTagMacro(pFacePlate, 'cdeTAG="<%C:', 'class="', '"');
+            if (tTCB === null) break;
+            tTCB.OnIValueChanged = (sender: INMIControl, pEvt, pVal) => {
+                const ttcb: TheControlBlock = sender.GetProperty("MyTCB");
+                if (pVal && document.getElementById(ttcb.TargetID + "_TGT"))
+                    document.getElementById(ttcb.TargetID + "_TGT").className = pVal;
+            };
+        }
+
         pFacePlate.HTML = cdeNMI.GenerateFinalString(pFacePlate.HTML, false, pFacePlate.TRF);
         pFacePlate.TargetControl.GetContainerElement().innerHTML = pFacePlate.HTML;
         for (const element of pFacePlate.TargetControl.MySubControls) {
