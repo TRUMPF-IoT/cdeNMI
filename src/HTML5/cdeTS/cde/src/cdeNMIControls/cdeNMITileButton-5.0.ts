@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -169,8 +169,6 @@
                     this.SetHoverStyle(cde.CBool(this.GetProperty("Disabled")));
                     this.RegisterEvent("FireOnClick", this.FireClick);
 
-                    //if ((typeof (pValue) === 'string') && pValue.substr(0, 6) === "TTS:<%")
-                    //    pValue = pValue; ///  pValue = cdeNMI.GenerateFinalString(pValue,this.MyTRF.GetDataRow(), this.MyTRF);
                     this.RegisterEvent("OnClick", pValue);
                     this.s2.onkeyup = (evt) => {
                         if (evt.keyCode === 13 || evt.keyCode === 32) {
@@ -208,13 +206,10 @@
                     if (this.MyNMIControl)
                         this.MyNMIControl.SetProperty(pName, pValue);
                 }
-            } else if (this.MyNMIControl && pName.substr(0, 1) === ".") {
+            } else if (this.MyNMIControl && pName.substring(0, 1) === ".") {
                 if (this.MyNMIControl)
-                    this.MyNMIControl.SetProperty(pName.substr(1), pValue);
-            } else if (pName === "ControlTW" || pName === "TileFactorX") {
-                this.SetTileStyle();
-                this.SetSizes();
-            } else if (pName === "ControlTH" || pName === "TileFactorY") {
+                    this.MyNMIControl.SetProperty(pName.substring(1), pValue);
+            } else if (pName === "ControlTW" || pName === "TileFactorX" || pName === "ControlTH" || pName === "TileFactorY") {
                 this.SetTileStyle();
                 this.SetSizes();
             } else if ((pName === "ClassName")) {
@@ -226,9 +221,9 @@
                         this.s2.classList.remove(tHovClass);
                 }
                 this.SetSizes();
-            } if (pName === "InnerControl" && pValue) {
+            } else if (pName === "InnerControl" && pValue) {
                 this.SetInnerControl(pValue);
-            } if (pName === "SubTitle" && pValue) {
+            } else if (pName === "SubTitle" && pValue) {
                 this.SetTileTitle("Title", this.GetProperty("RTitle"));
             } else if (pName.toLowerCase() === "thumbnail") {
                 const tParts: string[] = pValue.split(';');
@@ -236,7 +231,7 @@
                     this.SetTileTitle("Title", this.GetProperty("RTitle"));
                 }
                 else {
-                    const tInsideCtrl: INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.Picture).Create(null, { PostInitBag: ["iValue=" + tParts[0], "FullWidth=-1", "FullHeight=-1"] }); //cdeNMI.ctrlZoomImage.Create(null, -1, -1, tParts[0]);
+                    const tInsideCtrl: INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.Picture).Create(null, { PostInitBag: ["iValue=" + tParts[0], "FullWidth=-1", "FullHeight=-1"] });
                     if (tParts.length > 1) {
                         tInsideCtrl.SetProperty("Opacity", tParts[1]);
                         if (tParts.length > 2)
@@ -335,7 +330,6 @@
             this.divOuter.style.position = "relative";
 
             this.divInner = document.createElement("div");
-            //this.divInner.style.zoom = cde.MyBaseAssets.MyServiceHostInfo.TileScale.toString();
 
             this.divTitle = document.createElement("div");
             if (this.GetProperty("Value"))
@@ -369,8 +363,8 @@
                 if (this.GetProperty("ClassName")) {
                     const tCls: string[] = this.GetProperty("ClassName").split(' ');
                     let tFinCls = "";
-                    for (let i = 0; i < tCls.length; i++) {
-                        tFinCls += tCls[i] + "inner ";
+                    for (const element of tCls) {
+                        tFinCls += element + "inner ";
                     }
                     this.divTitle.className = tFinCls;
                 }
@@ -507,8 +501,6 @@
                 tS = 1;
             this.tLogoGroup.SetProperty("Style", "font-size:" + (cdeNMI.GetSizeFromTile(tS) / tF) + "px");
 
-            //this.MyLogoParts[0] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).Create(tLogoGroup, { PreInitBag: ["ControlTW=1", "ControlTH=1", "TileFactorX=" + cde.CInt(this.GetSetting("TileFactorX")), "TileFactorY=" + cde.CInt(this.GetSetting("TileFactorY"))], PostInitBag: ["ClassName=cl cl-A"] });
-            //this.MyLogoParts[0].SetProperty("Foreground", "#52D0EB");
             this.MyLogoParts[0] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).Create(this.tLogoGroup, { PreInitBag: ["Element=span"], PostInitBag: ["ClassName=cl cl-B cdeButtonHover2"] });
             this.MyLogoParts[0].SetProperty("Foreground", "#1DA3D1");
             this.MyLogoParts[1] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).Create(this.tLogoGroup, { PreInitBag: ["Element=span"], PostInitBag: ["ClassName=cl cl-C cdeButtonHover2"] });
