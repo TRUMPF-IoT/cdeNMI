@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -215,8 +215,7 @@ namespace cdeNMI {
                     continue;
                 t = schemes[i].attributes["lite"];
                 if (t) {
-                    const tN: string = cde.MyBaseAssets.MyCommStatus.InitialNPA;
-                    schemes[i].setAttribute("href", t.nodeValue + (!tN ? "" : "?SID=" + tN.substring(4, tN.length - ((tN.indexOf(".ashx") > 0 ? 5 : 0)))));
+                    schemes[i].setAttribute("href", t.nodeValue + cdeNMI.GenerateFinalString("<%ISID%>"));
                 }
             }
             if (cdeNMI.MyScreenManager) {
@@ -230,8 +229,7 @@ namespace cdeNMI {
                     continue;
                 t = schemes[i].attributes["dark"];
                 if (t) {
-                    const tN: string = cde.MyBaseAssets.MyCommStatus.InitialNPA;
-                    schemes[i].setAttribute("href", t.nodeValue + (!tN ? "" : "?SID=" + tN.substring(4, tN.length - ((tN.indexOf(".ashx") > 0 ? 5 : 0)))));
+                    schemes[i].setAttribute("href", t.nodeValue + cdeNMI.GenerateFinalString("<%ISID%>"));
                 }
             }
             if (cdeNMI.MyScreenManager) {
@@ -266,8 +264,7 @@ namespace cdeNMI {
         if (pCSSFileLite)
             fileref.setAttribute("lite", cde.FixupPath(pCSSFileLite));
         fileref.setAttribute("cde", "colorScheme");
-        const tN: string = cde.MyBaseAssets.MyCommStatus.InitialNPA;
-        fileref.setAttribute("href", tFileCSS + (!tN ? "" : "?SID=" + tN.substring(4, tN.length - ((tN.indexOf(".ashx") > 0 ? 5 : 0)))));
+        fileref.setAttribute("href", tFileCSS + cdeNMI.GenerateFinalString("<%ISID%>"));
         const tHead = document.getElementsByTagName("head")[0];
         tHead.insertBefore(fileref, tHead.childNodes[0]);
     }
@@ -428,8 +425,9 @@ namespace cdeNMI {
             if (tTCB === null) break;
             tTCB.OnIValueChanged = (sender: INMIControl, pEvt, pVal) => {
                 const ttcb: TheControlBlock = sender.GetProperty("MyTCB");
-                if (pVal && document.getElementById(ttcb.TargetID + "_TGT"))
-                    (document.getElementById(ttcb.TargetID + "_TGT") as HTMLImageElement).src = cde.FixupPath(pVal);
+                if (pVal && document.getElementById(ttcb.TargetID + "_TGT")) {
+                    (document.getElementById(ttcb.TargetID + "_TGT") as HTMLImageElement).src = cde.FixupPath(pVal + cdeNMI.GenerateFinalString("<%ISID%>"));
+                }
             };
         }
         while (true) {
@@ -507,6 +505,12 @@ namespace cdeNMI {
                 outStr = outStr.replace('<%UN%>', cde.MyBaseAssets.MyCommStatus.UserPref.CurrentUserName);
             else
                 outStr = outStr.replace('<%UN%>', '');
+        }
+        if (outStr.indexOf('<%ISID%>') >= 0) {
+            const tN: string = cde.MyBaseAssets.MyCommStatus.InitialNPA;
+            const len: number = (tN.indexOf(".ashx") > 0 ? 5 : 0);
+            const tISID = (!tN ? "" : "?SID=" + tN.substring(4, tN.length - len));
+            outStr = outStr.replace('<%ISID%>', tISID);
         }
         if (outStr.indexOf('<%NOW%>') >= 0) {
             outStr = outStr.replace('<%NOW%>', moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"));

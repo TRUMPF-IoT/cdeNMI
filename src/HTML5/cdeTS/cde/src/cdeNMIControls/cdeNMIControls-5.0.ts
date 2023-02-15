@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -29,7 +29,6 @@
             this.divPin = document.createElement("div");
 
             this.rootDiv.appendChild(this.divPin);
-            //this.divPin.innerHTML = "<img src='/ClientBin/Images/e.png' width='32' height='32'/>";
             this.RegisterEvent("PointerUp", (pControl: INMIControl, evt: Event, pPointer: ThePointer) => {
                 this.SetProperty("Value", !this.GetProperty("Value"));
                 if (this.GetProperty("OnClick"))
@@ -164,15 +163,14 @@
             this.MyBaseType = cdeControlType.DropUploader;
             super.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
 
-            this.mContentTarget = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(pTargetControl, { TRF: this.MyTRF });  // ctrlTileGroup.Create(pTargetControl, null);
+            this.mContentTarget = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(pTargetControl, { TRF: this.MyTRF });  
             this.mContentTarget.SetProperty("ClassName", "ctrlDropUploader");
             this.mContentTarget.SetInitialSize(0);
 
-            this.mZoomImg = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.Picture).Create(this.mContentTarget); //ctrlZoomImage.Create(this.mContentTarget);
+            this.mZoomImg = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.Picture).Create(this.mContentTarget); 
             this.mZoomImg.SetProperty("Visibility", false);
             this.mZoomImg.SetProperty("Style", "width:100%;height:100%");
 
-            //this.mInfo = ctrlSmartLabel.Create(this.mContentTarget, null, null, "", "p");
             this.mInfo = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).Create(this.mContentTarget, { PreInitBag: ["Element=p"] });
             const holder = this.mContentTarget.GetElement();
             holder.ondragover = () => {
@@ -253,7 +251,7 @@
                     let tFileName: string = file.name;
                     let tDir: string = this.GetProperty("TargetDir");
                     if (tDir) {
-                        if (tDir.substr(tDir.length - 1, 1) !== '\\')
+                        if (tDir.substring(tDir.length - 1) !== '\\')
                             tDir += "\\";
                         tFileName = tDir + tFileName;
                     }
@@ -284,8 +282,8 @@
         ProcessFiles(pFileList) {
             if (!pFileList || !pFileList.length || this.mFileList.length) return;
 
-            for (let i = 0; i < pFileList.length; i++) {
-                this.mFileList.push(pFileList[i]);
+            for (const element of pFileList) {
+                this.mFileList.push(element);
             }
             this.UploadNext();
         }
@@ -351,7 +349,6 @@
                             this.MyTE.SetProperty("TileHeight", (newSize / 4 * 3));
                             break;
                     }
-                    //this.SetProperty("ControlTW", newSize);
                 }
             });
             return true;
@@ -385,8 +382,7 @@
                             else
                                 tImgSrc = cde.FixupPath(tPa[0]);
                         }
-                        const tN: string = cde.MyBaseAssets.MyCommStatus.InitialNPA;
-                        this.Img.src = cde.FixupPath(tImgSrc + (!tN ? "" : "?SID=" + tN.substr(4, tN.length - (4 + (tN.indexOf(".ashx") > 0 ? 5 : 0)))));
+                        this.Img.src = cde.FixupPath(tImgSrc + cdeNMI.GenerateFinalString("<%ISID%>"));
                     }
                 } catch (ex) {
                     cdeNMI.ShowToastMessage(pValue + ":IMG SETP ERROR:" + ex);

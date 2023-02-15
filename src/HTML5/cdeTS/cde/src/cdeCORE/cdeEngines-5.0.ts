@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -238,8 +238,8 @@ namespace cde {
             tFileCSS = cde.FixupPath(pCSSFileLite);//.toLowerCase();
         const links = document.getElementsByTagName("link");
         if (links.length > 0) {
-            for (let i = 0; i < links.length; i++) {
-                if (links[i].getAttribute("href").toLowerCase() === tFileCSS.toLowerCase())
+            for (const element of links) {
+                if (element.getAttribute("href").toLowerCase() === tFileCSS.toLowerCase())
                     return;
             }
         }
@@ -252,8 +252,7 @@ namespace cde {
         if (pCSSFileLite)
             fileref.setAttribute("lite", cde.FixupPath(pCSSFileLite));
         fileref.setAttribute("cde", "colorScheme");
-        const tN: string = cde.MyBaseAssets.MyCommStatus.InitialNPA;
-        fileref.setAttribute("href", tFileCSS + (!tN ? "" : "?SID=" + tN.substr(4, tN.length - (4 + (tN.indexOf(".ashx") > 0 ? 5 : 0)))));
+        fileref.setAttribute("href", tFileCSS + cdeNMI.GenerateFinalString("<%ISID%>"));
         document.getElementsByTagName("head")[0].appendChild(fileref);
     }
 
@@ -264,8 +263,8 @@ namespace cde {
         const tScripEle: HTMLCollectionOf<HTMLScriptElement> = tRoot.getElementsByTagName("script");
         let DoInsert = true;
         if (tScripEle.length > 0) {
-            for (let i = 0; i < tScripEle.length; i++) {
-                if ((tScripEle[i] as HTMLElement).id === pScriptName) {
+            for (const element of tScripEle) {
+                if ((element as HTMLElement).id === pScriptName) {
                     DoInsert = false;
                     break;
                 }
@@ -299,8 +298,6 @@ namespace cdeCommCore {
     }
 
     export function RegisterTopic(InitString: string) {
-        //if (cde.MyBaseAssets.MyServiceHostInfo.LastSID && cde.MyBaseAssets.MyServiceHostInfo.LastSID != "")
-        //    InitString += "@" + cde.MyBaseAssets.MyServiceHostInfo.LastSID;
         cdeCommCore.PublishToFirstNode("ContentService", "CDE_SUBSCRIBE", InitString);
     }
 
