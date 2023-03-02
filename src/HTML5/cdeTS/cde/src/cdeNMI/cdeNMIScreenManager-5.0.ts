@@ -62,6 +62,9 @@
                 tDnPin.SetProperty("OnClick", (val, evt: MouseEvent, pointer: cdeNMI.ThePointer) => {
                     this.divSideBarRight.style.display = 'none';
                     this.divSideBarRight.classList.remove("cde-animate-right");
+                    cdeNMI.UnselectAllControls();
+                    if (this.CurrentScreen?.MyOverlay)
+                        this.CurrentScreen.MyOverlay.SetProperty("IsDisabled", false);
                 });
                 tDnPin.SetProperty("Content", "<i class='fa fa-2x'>&#xf061;</i>");
 
@@ -988,7 +991,7 @@
                 }
                 if (tScreen) {
                     if (tFTS === true) {
-                        let tRatio = 1.0;
+                        tScreen.ScreenScale = 1.0;
                         tScreen.GetElement().style.transformOrigin = "top left";
 
                         let tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidth"));
@@ -997,7 +1000,7 @@
                         else
                             tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelWidth"));
                         if (tWid > 0) 
-                            tRatio = (document.body.clientWidth-20) / tWid;
+                            tScreen.ScreenScale = (document.body.clientWidth-20) / tWid;
 
                         let tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileHeight"));
                         if (tHei > 0)
@@ -1006,11 +1009,11 @@
                             tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelHeight"));
                         if (tHei > 0) {
                             const tRatioH = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) / tHei;
-                            if (tRatioH < tRatio)
-                                tRatio = tRatioH;
+                            if (tRatioH < tScreen.ScreenScale)
+                                tScreen.ScreenScale = tRatioH;
                         }
-                        if (tRatio != 1.0)
-                            tScreen.GetElement().style.transform = "scale(" + tRatio + ")";
+                        if (tScreen.ScreenScale != 1.0) 
+                            tScreen.GetElement().style.transform = "scale(" + tScreen.ScreenScale + ")";
                     }
                     tBaseControl.OnLoaded();
                     if (tBaseControl && tBaseControl.MyFieldInfo)

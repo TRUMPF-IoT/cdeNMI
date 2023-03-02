@@ -1415,6 +1415,13 @@ namespace cdeNMI {
         }
     }
 
+    export function UnselectAllControls() {
+        const allSelected = document.getElementsByClassName("cde-is-selected");
+        for (const element of allSelected) {
+            element.classList.remove("cde-is-selected");
+        }
+    }
+
     export function GetControlFromPoint(x: number, y: number): INMIControl {
         let element: HTMLElement;
         const elements = [];
@@ -1425,7 +1432,7 @@ namespace cdeNMI {
             if (!element || element === document.documentElement) {
                 break;
             }
-            if (element.getAttribute("cdemid") && !tResControl) {
+            if (element.getAttribute("cdesel") && !tResControl) {
                 const myNmiControl = cdeNMI.MyTCF.GetRegisteredControlGroup(element.getAttribute("cdemid")); 
                 for (const tInfo in myNmiControl) {
                     if (myNmiControl.hasOwnProperty(tInfo)) {

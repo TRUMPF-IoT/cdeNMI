@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -11,72 +11,9 @@ using System;
 
 namespace NMIService
 {
-    public class TheNMIEditor : ICDEThing
+    public class TheNMIEditor : TheThingBase
     {
-        #region ICDEThing Methods
-        public void SetBaseThing(TheThing pThing)
-        {
-            MyBaseThing = pThing;
-        }
-        public TheThing GetBaseThing()
-        {
-            return MyBaseThing;
-        }
-        public virtual cdeP GetProperty(string pName, bool DoCreate)
-        {
-            if (MyBaseThing != null)
-                return MyBaseThing.GetProperty(pName, DoCreate);
-            return null;
-        }
-        public virtual cdeP SetProperty(string pName, object pValue)
-        {
-            if (MyBaseThing != null)
-                return MyBaseThing.SetProperty(pName, pValue);
-            return null;
-        }
-
-        public void RegisterEvent(string pName, Action<ICDEThing, object> pCallBack)
-        {
-            if (MyBaseThing != null)
-                MyBaseThing.RegisterEvent(pName, pCallBack);
-        }
-        public void UnregisterEvent(string pName, Action<ICDEThing, object> pCallBack)
-        {
-            if (MyBaseThing != null)
-                MyBaseThing.UnregisterEvent(pName, pCallBack);
-        }
-        public void FireEvent(string pEventName, ICDEThing sender, object pPara, bool FireAsync)
-        {
-            if (MyBaseThing != null)
-                MyBaseThing.FireEvent(pEventName, sender, pPara, FireAsync);
-        }
-        public bool HasRegisteredEvents(string pEventName)
-        {
-            if (MyBaseThing != null)
-                return MyBaseThing.HasRegisteredEvents(pEventName);
-            return false;
-        }
-
-        public virtual void HandleMessage(ICDEThing sender, object pMsg)
-        { }
-
-        protected TheThing MyBaseThing;
-
-        protected bool mIsUXInitCalled;
-        protected bool mIsUXInitialized;
-        protected bool mIsInitCalled;
-        protected bool mIsInitialized;
-        public bool IsUXInit()
-        { return mIsUXInitialized; }
-        public bool IsInit()
-        { return mIsInitialized; }
-
-        /// <summary>
-        /// The possible types of WeMo devices that can be detected
-        /// </summary>
-        #endregion
-
-        public bool Init()
+        public override bool Init()
         {
             if (mIsInitCalled) return false;
             mIsInitCalled = true;
@@ -97,25 +34,12 @@ namespace NMIService
             return true;
         }
 
-        public bool Delete()
-        {
-            mIsInitialized = false;
-            // TODO Properly implement delete
-            return DoDelete();
-        }
-
-        public virtual bool DoDelete()
-        {
-            return true;
-        }
-
-
         public virtual void sinkThrottleChanged(cdeP pNewValue)
         {
             MyBaseThing.SetPublishThrottle(TheCommonUtils.CInt(pNewValue));
         }
 
-        public bool CreateUX()
+        public override bool CreateUX()
         {
             if (mIsUXInitCalled) return false;
             mIsUXInitCalled = true;
@@ -174,6 +98,7 @@ namespace NMIService
 
         public virtual bool DoCreateUX()
         {
+            return true; //retired for now. Moved into NMI Control Code
             MyEditorForm = new TheFormInfo(MyBaseThing) { DefaultView = eDefaultView.Form, PropertyBag = new ThePropertyBag { "MaxTileWidth=6", "HideCaption=true", "AllowDrag=true" } };
             MyEditorForm.ModelID = "NMIEditor";
 
@@ -188,8 +113,6 @@ namespace NMIService
             TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 20, 2, 0, "Screen", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:Screen", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
             TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 30, 2, 0, "All", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:All", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
             TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 40, 2, 0, "Source", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:Source", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
-            //TheNMIEngine.AddSmartControl(MyBaseThing, MyStatusForm, eFieldType.TileButton, 50, 2, 0, "Compounds", null, new nmiCtrlTileButton { OnClick = "GRP:Cate:5", TileWidth = 2, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
-            //TheNMIEngine.AddSmartControl(MyBaseThing, MyStatusForm, eFieldType.TileButton, 60, 2, 0, "Gauges", null, new nmiCtrlTileButton {  OnClick = "GRP:Cate:6", TileWidth = 2, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
             TheFieldInfo mSendbutton = TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 70, 2, 0x80, "Reload", false, "", null, new nmiCtrlTileButton() { ParentFld=9, TileWidth = 2, NoTE = true, TileFactorY = 2, ClassName = "cdeGoodActionButton" });
             mSendbutton.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "", (pThing, pPara) =>
             {
@@ -265,9 +188,7 @@ namespace NMIService
             {
                 TheProcessMessage pMsg = pObj as TheProcessMessage;
                 if (pMsg?.Message == null) return;
-                string[] parts = pMsg.Message.PLS.Split(':');
-                TheThing tOrg = pThing.GetBaseThing(); // TheThingRegistry.GetThingByMID(MyBaseEngine.GetEngineName(), TheCommonUtils.CGuid(parts[2]));
-                //if (tOrg == null) return;
+                TheThing tOrg = pThing.GetBaseThing(); 
 
                 string tNewPropName = TheThing.GetSafePropertyString(tOrg, "ScratchName");
                 if (string.IsNullOrEmpty(tNewPropName))

@@ -1,8 +1,9 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
-﻿namespace cdeNMI {
+namespace cdeNMI {
+    declare let interact;
     /////////////////////////////////////////////////////////////
     /// NMI HTML5 Controls
     /////////////////////////////////////////////////////////////
@@ -61,6 +62,7 @@
         public MyWidth = 0;
         public MyHeight = 0;
         public MyDataItems: [];
+        public MyDirtyList:string []=[];
         private lastXYById: ThePointer[] = [];
         public MyChildren: INMIControl[] = [];
         public MySubControls: Array<TheControlBlock> = [];
@@ -96,7 +98,8 @@
             if (!this.MyFormID && pTargetControl)
                 this.MyFormID = pTargetControl.MyFormID;
 
-            this.RegisterEvent("NMI_SHAPE_RECOGNIZED", (pSend: INMIControl, pName: string, pScore: number) => { this.eventShapeRecognized(pSend, pName, pScore); });
+            if (cde.CBool(this.GetProperty("AllowGesture")) === true)
+                this.RegisterEvent("NMI_SHAPE_RECOGNIZED", (pSend: INMIControl, pName: string, pScore: number) => { this.eventShapeRecognized(pSend, pName, pScore); });
             return true;
         }
 
@@ -110,11 +113,17 @@
                 switch (pName) {
                     case "circle":
                     case "rightmouse": {
-                        this.SetProperty("Background", "pink");
+                        const tEl=this.GetElement();
+                        if (tEl && !tEl.classList.contains("cde-is-selected")) {
+                            tEl.classList.add("cde-is-selected");
+                        }
                         const tSideBar = document.getElementById("cdeSideBarRight") as HTMLDivElement;
                         if (tSideBar && !tSideBar.classList.contains("cde-animate-right")) {
                             tSideBar.classList.add("cde-animate-right");
                             tSideBar.style.display = '';
+                            const tS = TheNMIScreen.GetScreenByID(sender.MyFormID);
+                            if (tS?.MyOverlay)
+                                tS.MyOverlay.SetProperty("IsDisabled", true);
                         }
                         break;
                     }
@@ -122,6 +131,12 @@
             } else {
                 cdeNMI.ShowToastMessage("Guess is : " + pName + " but Score too low:" + pScore.toFixed(2));
             }
+        }
+
+        public SaveProperty(pName: string, pValue) {
+            if (this.MyDirtyList.indexOf(pName) < 0)
+                this.MyDirtyList.push(pName);
+            this.SetProperty(pName, pValue);
         }
 
         public SetProperty(pName: string, pValue) {
@@ -156,21 +171,21 @@
 
                 if (pName === "OnThingEvent") {
                     this.RegisterSetP((pControl: cdeNMI.INMIControl, pMsg: cde.TheProcessMessage) => {
-                        if (pMsg.Message.TXT.substr(0, 4) === "SETP" || pMsg.Message.TXT.substr(0, 5) === "SETFP") {  //ThingProperties only
+                        if (pMsg.Message.TXT.substring(0, 4) === "SETP" || pMsg.Message.TXT.substring(0, 5) === "SETFP") {  //ThingProperties only
                             const tProps: string[] = pMsg.Message.PLS.split(":;:");
-                            for (let i = 0; i < tProps.length; i++) {
-                                const pos: number = tProps[i].indexOf("=");
+                            for (const element of tProps) {
+                                const pos: number = element.indexOf("=");
                                 let tPropName = "";
                                 let tPropValue: any = true;
                                 if (pos < 0) {
-                                    tPropName = tProps[i];
+                                    tPropName = element;
                                     tPropValue = true;
                                 } else {
-                                    if (pos > 0 && pos < tProps[i].length) {
-                                        tPropName = tProps[i].substr(0, pos);
-                                        if (pos < tProps[i].length + 1)
-                                            tPropValue = tProps[i].substr(pos + 1);
-                                        if (tPropName.substr(0, 11) === "&^CDESP1^&:")
+                                    if (pos > 0 && pos < element.length) {
+                                        tPropName = element.substring(0, pos);
+                                        if (pos < element.length + 1)
+                                            tPropValue = element.substring(pos + 1);
+                                        if (tPropName.substring(0, 11) === "&^CDESP1^&:")
                                             continue;
                                     }
                                 }
@@ -271,6 +286,8 @@
                         this.MyTE.MyNMIControl.SetProperty("ClassName", pValue);
                 } else if (pName === "Display" && pValue && this.MyRootElement) {
                     this.MyRootElement.style.display = pValue;
+                } else if ((pName === "DragX" || pName === "DragY") && pValue) {
+                    this.MyRootElement.style.transform = `translate(${cde.CInt(this.GetProperty("DragX"))}px, ${cde.CInt(this.GetProperty("DragY"))}px)`
                 } else if (pName === "Style" && pValue && this.MyRootElement) {
                     this.MyRootElement.style.cssText += pValue;
                 } else if (pName === "MaxHeight" && pValue && this.MyRootElement) {
@@ -288,7 +305,6 @@
                 } else if (pName === "Margin" && this.MyRootElement) {
                     this.MyRootElement.style.margin = pValue + "px";
                 } else if (pName === "Z-Index" && this.MyRootElement) {
-                    //this.MyRootElement.style.position = "relative";       //V4.107: Why?????
                     this.MyRootElement.style.zIndex = pValue.toString();
                 } else if (pName === "PixelWidth" && this.MyRootElement) {
                     if (pValue) {
@@ -368,8 +384,8 @@
                         this.MyRootElement.style.pointerEvents = '';
                 } else if (pName === "NUITags" && pValue && cdeNMI.MyEngine) {
                     const t: string[] = pValue.toString().split(';');
-                    for (let i = 0; i < t.length; i++)
-                        cdeNMI.MyNMINUITags[t[i]] = this;
+                    for (const element of t)
+                        cdeNMI.MyNMINUITags[element] = this;
                 } else if (pName === "EngineName" && pValue && pValue !== "") {
                     this.MyEngineName = pValue;
                 } else if (pName === "cdeNMID" && pValue && pValue !== "") {
@@ -451,9 +467,6 @@
             const tID: string = cde.GuidToString(this.GetProperty("ID"));
             if (cdeNMI.MyTCF) {
                 cdeNMI.MyTCF.RegisterControl(tOWN, tID, this);
-                //if (!cdeNMI.MyTCF.MyNMIControls[tOWN])
-                //    cdeNMI.MyTCF.MyNMIControls[tOWN] = [];
-                //cdeNMI.MyTCF.MyNMIControls[tOWN][tID] = this;
             }
             return tID;
         }
@@ -512,8 +525,31 @@
         }
 
         public SetElement(pRootControl: HTMLElement, pHookEvents?: boolean, pContainerElement?: HTMLElement, NoFireOnLoad?: boolean) {
-            if (pRootControl)
+            if (pRootControl) {
                 this.MyRootElement = pRootControl;
+                (pRootControl as any).cookie = this;
+                if (typeof interact !== 'undefined' && cde.CBool(this.GetSetting("AllowDrag"))) {
+                    interact(pRootControl).draggable({
+                        listeners: {
+                            start(event) {
+                                const ele: INMIControl = event.target.cookie;
+                                ele.FireEvent(false, "DragStart");
+                            },
+                            move(event) {
+                                const ts = TheNMIScreen.GetScreenByID(event.target.cookie.MyFormID);
+                                let rat = 1.0;
+                                if (ts)
+                                    rat = ts.ScreenScale;
+                                const ele: INMIControl = event.target.cookie;
+                                if (ele) {
+                                    ele.SaveProperty("DragX", cde.CInt(ele.GetProperty("DragX")) + event.dx / rat);
+                                    ele.SaveProperty("DragY", cde.CInt(ele.GetProperty("DragY")) + event.dy / rat);
+                                }
+                            },
+                        }
+                    })
+                }
+            }
             else {
                 if (this.MyTarget)
                     this.MyRootElement = this.MyTarget.GetContainerElement();
@@ -579,15 +615,6 @@
                 if (this.PropertyBag["IsPointerOutAllowed"] !== true) {
                     this.MyRootElement.addEventListener("pointerout", (evt) => this.sinkDoEvent(evt), bDoCapture);
                 }
-            //} else if (window.navigator.msPointerEnabled) {
-            //    //  Microsoft pointer model = IE10
-            //    this.MyRootElement.addEventListener("MSPointerDown", (evt) => this.sinkDoEvent(evt), bDoCapture);
-            //    this.MyRootElement.addEventListener("MSPointerMove", (evt) => this.sinkDoEvent(evt), bDoCapture);
-            //    this.MyRootElement.addEventListener("MSPointerUp", (evt) => this.sinkDoEvent(evt), bDoCapture);
-            //    this.MyRootElement.addEventListener("MSPointerCancel", (evt) => this.sinkDoEvent(evt), bDoCapture);
-            //    if (this.PropertyBag["IsPointerOutAllowed"] !== true) {
-            //        this.MyRootElement.addEventListener("MSPointerOut", (evt) => this.sinkDoEvent(evt), bDoCapture);
-            //    }
             }
             else if (this.MyRootElement.addEventListener) {
                 //  iOS touch model
@@ -609,18 +636,10 @@
             let MyControlstyle: CSSStyleDeclaration;
             if (this.PreventDefault) {
                 cdeNMI.StopPointerEvents(evtObj);
-                //if (typeof this.MyRootElement.style.msContentZooming !== 'undefined')
-                //    this.MyRootElement.style.msContentZooming = "none";
-                //if (typeof this.MyRootElement.style.msTouchAction !== 'undefined')
-                //    this.MyRootElement.style.msTouchAction = "none";
                 MyControlstyle = this.MyRootElement.style;
                 MyControlstyle.touchAction = "none";
             }
             else {
-                //if (typeof this.MyRootElement.style.msContentZooming !== 'undefined')
-                //    this.MyRootElement.style.msContentZooming = "zoom";
-                //if (typeof this.MyRootElement.style.msTouchAction !== 'undefined')
-                //    this.MyRootElement.style.msTouchAction = "auto";
                 MyControlstyle = this.MyRootElement.style;
                 MyControlstyle.touchAction = "auto";
             }
@@ -759,8 +778,8 @@
                 tPS += pointerList.length;
             this.TouchPoints = tPS;
 
-            for (let i = 0; i < pointerList.length; ++i) {
-                const pointerObj: any = pointerList[i];
+            for (const element of pointerList) {
+                const pointerObj: any = element;
                 const pointerId: number = (typeof pointerObj.identifier !== 'undefined') ? pointerObj.identifier : (typeof pointerObj.pointerId !== 'undefined') ? pointerObj.pointerId : 1;
                 this.EnsurePageXY(pointerObj);
 
@@ -1167,8 +1186,7 @@
                                     if (!tScreenInfo || !tScreenInfo.MyStorageMirror[tTableName])
                                         return pContent;
                                     else {
-                                        for (let row = 0; row < tScreenInfo.MyStorageMirror[tTableName].length; row++) {
-                                            const tRow = tScreenInfo.MyStorageMirror[tTableName][row];
+                                        for (const tRow of tScreenInfo.MyStorageMirror[tTableName]) {
                                             const tName: string = cdeNMI.GetFldContentByName(tRow, this.GetSetting("ValueFld"), false);
                                             if (tName && cde.GuidToString(tName) === cde.GuidToString(pContent))
                                                 return cdeNMI.GetFldContentByName(tRow, this.GetSetting("NameFld"), false);
@@ -1208,8 +1226,7 @@
                                                 if (tDT) {
                                                     if (tScreenInfo.MyStorageMirror[cde.GuidToString(pFieldInfo.FormID)]) {
                                                         const tTargetTable = tScreenInfo.MyStorageMirror[cde.GuidToString(pFieldInfo.FormID)];
-                                                        for (let row = 0; row < tTargetTable.length; row++) {
-                                                            const tRow = tTargetTable[row];
+                                                        for (const tRow of tTargetTable) {
                                                             const tName: string = cdeNMI.GetFldContentByName(tRow, tParas[3], false);
                                                             if (tName && cde.GuidToString(tName) === cde.GuidToString(pContent)) {
                                                                 const tFinal: string = cdeNMI.GetFldContentByName(tRow, tDT, false);
@@ -1221,8 +1238,7 @@
                                                 }
                                                 return pContent;
                                             } else {
-                                                for (let row = 0; row < tScreenInfo.MyStorageMirror[tTableName].length; row++) {
-                                                    const tRow = tScreenInfo.MyStorageMirror[tTableName][row];
+                                                for (const tRow of tScreenInfo.MyStorageMirror[tTableName]) {
                                                     const tName: string = cdeNMI.GetFldContentByName(tRow, tParas[3], false);
                                                     if (tName && cde.GuidToString(tName) === cde.GuidToString(pContent))
                                                         return cdeNMI.GetFldContentByName(tRow, tParas[2], false);
@@ -1236,17 +1252,17 @@
                                         if (!tOptions && this.GetProperty("OptionsLive"))
                                             tOptions = this.GetProperty("OptionsLive");
                                         const tGroups: string[] = tOptions.split(';:;');
-                                        for (let tGrp = 0; tGrp < tGroups.length; tGrp++) {
+                                        for (const element of tGroups) {
                                             let i: number;
-                                            if (tGroups[tGrp].substr(0, 1) === "[") {
-                                                const tJOpgs = JSON.parse(tGroups[tGrp]);
+                                            if (element.substring(0, 1) === "[") {
+                                                const tJOpgs = JSON.parse(element);
                                                 for (i = 0; i < tJOpgs.length; i++) {
                                                     if (tJOpgs[i].V === pContent)
                                                         return tJOpgs[i].N;
                                                 }
                                             }
                                             else {
-                                                const tOps: string[] = tGroups[tGrp].split(';');
+                                                const tOps: string[] = element.split(';');
                                                 for (i = 0; i < tOps.length; i++) {
                                                     if (tGroups.length > 1 && i === 0) continue;
 
@@ -1260,7 +1276,7 @@
                                                             return tOptVal[0];
                                                     }
                                                 }
-                                                if (tOptions.substr(0, 12) === "SCREENPICKER") {
+                                                if (tOptions.substring(0, 12) === "SCREENPICKER") {
                                                     if (cdeNMI.MyEngine) {
                                                         cdeNMI.MyEngine.PublishToNMI('NMI_GET_DATA:SCREENRESOLVE:' + this.GetProperty("ID") + ':' + this.GetProperty("UXID") + ':' + pContent, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
                                                     }
@@ -1283,7 +1299,7 @@
                                     if (cde.CInt(tFormat) > 0) {
                                         if (pContent && pContent.length > parseInt(tFormat)) {
                                             if (isNaN(Number(pContent)) === true)
-                                                pContent = pContent.substr(0, parseInt(tFormat));
+                                                pContent = pContent.substring(0, parseInt(tFormat));
                                             else
                                                 pContent = cde.CDbl(pContent).toFixed(parseInt(tFormat));
                                         }

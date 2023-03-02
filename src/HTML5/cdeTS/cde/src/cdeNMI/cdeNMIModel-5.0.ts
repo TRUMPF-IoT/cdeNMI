@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -14,6 +14,7 @@
         GetSetting(pName: string, pDefault?, CompileAsJSON?: boolean); //Gets an incoming setting
         GetProperty(pName: string);                                        //Get a runtime property
         SetProperty(pName: string, pValue);
+        SaveProperty(pName: string, pValue);
         SetToDefault(bOnlyIfEmpty: boolean);
         AppendChild(pChild: INMIControl);
         AppendElement(pEle: HTMLElement);
@@ -65,6 +66,7 @@
         MyRC: number;
         MyWidth: number;
         MyHeight: number;
+        MyDirtyList: string[];
 
         Visibility: boolean;
         IsDirty: boolean;
@@ -100,8 +102,10 @@
         MySavePin: INMIControl;
         MyRefreshPin: INMIControl;
         MyShowAllPin: INMIControl;
+        MyOverlay: INMIControl;
         MyHostNode: string;
         HasRenderTarget: boolean;
+        ScreenScale: number;
     }
 
     export interface INMITileEntry extends INMIControl {
