@@ -708,7 +708,12 @@ namespace NMIService
                 if (!Found)
                 {
                     if (pRequest != null && TheBaseAssets.MyServiceHostInfo.AllowLocalHost)
-                        tStationUri = pRequest.RequestUri;
+                    {
+                        if (pRequest.Header.ContainsKey("Cf-Visitor") && TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("AllowCloudFlareTunnel")))
+                            tStationUri = new Uri($"https://{pRequest.RequestUri.Host}");
+                        else
+                            tStationUri = pRequest.RequestUri;
+                    }
                     else
                         tStationUri = new Uri(TheBaseAssets.MyServiceHostInfo.GetPrimaryStationURL(false));
                 }

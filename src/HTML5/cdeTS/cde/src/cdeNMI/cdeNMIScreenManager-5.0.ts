@@ -328,6 +328,7 @@
                     tScreen.SetProperty("FldOrder", this.CurrentView.Screens[i].FldOrder);
                     if (this.CurrentView.Screens[i].IsVisible) {
                         cntVisibleScreens++;
+                        this.CurrentScreen = tScreen;
                         if (cdeNMI.MyEngine)
                             cdeNMI.MyEngine.PublishToNMI("NMI_SHOW_SCREEN", tScreen.MyScreenID, tScreen.MyFieldInfo ? tScreen.MyFieldInfo.cdeN : null);
                     }

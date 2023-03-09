@@ -4,6 +4,7 @@
 
 ﻿using nsCDEngine.BaseClasses;
 using nsCDEngine.Communication;
+using nsCDEngine.Engines;
 using nsCDEngine.Engines.NMIService;
 using nsCDEngine.Engines.ThingService;
 using nsCDEngine.ViewModels;
@@ -98,29 +99,58 @@ namespace NMIService
 
         public virtual bool DoCreateUX()
         {
-            return true; //retired for now. Moved into NMI Control Code
             MyEditorForm = new TheFormInfo(MyBaseThing) { DefaultView = eDefaultView.Form, PropertyBag = new ThePropertyBag { "MaxTileWidth=6", "HideCaption=true", "AllowDrag=true" } };
             MyEditorForm.ModelID = "NMIEditor";
-
+            TheCDEngines.MyNMIService?.SetProperty("NMIEditorFormID", MyEditorForm.cdeMID);
             TheDashboardInfo tDash = TheNMIEngine.GetDashboardById(TheNMIHtml5RT.eNMIDashboard);
             MyEditorDashIcon = TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, MyEditorForm, "CMyForm", "NMI Control Editor", 1, 0x89, 0x80, "NMI", null, new ThePropertyBag() { "RenderTarget=cdeInSideBarRight", "NeverHide=true" }); //"mAllowDrag=true", "nVisibility=false", 
+            return true; //retired for now. Moved into NMI Control Code
+
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 9, 0, 0, null, null, new nmiCtrlTileGroup { TileWidth = 7, TileHeight = 1, TileFactorY = 2 });
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 10, 2, 0, "Main", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:Main", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
+            //TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 20, 2, 0, "Screen", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:Screen", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 30, 2, 0, "All", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:All", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
+            //TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 40, 2, 0, "Source", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:Source", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
+
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 1000, 2, 0x80, null, null, new nmiCtrlTileGroup() { Group = "NMIP:Main" });
+
+            //ALL Properties
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 2000, 2, 0x80, null, null, new nmiCtrlTileGroup() { TileWidth = 6, Group = "NMIP:All", Visibility = false });
+
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.Table, 2010, 0xA2, 0x80, "All Properties", "mypropertybag;1", new ThePropertyBag() { "NoTE=true", "TileHeight=5", "TileWidth=6", "ParentFld=2000" });
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.SingleEnded, 2020, 0x0A, 0, "New Property Name", "ScratchName", new nmiCtrlSingleEnded() { ParentFld = 2000 });
+            TheFieldInfo tBut = TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 2040, 0x0A, 0, "Add Property", false, null, null, new nmiCtrlTileButton() { ParentFld = 2000, NoTE = true, ClassName = "cdeGoodActionButton" });
+            tBut.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "AddProp", (pThing, pObj) =>
+            {
+                TheProcessMessage pMsg = pObj as TheProcessMessage;
+                if (pMsg?.Message == null) return;
+                TheThing tOrg = pThing.GetBaseThing();
+
+                string tNewPropName = TheThing.GetSafePropertyString(tOrg, "ScratchName");
+                if (string.IsNullOrEmpty(tNewPropName))
+                    TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", "Please specify a new property name"));
+                else
+                {
+                    if (tOrg.GetProperty(tNewPropName) != null)
+                    {
+                        TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", "Property already exists"));
+                    }
+                    else
+                    {
+                        tOrg.DeclareNMIProperty(tNewPropName, ePropertyTypes.TString);
+                        TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", "Property Added"));
+                        MyEditorForm.Reload(pMsg, false);
+                    }
+                    tOrg.SetProperty("ScratchName", "");
+                }
+            });
+
+            return true; //retired for now. Moved into NMI Control Code
 
             MySampleControl = TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.SingleEnded, 3, 2, MyBaseThing.cdeA, "CurrentValue", "Value", null);
 
 
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 9, 0, 0, null, null, new nmiCtrlTileGroup { TileWidth = 7, TileHeight = 1, TileFactorY = 2  });
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 10, 2, 0, "Basic", null, new nmiCtrlTileButton { ParentFld=9, OnClick = "GRP:NMIP:Basic", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 20, 2, 0, "Screen", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:Screen", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 30, 2, 0, "All", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:All", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 40, 2, 0, "Source", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:Source", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
-            TheFieldInfo mSendbutton = TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 70, 2, 0x80, "Reload", false, "", null, new nmiCtrlTileButton() { ParentFld=9, TileWidth = 2, NoTE = true, TileFactorY = 2, ClassName = "cdeGoodActionButton" });
-            mSendbutton.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "", (pThing, pPara) =>
-            {
-                TheProcessMessage pMsg = pPara as TheProcessMessage;
-                if (pMsg?.Message == null) return;
-                UpdateUx(pThing.GetBaseThing());
-                MyEditorForm.Reload(pMsg, tDash.cdeMID, true);
-            });
+
 
             TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 1000, 2, 0x80, null, null, new nmiCtrlTileGroup() { Group = "NMIP:Basic" });
             TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.ComboBox, 1010, 2, 0x80, "Control Type", "ControlType", new ThePropertyBag() { "Options=%RegisteredControlTypes%", "ParentFld=1000" });
@@ -178,36 +208,7 @@ namespace NMIService
                                 "<span class='fa-stack'><i class='fa fa-stack-1x'>&#xf0f6;</i><i class='fa fa-stack-2x text-danger' style='opacity:0.5'>&#xf05e;</i></span>,"+
                                 "<span class='fa-stack'><i class='fa fa-stack-1x'>&#xf15c;</i><i class='fa fa-stack-2x text-danger' style='opacity:0.5'>&#xf05e;</i></span>","ParentFld=3000" }).FldWidth = 1;
 
-            //ALL Properties
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 2000, 2, 0x80, null, null, new nmiCtrlTileGroup() { TileWidth = 6, Group = "NMIP:All", Visibility = false });
 
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.Table, 2010, 0xA2, 0x80, "All Properties", "mypropertybag;1", new ThePropertyBag() { "NoTE=true", "TileHeight=4", "TileLeft=9", "TileTop=3", "TileWidth=6", "FldWidth=6", "ParentFld=2000" });
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.SingleEnded, 2020, 0x0A, 0, "New Property Name", "ScratchName", new nmiCtrlSingleEnded() { ParentFld = 2000 });
-            TheFieldInfo tBut = TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 2040, 0x0A, 0, "Add Property", false, null, null, new nmiCtrlTileButton() { ParentFld = 2000, NoTE = true, ClassName = "cdeGoodActionButton" });
-            tBut.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "AddProp", (pThing, pObj) =>
-            {
-                TheProcessMessage pMsg = pObj as TheProcessMessage;
-                if (pMsg?.Message == null) return;
-                TheThing tOrg = pThing.GetBaseThing(); 
-
-                string tNewPropName = TheThing.GetSafePropertyString(tOrg, "ScratchName");
-                if (string.IsNullOrEmpty(tNewPropName))
-                    TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", "Please specify a new property name"));
-                else
-                {
-                    if (tOrg.GetProperty(tNewPropName) != null)
-                    {
-                        TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", "Property already exists"));
-                    }
-                    else
-                    {
-                        tOrg.DeclareNMIProperty(tNewPropName, ePropertyTypes.TString);
-                        TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", "Property Added"));
-                        MyEditorForm.Reload(pMsg, false);
-                    }
-                    tOrg.SetProperty("ScratchName", "");
-                }
-            });
 
             //THING Connector
             TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 5000, 2, 0x80, null, null, new nmiCtrlTileGroup() { TileWidth = 6, Group = "NMIP:Source", Visibility = false });

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -138,6 +138,8 @@
         mCurrentFormFieldsInfo: TheFieldInfo[] = null;
         MyMetaData: cdeNMI.TheFormInfo = null;
 
+        MyMirrorName: string = null;
+        MyStorageModel: any = null;
         IsInEdit = false;
 
         public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
@@ -169,16 +171,31 @@
                 pTableName = this.MyFieldInfo.DataItem;
 
             ///Create Meta Data for Property Bag Table
-            if (pTableName.substr(0, 13).toLowerCase() === "mypropertybag") {
-                if (!this.MyTRF || !this.MyFieldInfo || !this.MyScreenInfo.MyStorageMirror[this.MyTRF.TableName] || !this.MyScreenInfo.MyStorageMirror[this.MyTRF.TableName][this.MyTRF.RowNo] || !this.MyScreenInfo.MyStorageMirror[this.MyTRF.TableName][this.MyTRF.RowNo].MyPropertyBag) {
-                    if (pTargetControl)
-                        pTargetControl.GetElement().innerHTML = "Not a Thing or No Properties found";
-                    return false;
-                }
+            if (pTableName.substring(0, 13).toLowerCase() === "mypropertybag") {
                 const tTableParas: string[] = pTableName.split(';');
+                this.MyMirrorName = this.MyTRF.TableName;
+                if (tTableParas.length > 3) {
+                    const tM = cde.GuidToString(tTableParas[2]);
+                    const tT = cde.GuidToString(tTableParas[3]);
+                    if (!cdeNMI.MyNMIModels[tM] || !cdeNMI.MyNMIModels[tM].MyStorageMirror[tT] || !cdeNMI.MyNMIModels[tM].MyStorageMirror[tT][this.MyTRF.RowNo] || !cdeNMI.MyNMIModels[tM].MyStorageMirror[tT][this.MyTRF.RowNo].MyPropertyBag) {
+                        if (pTargetControl)
+                            pTargetControl.GetElement().innerHTML = "Store of Thing or No Properties found";
+                        return false;
+                    }
+                    this.MyStorageModel = cdeNMI.MyNMIModels[tM].MyStorageMirror[tT];
+                    this.MyMirrorName = tT;
+                }
+                else {
+                    if (!this.MyTRF || !this.MyFieldInfo || !this.MyScreenInfo.MyStorageMirror[this.MyMirrorName] || !this.MyScreenInfo.MyStorageMirror[this.MyMirrorName][this.MyTRF.RowNo] || !this.MyScreenInfo.MyStorageMirror[this.MyMirrorName][this.MyTRF.RowNo].MyPropertyBag) {
+                        if (pTargetControl)
+                            pTargetControl.GetElement().innerHTML = "Not a Thing or No Properties found";
+                        return false;
+                    }
+                    this.MyStorageModel = this.MyScreenInfo.MyStorageMirror[this.MyMirrorName];
+                }
                 this.IsNMIOnly = (tTableParas.length > 1 && tTableParas[1] === '1');
                 pTableName = cde.GuidToString("PB" + this.MyTRF.RowID);
-                this.RefreshPropTable(pTableName);
+                this.RefreshPropTable(pTableName, this.MyStorageModel, this.MyTRF.RowNo);
 
                 this.MyMetaData = new cdeNMI.TheFormInfo();
                 this.MyMetaData.FormFields = [];
@@ -679,7 +696,7 @@
                 const tDataRow = this.MyScreenInfo.MyStorageMirror[this.MyTableName][i];
                 this.mTableRows[tDataRow.cdeMID] = tRow;
                 let j = 0;
-                for (var tFldInfo of this.mCurrentFormFieldsInfo) {
+                for (const tFldInfo of this.mCurrentFormFieldsInfo) {
                     if (!tFldInfo || (tFldInfo.Flags & 8) !== 0 || tFldInfo.Type === cdeControlType.FacePlate) continue;
                     const tD: ctrlTableCell = ctrlTableCell.Create(null, null);
                     tRow.AppendChild(tD);
@@ -933,7 +950,7 @@
 
         public RefreshData(pTableName: string, pPageNo: number, bForceReload = false, pFileDownload=false) {
             if (this.IsPropertyTable && pFileDownload!==true) {
-                this.RefreshPropTable(pTableName);
+                this.RefreshPropTable(pTableName, this.MyStorageModel, this.MyTRF.RowNo);
                 this.UpdateBody(true);
             }
             else {
@@ -967,12 +984,12 @@
             }
         }
 
-        private RefreshPropTable(pTableName: string) {
+        private RefreshPropTable(pTableName: string, pStorageModel, tRowNo:number) {
             this.MyScreenInfo.MyStorageMirror[pTableName] = [];
-            for (const idx in this.MyScreenInfo.MyStorageMirror[this.MyTRF.TableName][this.MyTRF.RowNo].MyPropertyBag) {
-                if (this.IsNMIOnly && (this.MyScreenInfo.MyStorageMirror[this.MyTRF.TableName][this.MyTRF.RowNo].MyPropertyBag[idx].cdeE & 64) === 0)
+            for (const idx in pStorageModel[tRowNo].MyPropertyBag) {
+                if (this.IsNMIOnly && (pStorageModel[tRowNo].MyPropertyBag[idx].cdeE & 64) === 0)
                     continue;
-                this.MyScreenInfo.MyStorageMirror[pTableName].push(this.MyScreenInfo.MyStorageMirror[this.MyTRF.TableName][this.MyTRF.RowNo].MyPropertyBag[idx]);
+                this.MyScreenInfo.MyStorageMirror[pTableName].push(pStorageModel[tRowNo].MyPropertyBag[idx]);
             }
             this.SortTableByProperty(this.MyScreenInfo.MyStorageMirror[pTableName], "Name", false, false);
         }
@@ -980,10 +997,10 @@
         public TableHighlightRow() {
             if (document.getElementById && document.createTextNode) {
                 const tables = document.getElementsByTagName('table');
-                for (var tTabs of tables) {
+                for (const tTabs of tables) {
                     if (tTabs.className === 'cdeHilite') {
                         const trs = tTabs.getElementsByTagName('tr');
-                        for (var tRow of trs) {
+                        for (const tRow of trs) {
                             if (tRow.parentNode.nodeName === 'TBODY') {
                                 tRow.onmouseover = (ev) => {
                                     const target = (ev.target) as HTMLElement;
@@ -1028,7 +1045,7 @@
                 tTableRecord[0] = this.MyScreenInfo.MyStorageMirror[this.MyTableName][0].constructor();
             else
                 tTableRecord[0] = {};
-            for (var tFldInfo of this.mCurrentFormFieldsInfo) 
+            for (const tFldInfo of this.mCurrentFormFieldsInfo) 
             {
                 if (!tFldInfo)
                     continue;
@@ -1160,7 +1177,7 @@
                     let tFileName: string = file.name;
                     let tDir: string = this.GetProperty("TargetDir");
                     if (tDir) {
-                        if (tDir.substr(tDir.length - 1, 1) !== '\\')
+                        if (tDir.substring(tDir.length - 1) !== '\\')
                             tDir += "\\";
                         tFileName = tDir + tFileName;
                     }
@@ -1182,7 +1199,7 @@
         ProcessFiles(pFileList) {
             if (!pFileList || !pFileList.length || this.mFileList.length) return;
 
-            for (var tFile of pFileList) {
+            for (const tFile of pFileList) {
                 this.mFileList.push(tFile);
             }
             this.UploadNext();
