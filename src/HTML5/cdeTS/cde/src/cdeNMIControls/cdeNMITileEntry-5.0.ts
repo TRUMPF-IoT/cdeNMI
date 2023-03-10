@@ -33,7 +33,7 @@
             if (pTRF && pTRF.FldInfo) {
                 this.MyTEContainer.GetElement().setAttribute("cdefo", cde.CStr(pTRF.FldInfo.FldOrder));
                 this.MyTEContainer.GetElement().setAttribute("cdemid", cde.GuidToString(pTRF.FldInfo.cdeMID));
-                if (cde.CBool(this.GetSetting("AllowGesture")) === true)
+                if (cde.CBool(this.GetSetting("DisallowEdit")) === false)
                     this.MyTEContainer.GetElement().setAttribute("cdesel", "true");
             }
             this.MyTELabel = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(this.MyTEContainer, { ScreenID: pScreenID });

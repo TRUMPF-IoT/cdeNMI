@@ -263,9 +263,15 @@
                                         tOpt.PO = [];
                                         if (tF.MyFieldInfo)
                                             tOpt.FldOrder = tF.MyFieldInfo.FldOrder;
-                                        if (tF.MyDirtyList.length > 0) {
+                                        if (tF.MyDirtyList?.length > 0) {
                                             for (const element of tF.MyDirtyList) {
                                                 tOpt.PO.push(`${element}=${tF.GetProperty(element)}`);
+                                            }
+                                            tScene.Flds.push(tOpt);
+                                        }
+                                        if (tF.MyNMIControl?.MyDirtyList?.length > 0) {
+                                            for (const element of tF.MyNMIControl.MyDirtyList) {
+                                                tOpt.PO.push(`${element}=${tF.MyNMIControl.GetProperty(element)}`);
                                             }
                                             tScene.Flds.push(tOpt);
                                         }

@@ -69,6 +69,10 @@ namespace cdeNMI {
         public MyRC: number;
         mOldClassName: string;
 
+        public GetPropertyBag(): string[] {
+            return this.PropertyBag;
+        }
+
         public SetTRF(pTRF?: TheTRF, pPropertyBag?: string[]) {
             if (pTRF) {
                 this.MyTRF = pTRF;
@@ -98,7 +102,7 @@ namespace cdeNMI {
             if (!this.MyFormID && pTargetControl)
                 this.MyFormID = pTargetControl.MyFormID;
 
-            if (cde.CBool(this.GetProperty("AllowGesture")) === true)
+            if (cde.CBool(this.GetProperty("DisallowEdit")) === false)
                 this.RegisterEvent("NMI_SHAPE_RECOGNIZED", (pSend: INMIControl, pName: string, pScore: number) => { this.eventShapeRecognized(pSend, pName, pScore); });
             return true;
         }
@@ -113,6 +117,8 @@ namespace cdeNMI {
                 switch (pName) {
                     case "circle":
                     case "rightmouse": {
+                        if (cde.CBool(this.GetSetting("DisallowEdit")) === true)
+                            return;
                         const tEl=this.GetElement();
                         if (tEl && !tEl.classList.contains("cde-is-selected")) {
                             tEl.classList.add("cde-is-selected");
@@ -289,7 +295,7 @@ namespace cdeNMI {
                 } else if (pName === "Display" && pValue && this.MyRootElement) {
                     this.MyRootElement.style.display = pValue;
                 } else if ((pName === "DragX" || pName === "DragY") && pValue) {
-                    this.MyRootElement.style.transform = `translate(${cde.CInt(this.GetProperty("DragX"))}px, ${cde.CInt(this.GetProperty("DragY"))}px)`
+                    this.MyRootElement.style.transform = `translate(${cde.CDbl(this.GetProperty("DragX"))}px, ${cde.CDbl(this.GetProperty("DragY"))}px)`
                 } else if (pName === "Style" && pValue && this.MyRootElement) {
                     this.MyRootElement.style.cssText += pValue;
                 } else if (pName === "MaxHeight" && pValue && this.MyRootElement) {
@@ -544,8 +550,8 @@ namespace cdeNMI {
                                     rat = ts.ScreenScale;
                                 const ele: INMIControl = event.target.cookie;
                                 if (ele) {
-                                    ele.SaveProperty("DragX", cde.CInt(ele.GetProperty("DragX")) + event.dx / rat);
-                                    ele.SaveProperty("DragY", cde.CInt(ele.GetProperty("DragY")) + event.dy / rat);
+                                    ele.SaveProperty("DragX", cde.CDbl(ele.GetProperty("DragX")) + event.dx / rat);
+                                    ele.SaveProperty("DragY", cde.CDbl(ele.GetProperty("DragY")) + event.dy / rat);
                                 }
                             },
                         }
