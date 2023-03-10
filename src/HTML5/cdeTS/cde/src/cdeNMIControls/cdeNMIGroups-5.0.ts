@@ -1,9 +1,8 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
 ﻿namespace cdeNMI {
-
     /**
     * Creates a group of elements in a DIV
     * The pTargetControl will be overlayed by the ctrlDrawOverlay
@@ -30,6 +29,7 @@
         divTiles: HTMLDivElement = null;
         divDragContent: HTMLDivElement = null;
         h1Title: INMIControl = null;
+        dragPosition = { x: 0, y: 0 }
 
         public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
             this.MyBaseType = cdeControlType.TileGroup;
@@ -37,9 +37,13 @@
             this.divTiles = document.createElement('div');
             this.divTiles.className = "cdeTiles";
             this.divTiles.style.cssFloat = "left";
-            if (pTRF && pTRF.FldInfo)
+            if (pTRF && pTRF.FldInfo) {
                 this.divTiles.setAttribute("cdefo", cde.CStr(pTRF.FldInfo.FldOrder));
-            if (cde.CBool(this.GetSetting("AllowDrag"))) {
+                this.divTiles.setAttribute("cdemid", cde.GuidToString(pTRF.FldInfo.cdeMID));
+                if (cde.CBool(this.GetSetting("DisallowEdit")) === false)
+                    this.divTiles.setAttribute("cdesel", "true");
+            }
+            if (cde.CBool(this.GetSetting("AllowDragOld"))) {
                 this.divDragContent = document.createElement('div');
                 this.divDragContent.style.position = "absolute";
                 this.divDragContent.style.overflow = "hidden";
@@ -47,8 +51,9 @@
                 this.divTiles.appendChild(this.divDragContent);
                 this.SetElement(this.divTiles, false, this.divDragContent);
             }
-            else
+            else {
                 this.SetElement(this.divTiles);
+            }
 
             return true;
         }
@@ -66,7 +71,7 @@
                     }
                     if (this.MyBaseType !== cdeControlType.CollapsibleGroup && cde.CBool(this.GetProperty("IsDivOnly"))) {
                         if (tNewVal && tNewVal.startsWith("FA") && tNewVal.length === 8) {
-                            tNewVal = "<i class='fa faIcon " + (tNewVal.substr(3, 1) === "S" ? "fa-spin " : "") + "fa-" + tNewVal.substr(2, 1) + "x'>&#x" + tNewVal.substring(4) + ";</i>";
+                            tNewVal = "<i class='fa faIcon " + (tNewVal.substring(3, 4) === "S" ? "fa-spin " : "") + "fa-" + tNewVal.substring(2, 3) + "x'>&#x" + tNewVal.substring(4) + ";</i>";
                         }
                         this.divTiles.innerHTML = tNewVal;
                         this.divTiles.style.cssFloat = "none";

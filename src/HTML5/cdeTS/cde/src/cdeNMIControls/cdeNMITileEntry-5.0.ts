@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -33,6 +33,8 @@
             if (pTRF && pTRF.FldInfo) {
                 this.MyTEContainer.GetElement().setAttribute("cdefo", cde.CStr(pTRF.FldInfo.FldOrder));
                 this.MyTEContainer.GetElement().setAttribute("cdemid", cde.GuidToString(pTRF.FldInfo.cdeMID));
+                if (cde.CBool(this.GetSetting("DisallowEdit")) === false)
+                    this.MyTEContainer.GetElement().setAttribute("cdesel", "true");
             }
             this.MyTELabel = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(this.MyTEContainer, { ScreenID: pScreenID });
             this.MyTELabel.SetProperty("LabelElement", "span");

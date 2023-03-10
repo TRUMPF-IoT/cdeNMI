@@ -1,8 +1,15 @@
-/*
- * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+﻿/*
+ * Copyright (c) 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
  *
  * SPDX-License-Identifier: CC0-1.0
  */
-
 div.PlaceHolder {
-  display: block; }
+  display: block;
+}
+
+.cde-is-selected {
+  border-width: 3px;
+  border-style: solid;
+  border-color: #FF0000;
+  background: white;
+}

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -34,6 +34,7 @@
 
          private MyBackDrawObjects: TheDrawingObject[];
 
+         ScreenScale = 1.0;
          tObjPointer = -1;
          tStrokePointer = 0;
          tAsyncStrokes: TheDrawingObject[] = null;
@@ -109,8 +110,8 @@
                  else {
                      if ((pName === "Value" || pName === "iValue") && pValue) {
                          const tV: string = pValue.toString();
-                         if (tV.substr(0, 3) === "SH:") {
-                             this.SetProperty("SetShapes", tV.substr(3));
+                         if (tV.substring(0, 3) === "SH:") {
+                             this.SetProperty("SetShapes", tV.substring(3));
                              return;
                          }
                      }
@@ -304,7 +305,7 @@
                  this.WidthRatio = 1;
                  bDrawCanvas = true;
              } else if (pName === "YRatio" && this.fgcanvas) {
-                 const tRat = cde.CDbl(this.fgcanvas.style.width.substr(0, this.fgcanvas.style.width.length - 2)) / cde.CDbl(pValue);
+                 const tRat = cde.CDbl(this.fgcanvas.style.width.substring(0, this.fgcanvas.style.width.length - 2)) / cde.CDbl(pValue);
                  this.fgcanvas.style.height = tRat + "px";
                  this.MyHeight = tRat;
              }
@@ -438,6 +439,9 @@
 
         RedrawForeground() {
             this.redrawPending = false;
+            const ts = TheNMIScreen.GetScreenByID(this.MyFormID);
+            if (ts)
+                this.ScreenScale = ts.ScreenScale;
 
             if (!cde.CBool(this.GetProperty("Playback")) && !cde.CBool(this.GetProperty("NoClear")))
                 this.fgctx.clearRect(0, 0, this.fgctx.canvas.width, this.fgctx.canvas.height);
@@ -484,7 +488,7 @@
             switch (tDrawingObjects.Type) {
                 case 1: //Rectangle
                     pctx.fillStyle = ctrlCanvasDraw.ProcessColor(this, pctx, tDrawingObjects.Fill);
-                    pctx.fillRect(tDrawingObjects.Left, tDrawingObjects.Top, tDrawingObjects.Width, tDrawingObjects.Height);
+                    pctx.fillRect(tDrawingObjects.Left / this.ScreenScale, tDrawingObjects.Top / this.ScreenScale, tDrawingObjects.Width / this.ScreenScale, tDrawingObjects.Height / this.ScreenScale);
                     break;
                 case 2: //Polyline
                     this.DrawPolyline(tDrawingObjects.HasEnded && this.bgctx ? this.bgctx : pctx, tDrawingObjects.ComplexData, tDrawingObjects.Foreground, tDrawingObjects.Fill);
@@ -494,18 +498,18 @@
                     if (tDrawingObjects.ComplexData.Font)
                         pctx.font = tDrawingObjects.ComplexData.Font;
                     pctx.strokeStyle = ctrlCanvasDraw.ProcessColor(this, pctx, tDrawingObjects.Fill);
-                    pctx.strokeText(tDrawingObjects.ComplexData.Text, tDrawingObjects.Left, tDrawingObjects.Top);
+                    pctx.strokeText(tDrawingObjects.ComplexData.Text, tDrawingObjects.Left / this.ScreenScale, tDrawingObjects.Top / this.ScreenScale);
                     break;
                 case 4: //Filled Cicrle
                     pctx.beginPath();
-                    pctx.arc(tDrawingObjects.Left, tDrawingObjects.Top, tDrawingObjects.Width, 0, 2 * Math.PI, false);
+                    pctx.arc(tDrawingObjects.Left / this.ScreenScale, tDrawingObjects.Top / this.ScreenScale, tDrawingObjects.Width / this.ScreenScale, 0, 2 * Math.PI, false);
                     pctx.fillStyle = ctrlCanvasDraw.ProcessColor(this, pctx, tDrawingObjects.Fill);
                     pctx.fill();
                     break;
                 case 5: //Empty Circle
                     pctx.beginPath();
-                    pctx.arc(tDrawingObjects.Left, tDrawingObjects.Top, tDrawingObjects.Width, 0, 2 * Math.PI, false);
-                    pctx.lineWidth = tDrawingObjects.StrokeThickness;
+                    pctx.arc(tDrawingObjects.Left / this.ScreenScale, tDrawingObjects.Top / this.ScreenScale, tDrawingObjects.Width / this.ScreenScale, 0, 2 * Math.PI, false);
+                    pctx.lineWidth = tDrawingObjects.StrokeThickness / this.ScreenScale;
                     pctx.strokeStyle = ctrlCanvasDraw.ProcessColor(this, pctx, tDrawingObjects.Fill);
                     pctx.stroke();
                     break;
@@ -513,13 +517,13 @@
                     {
                         const tIMG: HTMLImageElement = document.createElement("img");
                         tIMG.src = "data:image/jpeg;base64," + tDrawingObjects.ComplexData;
-                        pctx.drawImage(tIMG, tDrawingObjects.Left, tDrawingObjects.Top);
+                        pctx.drawImage(tIMG, tDrawingObjects.Left / this.ScreenScale, tDrawingObjects.Top / this.ScreenScale);
                     }
                     break;
                 case 7: //drawIcon
                     try {
                         if (jdenticon) {
-                            pctx.setTransform(1, 0, 0, 1, tDrawingObjects.Left, tDrawingObjects.Top);
+                            pctx.setTransform(1, 0, 0, 1, tDrawingObjects.Left / this.ScreenScale, tDrawingObjects.Top / this.ScreenScale);
                             jdenticon.drawIcon(pctx, tDrawingObjects.ComplexData, tDrawingObjects.Width);
                         }
                     }
@@ -556,8 +560,8 @@
         DrawPolyline(ctx: CanvasRenderingContext2D, pPoints: TheStrokePoint[], pColor?: string, pFillColor?: string) {
             if (pPoints.length === 1) {
                 ctx.beginPath();
-                ctx.arc(pPoints[0].PO.x, pPoints[0].PO.y, 10, 0, Math.PI, true);
-                ctx.arc(pPoints[0].PO.x, pPoints[0].PO.y, 10, Math.PI, Math.PI * 2, true);
+                ctx.arc(pPoints[0].PO.x / this.ScreenScale, pPoints[0].PO.y / this.ScreenScale, 10 / this.ScreenScale, 0, Math.PI, true);
+                ctx.arc(pPoints[0].PO.x / this.ScreenScale, pPoints[0].PO.y / this.ScreenScale, 10 / this.ScreenScale, Math.PI, Math.PI * 2, true);
                 if (pColor)
                     ctx.fillStyle = pColor;
                 ctx.globalAlpha = 0.5;
@@ -567,14 +571,14 @@
 
                 for (let i = 1; i < pPoints.length; ++i) {
                     ctx.beginPath();
-                    ctx.moveTo(pPoints[i - 1].PO.x, pPoints[i - 1].PO.y);
+                    ctx.moveTo(pPoints[i - 1].PO.x / this.ScreenScale, pPoints[i - 1].PO.y / this.ScreenScale);
                     ctx.lineCap = "round";
                     ctx.strokeStyle = pColor;
                     ctx.globalAlpha = 1;
-                    ctx.lineTo(pPoints[i].PO.x, pPoints[i].PO.y);
+                    ctx.lineTo(pPoints[i].PO.x / this.ScreenScale, pPoints[i].PO.y / this.ScreenScale);
                     let pStrokeThickness: number = pPoints[i].PO.t;
                     if (pStrokeThickness < 1) pStrokeThickness = 1;
-                    ctx.lineWidth = pStrokeThickness * cdeNMI.MyNMISettings.StrokeSize;
+                    ctx.lineWidth = pStrokeThickness * cdeNMI.MyNMISettings.StrokeSize / this.ScreenScale;
                     ctx.stroke();
                 }
 
@@ -610,14 +614,14 @@
                 }
             }
             ctx.beginPath();
-            ctx.moveTo(tStrokeP[thisObj.tStrokePointer - 1].PO.x, tStrokeP[thisObj.tStrokePointer - 1].PO.y);
+            ctx.moveTo(tStrokeP[thisObj.tStrokePointer - 1].PO.x / this.ScreenScale, tStrokeP[thisObj.tStrokePointer - 1].PO.y / this.ScreenScale);
             ctx.lineCap = "round";
             ctx.strokeStyle = thisObj.tAsyncStrokes[thisObj.tObjPointer].Foreground;
             ctx.globalAlpha = 1;
-            ctx.lineTo(tStrokeP[thisObj.tStrokePointer].PO.x, tStrokeP[thisObj.tStrokePointer].PO.y);
+            ctx.lineTo(tStrokeP[thisObj.tStrokePointer].PO.x / this.ScreenScale, tStrokeP[thisObj.tStrokePointer].PO.y / this.ScreenScale);
             let pStrokeThickness: number = tStrokeP[thisObj.tStrokePointer].PO.t;
             if (pStrokeThickness < 1) pStrokeThickness = 1;
-            ctx.lineWidth = pStrokeThickness * cdeNMI.MyNMISettings.StrokeSize;
+            ctx.lineWidth = pStrokeThickness * cdeNMI.MyNMISettings.StrokeSize / this.ScreenScale;
             ctx.stroke();
             let tDelay: number = tStrokeP[thisObj.tStrokePointer].DT - tStrokeP[thisObj.tStrokePointer - 1].DT;
             if (thisObj.tStrokePointer < 2)
@@ -625,7 +629,9 @@
             setTimeout(thisObj.DrawLinesAsync, tDelay, thisObj, ctx);
         }
 
-        BeginPolyline(pTarget: INMIControl, pEvent: Event, pPointer: ThePointer) {
+         BeginPolyline(pTarget: INMIControl, pEvent: Event, pPointer: ThePointer) {
+             if (cde.CBool(pTarget.GetProperty("IsDisabled")) === true)
+                 return;
             const tCanvDraw: ctrlCanvasDraw = pTarget as ctrlCanvasDraw;
             if (tCanvDraw.foregroundPolylines[pPointer.Identifier.toString()])
                 tCanvDraw.EndPolyline(pTarget, pEvent, pPointer);
@@ -686,7 +692,7 @@
                             tTargetCtrl.FireEvent(true, "NMI_SHAPE_RECOGNIZED", "rightmouse", 10);
                         } else if (cdeNMI.MyShapeRecognizer && cde.CBool(pTarget.GetProperty("EnableRecognizer"))) {
                             const tRes: TheRecognizerResult = cdeNMI.MyShapeRecognizer.RecogizeShape(polyline, 0);
-                            if (tRes && tTargetCtrl)
+                            if (tRes)
                                 tTargetCtrl.FireEvent(true, "NMI_SHAPE_RECOGNIZED", tRes.Name, tRes.Score);
                         }
                     }
@@ -695,11 +701,11 @@
         }
 
         public static ProcessColor(pThis: INMIControl, pgbctx: CanvasRenderingContext2D, tFill: string) {
-            const tCmd: string = tFill.substr(0, 3);
+            const tCmd: string = tFill.substring(0, 3);
             switch (tCmd) {
                 case "SVG": //Syntax: "SVG:<svgCode>"
                     {
-                        const data = tFill.substr(4);
+                        const data = tFill.substring(4);
                         const DOMURL: any = self.URL || self.webkitURL || self;
                         const svg = new Blob([data], { type: "image/svg+xml;charset=utf-8" });
                         const url = DOMURL.createObjectURL(svg);
@@ -739,12 +745,12 @@
                 default:
                     {
                         let tBar: string[];
-                        if (tFill.length > 9 && tFill.toLowerCase().substr(0, 9) === "gradient(") {
+                        if (tFill.length > 9 && tFill.toLowerCase().substring(0, 9) === "gradient(") {
                             tBar = tFill.substr(9, tFill.length - 10).split(',');
                             let tMode = 1;
                             if (pThis.GetProperty("IsVertical")) tMode = 2;
                             return ctrlCanvasDraw.CreateGradient(pgbctx, tBar, tMode, cde.CBool(pThis.GetProperty("IsInverted")));
-                        } else if (tFill.length > 10 && tFill.toLowerCase().substr(0, 10) === "gradientc(") {
+                        } else if (tFill.length > 10 && tFill.toLowerCase().substring(0, 10) === "gradientc(") {
                             tBar = tFill.substr(10, tFill.length - 11).split(',');
                             return ctrlCanvasDraw.CreateGradient(pgbctx, tBar, 0, cde.CBool(pThis.GetProperty("IsInverted")));
                         } else if (tFill.toLowerCase() === "transparent")
@@ -758,14 +764,14 @@
         public static CreateGradient(pgbctx: CanvasRenderingContext2D, tBar: string[], pMode: number, bInverted: boolean): CanvasGradient {
             let gradient: CanvasGradient;
             switch (pMode) {
-                default:
-                    gradient = pgbctx.createRadialGradient(pgbctx.canvas.width / 2, pgbctx.canvas.height / 2, 1, pgbctx.canvas.width / 2, pgbctx.canvas.height / 2, pgbctx.canvas.height / 2);
-                    break;
                 case 1:
                     gradient = pgbctx.createLinearGradient(0, 0, pgbctx.canvas.width, 0);
                     break;
                 case 2:
                     gradient = pgbctx.createLinearGradient(0, 0, 0, pgbctx.canvas.height);
+                    break;
+                default:
+                    gradient = pgbctx.createRadialGradient(pgbctx.canvas.width / 2, pgbctx.canvas.height / 2, 1, pgbctx.canvas.width / 2, pgbctx.canvas.height / 2, pgbctx.canvas.height / 2);
                     break;
             }
             let i: number;
@@ -857,8 +863,10 @@
                 this.ProcessFiles(e.dataTransfer.files);
             }
 
-            this.MyDrawingObject = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.CanvasDraw).Create(this.drawingTarget, { TRF: pTRF }) as INMICanvasDraw; // ctrlCanvasDraw.Create(this.drawingTarget, pTRF);
+            this.MyDrawingObject = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.CanvasDraw).Create(this.drawingTarget, { TRF: pTRF }) as INMICanvasDraw;
             this.MyDrawingObject.SetProperty("FillDistance", 25);
+            if (!this.MyDrawingObject.MyFormID)
+                this.MyDrawingObject.MyFormID = this.MyFormID;
 
             if (!this.MyFieldInfo || !this.MyFieldInfo.Flags || (this.MyFieldInfo && (this.MyFieldInfo.Flags & 2) !== 0)) {
                 this.MyDrawingObject.SetProperty("OnPointerDown", this.MyDrawingObject.BeginPolyline);
@@ -894,7 +902,7 @@
                 if (cde.CBool(this.GetSetting("HideClear")))
                     this.mClearButton.SetProperty("Visibility", false);
 
-                this.mSaveButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Save", "Style=position:absolute; right:0px;background-color:white; background-image:none;"] }); //TODO: Convert Style to ClassName!
+                this.mSaveButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Save", "Style=position:absolute; right:0px;background-color:white; background-image:none;"] }); 
                 this.mSaveButton.SetProperty("OnClick", (sender: INMIControl, e: PointerEvent, tPs: number) => {
                     let imageData: string;
                     let fileExt = ".PNG";
@@ -929,7 +937,7 @@
                 this.mSaveButton.SetProperty("Foreground", "black");
                 this.mSaveButton.SetProperty("Visibility", this.mIsSynced);
 
-                this.mPlayButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Play", "Style=position:absolute; right:0px;background-color:white; background-image:none;"] }); //TODO: Convert Style to ClassName!
+                this.mPlayButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Play", "Style=position:absolute; right:0px;background-color:white; background-image:none;"] }); 
                 this.mPlayButton.SetProperty("OnClick", () => { //sender: INMIControl, e: PointerEvent, tPs: number
                     this.MyDrawingObject.SetProperty("Playback", true);
                     this.MyDrawingObject.DrawCanvasBackground();
@@ -944,7 +952,7 @@
 
                 if ((this.MyFieldInfo && (this.MyFieldInfo.Flags & 32) !== 0) || (this.GetProperty("Value") && this.GetProperty("Value").substring(0, 2) !== "[{")) {
                     this.ShowTextField(this.GetProperty("Value"), false);
-                    this.mTextToggleButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.mBaseDiv, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Enter Text", "Style=position:absolute; right:0px"] }); //TODO: Convert Style to ClassName!
+                    this.mTextToggleButton = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.mBaseDiv, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Enter Text", "Style=position:absolute; right:0px"] }); 
                     this.mTextToggleButton.SetProperty("OnClick", () => {
                         if (this.mIsTextFldVisible) {
                             this.mIsTextFldVisible = false;
@@ -965,7 +973,7 @@
                     this.mTextToggleButton.SetProperty("TileTop", 2);
                     this.mTextToggleButton.SetProperty("Foreground", "black");
                 } else {
-                    this.tBlack = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Black", "Style=position:absolute; right:0px; background-color:black; background-image:none;"] }); //TODO: Convert Style to ClassName!
+                    this.tBlack = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Black", "Style=position:absolute; right:0px; background-color:black; background-image:none;"] }); 
                     this.tBlack.SetProperty("OnClick", () => {
                         this.MyDrawingObject.SetProperty("Foreground", "#000000");
                         return false;
@@ -974,7 +982,7 @@
                     if (!cde.CBool(this.GetSetting["ShowColors"]))
                         this.tBlack.SetProperty("Visibility", false);
 
-                    this.tRed = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Red", "Style=position:absolute; right:0px; background-color:#FF0000; background-image:none;"] }); //TODO: Convert Style to ClassName!
+                    this.tRed = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Red", "Style=position:absolute; right:0px; background-color:#FF0000; background-image:none;"] }); 
                     this.tRed.SetProperty("OnClick", () => {
                         this.MyDrawingObject.SetProperty("Foreground", "#FF0000");
                         return false;
@@ -983,7 +991,7 @@
                     if (!cde.CBool(this.GetSetting["ShowColors"]))
                         this.tRed.SetProperty("Visibility", false);
 
-                    this.tGreen = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Green", "Style=position:absolute; right:0px; background-color:#00FF00; background-image:none;"] }); //TODO: Convert Style to ClassName!
+                    this.tGreen = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Green", "Style=position:absolute; right:0px; background-color:#00FF00; background-image:none;"] });
                     this.tGreen.SetProperty("OnClick", () => {
                         this.MyDrawingObject.SetProperty("Foreground", "#00FF00");
                         return false;
@@ -992,7 +1000,7 @@
                     if (!cde.CBool(this.GetSetting["ShowColors"]))
                         this.tGreen.SetProperty("Visibility", false);
 
-                    this.tYellow = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Yellow", "Style=position:absolute; right:0px; background-color:#FFFF00; background-image:none;"] }); //TODO: Convert Style to ClassName!
+                    this.tYellow = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Yellow", "Style=position:absolute; right:0px; background-color:#FFFF00; background-image:none;"] }); 
                     this.tYellow.SetProperty("OnClick", () => {
                         this.MyDrawingObject.SetProperty("Foreground", "#FFFF00");
                         return false;
@@ -1001,7 +1009,7 @@
                     if (!cde.CBool(this.GetSetting["ShowColors"]))
                         this.tYellow.SetProperty("Visibility", false);
 
-                    this.tBlue = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Blue", "Style=position:absolute; right:0px; background-color:#0000FF; background-image:none;"] }); //TODO: Convert Style to ClassName!
+                    this.tBlue = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Blue", "Style=position:absolute; right:0px; background-color:#0000FF; background-image:none;"] }); 
                     this.tBlue.SetProperty("OnClick", () => {
                         this.MyDrawingObject.SetProperty("Foreground", "#0000FF");
                         return false;
@@ -1010,7 +1018,7 @@
                     if (!cde.CBool(this.GetSetting["ShowColors"]))
                         this.tBlue.SetProperty("Visibility", false);
 
-                    this.tPink = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Pink", "Style=position:absolute; right:0px; background-color:#FF00FF; background-image:none;"] }); //TODO: Convert Style to ClassName!
+                    this.tPink = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileButton).Create(this.drawingTarget, { PostInitBag: ["TileWidth=1", "TileHeight=1", "Text=Pink", "Style=position:absolute; right:0px; background-color:#FF00FF; background-image:none;"] }); 
                     this.tPink.SetProperty("OnClick", () => {
                         this.MyDrawingObject.SetProperty("Foreground", "#FF00FF");
                         return false;
@@ -1135,7 +1143,7 @@
 
             const file: File = pFileList[0];
 
-            if (file.name.length > 8 && file.name.substr(file.name.length - 7, 7) === ".ink2me") {
+            if (file.name.length > 8 && file.name.substring(file.name.length - 7) === ".ink2me") {
                 const reader = new FileReader();
                 reader.onload = () => {
                     const tres = reader.result;
@@ -1224,7 +1232,7 @@
                 tFldInfo.Flags = this.MyFieldInfo.Flags;
                 tFldInfo.FormID = this.MyFieldInfo.FormID;
             }
-            this.mTextFld = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SingleEnded).Create(null, { TRF: new TheTRF("", 0, tFldInfo), PostInitBag: ["iValue=" + pContent] }); //  cdeNMI.ctrlEditBox.Create(null, null, new TheTRF("", 0, tFldInfo), pContent);
+            this.mTextFld = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SingleEnded).Create(null, { TRF: new TheTRF("", 0, tFldInfo), PostInitBag: ["iValue=" + pContent] }); 
             this.mTextFld.SetProperty("Rows", 10);
             this.mBaseDiv.AppendChild(this.mTextFld);
             if (bShowRightAway)
@@ -1284,10 +1292,7 @@
             this.PreventManipulation = true;
             this.PreventDefaultManipulationAndMouseEvent(null);
 
-            this.mDrawCanvas = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TouchDraw).Create(this, { TRF: (this.MyTRF ? this.MyTRF : new TheTRF("", 0, this.MyFieldInfo)) }); // .ctrlTouchDraw.Create(this, pTRF);
-            //this.mDrawCanvas.RegisterEvent("NMI_SHAPE_RECOGNIZED", (sender: INMIControl, pName: string, pScore: number) => {
-            //    this.FireEvent(true, "NMI_SHAPE_RECOGNIZED", pName, pScore);
-            //})
+            this.mDrawCanvas = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TouchDraw).Create(this, { TRF: (this.MyTRF ? this.MyTRF : new TheTRF("", 0, this.MyFieldInfo)) }); 
             this.CurrentControl = this.mDrawCanvas;
 
             this.HookEvents(false);
@@ -1438,7 +1443,7 @@
             this.mBaseCtrl.GetElement().className = "ctrlBarChart";
             this.mBaseCtrl.GetElement().style.position = "relative";
 
-            this.mCanvas = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.CanvasDraw).Create(this.mBaseCtrl, { TRF: pTRF }) as INMICanvasDraw; // ctrlCanvasDraw.Create(this.mBaseCtrl, pTRF);
+            this.mCanvas = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.CanvasDraw).Create(this.mBaseCtrl, { TRF: pTRF }) as INMICanvasDraw;
 
             this.SetElement(this.mBaseCtrl.GetElement(), true);
 
@@ -1749,7 +1754,7 @@
 
     /**
      * Creates a vertical or horizontal slider looking like a rubber band
-     * TODO: MultiTouch Scroll increases Value 5x Touchpoint - but Bar should not scroll differently!
+     * MultiTouch Scroll increases Value 5x Touchpoint - but Bar should not scroll differently!
      * (4.1 Ready!)
     **/
     export class ctrlEndlessSlider extends TheNMIBaseControl {
@@ -2101,7 +2106,7 @@
             this.MyBaseType = cdeNMI.cdeControlType.Shape;
             super.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
 
-            this.mBaseCtrl = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileGroup); // new cdeNMI.ctrlTileGroup(pTRF);
+            this.mBaseCtrl = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileGroup); 
             this.mBaseCtrl.InitControl(pTargetControl, this.MyTRF);
             this.mBaseCtrl.SetInitialSize(1);
             this.mBaseCtrl.SetProperty("ClassName", "ctrlShape");
@@ -2217,7 +2222,6 @@
             super.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
 
             this.containerTileGroup = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(pTargetControl);
-            //this.containerTileGroup.InitControl(pTargetControl);
 
             let tMax: number = cde.CInt(this.GetProperty("MaxValue"));
             if (tMax === cde.CInt(this.GetProperty("MinValue")))
@@ -2582,8 +2586,6 @@
 
         DoRender() {
             if (!this.mycanvas || this.mWidth === 0 || this.mHeight === 0) return;
-            //var tHei: number = cde.CInt(this.GetProperty("ControlTH"));
-            //if (tHei == 0) tHei = 1;
             const context: CanvasRenderingContext2D = this.mycontext as CanvasRenderingContext2D;
             const canvas = this.mycanvas;
             const x = this.mycanvas.width / 2;
@@ -2604,7 +2606,6 @@
             context.strokeStyle = this.mBackground;
             context.fillStyle = this.mBackground;
             context.stroke();
-            //context.fill();
 
             let myBlue = this.GetProperty("Foreground");
             if (!myBlue) {

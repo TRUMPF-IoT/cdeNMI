@@ -1,9 +1,10 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
 ﻿using nsCDEngine.BaseClasses;
 using nsCDEngine.Communication;
+using nsCDEngine.Engines;
 using nsCDEngine.Engines.NMIService;
 using nsCDEngine.Engines.ThingService;
 using nsCDEngine.ViewModels;
@@ -11,72 +12,9 @@ using System;
 
 namespace NMIService
 {
-    public class TheNMIEditor : ICDEThing
+    public class TheNMIEditor : TheThingBase
     {
-        #region ICDEThing Methods
-        public void SetBaseThing(TheThing pThing)
-        {
-            MyBaseThing = pThing;
-        }
-        public TheThing GetBaseThing()
-        {
-            return MyBaseThing;
-        }
-        public virtual cdeP GetProperty(string pName, bool DoCreate)
-        {
-            if (MyBaseThing != null)
-                return MyBaseThing.GetProperty(pName, DoCreate);
-            return null;
-        }
-        public virtual cdeP SetProperty(string pName, object pValue)
-        {
-            if (MyBaseThing != null)
-                return MyBaseThing.SetProperty(pName, pValue);
-            return null;
-        }
-
-        public void RegisterEvent(string pName, Action<ICDEThing, object> pCallBack)
-        {
-            if (MyBaseThing != null)
-                MyBaseThing.RegisterEvent(pName, pCallBack);
-        }
-        public void UnregisterEvent(string pName, Action<ICDEThing, object> pCallBack)
-        {
-            if (MyBaseThing != null)
-                MyBaseThing.UnregisterEvent(pName, pCallBack);
-        }
-        public void FireEvent(string pEventName, ICDEThing sender, object pPara, bool FireAsync)
-        {
-            if (MyBaseThing != null)
-                MyBaseThing.FireEvent(pEventName, sender, pPara, FireAsync);
-        }
-        public bool HasRegisteredEvents(string pEventName)
-        {
-            if (MyBaseThing != null)
-                return MyBaseThing.HasRegisteredEvents(pEventName);
-            return false;
-        }
-
-        public virtual void HandleMessage(ICDEThing sender, object pMsg)
-        { }
-
-        protected TheThing MyBaseThing;
-
-        protected bool mIsUXInitCalled;
-        protected bool mIsUXInitialized;
-        protected bool mIsInitCalled;
-        protected bool mIsInitialized;
-        public bool IsUXInit()
-        { return mIsUXInitialized; }
-        public bool IsInit()
-        { return mIsInitialized; }
-
-        /// <summary>
-        /// The possible types of WeMo devices that can be detected
-        /// </summary>
-        #endregion
-
-        public bool Init()
+        public override bool Init()
         {
             if (mIsInitCalled) return false;
             mIsInitCalled = true;
@@ -97,25 +35,12 @@ namespace NMIService
             return true;
         }
 
-        public bool Delete()
-        {
-            mIsInitialized = false;
-            // TODO Properly implement delete
-            return DoDelete();
-        }
-
-        public virtual bool DoDelete()
-        {
-            return true;
-        }
-
-
         public virtual void sinkThrottleChanged(cdeP pNewValue)
         {
             MyBaseThing.SetPublishThrottle(TheCommonUtils.CInt(pNewValue));
         }
 
-        public bool CreateUX()
+        public override bool CreateUX()
         {
             if (mIsUXInitCalled) return false;
             mIsUXInitCalled = true;
@@ -176,28 +101,56 @@ namespace NMIService
         {
             MyEditorForm = new TheFormInfo(MyBaseThing) { DefaultView = eDefaultView.Form, PropertyBag = new ThePropertyBag { "MaxTileWidth=6", "HideCaption=true", "AllowDrag=true" } };
             MyEditorForm.ModelID = "NMIEditor";
-
+            TheCDEngines.MyNMIService?.SetProperty("NMIEditorFormID", MyEditorForm.cdeMID);
             TheDashboardInfo tDash = TheNMIEngine.GetDashboardById(TheNMIHtml5RT.eNMIDashboard);
             MyEditorDashIcon = TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, MyEditorForm, "CMyForm", "NMI Control Editor", 1, 0x89, 0x80, "NMI", null, new ThePropertyBag() { "RenderTarget=cdeInSideBarRight", "NeverHide=true" }); //"mAllowDrag=true", "nVisibility=false", 
+            return true; //retired for now. Moved into NMI Control Code
+
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 9, 0, 0, null, null, new nmiCtrlTileGroup { TileWidth = 7, TileHeight = 1, TileFactorY = 2 });
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 10, 2, 0, "Main", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:Main", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
+            //TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 20, 2, 0, "Screen", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:Screen", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 30, 2, 0, "All", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:All", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
+            //TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 40, 2, 0, "Source", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:Source", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
+
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 1000, 2, 0x80, null, null, new nmiCtrlTileGroup() { Group = "NMIP:Main" });
+
+            //ALL Properties
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 2000, 2, 0x80, null, null, new nmiCtrlTileGroup() { TileWidth = 6, Group = "NMIP:All", Visibility = false });
+
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.Table, 2010, 0xA2, 0x80, "All Properties", "mypropertybag;1", new ThePropertyBag() { "NoTE=true", "TileHeight=5", "TileWidth=6", "ParentFld=2000" });
+            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.SingleEnded, 2020, 0x0A, 0, "New Property Name", "ScratchName", new nmiCtrlSingleEnded() { ParentFld = 2000 });
+            TheFieldInfo tBut = TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 2040, 0x0A, 0, "Add Property", false, null, null, new nmiCtrlTileButton() { ParentFld = 2000, NoTE = true, ClassName = "cdeGoodActionButton" });
+            tBut.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "AddProp", (pThing, pObj) =>
+            {
+                TheProcessMessage pMsg = pObj as TheProcessMessage;
+                if (pMsg?.Message == null) return;
+                TheThing tOrg = pThing.GetBaseThing();
+
+                string tNewPropName = TheThing.GetSafePropertyString(tOrg, "ScratchName");
+                if (string.IsNullOrEmpty(tNewPropName))
+                    TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", "Please specify a new property name"));
+                else
+                {
+                    if (tOrg.GetProperty(tNewPropName) != null)
+                    {
+                        TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", "Property already exists"));
+                    }
+                    else
+                    {
+                        tOrg.DeclareNMIProperty(tNewPropName, ePropertyTypes.TString);
+                        TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", "Property Added"));
+                        MyEditorForm.Reload(pMsg, false);
+                    }
+                    tOrg.SetProperty("ScratchName", "");
+                }
+            });
+
+            return true; //retired for now. Moved into NMI Control Code
 
             MySampleControl = TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.SingleEnded, 3, 2, MyBaseThing.cdeA, "CurrentValue", "Value", null);
 
 
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 9, 0, 0, null, null, new nmiCtrlTileGroup { TileWidth = 7, TileHeight = 1, TileFactorY = 2  });
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 10, 2, 0, "Basic", null, new nmiCtrlTileButton { ParentFld=9, OnClick = "GRP:NMIP:Basic", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 20, 2, 0, "Screen", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:Screen", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 30, 2, 0, "All", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:All", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 40, 2, 0, "Source", null, new nmiCtrlTileButton { ParentFld = 9, OnClick = "GRP:NMIP:Source", TileWidth = 1, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
-            //TheNMIEngine.AddSmartControl(MyBaseThing, MyStatusForm, eFieldType.TileButton, 50, 2, 0, "Compounds", null, new nmiCtrlTileButton { OnClick = "GRP:Cate:5", TileWidth = 2, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
-            //TheNMIEngine.AddSmartControl(MyBaseThing, MyStatusForm, eFieldType.TileButton, 60, 2, 0, "Gauges", null, new nmiCtrlTileButton {  OnClick = "GRP:Cate:6", TileWidth = 2, TileHeight = 1, TileFactorY = 2, NoTE = true, ClassName = "cdeTransitButton" });
-            TheFieldInfo mSendbutton = TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 70, 2, 0x80, "Reload", false, "", null, new nmiCtrlTileButton() { ParentFld=9, TileWidth = 2, NoTE = true, TileFactorY = 2, ClassName = "cdeGoodActionButton" });
-            mSendbutton.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "", (pThing, pPara) =>
-            {
-                TheProcessMessage pMsg = pPara as TheProcessMessage;
-                if (pMsg?.Message == null) return;
-                UpdateUx(pThing.GetBaseThing());
-                MyEditorForm.Reload(pMsg, tDash.cdeMID, true);
-            });
+
 
             TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 1000, 2, 0x80, null, null, new nmiCtrlTileGroup() { Group = "NMIP:Basic" });
             TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.ComboBox, 1010, 2, 0x80, "Control Type", "ControlType", new ThePropertyBag() { "Options=%RegisteredControlTypes%", "ParentFld=1000" });
@@ -255,38 +208,7 @@ namespace NMIService
                                 "<span class='fa-stack'><i class='fa fa-stack-1x'>&#xf0f6;</i><i class='fa fa-stack-2x text-danger' style='opacity:0.5'>&#xf05e;</i></span>,"+
                                 "<span class='fa-stack'><i class='fa fa-stack-1x'>&#xf15c;</i><i class='fa fa-stack-2x text-danger' style='opacity:0.5'>&#xf05e;</i></span>","ParentFld=3000" }).FldWidth = 1;
 
-            //ALL Properties
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 2000, 2, 0x80, null, null, new nmiCtrlTileGroup() { TileWidth = 6, Group = "NMIP:All", Visibility = false });
 
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.Table, 2010, 0xA2, 0x80, "All Properties", "mypropertybag;1", new ThePropertyBag() { "NoTE=true", "TileHeight=4", "TileLeft=9", "TileTop=3", "TileWidth=6", "FldWidth=6", "ParentFld=2000" });
-            TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.SingleEnded, 2020, 0x0A, 0, "New Property Name", "ScratchName", new nmiCtrlSingleEnded() { ParentFld = 2000 });
-            TheFieldInfo tBut = TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileButton, 2040, 0x0A, 0, "Add Property", false, null, null, new nmiCtrlTileButton() { ParentFld = 2000, NoTE = true, ClassName = "cdeGoodActionButton" });
-            tBut.RegisterUXEvent(MyBaseThing, eUXEvents.OnClick, "AddProp", (pThing, pObj) =>
-            {
-                TheProcessMessage pMsg = pObj as TheProcessMessage;
-                if (pMsg?.Message == null) return;
-                string[] parts = pMsg.Message.PLS.Split(':');
-                TheThing tOrg = pThing.GetBaseThing(); // TheThingRegistry.GetThingByMID(MyBaseEngine.GetEngineName(), TheCommonUtils.CGuid(parts[2]));
-                //if (tOrg == null) return;
-
-                string tNewPropName = TheThing.GetSafePropertyString(tOrg, "ScratchName");
-                if (string.IsNullOrEmpty(tNewPropName))
-                    TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", "Please specify a new property name"));
-                else
-                {
-                    if (tOrg.GetProperty(tNewPropName) != null)
-                    {
-                        TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", "Property already exists"));
-                    }
-                    else
-                    {
-                        tOrg.DeclareNMIProperty(tNewPropName, ePropertyTypes.TString);
-                        TheCommCore.PublishToOriginator(pMsg.Message, new TSM(eEngineName.NMIService, "NMI_TOAST", "Property Added"));
-                        MyEditorForm.Reload(pMsg, false);
-                    }
-                    tOrg.SetProperty("ScratchName", "");
-                }
-            });
 
             //THING Connector
             TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 5000, 2, 0x80, null, null, new nmiCtrlTileGroup() { TileWidth = 6, Group = "NMIP:Source", Visibility = false });

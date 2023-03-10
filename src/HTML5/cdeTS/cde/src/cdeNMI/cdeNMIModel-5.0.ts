@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -12,8 +12,10 @@
         InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean;
         Create(pTargetControl: cdeNMI.INMIControl, pOptions?: TheNMIC): INMIControl;
         GetSetting(pName: string, pDefault?, CompileAsJSON?: boolean); //Gets an incoming setting
+        GetPropertyBag(): string[];
         GetProperty(pName: string);                                        //Get a runtime property
         SetProperty(pName: string, pValue);
+        SaveProperty(pName: string, pValue);
         SetToDefault(bOnlyIfEmpty: boolean);
         AppendChild(pChild: INMIControl);
         AppendElement(pEle: HTMLElement);
@@ -65,6 +67,7 @@
         MyRC: number;
         MyWidth: number;
         MyHeight: number;
+        MyDirtyList: string[];
 
         Visibility: boolean;
         IsDirty: boolean;
@@ -100,8 +103,10 @@
         MySavePin: INMIControl;
         MyRefreshPin: INMIControl;
         MyShowAllPin: INMIControl;
+        MyOverlay: INMIControl;
         MyHostNode: string;
         HasRenderTarget: boolean;
+        ScreenScale: number;
     }
 
     export interface INMITileEntry extends INMIControl {
@@ -1060,11 +1065,11 @@
 
         public static GetValueFromBagByName(pBag: string[], pName: string, bDontTrim?: boolean): string {
             if (pBag && pBag.length > 0) {
-                for (let jj = 0; jj < pBag.length; jj++) {
-                    const ePos: number = pBag[jj].indexOf("=");
+                for (const element of pBag) {
+                    const ePos: number = element.indexOf("=");
                     if (ePos >= 0) {
-                        const tPropName: string = pBag[jj].substring(0, ePos).trim();
-                        const tProValue: string = (bDontTrim === true ? pBag[jj].substring(ePos + 1) : pBag[jj].substring(ePos + 1).trim());
+                        const tPropName: string = element.substring(0, ePos).trim();
+                        const tProValue: string = (bDontTrim === true ? element.substring(ePos + 1) : element.substring(ePos + 1).trim());
                         if (tPropName === pName)
                             return tProValue;
                     }
@@ -1077,12 +1082,12 @@
             if (!tFldInfo) return;
             if (!tFldInfo.PropertyBag)
                 tFldInfo.PropertyBag = [];
-            for (let jj = 0; jj < tFldInfo.PropertyBag.length; jj++) {
-                this.ConvertBagToSettings(tFldInfo, tFldInfo.PropertyBag[jj]);
+            for (const element of tFldInfo.PropertyBag) {
+                this.ConvertBagToSettings(tFldInfo, element);
             }
             if (pBag) {
-                for (let jjj = 0; jjj < pBag.length; jjj++) {
-                    this.ConvertBagToSettings(tFldInfo, pBag[jjj]);
+                for (const element of pBag) {
+                    this.ConvertBagToSettings(tFldInfo, element);
                 }
             }
         }
@@ -1109,14 +1114,14 @@
 
         public static SetPropertiesFromBag(pCtrl: cdeNMI.INMIControl, pBag: string[], pRow?, pIsLive?: boolean, pIsInTable?: boolean) {
             if (!pBag || !pCtrl) return;
-            for (let jj = 0; jj < pBag.length; jj++) {
-                let ePos: number = pBag[jj].indexOf("=");
+            for (const element of pBag) {
+                let ePos: number = element.indexOf("=");
                 let bHasValue = true;
                 if (ePos < 0) {
-                    ePos = pBag[jj].length;
+                    ePos = element.length;
                     bHasValue = false;
                 }
-                let tPropName: string = pBag[jj].substring(0, ePos).trim();
+                let tPropName: string = element.substring(0, ePos).trim();
                 if (tPropName === "Value") tPropName = "iValue";
                 if (cde.CBool(pIsInTable) && (tPropName === "TileWidth" || tPropName === "TileLeft" || tPropName === "TileTop" || tPropName === "IsAbsolute"))
                     continue;
@@ -1125,7 +1130,7 @@
                 let tProValue = "";
                 try {
                     if (bHasValue) {
-                        tProValue = pBag[jj].substring(ePos + 1).trim();
+                        tProValue = element.substring(ePos + 1).trim();
                         cdeNMI.ThePB.SetRawProperty(pCtrl, tPropName, tProValue, pRow, pIsLive);
                     }
                     else {

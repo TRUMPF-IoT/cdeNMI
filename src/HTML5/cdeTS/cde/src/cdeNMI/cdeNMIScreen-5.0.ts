@@ -23,6 +23,7 @@
         pos4 = 0;
         oldz = "";
         oldBC = "";
+        ScreenScale = 0.0;
         IsDragging = false;
 
         MyScreenDIV: HTMLDivElement = null;
@@ -258,6 +259,22 @@
                                     tScene.Flds = new Array<TheFLDOR>();
                                     for (const i in tScreen.MyFormControls) {
                                         const tF: INMIControl = tScreen.MyFormControls[i];
+                                        const tOpt: TheFLDOR = new TheFLDOR();
+                                        tOpt.PO = [];
+                                        if (tF.MyFieldInfo)
+                                            tOpt.FldOrder = tF.MyFieldInfo.FldOrder;
+                                        if (tF.MyDirtyList?.length > 0) {
+                                            for (const element of tF.MyDirtyList) {
+                                                tOpt.PO.push(`${element}=${tF.GetProperty(element)}`);
+                                            }
+                                            tScene.Flds.push(tOpt);
+                                        }
+                                        if (tF.MyNMIControl?.MyDirtyList?.length > 0) {
+                                            for (const element of tF.MyNMIControl.MyDirtyList) {
+                                                tOpt.PO.push(`${element}=${tF.MyNMIControl.GetProperty(element)}`);
+                                            }
+                                            tScene.Flds.push(tOpt);
+                                        }
                                         if (tF.MyBaseType === cdeControlType.CollapsibleGroup) {
                                             if (tScene.TileWidth === null) {
                                                 if (cde.CBool(tF.GetProperty("AllowHorizontalExpand")) === true)
@@ -265,10 +282,6 @@
                                                 else
                                                     tScene.TileWidth = 0;
                                             }
-                                            const tOpt: TheFLDOR = new TheFLDOR();
-                                            tOpt.PO = [];
-                                            if (tF.MyFieldInfo)
-                                                tOpt.FldOrder = tF.MyFieldInfo.FldOrder;
                                             tOpt.PO.push("DoClose=" + !cde.CBool(tF.GetProperty("IsOpen")));
                                             if (cde.CInt(tF.GetProperty("TileWidth")) > 0)
                                                 tOpt.PO.push("TileWidth=" + tF.GetProperty("TileWidth"));
@@ -316,9 +329,12 @@
                     this.MyDrawPin = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.PinButton).Create(tAllPins, { ScreenID: this.MyScreenID, PostInitBag: ["iValue=true", "Right=105", "Top=6", "ClassName=cdeDivDraw"] });
                     this.MyDrawPin.SetProperty("OnClick", (val, evt: MouseEvent, pointer: cdeNMI.ThePointer) => {
                         if (!this.MyOverlay) {
-                            this.MyOverlay = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.DrawOverlay).Create(this, { PreInitBag: ["HideClear=true", "EnableRecognizer=true"] }) as INMICanvasDraw;
+                            const tcr = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.DrawOverlay);
+                            tcr.MyFormID = this.MyScreenID;
+                            this.MyOverlay = tcr.Create(this, { PreInitBag: ["HideClear=true", "EnableRecognizer=true"] }) as INMICanvasDraw;
                         }
                         else {
+                            cdeNMI.UnselectAllControls();
                             this.RemoveChild(this.MyOverlay);
                             this.MyOverlay = null;
                         }
