@@ -141,6 +141,7 @@
         MyMirrorName: string = null;
         MyStorageModel: any = null;
         IsInEdit = false;
+        MyNMIEditControl: INMIControl = null;
 
         public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
             this.MyBaseType = cdeControlType.Table;
@@ -173,39 +174,58 @@
             ///Create Meta Data for Property Bag Table
             if (pTableName.substring(0, 13).toLowerCase() === "mypropertybag") {
                 const tTableParas: string[] = pTableName.split(';');
-                this.MyMirrorName = this.MyTRF.TableName;
-                if (tTableParas.length > 3) {
-                    const tM = cde.GuidToString(tTableParas[2]);
-                    const tT = cde.GuidToString(tTableParas[3]);
-                    if (!cdeNMI.MyNMIModels[tM] || !cdeNMI.MyNMIModels[tM].MyStorageMirror[tT] || !cdeNMI.MyNMIModels[tM].MyStorageMirror[tT][this.MyTRF.RowNo] || !cdeNMI.MyNMIModels[tM].MyStorageMirror[tT][this.MyTRF.RowNo].MyPropertyBag) {
-                        if (pTargetControl)
-                            pTargetControl.GetElement().innerHTML = "Store of Thing or No Properties found";
-                        return false;
+                if (tTableParas.length > 2 && tTableParas[1] == '2') {
+                    const tFldId = cde.GuidToString(tTableParas[2]);
+                    this.IsNMIOnly = true;
+                    pTableName = cde.GuidToString("PBX" + tFldId);
+                    const tControls: INMIControl[] = cdeNMI.MyTCF.MyNMIControls[tFldId];
+                    if (tControls) {
+                        for (const tControl in tControls) {
+                            this.MyNMIEditControl = tControls[tControl];
+                            this.RefreshControlPropTable(pTableName,tControls[tControl]);
+                        }
                     }
-                    this.MyStorageModel = cdeNMI.MyNMIModels[tM].MyStorageMirror[tT];
-                    this.MyMirrorName = tT;
+                    else {
+                        if (pTargetControl)
+                            pTargetControl.GetElement().innerHTML = "Target Control not registered and cannot be edited";
+                    }
                 }
                 else {
-                    if (!this.MyTRF || !this.MyFieldInfo || !this.MyScreenInfo.MyStorageMirror[this.MyMirrorName] || !this.MyScreenInfo.MyStorageMirror[this.MyMirrorName][this.MyTRF.RowNo] || !this.MyScreenInfo.MyStorageMirror[this.MyMirrorName][this.MyTRF.RowNo].MyPropertyBag) {
-                        if (pTargetControl)
-                            pTargetControl.GetElement().innerHTML = "Not a Thing or No Properties found";
-                        return false;
+                    this.MyMirrorName = this.MyTRF.TableName;
+                    if (tTableParas.length > 3) {
+                        const tM = cde.GuidToString(tTableParas[2]);
+                        const tT = cde.GuidToString(tTableParas[3]);
+                        if (!cdeNMI.MyNMIModels[tM] || !cdeNMI.MyNMIModels[tM].MyStorageMirror[tT] || !cdeNMI.MyNMIModels[tM].MyStorageMirror[tT][this.MyTRF.RowNo] || !cdeNMI.MyNMIModels[tM].MyStorageMirror[tT][this.MyTRF.RowNo].MyPropertyBag) {
+                            if (pTargetControl)
+                                pTargetControl.GetElement().innerHTML = "Store of Thing or No Properties found";
+                            return false;
+                        }
+                        this.MyStorageModel = cdeNMI.MyNMIModels[tM].MyStorageMirror[tT];
+                        this.MyMirrorName = tT;
                     }
-                    this.MyStorageModel = this.MyScreenInfo.MyStorageMirror[this.MyMirrorName];
+                    else {
+                        if (!this.MyTRF || !this.MyFieldInfo || !this.MyScreenInfo.MyStorageMirror[this.MyMirrorName] || !this.MyScreenInfo.MyStorageMirror[this.MyMirrorName][this.MyTRF.RowNo] || !this.MyScreenInfo.MyStorageMirror[this.MyMirrorName][this.MyTRF.RowNo].MyPropertyBag) {
+                            if (pTargetControl)
+                                pTargetControl.GetElement().innerHTML = "Not a Thing or No Properties found";
+                            return false;
+                        }
+                        this.MyStorageModel = this.MyScreenInfo.MyStorageMirror[this.MyMirrorName];
+                    }
+                    this.IsNMIOnly = (tTableParas.length > 1 && tTableParas[1] === '1');
+                    pTableName = cde.GuidToString("PB" + this.MyTRF.RowID);
+                    this.RefreshPropTable(pTableName, this.MyStorageModel, this.MyTRF.RowNo);
                 }
-                this.IsNMIOnly = (tTableParas.length > 1 && tTableParas[1] === '1');
-                pTableName = cde.GuidToString("PB" + this.MyTRF.RowID);
-                this.RefreshPropTable(pTableName, this.MyStorageModel, this.MyTRF.RowNo);
 
                 this.MyMetaData = new cdeNMI.TheFormInfo();
                 this.MyMetaData.FormFields = [];
                 this.MyMetaData.IsReadOnly = (this.MyFieldInfo.Flags & 2) === 0;
                 this.MyMetaData.IsGenerated = false;
                 this.MyMetaData.TargetElement = pTableName;
-                this.MyMetaData.PropertyBag = ["Caption=" + (cde.IsNotSet(this.MyFieldInfo["Caption"]) ? "" : this.MyFieldInfo["Caption"])];
+                if (!cde.IsNotSet(this.MyFieldInfo["Caption"]))
+                    this.MyMetaData.PropertyBag = ["Caption=" + this.MyFieldInfo["Caption"]];
 
                 let tSizeX = 3; if (cde.CInt(this.MyFieldInfo["TileWidth"]) < 3) tSizeX = 1;
-                let tSizeX1 = 3; if (cde.CInt(this.MyFieldInfo["TileWidth"]) > 3) tSizeX1 = cde.CInt(this.MyFieldInfo["TileWidth"]) - 3;
+                let tSizeX1 = 2; if (cde.CInt(this.MyFieldInfo["TileWidth"]) > 4) tSizeX1 = cde.CInt(this.MyFieldInfo["TileWidth"]) - 4;
                 for (let index = 0; index < (this.IsNMIOnly ? 2 : 4); index++) {
                     switch (index) {
                         case 0:
@@ -541,10 +561,10 @@
 
             const tHeadTd: HTMLDivElement = document.createElement("div");
             tHeadTd.className = "cdeMainTableHeader";
-            tHeadTd.style.height = (cdeNMI.GetSizeFromTile(1) / 2) + "px";
             pParent.appendChild(tHeadTd);
 
             let tAddHeadline = true;
+            let HasContent = false;
             if (cde.IsNotSet(pHeaderTitle)) {
                 pHeaderTitle = "&nbsp;";
                 tAddHeadline = false;
@@ -574,6 +594,7 @@
                         tHeadTd.appendChild(tRefreshBut.GetElement());
                     }
                     if (cde.CInt(this.GetProperty("PageSize")) > 0) {
+                        HasContent = true;
                         const tBut = ctrlTileButton.Create(null, () => {
                             if (!this.rowAdder && cde.CInt(this.GetProperty("CurrentPage")) > 0) {
                                 cdeNMI.ResetKeyCorder();
@@ -620,6 +641,7 @@
                     }
                 }
                 if (cde.CBool(this.MyFieldInfo["ShowExportButton"])) {
+                    HasContent = true;
                     const tButEx = ctrlTileButton.Create(null, () => {
                         this.RefreshData(this.MyTableName, cde.CInt(this.GetProperty("CurrentPage")), true, true);
                     }, "<span class='fa cdeTableHeaderIcon'>&#xf019;</span>", 1, 1);
@@ -649,6 +671,7 @@
                         }
                     }
                     if (cde.CBool(this.MyFieldInfo["ShowFilterField"])) {
+                        HasContent = true;
                         const tFilterIcon = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).Create(null, { PostInitBag: ["ClassName=cdeFilterInputIcon", "TileWidth=1", "TileFactorX=2", "Style=float:left;", "Text=<i class='fa fa-2x'>&#xf002;</i>"] });
                         tHeadTd.appendChild(tFilterIcon.GetElement());
                         const tFld2: TheFieldInfo = new TheFieldInfo(cdeControlType.SingleEnded, 3, "Filter:", 2);
@@ -670,6 +693,8 @@
                 this.InfoText.SetProperty("TileFactorY", 2);
                 this.InfoText.SetProperty("ClassName", "cdeRefresher");
                 this.InfoText.SetProperty("Visibility", false);
+                if (HasContent === true)
+                    tHeadTd.style.height = (cdeNMI.GetSizeFromTile(1) / 2) + "px";
                 tHeadTd.appendChild(this.InfoText.GetElement());
 
             }
@@ -767,7 +792,10 @@
                         tDCellDiv.SetProperty("TileWidth", tDWidth);
                         let HookEvent = true;
                         tFldInfo["IsInTable"] = true;
-                        switch (tFldInfo.Type) {
+                        let fTYpe:cdeControlType = tFldInfo.Type;
+                        if (this.MyNMIEditControl && tFldInfo.DataItem == "Value")
+                            fTYpe = cde.CInt(tDataRow["ControlID"]);
+                        switch (fTYpe) {
                             case cdeControlType.Picture:
                                 if (tFldContent && (tFldContent.length > 512 || cde.CBool(ThePB.GetSetting(tFldInfo, "IsBlob"))))
                                     tFldContent = "data:image/jpeg;base64," + tFldContent;
@@ -861,11 +889,13 @@
                                 }, new TheTRF(this.MyTableName, i, tFldInfo));
                                 continue;
                             default:
+                                const oTRF:TheTRF = new TheTRF(this.MyTableName, i, tFldInfo);
+                                oTRF.FldInfo.Type = fTYpe;
                                 this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).
                                     Create(null,
                                         {
                                             ScreenID: this.MyScreenID,
-                                            TRF: new TheTRF(this.MyTableName, i, tFldInfo),
+                                            TRF: oTRF,
                                             PreInitBag: ["Element=div", "IsReadOnly=" + this.MyFormInfo.IsReadOnly, "IsInTable=true"],
                                             PostInitBag: ["iValue=" + tFldContent],
                                             Cookie: tDataRow
@@ -903,8 +933,13 @@
                 this.MyTableControls[i][tFldID].MyTRF.RowID = tDataRow.cdeMID;
             this.MyTableControls[i][tFldID].MyTRF.ModelID = this.MyScreenID;
             this.MyTableControls[i][tFldID].MyDataView = this;
+            if (this.MyNMIEditControl)
+                this.MyTableControls[i][tFldID].SetProperty("TargetPropName", tDataRow["Name"]);
             if (HookEvent) {
                 this.MyTableControls[i][tFldID].SetProperty("OnValueChanged", (pCtrl: INMIControl, evt, pValue, pTRF: TheTRF) => {
+                    if (this.MyNMIEditControl && pCtrl.GetProperty("TargetPropName")) {
+                        this.MyNMIEditControl.SaveProperty(pCtrl.GetProperty("TargetPropName"), pValue);
+                    }
                     if (pTRF) {
                         this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyTableName, pTRF.RowNo, this.MyTableControls[pTRF.RowNo], false, false); //Push Table changes to Relay
                     }
@@ -993,6 +1028,28 @@
             }
             this.SortTableByProperty(this.MyScreenInfo.MyStorageMirror[pTableName], "Name", false, false);
         }
+
+        private RefreshControlPropTable(pTableName: string, pControl:INMIControl) {
+            this.MyScreenInfo.MyStorageMirror[pTableName] = [];
+            if (!pControl)
+                return;
+            for (const idx in this.AllowedNMIEditorProps) {
+                const tProps=this.AllowedNMIEditorProps[idx].split(':');
+                let tval = pControl.GetProperty(tProps[0]);
+                if (!tval)
+                    tval = "";
+                let tID = "1";
+                if (tProps.length > 1)
+                    tID = tProps[1];
+                this.MyScreenInfo.MyStorageMirror[pTableName].push({ Name: tProps[0], Value: tval, ControlID: tID });
+            }
+            this.SortTableByProperty(this.MyScreenInfo.MyStorageMirror[pTableName], "Name", false, false);
+        }
+
+        AllowedNMIEditorProps: string[] = ["Style:1", "Visibility:4", "NUITags:1", "TEClassName:1", "TileFactorX:12", "TileFactorY:12", "Top:12",
+            "Left:12", "Caption:1", "TileLeft:12", "TileTop:12", "MinValue:12", "MaxValue:12", "Title:1", "Format:1", "MainBackground:1", "Foreground:1",
+            "Label:1", "LabelClassName:1", "LabelForeground:1", "TileWidth:12", "TileHeight:12", "PixelWidth:12", "PixelHeight:12", "Background:1",
+            "ClassName:1", "IsAbsolute:4", "Opacity:12", "FontSize:12", "ParentFld:12", "NoTE:4"];
 
         public TableHighlightRow() {
             if (document.getElementById && document.createTextNode) {
