@@ -18,6 +18,7 @@
         SaveProperty(pName: string, pValue);
         SetToDefault(bOnlyIfEmpty: boolean);
         AppendChild(pChild: INMIControl);
+        RemoveChild(pChild: INMIControl);
         AppendElement(pEle: HTMLElement);
         DeleteControl(tControl: INMIControl);
         RegisterNMIControl(): string;

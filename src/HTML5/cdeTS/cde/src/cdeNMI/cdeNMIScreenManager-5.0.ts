@@ -955,6 +955,11 @@
             }
             let tBaseControl: INMIDataView = null;
             const tScreen: cdeNMI.INMIScreen = cdeNMI.MyScreenManager && pScreenID ? cdeNMI.MyScreenManager.GetScreenByID(pScreenID) : null;
+            if (tScreen?.MyOverlay) {
+                cdeNMI.UnselectAllControls();
+                tScreen.RemoveChild(tScreen.MyOverlay);
+                tScreen.MyOverlay = null;
+            }
             if (tFormInfo) {
                 const tTRF: TheTRF = cdeNMI.TheTRF.FromScreenForm(tModel, tTableName);
                 if (tFormInfo.IsAlwaysEmpty === true)
