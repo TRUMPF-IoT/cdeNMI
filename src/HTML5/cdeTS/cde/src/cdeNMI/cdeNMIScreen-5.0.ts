@@ -331,7 +331,7 @@
                         if (!this.MyOverlay) {
                             const tcr = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.DrawOverlay);
                             tcr.MyFormID = this.MyScreenID;
-                            this.MyOverlay = tcr.Create(this, { PreInitBag: ["HideClear=true", "EnableRecognizer=true"] }) as INMICanvasDraw;
+                            this.MyOverlay = tcr.Create(this, { PreInitBag: ["HideClear=true", "EnableRecognizer=true"], ScreenID: this.MyScreenID }) as INMICanvasDraw;
                         }
                         else {
                             cdeNMI.UnselectAllControls();
