@@ -439,10 +439,6 @@
 
         RedrawForeground() {
             this.redrawPending = false;
-            const ts = TheNMIScreen.GetScreenByID(this.MyFormID);
-            if (ts)
-                this.ScreenScale = ts.ScreenScale;
-
             if (!cde.CBool(this.GetProperty("Playback")) && !cde.CBool(this.GetProperty("NoClear")))
                 this.fgctx.clearRect(0, 0, this.fgctx.canvas.width, this.fgctx.canvas.height);
 
@@ -1286,6 +1282,12 @@
             }
             this.divTiles.id = "cdeOverlay";
             this.divTiles.className = "cdeDrawOverlay";
+            this.divTiles.style.transformOrigin = "top left";
+            const tScreen = cdeNMI.MyScreenManager.GetScreenByID(pScreenID);
+            if (tScreen && tScreen.ScreenScale != 1.0 && tScreen.ScreenScale != 0.0) {
+                this.divTiles.style.transform = "scale(" + 1 / tScreen.ScreenScale + ")";
+            }
+
             this.SetElement(this.divTiles, false);
 
             this.PreventDefault = true;
@@ -1428,6 +1430,7 @@
 
         IsPointerDown = false;
         PointerID = 0;
+        Scale = 1.0;
 
         public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
             this.MyBaseType = cdeControlType.BarChart;
@@ -1450,8 +1453,12 @@
             this.SetProperty("Disabled", (!this.MyFieldInfo || (this.MyFieldInfo.Flags & 2) === 0));
             if (this.MyFormID && cdeNMI.MyScreenManager) {
                 const tScreen: INMIScreen = cdeNMI.MyScreenManager.GetScreenByID(this.MyFormID);
-                if (tScreen)
+                if (tScreen) {
                     tScreen.RegisterEvent("OnLoaded", () => this.ApplySkin());
+                    if (tScreen.ScreenScale != 1.0 && tScreen.ScreenScale != 0.0) {
+                        this.Scale = 1.0;// 1/tScreen.ScreenScale
+                    }
+                }
             }
             cde.MyBaseAssets.RegisterEvent("ThemeSwitched", () => {
                 if (cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme)
@@ -1544,6 +1551,8 @@
                 if (this.mCanvas.MyHeight === 0 || this.mCanvas.MyWidth === 0)
                     return;
             }
+            if (pValue === "")
+                pValue = 0;
             this.wasDrawnOnce = true;
             this.tText = new TheDrawingObject();
             this.tText.Type = 3;
@@ -1658,7 +1667,7 @@
             thisObj.IsPointerDown = false;
             thisObj.PointerID = 0;
             if (pPointer.pointerEvent === cdeNMI.cdeInputEvent.END)
-                thisObj.CalcNewPos(pPointer.AdjPosition.x, pPointer.AdjPosition.y, 1);
+                thisObj.CalcNewPos(pPointer.AdjPosition.x / thisObj.Scale, pPointer.AdjPosition.y / thisObj.Scale, 1);
         }
 
         sinkPointerDown(pTarget: INMIControl, pEvent: Event, pPointer: ThePointer) {
@@ -1667,7 +1676,7 @@
             if (!thisObj.IsPointerDown && thisObj.GetProperty("Disabled") !== true) {
                 thisObj.IsPointerDown = true;
                 thisObj.PointerID = pPointer.Identifier;
-                thisObj.CalcNewPos(pPointer.AdjPosition.x, pPointer.AdjPosition.y, 0);
+                thisObj.CalcNewPos(pPointer.AdjPosition.x / thisObj.Scale, pPointer.AdjPosition.y / thisObj.Scale, 0);
             }
         }
 
@@ -1676,9 +1685,9 @@
             const thisObj: ctrlBarChart = pTarget as ctrlBarChart;
             const tPS: number = thisObj.GetProperty("TouchPoints");
             if (tPS > 1)
-                thisObj.CalcNewPos(pPointer.AdjPosition.x, pPointer.AdjPosition.y, 2);
+                thisObj.CalcNewPos(pPointer.AdjPosition.x / thisObj.Scale, pPointer.AdjPosition.y / thisObj.Scale, 2);
             else
-                thisObj.CalcNewPos(pPointer.AdjPosition.x, pPointer.AdjPosition.y, 0);
+                thisObj.CalcNewPos(pPointer.AdjPosition.x / thisObj.Scale, pPointer.AdjPosition.y / thisObj.Scale, 0);
         }
 
         CalcNewPos(pX: number, pY: number, bSetVal: number) {
@@ -2560,8 +2569,6 @@
                 this.GaugeShell.SetProperty("Background", pValue);
             } else if (pName === "Background" && this.GaugeShell) {
                 this.mBackground = pValue;
-                this.IsDirty = true;
-            } else if (pName === "Title") {
                 bIsDirty = true;
             } else if (pName === "SubTitle" || pName === "LowerLimit" || pName === "UpperLimit") {
                 bIsDirty = true;

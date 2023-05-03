@@ -344,11 +344,11 @@ namespace cdeNMI {
         return tSeg;
     }
 
-    export function CreateTCB(pFacePlate: cdeNMI.TheFaceWait, pName: string, pType: cdeNMI.cdeControlType = cdeNMI.cdeControlType.SingleEnded): cdeNMI.TheControlBlock {
+    export function CreateTCB(pFacePlate: cdeNMI.TheFaceWait, pName: string, pType: cdeNMI.cdeControlType = cdeNMI.cdeControlType.SingleEnded, pDigits: number = 0): cdeNMI.TheControlBlock {
         const pTRF: cdeNMI.TheTRF = pFacePlate.TRF;
         const tTCB: cdeNMI.TheControlBlock = new cdeNMI.TheControlBlock();
         tTCB.TargetID = "CNMIC" + (cdeNMI.MyNMISettings.IDCounter++);
-        tTCB.MyControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel); 
+        tTCB.MyControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel);
 
         let tFldContent = "";
         const tFldInfo: cdeNMI.TheFieldInfo = new cdeNMI.TheFieldInfo(cdeControlType.SmartLabel, 0, null);
@@ -363,11 +363,16 @@ namespace cdeNMI {
             tFldInfo.FormID = cde.GuidToString(pTRF.TableName);
             tFldInfo.cdeN = pTRF.FldInfo.cdeN;
             tFldInfo.Type = pType;
+            if (pType == cdeNMI.cdeControlType.Number)
+                tFldInfo["Format"] = pDigits;
             tFldInfo["Element"] = "span";
 
             const tMyScreenInfo = cdeNMI.MyNMIModels[pTRF.ModelID];
             if (tMyScreenInfo && tMyScreenInfo.MyStorageMirror[tOwnerThingID]) {
                 tFldContent = cdeNMI.GetFldContent(tMyScreenInfo.MyStorageMirror[tOwnerThingID][pTRF.RowNo], tFldInfo, false);
+                if (pType == cdeNMI.cdeControlType.Number && tFldContent && pDigits > 0) {
+                    tFldContent = parseFloat(tFldContent).toFixed(pDigits);
+                }
             }
             const tTRF: cdeNMI.TheTRF = new cdeNMI.TheTRF(tOwnerThingID, pTRF ? pTRF.RowNo : 0, tFldInfo);
             tTRF.ModelID = pTRF ? pTRF.ModelID : null;
@@ -418,6 +423,18 @@ namespace cdeNMI {
             tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, "<%C20:", "%>");
             if (tSeg === null) break;
             tTCB = CreateTCB(pFacePlate, tSeg.Inner);
+            pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "<span ID=" + tTCB.TargetID + "></span>");
+        }
+        while (true) {
+            tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, "<%C12:", "%>");
+            if (tSeg === null) break;
+            const tF = tSeg.Inner.split(':');
+            let digi = 0;
+            if (tF.length > 1) {
+                digi = cde.CInt(tF[0]);
+                tSeg.Inner = tF[1];
+            }
+            tTCB = CreateTCB(pFacePlate, tSeg.Inner, cdeNMI.cdeControlType.Number, digi);
             pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "<span ID=" + tTCB.TargetID + "></span>");
         }
         while (true) {

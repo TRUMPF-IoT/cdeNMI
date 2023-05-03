@@ -18,6 +18,7 @@
         SaveProperty(pName: string, pValue);
         SetToDefault(bOnlyIfEmpty: boolean);
         AppendChild(pChild: INMIControl);
+        RemoveChild(pChild: INMIControl);
         AppendElement(pEle: HTMLElement);
         DeleteControl(tControl: INMIControl);
         RegisterNMIControl(): string;
@@ -610,6 +611,14 @@
             for (let offsetElement: HTMLElement = theElement; offsetElement; offsetElement = offsetElement.offsetParent as HTMLElement) {
                 tPoint.x += offsetElement.offsetLeft;
                 tPoint.y += offsetElement.offsetTop;
+                const ol: any = offsetElement;
+                if (ol.NMIControl && ol.NMIControl.ScreenScale) {
+                    const sc = ol.NMIControl.ScreenScale;
+                    if (sc != 0.0 && sc != 1.0) {
+                        tPoint.x *= sc;
+                        tPoint.y *= sc;
+                    }
+                }
                 if (offsetElement.className && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform === 0 && (offsetElement.className === 'cdeHeader'))
                     HasFixedRoot = true;
             }
