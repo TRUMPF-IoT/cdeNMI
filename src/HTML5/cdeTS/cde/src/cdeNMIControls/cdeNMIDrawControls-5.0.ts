@@ -2569,8 +2569,6 @@
                 this.GaugeShell.SetProperty("Background", pValue);
             } else if (pName === "Background" && this.GaugeShell) {
                 this.mBackground = pValue;
-                this.IsDirty = true;
-            } else if (pName === "Title") {
                 bIsDirty = true;
             } else if (pName === "SubTitle" || pName === "LowerLimit" || pName === "UpperLimit") {
                 bIsDirty = true;
