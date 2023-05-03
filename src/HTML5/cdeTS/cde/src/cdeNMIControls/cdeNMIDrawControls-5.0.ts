@@ -34,6 +34,7 @@
 
          private MyBackDrawObjects: TheDrawingObject[];
 
+         ScreenScale = 1.0;
          tObjPointer = -1;
          tStrokePointer = 0;
          tAsyncStrokes: TheDrawingObject[] = null;
@@ -483,7 +484,7 @@
             switch (tDrawingObjects.Type) {
                 case 1: //Rectangle
                     pctx.fillStyle = ctrlCanvasDraw.ProcessColor(this, pctx, tDrawingObjects.Fill);
-                    pctx.fillRect(tDrawingObjects.Left, tDrawingObjects.Top, tDrawingObjects.Width, tDrawingObjects.Height);
+                    pctx.fillRect(tDrawingObjects.Left / this.ScreenScale, tDrawingObjects.Top / this.ScreenScale, tDrawingObjects.Width / this.ScreenScale, tDrawingObjects.Height / this.ScreenScale);
                     break;
                 case 2: //Polyline
                     this.DrawPolyline(tDrawingObjects.HasEnded && this.bgctx ? this.bgctx : pctx, tDrawingObjects.ComplexData, tDrawingObjects.Foreground, tDrawingObjects.Fill);
@@ -493,18 +494,18 @@
                     if (tDrawingObjects.ComplexData.Font)
                         pctx.font = tDrawingObjects.ComplexData.Font;
                     pctx.strokeStyle = ctrlCanvasDraw.ProcessColor(this, pctx, tDrawingObjects.Fill);
-                    pctx.strokeText(tDrawingObjects.ComplexData.Text, tDrawingObjects.Left, tDrawingObjects.Top);
+                    pctx.strokeText(tDrawingObjects.ComplexData.Text, tDrawingObjects.Left / this.ScreenScale, tDrawingObjects.Top / this.ScreenScale);
                     break;
                 case 4: //Filled Cicrle
                     pctx.beginPath();
-                    pctx.arc(tDrawingObjects.Left, tDrawingObjects.Top, tDrawingObjects.Width, 0, 2 * Math.PI, false);
+                    pctx.arc(tDrawingObjects.Left / this.ScreenScale, tDrawingObjects.Top / this.ScreenScale, tDrawingObjects.Width / this.ScreenScale, 0, 2 * Math.PI, false);
                     pctx.fillStyle = ctrlCanvasDraw.ProcessColor(this, pctx, tDrawingObjects.Fill);
                     pctx.fill();
                     break;
                 case 5: //Empty Circle
                     pctx.beginPath();
-                    pctx.arc(tDrawingObjects.Left, tDrawingObjects.Top, tDrawingObjects.Width, 0, 2 * Math.PI, false);
-                    pctx.lineWidth = tDrawingObjects.StrokeThickness;
+                    pctx.arc(tDrawingObjects.Left / this.ScreenScale, tDrawingObjects.Top / this.ScreenScale, tDrawingObjects.Width / this.ScreenScale, 0, 2 * Math.PI, false);
+                    pctx.lineWidth = tDrawingObjects.StrokeThickness / this.ScreenScale;
                     pctx.strokeStyle = ctrlCanvasDraw.ProcessColor(this, pctx, tDrawingObjects.Fill);
                     pctx.stroke();
                     break;
@@ -512,13 +513,13 @@
                     {
                         const tIMG: HTMLImageElement = document.createElement("img");
                         tIMG.src = "data:image/jpeg;base64," + tDrawingObjects.ComplexData;
-                        pctx.drawImage(tIMG, tDrawingObjects.Left, tDrawingObjects.Top);
+                        pctx.drawImage(tIMG, tDrawingObjects.Left / this.ScreenScale, tDrawingObjects.Top / this.ScreenScale);
                     }
                     break;
                 case 7: //drawIcon
                     try {
                         if (jdenticon) {
-                            pctx.setTransform(1, 0, 0, 1, tDrawingObjects.Left, tDrawingObjects.Top);
+                            pctx.setTransform(1, 0, 0, 1, tDrawingObjects.Left / this.ScreenScale, tDrawingObjects.Top / this.ScreenScale);
                             jdenticon.drawIcon(pctx, tDrawingObjects.ComplexData, tDrawingObjects.Width);
                         }
                     }
@@ -555,8 +556,8 @@
         DrawPolyline(ctx: CanvasRenderingContext2D, pPoints: TheStrokePoint[], pColor?: string, pFillColor?: string) {
             if (pPoints.length === 1) {
                 ctx.beginPath();
-                ctx.arc(pPoints[0].PO.x, pPoints[0].PO.y, 10, 0, Math.PI, true);
-                ctx.arc(pPoints[0].PO.x, pPoints[0].PO.y, 10, Math.PI, Math.PI * 2, true);
+                ctx.arc(pPoints[0].PO.x / this.ScreenScale, pPoints[0].PO.y / this.ScreenScale, 10 / this.ScreenScale, 0, Math.PI, true);
+                ctx.arc(pPoints[0].PO.x / this.ScreenScale, pPoints[0].PO.y / this.ScreenScale, 10 / this.ScreenScale, Math.PI, Math.PI * 2, true);
                 if (pColor)
                     ctx.fillStyle = pColor;
                 ctx.globalAlpha = 0.5;
@@ -566,14 +567,14 @@
 
                 for (let i = 1; i < pPoints.length; ++i) {
                     ctx.beginPath();
-                    ctx.moveTo(pPoints[i - 1].PO.x, pPoints[i - 1].PO.y);
+                    ctx.moveTo(pPoints[i - 1].PO.x / this.ScreenScale, pPoints[i - 1].PO.y / this.ScreenScale);
                     ctx.lineCap = "round";
                     ctx.strokeStyle = pColor;
                     ctx.globalAlpha = 1;
-                    ctx.lineTo(pPoints[i].PO.x, pPoints[i].PO.y);
+                    ctx.lineTo(pPoints[i].PO.x / this.ScreenScale, pPoints[i].PO.y / this.ScreenScale);
                     let pStrokeThickness: number = pPoints[i].PO.t;
                     if (pStrokeThickness < 1) pStrokeThickness = 1;
-                    ctx.lineWidth = pStrokeThickness * cdeNMI.MyNMISettings.StrokeSize;
+                    ctx.lineWidth = pStrokeThickness * cdeNMI.MyNMISettings.StrokeSize / this.ScreenScale;
                     ctx.stroke();
                 }
 
@@ -609,14 +610,14 @@
                 }
             }
             ctx.beginPath();
-            ctx.moveTo(tStrokeP[thisObj.tStrokePointer - 1].PO.x, tStrokeP[thisObj.tStrokePointer - 1].PO.y);
+            ctx.moveTo(tStrokeP[thisObj.tStrokePointer - 1].PO.x / this.ScreenScale, tStrokeP[thisObj.tStrokePointer - 1].PO.y / this.ScreenScale);
             ctx.lineCap = "round";
             ctx.strokeStyle = thisObj.tAsyncStrokes[thisObj.tObjPointer].Foreground;
             ctx.globalAlpha = 1;
-            ctx.lineTo(tStrokeP[thisObj.tStrokePointer].PO.x, tStrokeP[thisObj.tStrokePointer].PO.y);
+            ctx.lineTo(tStrokeP[thisObj.tStrokePointer].PO.x / this.ScreenScale, tStrokeP[thisObj.tStrokePointer].PO.y / this.ScreenScale);
             let pStrokeThickness: number = tStrokeP[thisObj.tStrokePointer].PO.t;
             if (pStrokeThickness < 1) pStrokeThickness = 1;
-            ctx.lineWidth = pStrokeThickness * cdeNMI.MyNMISettings.StrokeSize;
+            ctx.lineWidth = pStrokeThickness * cdeNMI.MyNMISettings.StrokeSize / this.ScreenScale;
             ctx.stroke();
             let tDelay: number = tStrokeP[thisObj.tStrokePointer].DT - tStrokeP[thisObj.tStrokePointer - 1].DT;
             if (thisObj.tStrokePointer < 2)
