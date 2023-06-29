@@ -2747,7 +2747,9 @@
             } else
                 context.fillStyle = myLabCol;
 
-            let dValue:string = this.GetProperty("Value");
+            let dValue: string = this.GetProperty("Value");
+            if (!dValue)
+                dValue = "0";
             if (cde.CInt(this.GetProperty("Digits")) > 0)
                 dValue = cde.CDbl(this.GetProperty("Value")).toFixed(cde.CInt(this.GetProperty("Digits")));
             //centering canvas text

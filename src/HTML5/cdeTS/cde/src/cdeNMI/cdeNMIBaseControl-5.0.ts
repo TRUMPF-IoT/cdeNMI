@@ -57,6 +57,7 @@ namespace cdeNMI {
         public Visibility = true;
         public IsDisabled = false;
         public Is3DObject = false;
+        public IsDragging = false;
         public IsDirty = false;
         public HasFacePlate = false;
         public MyWidth = 0;
@@ -537,25 +538,7 @@ namespace cdeNMI {
                 this.MyRootElement = pRootControl;
                 (pRootControl as any).cookie = this;
                 if (typeof interact !== 'undefined' && cde.CBool(this.GetSetting("AllowDrag"))) {
-                    interact(pRootControl).draggable({
-                        listeners: {
-                            start(event) {
-                                const ele: INMIControl = event.target.cookie;
-                                ele.FireEvent(false, "DragStart");
-                            },
-                            move(event) {
-                                const ts = TheNMIScreen.GetScreenByID(event.target.cookie.MyFormID);
-                                let rat = 1.0;
-                                if (ts)
-                                    rat = ts.ScreenScale;
-                                const ele: INMIControl = event.target.cookie;
-                                if (ele) {
-                                    ele.SaveProperty("DragX", cde.CDbl(ele.GetProperty("DragX")) + event.dx / rat);
-                                    ele.SaveProperty("DragY", cde.CDbl(ele.GetProperty("DragY")) + event.dy / rat);
-                                }
-                            },
-                        }
-                    })
+                    this.AttachDragListener(this);
                 }
             }
             else {
@@ -577,6 +560,40 @@ namespace cdeNMI {
                     cdeNMI.MyEngine.PublishToNMI("NMI_FLD_LOADED:" + this.MyFieldInfo.cdeMID, this.GetSetting("OnLoaded"), this.cdeN);  //OnLoaded OK
                 }
             }
+        }
+
+        private AttachDragListener(pRootControl: TheNMIBaseControl) {
+            interact(pRootControl.GetElement()).draggable({
+                listeners: {
+                    start(event) {
+                        const ele: TheNMIBaseControl = event.target.cookie;
+                        ele.IsDragging = true;
+                        ele.FireEvent(false, "DragStart");
+                    },
+                    end(event) {
+                        const ele: TheNMIBaseControl = event.target.cookie;
+                        ele.IsDragging = false;
+                        ele.FireEvent(false, "DragEnd");
+                    },
+                    move(event) {
+                        const ts = TheNMIScreen.GetScreenByID(event.target.cookie.MyFormID);
+                        const ele: TheNMIBaseControl = event.target.cookie;
+                        if (!ts.Visibility) {
+                            ele.IsDragging = false;
+                            interact(ele.GetElement()).unset();
+                            ele.AttachDragListener(ele);
+                            return;
+                        }
+                        let rat = 1.0;
+                        if (ts)
+                            rat = ts.ScreenScale;
+                        if (ele) {
+                            ele.SaveProperty("DragX", cde.CDbl(ele.GetProperty("DragX")) + event.dx / rat);
+                            ele.SaveProperty("DragY", cde.CDbl(ele.GetProperty("DragY")) + event.dy / rat);
+                        }
+                    },
+                }
+            });
         }
 
         public DeleteControl(tControl: INMIControl) {
@@ -750,7 +767,7 @@ namespace cdeNMI {
         }
 
         private sinkDoEvent(pEvtObj: Event) {
-            if (cde.CBool(this.GetProperty("IsHitTestDisabled")) || cde.CBool(this.GetProperty("IsUnhooked")))
+            if (cde.CBool(this.GetProperty("IsHitTestDisabled")) || cde.CBool(this.GetProperty("IsUnhooked")) || this.IsDragging===true)
                 return;
 
             if (pEvtObj.type === "mousemove" && this.lastXYById.length === 0 && !cde.CBool(this.GetProperty("AllowMoveWithoutDown")))
