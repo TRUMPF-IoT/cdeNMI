@@ -889,8 +889,8 @@
                                 }, new TheTRF(this.MyTableName, i, tFldInfo));
                                 continue;
                             default:
+                                tFldInfo.Type = fTYpe;
                                 const oTRF:TheTRF = new TheTRF(this.MyTableName, i, tFldInfo);
-                                oTRF.FldInfo.Type = fTYpe;
                                 this.MyTableControls[i][tFldID] = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).
                                     Create(null,
                                         {
@@ -902,10 +902,12 @@
                                         });
                                 if ((tFldInfo.Flags & 2) !== 0 && tFldInfo.Type !== cdeNMI.cdeControlType.SmartLabel) {
                                     tD.MyNMIControl = this.MyTableControls[i][tFldID];
+                                    tD.MyNMIControl.SetProperty("cmRealType", fTYpe);
                                     this.MyTableControls[i][tFldID].MyNMIControl = tD;
                                     tD.MyNMIControl.MyDataView = this;
                                     tD.RegisterEvent("PointerUp", (pControl: INMIControl, evt: Event, pPointer: ThePointer) => {
                                         cdeNMI.StopPointerEvents(evt);
+                                        pControl.MyNMIControl.MyFieldInfo.Type = pControl.MyNMIControl.GetProperty("cmRealType");
                                         (pControl.MyNMIControl as ctrlSmartLabel).EditControl(evt, pPointer, pControl);
                                     });
                                 }
