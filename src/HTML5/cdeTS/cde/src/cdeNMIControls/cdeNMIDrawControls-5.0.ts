@@ -1286,6 +1286,8 @@
             const tScreen = cdeNMI.MyScreenManager.GetScreenByID(pScreenID);
             if (tScreen && tScreen.ScreenScale != 1.0 && tScreen.ScreenScale != 0.0) {
                 this.divTiles.style.transform = "scale(" + 1 / tScreen.ScreenScale + ")";
+                this.divTiles.style.width = (pTargetControl.GetContainerElement().clientWidth * tScreen.ScreenScale) - 5 + "px";
+                this.divTiles.style.height = (pTargetControl.GetContainerElement().clientHeight * tScreen.ScreenScale) - 5 + "px";
             }
 
             this.SetElement(this.divTiles, false);

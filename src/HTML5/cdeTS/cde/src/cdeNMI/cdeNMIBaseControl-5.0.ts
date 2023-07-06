@@ -115,11 +115,27 @@ namespace cdeNMI {
                 cdeNMI.ShowToastMessage("Name: " + pName + " Score:" + pScore.toFixed(2));
                 if (cde.MyEventLogger)
                     cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "ShapeRecognizer", "Name: " + pName + " Score:" + pScore.toFixed(2));
+                if (cde.CBool(this.GetSetting("DisallowEdit")) === true)
+                    return;
                 switch (pName) {
+                    case "x":
+                    case "delete":
+                        const tEl = this.GetElement();
+                        if (tEl && !tEl.classList.contains("cde-is-selected")) {
+                            tEl.classList.add("cde-is-selected");
+                        }
+                        if (cdeNMI.MyPopUp)
+                            cdeNMI.MyPopUp.Show("Are you sure you want to delete this control?",
+                                false,
+                                null,
+                                1,
+                                () => {
+                                    if (cdeNMI.MyEngine)
+                                        cdeNMI.MyEngine.PublishToNMI("NMI_EDITOR_DELETE", `${this.MyTRF.FldInfo.cdeMID};${sender.MyFormID};${this.MyTRF.FldInfo.cdeO}`, this.MyTRF.FldInfo.cdeN);
+                                });
+                        break;
                     case "circle":
                     case "rightmouse": {
-                        if (cde.CBool(this.GetSetting("DisallowEdit")) === true)
-                            return;
                         const tEl=this.GetElement();
                         if (tEl && !tEl.classList.contains("cde-is-selected")) {
                             tEl.classList.add("cde-is-selected");
