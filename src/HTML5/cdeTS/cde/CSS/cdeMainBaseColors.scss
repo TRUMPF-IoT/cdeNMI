@@ -672,7 +672,7 @@ $cde-toggle-active: $system-available-color-green !default;
         border-radius: 6px;
         box-shadow: 0 8px 16px rgba(0,0,0,0.25);
         overflow: hidden;
-        filter: drop-shadow(8px 8px 10px black) sepia(90%) hue-rotate(180deg);
+        filter: drop-shadow(8px 8px 10px black);
 
         &:before {
             content: '';

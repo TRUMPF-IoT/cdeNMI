@@ -42,5 +42,13 @@
   {
     "outputFile": "cde/CSS/MYSTYLES.css",
     "inputFile": "cde/CSS/MYSTYLES.scss"
+  },
+  {
+    "outputFile": "cde/CSS/cdeBaseColors.css",
+    "inputFile": "cde/CSS/cdeBaseColors.scss"
+  },
+  {
+    "outputFile": "cde/CSS/LcdeBaseColors.css",
+    "inputFile": "cde/CSS/LcdeBaseColors.scss"
   }
 ]
