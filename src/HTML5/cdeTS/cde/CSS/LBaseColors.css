@@ -603,6 +603,45 @@ button.cdeTabSelected {
   border-right-width: 2px;
 }
 
+.nmiFace1x1 {
+  width: 78px;
+  height: 78px;
+  position: absolute;
+  border: groove;
+}
+
+.nmiFace2x1 {
+  width: 156px;
+  height: 78px;
+  position: absolute;
+  border: groove;
+}
+
+.nmiFace2x2 {
+  width: 156px;
+  height: 156px;
+  position: absolute;
+  border: groove;
+}
+
+.nmiFace3x2 {
+  width: 234px;
+  height: 156px;
+  position: absolute;
+  border: groove;
+}
+
+.nmiFace3x3 {
+  width: 234px;
+  height: 234px;
+  position: absolute;
+  border: groove;
+}
+
+.nmiFace {
+  position: absolute;
+}
+
 input.cdeButton {
   color: hsl(0deg, 0%, 13%);
   background-color: initial;

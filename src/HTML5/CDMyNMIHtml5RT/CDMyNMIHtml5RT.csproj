@@ -54,7 +54,6 @@
     <None Remove="ClientBin\CDE\cde.minold.js" />
     <None Remove="ClientBin\CDE\cdeWorker.min.js" />
     <None Remove="ClientBin\CDE\cdeWorker.minold.js" />
-    <None Remove="ClientBin\CSS\cdeBaseColors.css" />
     <None Remove="ClientBin\CSS\cdeBaseColors.min.css" />
     <None Remove="ClientBin\CSS\CDESTYLES.min.css" />
     <None Remove="ClientBin\CSS\choices.dark.min.css" />
@@ -83,7 +82,6 @@
   <ItemGroup>
     <EmbeddedResource Include="ClientBin\CDE\cde.min.js" />
     <EmbeddedResource Include="ClientBin\CDE\cdeWorker.min.js" />
-    <EmbeddedResource Include="ClientBin\CSS\cdeBaseColors.css" />
     <EmbeddedResource Include="ClientBin\CSS\cdeBaseColors.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\CDESTYLES.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\choices.dark.min.css" />
