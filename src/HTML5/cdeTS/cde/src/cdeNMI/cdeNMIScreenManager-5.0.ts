@@ -915,7 +915,7 @@
                 const pMSGPLS: string = tParts[0];
                 if (!tModel.MyStorageMirror[tTableName] || cde.CBool(bForceInitData) === true) {
                     tModel.MyStorageMirror[tTableName] = (typeof (pMSGPLS) === "object" ? pMSGPLS : JSON.parse(pMSGPLS));
-                    cdeNMI.MyEngine.FireEvent(false, "RecordUpdated_" + tTableName + "_" + 0, tModelId, tTableName, 0);
+                    cdeNMI.MyEngine.FireEvent(false, "RecordUpdated_" + tTableName + "_" + 0, tModelId, tTableName, 0, null);
                 }
                 else {
                     const tTable = (typeof (pMSGPLS) === "object" ? pMSGPLS : JSON.parse(pMSGPLS));
@@ -931,7 +931,7 @@
                         }
                         if (!tFoundOne)
                             tModel.MyStorageMirror[tTableName][tLen] = element;
-                        cdeNMI.MyEngine.FireEvent(false, "RecordUpdated_" + tTableName + "_" + tLen, tModelId, tTableName, tLen);
+                        cdeNMI.MyEngine.FireEvent(false, "RecordUpdated_" + tTableName + "_" + tLen, tModelId, tTableName, tLen,null);
                     }
                 }
                 if (tParts.length > 1 && tModel.MyStorageMeta && (tModel.MyStorageMeta[tTableName] || cde.CBool(bForceInitData) === true)) {

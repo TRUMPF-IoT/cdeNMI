@@ -501,7 +501,7 @@ namespace cdeNMI {
                                     for (let tRowNo = 0; tRowNo < tModel.MyStorageMirror[tTableGuid].length; tRowNo++) {
                                         if (tModel.MyStorageMeta[tTableGuid].IsAlwaysEmpty || tModel.MyStorageMirror[tTableGuid][tRowNo].cdeMID === tRecord.cdeMID) {
                                             tModel.MyStorageMirror[tTableGuid][tRowNo] = tRecord;
-                                            this.FireEvent(false, "RecordUpdated_" + tTableGuid + "_" + tRowNo, tModelMid, tTableGuid, tRowNo);
+                                            this.FireEvent(false, "RecordUpdated_" + tTableGuid + "_" + tRowNo, tModelMid, tTableGuid, tRowNo, null);
                                             break;
                                         }
                                     }

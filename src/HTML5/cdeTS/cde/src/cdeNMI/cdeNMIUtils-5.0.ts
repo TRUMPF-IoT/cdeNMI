@@ -488,7 +488,7 @@ namespace cdeNMI {
             }
         }
         if (pFacePlate && pFacePlate.TRF) {
-            cdeNMI.MyEngine.RegisterEvent("RecordUpdated_" + pFacePlate.TRF.TableName + "_" + pFacePlate.TRF.RowNo, (pSI, pModelGUID, tTabName, tRowID, pDirtyMask) => {
+            cdeNMI.MyEngine.RegisterEvent("RecordUpdated_" + pFacePlate.TRF.TableName + "_" + pFacePlate.TRF.RowNo, (pSI, pModelGUID, tTabName, tRowID) => {
                 UpdateFldsFromTable(pModelGUID, tTabName, tRowID);
             });
             UpdateFldsFromTable(pFacePlate.TRF.ModelID, pFacePlate.TRF.TableName, pFacePlate.TRF.RowNo);
