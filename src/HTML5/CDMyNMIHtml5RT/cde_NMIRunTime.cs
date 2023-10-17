@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -22,7 +22,7 @@ namespace NMIService
         private bool IsAutoTheme = false;
         private bool IsLightTheme = false;
         SolarCalculator.SolarEvents SunriseSunset = null;
-        static private string PageScale = "";
+        static private string PageScale = ""; 
         static private string[] PlatformScale;
         private void InitNMIAssets()
         {
