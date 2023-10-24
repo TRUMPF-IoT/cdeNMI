@@ -37,7 +37,7 @@
             this.divTiles = document.createElement('div');
             this.divTiles.className = "cdeTiles";
             this.divTiles.style.cssFloat = "left";
-            if (pTRF && pTRF.FldInfo) {
+            if (pTRF?.FldInfo) {
                 this.divTiles.setAttribute("cdefo", cde.CStr(pTRF.FldInfo.FldOrder));
                 this.divTiles.setAttribute("cdemid", cde.GuidToString(pTRF.FldInfo.cdeMID));
                 if (cde.CBool(this.GetSetting("DisallowEdit")) === false)

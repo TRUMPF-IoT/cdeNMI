@@ -30,7 +30,7 @@
 
             this.MyTEContainer = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(pTargetControl, { ScreenID: pScreenID });
             this.MyTEContainer.SetProperty("ClassName", "cdeFlexRow cdeFlexCenter cdeTileContainer");
-            if (pTRF && pTRF.FldInfo) {
+            if (pTRF?.FldInfo) {
                 this.MyTEContainer.GetElement().setAttribute("cdefo", cde.CStr(pTRF.FldInfo.FldOrder));
                 this.MyTEContainer.GetElement().setAttribute("cdemid", cde.GuidToString(pTRF.FldInfo.cdeMID));
                 if (cde.CBool(this.GetSetting("DisallowEdit")) === false)

@@ -269,6 +269,7 @@ namespace cdeNMI {
                     }
                     else {
                         this.MyRootElement.style.display = 'none';
+                        this.MyRootElement.setAttribute("cdesel", "false");
                         this.OnUnload();
                     }
                 } else if (pName === "IsOwnerDown") {
@@ -1193,6 +1194,16 @@ namespace cdeNMI {
                                         }
                                     }
                                 }
+                                break;
+                            case cdeControlType.TimeSpan:
+                                if (pContent) {
+                                    tFormat = pFieldInfo["Format"];
+                                    if (!cde.IsNotSet(tFormat)) {
+                                        pContent = cdeNMI.prettyTime(cde.CDbl(pContent), tFormat);
+                                    }
+                                }
+                                else
+                                    pContent = "not set";
                                 break;
                             case cdeControlType.Number:
                                 if (pContent) {
