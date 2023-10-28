@@ -276,7 +276,7 @@ var CDMyC3;
             super.SetProperty(pName, pValue);
             if (TheC3Service.HaveCtrlsLoaded && this.myChartControl) {
                 if ((pName === "Value" || pName === "iValue") && pValue) {
-                    if (cdeCommonUtils.CStr(pValue).substr(0, 1) === "[") {
+                    if (cdeCommonUtils.CStr(pValue).substring(0, 1) === "[") {
                         const ts = JSON.parse(pValue);
                         for (let i = 0; i < ts.length; i++) {
                             this.AddValueToChart(ts[i].value, ts[i].name);
@@ -385,15 +385,23 @@ var CDMyC3;
                     hei = cdeNMI.GetSizeFromTile(hei);
                 this.myChartContainer.SetProperty("TileHeight", this.GetProperty("ControlTH"));
             }
+            let gridColor = this.GetProperty("GridColor");
+            if (!gridColor)
+                gridColor = "transparent";
             this.myChartCanvas.width = wid;
             this.myChartCanvas.height = hei;
             this.mTimeSeries = new Array();
-            const tConf = { millisPerPixel: this.mSpeed, grid: { verticalSections: 0, millisPerLine: millis, fillStyle: tBack, borderVisible: false }, horizontalLines: [{ color: '#ffffff', lineWidth: 1, value: 0 }] };
+            const tConf = { millisPerPixel: this.mSpeed, grid: { verticalSections: 0, strokeStyle: gridColor, millisPerLine: millis, fillStyle: tBack, borderVisible: false }, horizontalLines: [{ color: '#ffffff', lineWidth: 1, value: 0 }] };
             if (cdeCommonUtils.CInt(this.GetProperty("MaxValue")) !== 0)
                 tConf.maxValue = cdeCommonUtils.CInt(this.GetProperty("MaxValue"));
-            tConf.minValue = 0;
             if (cdeCommonUtils.CInt(this.GetProperty("MinValue")) !== 0)
                 tConf.minValue = cdeCommonUtils.CInt(this.GetProperty("MinValue"));
+            if (cde.CBool(this.GetProperty("HideLabels")) === true) {
+                tConf.labels = {};
+                tConf.labels.disabled = true;
+            }
+            if (cde.CBool(this.GetProperty("ShowTimestamps")) === true)
+                tConf.timestampFormatter = SmoothieChart.timeFormatter;
             tConf.scrollBackwards = this.mBackwards;
             this.myChartControl = new SmoothieChart(tConf);
             this.myChartControl.streamTo(this.myChartCanvas, this.mDelay);

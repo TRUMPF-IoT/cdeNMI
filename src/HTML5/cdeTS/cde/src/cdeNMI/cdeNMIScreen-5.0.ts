@@ -24,7 +24,6 @@
         oldz = "";
         oldBC = "";
         ScreenScale = 0.0;
-        IsDragging = false;
 
         MyScreenDIV: HTMLDivElement = null;
         MyScreen: HTMLDivElement = null; //BackCompat
@@ -34,6 +33,7 @@
         mIsInitialized = false;
         IsIFrame = false;
 
+        public AllowDragging = false;
         public MyHostNode = "";
         public MyRefreshButton: INMIControl = null;
         public MySavePin: INMIControl = null;
@@ -239,7 +239,7 @@
                 }
 
                 if (!IsTesla) {
-                    this.MySavePin = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.PinButton).Create(tAllPins, { ScreenID: this.MyScreenID, PostInitBag: ["iValue=true", "Right=140", "Top=6", "ClassName=cdeDivSave"] });
+                    this.MySavePin = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.PinButton).Create(tAllPins, { ScreenID: this.MyScreenID, PostInitBag: ["iValue=true", "Right=105", "Top=6", "ClassName=cdeDivSave"] });
                     this.MySavePin.SetProperty("OnClick", (val, evt: MouseEvent, pointer: cdeNMI.ThePointer) => {
                         const tScreen: cdeNMI.INMIDataView = cdeNMI.MyTCF.GetRegisteredControl("TABLES", this.MyScreenID) as INMIDataView;
                         if (tScreen) {
@@ -326,7 +326,7 @@
                 this.MyRefreshPin.SetProperty("Visibility", false);
 
                 if (cde.MyBaseAssets.MyServiceHostInfo.RedPill === true) {
-                    this.MyDrawPin = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.PinButton).Create(tAllPins, { ScreenID: this.MyScreenID, PostInitBag: ["iValue=true", "Right=105", "Top=6", "ClassName=cdeDivDraw"] });
+                    this.MyDrawPin = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.PinButton).Create(tAllPins, { ScreenID: this.MyScreenID, PostInitBag: ["iValue=true", "Right=140", "Top=6", "ClassName=cdeDivDraw"] });
                     this.MyDrawPin.SetProperty("OnClick", (val, evt: MouseEvent, pointer: cdeNMI.ThePointer) => {
                         if (!this.MyOverlay) {
                             const tcr = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.DrawOverlay);
@@ -341,27 +341,23 @@
                     });
                     this.MyDrawPin.SetProperty("Content", "<i class='fa'>&#xf044;</i>");
                     this.MyDrawPin.SetProperty("Visibility", !cde.CBool(this.GetSetting("UseIFrame")));
-                }
 
-                if (cde.CBool(this.GetSetting("AllowDrag"))) {
+                //} if (cde.CBool(this.GetSetting("AllowDrag"))) {
                     this.mDragButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.PinButton).Create(tAllPins, { ScreenID: this.MyScreenID, PostInitBag: ["iValue=true", "Right=175", "Top=6", "ClassName=cdeDivDraw"] });
-                    this.mDragButton.SetProperty("Content", "<i class='fa'>&#xF0b2;</i>");
-                    this.mDragButton.SetProperty("HoverClassName", "cdeDragButton");
-                    this.mDragButton.SetProperty("OnPointerDown", (sender, e) => {
-                        if (this.IsDragging) {
-                            this.closeDragElement(e);
-                            return;
+                    if (this.AllowDragging)
+                        this.mDragButton.SetProperty("Content", "<i class='fa cdeDragSel'>&#xF58E;</i>");
+                    else
+                        this.mDragButton.SetProperty("Content", "<i class='fa cdeDrag'>&#xF58D;</i>");
+                    this.mDragButton.SetProperty("Visibility", !cde.CBool(this.GetSetting("UseIFrame")));
+                    this.mDragButton.SetProperty("OnClick", (val, evt: MouseEvent, pointer: cdeNMI.ThePointer) => {
+                        if (!this.AllowDragging) {
+                            this.AllowDragging = true;
+                            this.mDragButton.SetProperty("Content", "<i class='fa cdeDragSel'>&#xF58E;</i>");
                         }
-                        e = e || window.event;
-                        e.preventDefault();
-                        this.pos3 = e.clientX;
-                        this.pos4 = e.clientY;
-                        this.mDragButton.SetProperty("Foreground", "green");
-                        this.IsDragging = true;
-                        this.oldz = this.MyScreenDIV.style.zIndex;
-                        this.MyScreenDIV.style.zIndex = "450";
-                        document.onpointerup = (evt) => { this.closeDragElement(evt); }
-                        document.onpointermove = (evt) => { this.elementDrag(evt); };
+                        else {
+                            this.mDragButton.SetProperty("Content", "<i class='fa cdeDrag'>&#xF58D;</i>");
+                            this.AllowDragging = false;
+                        }
                     });
                 }
             }
@@ -399,42 +395,6 @@
             }
 
             return true;
-        }
-
-        closeDragElement(e: Event) {
-            e.stopPropagation();
-            e.preventDefault();
-            this.IsDragging = false;
-            /* stop moving when mouse button is released:*/
-            document.onpointermove = null;
-            document.onpointerup = null;
-            this.mDragButton.SetProperty("Foreground", null);
-
-            this.MyScreenDIV.style.zIndex = this.oldz;
-            this.ApplySkin();
-        }
-
-        oldTop = 0;
-        oldLeft = 0;
-        elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // calculate the new cursor position:
-            this.pos1 = this.pos3 - e.clientX;
-            this.pos2 = this.pos4 - e.clientY;
-            this.pos3 = e.clientX;
-            this.pos4 = e.clientY;
-
-            if (this.pos1 === 0 && this.pos2 === 0) {
-                this.closeDragElement(e);
-                return;
-            }
-            this.IsDragging = true;
-            // set the element's new position:
-            this.oldTop = (this.oldTop - this.pos2)
-            this.oldLeft = (this.oldLeft - this.pos1)
-            this.MyScreenDIV.style.top = (this.oldTop) + "px";
-            this.MyScreenDIV.style.left = (this.oldLeft) + "px";
         }
 
         SaveHomeScreen(tScreen: INMIScreen) {

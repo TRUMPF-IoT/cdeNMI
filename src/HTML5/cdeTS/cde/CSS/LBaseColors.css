@@ -419,6 +419,14 @@ div.cdeDivRefresh {
   color: hsl(0deg, 0%, 53%);
 }
 
+.cdeDrag {
+  color: hsl(0deg, 0%, 53%);
+}
+
+.cdeDragSel {
+  color: red;
+}
+
 div.cdeSideBar {
   background-color: hsl(0deg, 0%, 15%);
 }

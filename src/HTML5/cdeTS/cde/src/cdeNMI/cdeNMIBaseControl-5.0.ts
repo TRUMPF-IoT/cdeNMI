@@ -581,9 +581,23 @@ namespace cdeNMI {
 
         private AttachDragListener(pRootControl: TheNMIBaseControl) {
             interact(pRootControl.GetElement()).draggable({
+                modifiers: [
+                    interact.modifiers.snap({
+                        // snap to the corners of a grid
+                        targets: [
+                            interact.snappers.grid({ x: 10, y: 10 }),
+                        ],
+                    })
+                ],
                 listeners: {
                     start(event) {
                         const ele: TheNMIBaseControl = event.target.cookie;
+                        const ts = TheNMIScreen.GetScreenByID(ele?.MyFormID);
+                        if (ts.AllowDragging !== true) {
+                            interact(ele.GetElement()).unset();
+                            ele.AttachDragListener(ele);
+                            return;
+                        }
                         ele.IsDragging = true;
                         ele.FireEvent(false, "DragStart");
                     },
@@ -593,8 +607,13 @@ namespace cdeNMI {
                         ele.FireEvent(false, "DragEnd");
                     },
                     move(event) {
-                        const ts = TheNMIScreen.GetScreenByID(event.target.cookie.MyFormID);
                         const ele: TheNMIBaseControl = event.target.cookie;
+                        const ts = TheNMIScreen.GetScreenByID(ele?.MyFormID);
+                        if (ts.AllowDragging !== true || ele.IsDragging === false || event.buttons<1) {
+                            interact(ele.GetElement()).unset();
+                            ele.AttachDragListener(ele);
+                            return;
+                        }
                         if (!ts.Visibility) {
                             ele.IsDragging = false;
                             interact(ele.GetElement()).unset();
@@ -605,8 +624,12 @@ namespace cdeNMI {
                         if (ts)
                             rat = ts.ScreenScale;
                         if (ele) {
-                            ele.SaveProperty("DragX", cde.CDbl(ele.GetProperty("DragX")) + event.dx / rat);
-                            ele.SaveProperty("DragY", cde.CDbl(ele.GetProperty("DragY")) + event.dy / rat);
+                            let x = cde.CDbl(ele.GetProperty("DragX")) + event.dx / rat;
+                            //if (cde.CDbl(ele.GetProperty("Left")) > 0 && cde.CDbl(ele.GetProperty("Left")) - x < 0) x = 0;
+                            let y = cde.CDbl(ele.GetProperty("DragY")) + event.dy / rat;
+                            //if (cde.CDbl(ele.GetProperty("Top")) > 0 && cde.CDbl(ele.GetProperty("Top")) - y < 0) y = 0;
+                            ele.SaveProperty("DragX", x);
+                            ele.SaveProperty("DragY", y);
                         }
                     },
                 }

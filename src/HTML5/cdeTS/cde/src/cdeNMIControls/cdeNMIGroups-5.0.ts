@@ -247,7 +247,6 @@
         pos4 = 0;
         oldz = "";
         oldBC = "";
-        IsDragging = false;
         mDefaultSize = 6;
         IsTesla = false;
 
@@ -304,7 +303,7 @@
             this.SetElement(this.GetElement(), false, this.mContentGroup.GetElement());
 
             this.mTitleGroup.RegisterEvent("PointerUp", (pControl: cdeNMI.INMIControl, evt) => {
-                if (evt.type === "mousedown" || this.IsDragging)
+                if (evt.type === "mousedown")
                     return;
                 if (this.MyFieldInfo && (this.MyFieldInfo.Flags & 2) !== 0)
                     this.ToggleDrop(!cde.CBool(cde.CBool(this.GetProperty("IsOpen"))), false);
@@ -360,34 +359,7 @@
                 }
             }
 
-            if (cde.CBool(this.GetSetting("AllowDrag"))) {
-                this.mDragButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(this.mTitleGroup, { PreInitBag: ["ControlTW=1", "ControlTH=1"], PostInitBag: ["iValue=<span class='fa fa-lg cdeFormPin'>&#xF0b2;<span>"] });
-                this.mDragButton.SetProperty("Float", "right");
-                this.mDragButton.SetProperty("HoverClassName", "cdeDragButton");
-                if (!this.IsTesla && cde.CBool(this.GetSetting("IsSmall"))) {
-                    this.mDragButton.SetProperty("TileFactorX", 2);
-                    this.mDragButton.SetProperty("TileFactorY", 2);
-                }
-                this.mDragButton.SetProperty("OnPointerDown", (sender, e) => {
-                    if (this.IsDragging) {
-                        this.closeDragElement(e);
-                        return;
-                    }
-                    e = e || window.event;
-                    e.preventDefault();
-                    this.pos3 = e.clientX;
-                    this.pos4 = e.clientY;
-                    this.IsDragging = true;
-                    document.onpointerup = (evt) => { this.closeDragElement(evt); }
-                    this.oldz = this.MyRootElement.style.zIndex;
-                    this.MyRootElement.style.zIndex = "4000";
-                    this.oldBC = this.GetElement().style.backgroundColor;
-                    this.GetElement().style.backgroundColor = "rgba(0,0,0,.4)";
-                    document.onpointermove = (evt) => { this.elementDrag(evt); };
-                });
-            } else {
-                this.SetProperty("Overflow", "hidden");
-            }
+            this.SetProperty("Overflow", "hidden");
             this.ApplySkin();
             this.ToggleDrop(!cde.CBool(cde.CBool(this.GetProperty("DoClose"))), true);
             return true;
@@ -452,43 +424,6 @@
             } else if (!this.IsTesla && pName === "IsSmall" && this.mTitleGroup) {
                 this.SetGroupHeaderSize();
             }
-        }
-
-        closeDragElement(e: Event) {
-            cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "closedrag", "closed");
-            e.stopPropagation();
-            e.preventDefault();
-            this.IsDragging = false;
-            /* stop moving when mouse button is released:*/
-            document.onpointermove = null;
-            document.onpointerup = null;
-
-            this.MyRootElement.style.zIndex = this.oldz;
-            //Snap control infront of the control its on - except it was right infront of it
-            this.MyRootElement.style.top = "0px";
-            this.MyRootElement.style.left = "0px";
-            this.GetElement().style.backgroundColor = this.oldBC;
-            this.ApplySkin();
-        }
-
-        elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            // calculate the new cursor position:
-            this.pos1 = this.pos3 - e.clientX;
-            this.pos2 = this.pos4 - e.clientY;
-            this.pos3 = e.clientX;
-            this.pos4 = e.clientY;
-
-            if (this.pos1 === 0 && this.pos2 === 0) {
-                this.closeDragElement(e);
-                return;
-            }
-            this.IsDragging = true;
-            cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "ElemetDrag", this.pos1 + "," + this.pos2 + "," + this.pos3 + "," + this.pos4);
-            // set the element's new position:
-            this.MyRootElement.style.top = (this.MyRootElement.offsetTop - this.pos2) + "px";
-            this.MyRootElement.style.left = (this.MyRootElement.offsetLeft - this.pos1) + "px";
         }
 
         public SetNewWidth(tW: number) {
