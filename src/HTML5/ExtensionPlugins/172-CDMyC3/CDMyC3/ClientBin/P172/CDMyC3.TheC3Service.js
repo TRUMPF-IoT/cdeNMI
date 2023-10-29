@@ -396,6 +396,9 @@ var CDMyC3;
                 tConf.maxValue = cdeCommonUtils.CInt(this.GetProperty("MaxValue"));
             if (cdeCommonUtils.CInt(this.GetProperty("MinValue")) !== 0)
                 tConf.minValue = cdeCommonUtils.CInt(this.GetProperty("MinValue"));
+            if (cde.CBool(this.GetProperty("ShowTooltips")) === true) {
+                tConf.tooltip = true;
+            }
             if (cde.CBool(this.GetProperty("HideLabels")) === true) {
                 tConf.labels = {};
                 tConf.labels.disabled = true;
