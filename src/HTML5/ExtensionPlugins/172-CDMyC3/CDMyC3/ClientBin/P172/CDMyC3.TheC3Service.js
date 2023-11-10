@@ -366,7 +366,7 @@ var CDMyC3;
             if (this.GetProperty("SeriesNames"))
                 this.mSeriesNames = cde.cdeEval("(" + this.GetProperty("SeriesNames") + ")");
             else
-                this.mSeriesNames = [{ name: 'Data', lineColor: 'rgba(0,255,0,0.39)' }];
+                this.mSeriesNames = [{ name: 'Data', lineColor: 'rgba(0,255,0,0.39)', fillColor: 'transparent' }];
             let wid = cdeCommonUtils.CInt(this.GetProperty("PixelWidth"));
             if (wid === 0) {
                 wid = cdeCommonUtils.CInt(this.GetProperty("ControlTW"));
