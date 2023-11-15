@@ -80,13 +80,13 @@ namespace cdeNMI {
             }
             else {
                 if ((this.MyScreenInfo.IsLiveForm || this.MyScreenInfo.MyStorageMirror[this.MyStorageName]) && tCurrentRow >= 0) {
-                    cdeNMI.MyEngine.RegisterEvent("RecordUpdated_" + this.MyStorageName + "_" + tCurrentRow, (pSI: cdeNMI.INMIControl, pModelGUID: string, tTabName: string, tRowID: number) => {
+                    cdeNMI.MyEngine.RegisterEvent("RecordUpdated_" + this.MyStorageName + "_" + tCurrentRow, (pSI: cdeNMI.INMIControl, pModelGUID: string, tTabName: string, tRowID: number,pMask:string, pTRF:TheTRF) => {
                         //Updates a form from changes in the corresponding table p- but no templates or wizards (they should always be blank)
                         if (pModelGUID && pModelGUID !== "" && !this.GetSetting("TableReference")) {
                             const tMod: TheScreenInfo = cdeNMI.MyNMIModels[pModelGUID];
                             for (const cc in this.MyFormControls) {
                                 const tN = this.MyFormControls[cc].GetProperty("DataItem");
-                                if (tN) {
+                                if (tN && (!pTRF || pTRF.FldInfo.cdeO==this.MyTRF.FldInfo.cdeO)) {
                                     if (!Object.prototype.hasOwnProperty.call(tMod.MyStorageMirror[tTabName][tRowID], 'SecToken')) {
                                         const tCont = cdeNMI.GetFldContent(tMod.MyStorageMirror[tTabName][tRowID], this.MyFormControls[cc].MyFieldInfo, this.MyScreenInfo.IsGenerated);
                                         if (this.MyFormControls[cc].GetProperty("Value") !== tCont)
@@ -94,7 +94,7 @@ namespace cdeNMI {
                                     }
                                 }
                             }
-                            this.ValidateRules(pModelGUID, null, tTabName, tRowID, this.MyFormControls, true, false);    //Runs values change in a table against the form - no push to Relay
+                            this.ValidateRules(pModelGUID, null, tTabName, pTRF, this.MyFormControls, true, false);    //Runs values change in a table against the form - no push to Relay
                         }
                     });
                     if (!this.MyScreenInfo.IsLiveForm) {
@@ -258,11 +258,11 @@ namespace cdeNMI {
                                                 tLocalOnly = true;
                                             }
                                             //Checks rules after each ValueChange. tLocalOnly is true for Templates and Wizards
-                                            this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyStorageName, sender.MyTRF ? sender.MyTRF.RowNo : 0, this.MyFormControls, tLocalOnly, false); //if IsPostingOnSubmit is true, no push to node
+                                            this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyStorageName, sender.MyTRF, this.MyFormControls, tLocalOnly, false); //if IsPostingOnSubmit is true, no push to node
                                         });
                                         if (e.MyBaseType === cdeControlType.TileButton && cde.CBool(e.GetProperty("IsSubmit")) === true) {   //Wizard and Template submit
                                             e.SetProperty("OnClick", (sender: INMIControl) => {
-                                                this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyStorageName, sender.MyTRF ? sender.MyTRF.RowNo : 0, this.MyFormControls, false, true); //Submit button pushed - all values will be written and sent to Node
+                                                this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyStorageName, sender.MyTRF, this.MyFormControls, false, true); //Submit button pushed - all values will be written and sent to Node
                                                 if (!this.PropertyBag["FinishPage"] && !this.PropertyBag["ProcessingPage"]) {
                                                     if (this.PropertyBag["FinishScreenID"]) {
                                                         const tScrParts = this.PropertyBag["FinishScreenID"];
@@ -290,7 +290,7 @@ namespace cdeNMI {
                     }
                 }
             }
-            this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyStorageName, tCurrentRow, this.MyFormControls, true, false); //Just verify all rules on the form
+            this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyStorageName, this.MyTRF, this.MyFormControls, true, false); //Just verify all rules on the form
             cdeNMI.TheFlashCache.FlushCache();
             this.RegisterEvent("RRT", () => { this.RenderRenderTargets(); });
             this.SetProperty("ID", "FORM_" + this.MyTableName);

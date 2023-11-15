@@ -725,7 +725,7 @@ if (rng_pool == null) {
     var t;
     while (rng_pptr < rng_psize) {
         if (typeof window === typeof undefined) {
-            t = Math.floor(65536 * Math.random()); //NOSONAR not available in WebWorker
+            t = Math.floor(65536 * Math.random());
         }
         else {
             const crypto = window.crypto || window.msCrypto;
@@ -1182,8 +1182,14 @@ var cde;
                                     if (!this.MyHSI.InitialNPA)
                                         this.MyHSI.InitialNPA = pConfig.RequestPath;
                                 }
-                                pConfig = tConfig;
-                                this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State Restored', 1);
+                                if (pConfig && (pConfig.uri != tConfig.uri || pConfig.wsuri != tConfig.wsuri || pConfig.host != tConfig.host)) {
+                                    this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State ignored - host has changed', 1);
+                                    this.DeleteFromIDB();
+                                }
+                                else {
+                                    pConfig = tConfig;
+                                    this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State Restored', 1);
+                                }
                             }
                             else {
                                 this.FireEvent(true, "CDE_NEW_LOGENTRY", "IndexedDB:message", 'State ignored', 1);
@@ -1422,8 +1428,8 @@ var cde;
                     MyQueuedMsg = new cde.TheCoreQueueContent("", "", tDevList);
                     const tRPath = (pRetryPath ? pRetryPath : this.MyConfig.RequestPath);
                     uri = this.MyFallbackServiceUrl + encodeURI(tRPath);
-                    if (this.UsesWebSockets === false && uri.substr(uri.length - 5, 5) === ".ashx")
-                        uri = uri.substr(0, uri.length - 5);
+                    if (this.UsesWebSockets === false && uri.substring(uri.length - 5) === ".ashx")
+                        uri = uri.substring(0, uri.length - 5);
                     if (MyQueuedMsg.TOPIC !== "")
                         uri += "?" + encodeURI(MyQueuedMsg.TOPIC);
                     MyQueuedMsg.RQP = uri;
@@ -1702,8 +1708,8 @@ var cde;
                                     if (tLogParts.length > 3) {
                                         try {
                                             const pos = cde.GetSubstringIndex(tMsg.TOP, ':', 3);
-                                            const tres = tMsg.TOP.substr(pos + 1);
-                                            if (tres.length > 2 && tres.substr(0, 1) === "{")
+                                            const tres = tMsg.TOP.substring(pos + 1);
+                                            if (tres.length > 2 && tres.substring(0, 1) === "{")
                                                 this.MyHSI.UserPref = JSON.parse(tres);
                                             else
                                                 this.MyHSI.UserPref.LCID = cde.CInt(tres);
@@ -1723,7 +1729,7 @@ var cde;
                             this.MyHSI.IsUserLoggedIn = true;
                             this.MyHSI.UserPref.ScreenParts = tScrParts;
                             this.Pre4209SID = tMsg.SID;
-                            if (tMsg.SID && tMsg.SID.substr(0, 2) === "UT") {
+                            if (tMsg.SID && tMsg.SID.substring(0, 2) === "UT") {
                                 this.Pre4209SID = null;
                                 this.MyConfig.Creds = new cde.TheCDECredentials();
                                 this.MyConfig.Creds.QToken = tMsg.SID;
@@ -1734,7 +1740,7 @@ var cde;
                             this.mLoginSent = false;
                         }
                         else if (tLogParts[0] === 'SELECT_MESH') {
-                            const tMeshPicker = tMsg.TOP.substr('SELECT_MESH:'.length);
+                            const tMeshPicker = tMsg.TOP.substring('SELECT_MESH:'.length);
                             const tMeshes = JSON.parse(tMeshPicker);
                             this.FireEvent(true, "CDE_SELECT_MESH", tMeshes);
                         }

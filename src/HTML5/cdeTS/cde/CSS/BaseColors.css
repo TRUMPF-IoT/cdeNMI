@@ -1,8 +1,8 @@
 ﻿/*
- * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
- *
- * SPDX-License-Identifier: CC0-1.0
- */
+* Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+*
+* SPDX-License-Identifier: CC0-1.0
+*/
 /**
 * This file overwrites values in MainBaseColors.scss and defines C-DEngine
 * styles in the SomeBrand theme.
@@ -32,408 +32,529 @@
 * is re-complied. This file does not ever compile on its own.
 **/
 body.cdeBody {
-  background-color: #444; }
+  background-color: #444;
+}
 
 div.cdeHeader {
-  background-color: #262626; }
+  background-color: hsl(0deg, 0%, 15%);
+}
 
 h1.cdeScreenTitle {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 td.MyItemFont {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 span.cdeMyHeaderTitle {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 td.cdeDlgTitleBar {
-  color: #262626; }
+  color: hsl(0deg, 0%, 15%);
+}
 
 div.cdeCentered {
-  background: rgba(0, 0, 0, 0.1);
-  /* Older browsers */ }
+  background: rgba(0, 0, 0, 0.1); /* Older browsers */
+}
 
 td.Data {
-  color: #444; }
+  color: #444;
+}
 
 span.cdeInfoText {
-  color: red; }
+  color: red;
+}
 
 .cdeHeadline2 {
-  color: #ccc; }
+  color: #ccc;
+}
 
 .cdeHeadline {
-  color: #ccc; }
+  color: #ccc;
+}
 
 h1.cdeDashCategory {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 p.cdeNormal {
-  color: #ccc; }
+  color: #ccc;
+}
 
 body.cdeLogBody {
-  background-color: white; }
+  background-color: white;
+}
 
 td.cdeLogEntry {
-  border-color: #ccc; }
+  border-color: #ccc;
+}
 
 th.cdeLogEntryHeader {
   border-color: #ccc;
   background-color: lightgray;
-  color: white; }
+  color: white;
+}
 
 li.cdeChannelInfo {
-  color: lightgray; }
+  color: lightgray;
+}
 
 .cdePopupContent {
-  padding: 20px; }
+  padding: 20px;
+}
 
 div.cdePopupOverlay {
-  background: rgba(0, 0, 0, 0.8); }
+  background: rgba(0, 0, 0, 0.8);
+}
 
 .cdePopupTemplate {
   background-color: #181818;
   box-shadow: 10px 10px rgba(41, 41, 41, 0.48);
   border-width: 6px;
   border-style: solid;
-  border-color: #252525; }
+  border-color: #252525;
+}
 
 /*Login Stuff*/
 .cdeEngineStatusRed {
   background: red;
-  color: white; }
+  color: white;
+}
 
 td.cdeEngineStatusGreen {
   background: green;
-  color: white; }
+  color: white;
+}
 
 td.cdeEngineStatusYellow {
   background: #fce233;
-  color: black; }
+  color: black;
+}
 
 /*ctrlTabelView Colors*/
 table.cdeHilite {
-  color: #1e586d; }
+  color: #1e586d;
+}
 
 div.CMyTable {
-  background-color: #444; }
+  background-color: #444;
+}
 
 table.CMyTable {
-  color: #444; }
+  color: #444;
+}
 
 h1.cdeTableHeader {
-  color: #ccc; }
+  color: #ccc;
+}
 
 th.cdeTH {
   color: #eee;
   background-image: none;
   background-color: rgba(30, 88, 109, 0.7);
-  font-size: 16px; }
+  font-size: 16px;
+}
 
 tr.cdeHeaderRow {
-  color: rgba(30, 88, 109, 0.7); }
+  color: rgba(30, 88, 109, 0.7);
+}
 
 tr.cdeRowOdd {
   background-color: #666;
   color: #ccc;
-  border-bottom-color: rgba(0, 0, 0, 0.4); }
+  border-bottom-color: rgba(0, 0, 0, 0.4);
+}
 
 tr.cdeRowDeleted {
-  background-color: red; }
+  background-color: red;
+}
 
 tr.cdeRowEven {
   color: #ccc;
   border-bottom-color: rgba(0, 0, 0, 0.4);
-  background-color: #444; }
+  background-color: #444;
+}
 
 tr.cdeHilightRow {
-  background-color: #1e586d; }
+  background-color: #1e586d;
+}
 
 div.CMyCanvas {
-  background-color: #444; }
+  background-color: #444;
+}
 
 div.cdeAboutBox {
-  color: white; }
+  color: white;
+}
 
 input.cdeInput {
   color: white;
   background-color: rgba(90, 90, 90, 0.72);
-  border: 1px solid #3f4458; }
+  border: 1px solid #3f4458;
+}
 
 input.cdeInputCombo {
   color: white;
-  background-color: rgba(90, 90, 90, 0.72); }
+  background-color: rgba(90, 90, 90, 0.72);
+}
 
 div.ctrlCheckBox {
   color: white;
   background-color: rgba(90, 90, 90, 0.72);
-  border: 1px solid #3f4458; }
+  border: 1px solid #3f4458;
+}
 
 div.cdeLiveImg {
-  color: #ccc; }
+  color: #ccc;
+}
 
 input.cdeButton {
-  color: #ccc; }
+  color: #ccc;
+}
 
 button.cdeAddButton {
-  color: #ccc; }
+  color: #ccc;
+}
 
 button.cdeLiveTileBar {
   color: white;
   background-color: rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 0, 0, 0.2); }
+  border-color: rgba(0, 0, 0, 0.2);
+}
 
 input.cdeInputCredentials {
   color: white;
   background-color: rgba(90, 90, 90, 0.72);
-  border: 1px solid #3f4458; }
+  border: 1px solid #3f4458;
+}
 
 input.cdeInputNumber {
   color: white;
   background-color: rgba(90, 90, 90, 0.72);
-  border: 1px solid #3f4458; }
+  border: 1px solid #3f4458;
+}
 
 input.cdeInputCenter {
   color: white;
   background-color: rgba(90, 90, 90, 0.72);
-  border: 1px solid #3f4458; }
+  border: 1px solid #3f4458;
+}
 
 textarea.ctrlTextArea {
   background-color: rgba(90, 90, 90, 0.72);
-  color: white; }
+  color: white;
+}
 
 div.ctrlEndlessSlider {
-  background-color: rgba(90, 90, 90, 0.72); }
+  background-color: rgba(90, 90, 90, 0.72);
+}
 
 div.ctrlBarChart {
-  background-color: rgba(90, 90, 90, 0.72); }
+  background-color: rgba(90, 90, 90, 0.72);
+}
 
 .cdeMutLock {
   background-color: black;
-  color: white; }
+  color: white;
+}
 
 h1.cdeTileGroupHeader {
-  color: #ccc; }
+  color: #ccc;
+}
 
 div.cdeTileGroupHeader {
-  color: #ccc; }
+  color: #ccc;
+}
 
 div.cdeTileGroupHeaderSmall {
-  color: #ccc; }
+  color: #ccc;
+}
 
 div.cdeCloseGroup {
-  color: #ccc; }
+  color: #ccc;
+}
 
 div.ctrlDropUploader {
   border-color: #3f4458;
   background-color: rgba(90, 90, 90, 0.72);
   color: white;
-  border-width: 6px; }
+  border-width: 6px;
+}
 
 div.ctrlDropUploaderHover {
   background-color: white;
   border-color: #ccc;
-  border-width: 6px; }
+  border-width: 6px;
+}
 
 .cdeDashPlate {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 div.cdeTileTextSmall {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 .cdeTiles {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 .cdeLiveTile {
   color: #CCCCCC;
   background-color: rgba(0, 0, 0, 0.1);
   border-color: rgba(0, 0, 0, 0.2);
-  border-radius: 20px; }
+  border-radius: 20px;
+}
 
 div.cdeOuterTileButton {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 .cdeLiveTileLong {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 .cdeLiveTileVeryLong {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 .cdeLiveTileSmall {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 div.cdeTileEntry {
   color: #ccc;
   background-color: rgba(0, 0, 0, 0.1);
   border-top-color: #ccc;
   border-right-color: #ccc;
-  border-bottom-color: #ccc; }
+  border-bottom-color: #ccc;
+}
 
 div.cdeTileText {
-  color: inherit; }
+  color: inherit;
+}
 
 div.cdeTileTextNoImg {
-  color: inherit; }
+  color: inherit;
+}
 
 div.cdeTileEntryText {
-  color: #ccc; }
+  color: #ccc;
+}
 
 div.cdeLiveTileSmall {
   color: #ccc;
-  background-color: rgba(0, 0, 0, 0.1); }
+  background-color: rgba(0, 0, 0, 0.1);
+}
 
 .actionButton {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 ::-webkit-scrollbar {
-  background-color: rgba(0, 0, 0, 0.1); }
+  background-color: rgba(0, 0, 0, 0.1);
+}
 
 ::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.1); }
+  background-color: rgba(0, 0, 0, 0.1);
+}
 
 ::-webkit-scrollbar-thumb {
-  background-color: #1e586d; }
+  background-color: #1e586d;
+}
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #1e586d; }
+  background-color: #1e586d;
+}
 
 ::-webkit-scrollbar-thumb:active {
-  background-color: #1e586d; }
+  background-color: #1e586d;
+}
 
 a {
-  color: #1e586d; }
+  color: #1e586d;
+}
 
 a:visited {
-  color: #1e586d; }
+  color: #1e586d;
+}
 
 div.SensorGroupLabel {
   background: #1e586d;
-  background-color: #1e586d; }
+  background-color: #1e586d;
+}
 
 div.TransparentGroupLabel {
   background: transparent;
-  background-color: transparent; }
+  background-color: transparent;
+}
 
 div.cdePinDiv {
-  color: #888; }
+  color: #888;
+}
 
 div.cdeUnpinDiv {
-  color: #888; }
+  color: #888;
+}
 
 div.cdeDivUp {
-  color: #888; }
+  color: #888;
+}
 
 div.cdeDivDown {
-  color: #888; }
+  color: #888;
+}
 
 div.cdeDivSave {
-  color: #888; }
+  color: #888;
+}
 
 div.cdeDivDraw {
-  color: #888; }
+  color: #888;
+}
 
 div.cdeDivRefresh {
-  color: #888; }
+  color: #888;
+}
+
+.cdeDrag {
+  color: #888;
+}
+
+.cdeDragSel {
+  color: red;
+}
 
 div.cdeSideBar {
-  background-color: #262626; }
+  background-color: hsl(0deg, 0%, 15%);
+}
 
 .cdeScreenListButtoninner {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 .cdeMyHeaderTitleModern {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 .cdeVertCenter {
-  color: #fce131; }
+  color: hsl(52deg, 97%, 59%);
+}
 
 .cdeOkButton {
   color: #ccc;
-  background-color: #1e586d; }
+  background-color: #1e586d;
+}
 
 .cdeYesButton {
   background-color: green;
-  color: #eee; }
+  color: #eee;
+}
 
 .cdeNoButton {
   background-color: red;
-  color: #eee; }
+  color: #eee;
+}
 
 .cdeTableButton {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 .cdeDeleteButton {
-  background-image: none; }
+  background-image: none;
+}
 
 .cdeDetailButton {
-  background-image: none; }
+  background-image: none;
+}
 
 .MyHeaderButton {
   background-image: none;
-  color: #888; }
+  color: #888;
+}
 
 div.cdePopupBackAlarm {
-  background: black; }
+  background: hsl(0deg, 0%, 0%);
+}
 
 div.cdePopupBackInfo {
-  background: black; }
+  background: hsl(0deg, 0%, 0%);
+}
 
 div.cdePopupContent41 {
-  color: white; }
+  color: white;
+}
 
 .cdeSwitch {
-  background: #bebaa7; }
+  background: hsl(50deg, 15%, 70%);
+}
 
 .cdeSwitch div {
-  background: white; }
+  background: hsl(0deg, 0%, 100%);
+}
 
 .toggleChecked > .cdeSwitch {
-  background: #65bb00; }
+  background: #65bb00;
+}
 
 .cdeSideBarRight {
-  background-color: black; }
+  background-color: black;
+}
 
 /*cdeStatus0 to cdeStatus7 refer to the status level 0=gray, 1=green, 2=yellow, 3=red, 4=blue, 5=brown, 6=purlple, 7=black*/
 .cdeStatus0 {
   background-color: gray;
-  color: white; }
+  color: white;
+}
 
 .cdeStatus1 {
   background-color: green;
-  color: white; }
+  color: white;
+}
 
 .cdeStatus2 {
   background-color: yellow;
-  color: black; }
+  color: black;
+}
 
 .cdeStatus3 {
   background-color: red;
-  color: white; }
+  color: white;
+}
 
 .cdeStatus4 {
   background-color: blue;
-  color: white; }
+  color: white;
+}
 
 .cdeStatus5 {
   background-color: brown;
-  color: white; }
+  color: white;
+}
 
 .cdeStatus6 {
   background-color: purple;
-  color: white; }
+  color: white;
+}
 
 .cdeStatus7 {
   background-color: black;
-  color: white; }
+  color: white;
+}
 
 .cdeWizardExplainer {
-  color: #eee; }
+  color: #eee;
+}
 
 .cdeTileEntryLabel {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 .cdeTileEntryLabelSmall {
-  color: #CCCCCC; }
+  color: #CCCCCC;
+}
 
 .cdeBlurBack {
   position: absolute;
@@ -442,22 +563,25 @@ div.cdePopupContent41 {
   border-radius: 6px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
   overflow: hidden;
-  filter: drop-shadow(8px 8px 10px black) sepia(90%) hue-rotate(180deg); }
-  .cdeBlurBack:before {
-    content: '';
-    position: absolute;
-    top: -20px;
-    left: -20px;
-    right: -20px;
-    bottom: -20px;
-    background: inherit;
-    filter: blur(10px) saturate(2); }
-  .cdeBlurBack.dragging:before {
-    filter: blur(10px) sepia(1) hue-rotate(200deg); }
-
+  filter: drop-shadow(8px 8px 10px black);
+}
+.cdeBlurBack:before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;
+  background: inherit;
+  filter: blur(10px) saturate(2);
+}
+.cdeBlurBack.dragging:before {
+  filter: blur(10px) sepia(1) hue-rotate(200deg);
+}
 .cdeMainTableHeader {
   background-color: #1e586d;
-  margin: 0px; }
+  margin: 0px;
+}
 
 .cdeTableContainer {
   box-sizing: border-box;
@@ -467,26 +591,71 @@ div.cdePopupContent41 {
   border-right-style: solid;
   border-right-width: 1px;
   border-bottom-style: solid;
-  border-bottom-width: 1px; }
+  border-bottom-width: 1px;
+}
 
 .cdeTabButton {
   background: #1e586d;
-  background-color: #1e586d; }
+  background-color: #1e586d;
+}
 
 .cdeTabNotSelected {
-  border: none; }
+  border: none;
+}
 
 button.cdeTabSelected {
   border-style: solid;
   border-color: #cccccc;
   border-top-width: 2px;
   border-left-width: 2px;
-  border-right-width: 2px; }
+  border-right-width: 2px;
+}
+
+.nmiFace1x1 {
+  width: 78px;
+  height: 78px;
+  position: absolute;
+  border: groove;
+}
+
+.nmiFace2x1 {
+  width: 156px;
+  height: 78px;
+  position: absolute;
+  border: groove;
+}
+
+.nmiFace2x2 {
+  width: 156px;
+  height: 156px;
+  position: absolute;
+  border: groove;
+}
+
+.nmiFace3x2 {
+  width: 234px;
+  height: 156px;
+  position: absolute;
+  border: groove;
+}
+
+.nmiFace3x3 {
+  width: 234px;
+  height: 234px;
+  position: absolute;
+  border: groove;
+}
+
+.nmiFace {
+  position: absolute;
+}
 
 input.cdeButton {
   color: #ccc;
-  background-color: initial; }
+  background-color: initial;
+}
 
 button.cdeAddButton {
   color: #ccc;
-  background-color: initial; }
+  background-color: initial;
+}

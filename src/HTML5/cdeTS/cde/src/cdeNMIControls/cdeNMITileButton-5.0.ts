@@ -439,6 +439,8 @@
 
         eventTileDown(pTarget: INMIControl, pEvent: Event, pPointer: ThePointer) {
             if (!this.GetProperty("Disabled")) {
+                if (TheNMIScreen.GetScreenByID(this.MyFormID)?.AllowDragging === true)
+                    return;
                 if (pPointer.IsOnObject || cde.CBool(this.GetProperty("IgnoreHitTarget"))) {
                     this.WasClicked = false;
                     this.SetProperty("IsDown", true);
@@ -450,6 +452,8 @@
 
         eventTileExit(pTarget: INMIControl, pEvent: Event, pPointer: ThePointer) {
             if (!this.GetProperty("Disabled")) {
+                if (TheNMIScreen.GetScreenByID(this.MyFormID)?.AllowDragging === true)
+                    return;
                 this.SetProperty("IsDown", false);
                 this.ShowHoverOut(this.s2);
                 if ((pPointer.IsOnObject || cde.CBool(this.GetProperty("IgnoreHitTarget"))) && pPointer.PathLength() < cdeNMI.MyNMISettings.DeadPathLength) {
@@ -459,6 +463,8 @@
         }
 
         public FireClick(pSender: INMIControl, pEvent?: Event) {
+            if (TheNMIScreen.GetScreenByID(this.MyFormID)?.AllowDragging === true)
+                return;
             if (this.HasEvent("OnClick") && !this.WasClicked) {
                 if (this.GetProperty("AreYouSure")) {
                     if (cdeNMI.MyPopUp)

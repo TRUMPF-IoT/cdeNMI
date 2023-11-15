@@ -918,7 +918,8 @@
                 }
                 cdeNMI.MyEngine.UnregisterEvent("RecordUpdated_" + this.MyTableName + "_" + i, this.UpdateRecord);
                 cdeNMI.MyEngine.RegisterEvent("RecordUpdated_" + this.MyTableName + "_" + i, this.UpdateRecord);
-                this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyTableName, i, this.MyTableControls[i], true, false);  //Run local rules on Table Row
+                let ttrf = new TheTRF(this.MyTableName, i, this.MyTRF.FldInfo);
+                this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyTableName, ttrf, this.MyTableControls[i], true, false);  //Run local rules on Table Row
             }
             cdeNMI.TheFlashCache.FlushCache();
             this.InfoText.SetProperty("Text", "");
@@ -943,7 +944,7 @@
                         this.MyNMIEditControl.SaveProperty(pCtrl.GetProperty("TargetPropName"), pValue);
                     }
                     if (pTRF) {
-                        this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyTableName, pTRF.RowNo, this.MyTableControls[pTRF.RowNo], false, false); //Push Table changes to Relay
+                        this.ValidateRules(this.MyScreenID, this.MyTableName, this.MyTableName, pTRF, this.MyTableControls[pTRF.RowNo], false, false); //Push Table changes to Relay
                     }
                 });
             }
@@ -961,7 +962,7 @@
             tDCellDiv.AppendChild(this.MyTableControls[i][tFldID]);
         }
 
-        UpdateRecord(pSI: cdeNMI.INMIControl, pModelMID: string, tTabName: string, tRowID: number, tMask: string) {
+        UpdateRecord(pSI: cdeNMI.INMIControl, pModelMID: string, tTabName: string, tRowID: number, tMask: string, pTRF: TheTRF) {
             if (this.MyTableName && this.MyTableName === tTabName) {
                 const tMod: TheScreenInfo = cdeNMI.MyNMIModels[pModelMID];
                 if (tMod) {
@@ -974,7 +975,7 @@
                         }
                         cnt++; //V5: This was missing!
                     }
-                    this.ValidateRules(pModelMID, tTabName, tTabName, tRowID, this.MyTableControls[tRowID], true, false);  //Validate rules in Row
+                    this.ValidateRules(pModelMID, tTabName, tTabName, pTRF, this.MyTableControls[tRowID], true, false);  //Validate rules in Row
                 }
             }
         }

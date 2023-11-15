@@ -483,6 +483,13 @@ div.cdeDivRefresh {
     color: $cde-tile-icon-color;
 }
 
+.cdeDrag {
+    color: $cde-tile-icon-color;
+}
+.cdeDragSel {
+    color: red;
+}
+
 .cdeFormPin {
 }
 
@@ -672,7 +679,7 @@ $cde-toggle-active: $system-available-color-green !default;
         border-radius: 6px;
         box-shadow: 0 8px 16px rgba(0,0,0,0.25);
         overflow: hidden;
-        filter: drop-shadow(8px 8px 10px black) sepia(90%) hue-rotate(180deg);
+        filter: drop-shadow(8px 8px 10px black);
 
         &:before {
             content: '';
@@ -735,3 +742,39 @@ $cde-toggle-active: $system-available-color-green !default;
         border-left-width: 2px;
         border-right-width: 2px;
     }
+
+.nmiFace1x1 {
+    width: 78px;
+    height: 78px;
+    position: absolute;
+    border: groove;
+}
+
+.nmiFace2x1 {
+    width: 156px;
+    height: 78px;
+    position: absolute;
+    border: groove;
+}
+.nmiFace2x2 {
+    width: 156px;
+    height: 156px;
+    position: absolute;
+    border: groove;
+}
+.nmiFace3x2 {
+    width: 234px;
+    height: 156px;
+    position: absolute;
+    border: groove;
+}
+.nmiFace3x3 {
+    width: 234px;
+    height: 234px;
+    position: absolute;
+    border: groove;
+}
+
+.nmiFace {
+    position: absolute;
+}

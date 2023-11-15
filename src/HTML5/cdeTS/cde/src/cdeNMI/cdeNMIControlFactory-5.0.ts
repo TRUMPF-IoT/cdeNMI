@@ -562,6 +562,9 @@
         }
 
         stringToFunction = function (str) {
+            let tCtrl = cdeNMI.MyTCF.GetControlByName(str);
+            if (tCtrl)
+                str = tCtrl.split(':')[0];
             const arr = str.split(".");
 
             const fn = (window) as any;

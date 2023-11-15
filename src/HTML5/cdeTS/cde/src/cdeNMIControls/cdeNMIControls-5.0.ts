@@ -1530,19 +1530,6 @@
             super(null, pTRF);
         }
 
-        static CreateOLD(pTarget: INMIControl, pScreenID: string, pTRF: TheTRF, IsChecked: boolean, pTitle?: string, pIsOverLay?: boolean, pClassName?: string): ctrlCheckBox {
-            const tTile: ctrlCheckBox = new ctrlCheckBox(pTRF);
-            tTile.InitControl(pTarget, pTRF, null, pScreenID);
-            if (pClassName)
-                tTile.SetProperty("ClassName", pClassName);
-            tTile.SetProperty("iValue", IsChecked);
-            if (cde.CBool(pIsOverLay))
-                tTile.SetProperty("IsOverlay", pIsOverLay);
-            if (pTitle)
-                tTile.SetProperty("Title", pTitle);
-            return tTile;
-        }
-
         MyCheckBox: HTMLDivElement = null;
         IsCustomCheck = false;
         MyLabel: HTMLLabelElement = null;
@@ -1556,7 +1543,7 @@
 
             this.MyCheckBox = document.createElement("div");
             this.MyCheckBox.className = "cdeToggleSwitch";
-            var cw = cde.CInt(this.GetSetting("CheckWidth"));
+            let cw = cde.CInt(this.GetSetting("CheckWidth"));
             if (cw == 0)
                 cw = 1;
             this.MyCheckBox.style.height = (cdeNMI.GetSizeFromTile(cw)) + "px";

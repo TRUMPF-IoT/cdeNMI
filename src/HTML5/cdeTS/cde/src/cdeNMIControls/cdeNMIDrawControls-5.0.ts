@@ -2252,11 +2252,19 @@
 
             if (tW > 0) {
                 this.containerTileGroup.SetProperty("TileWidth", tW);
-                this.canvas.width = cdeNMI.GetSizeFromTile(this.containerTileGroup.GetProperty("TileWidth"));
+                let ttw = cdeNMI.GetSizeFromTile(this.containerTileGroup.GetProperty("TileWidth"));
+                let fx = cde.CInt(this.GetProperty("TileFactorX"));
+                if (fx > 1)
+                    ttw /= fx;
+                this.canvas.width = ttw;
             }
             if (tH > 0) {
                 this.containerTileGroup.SetProperty("TileHeight", tH);
-                this.canvas.height = cdeNMI.GetSizeFromTile(this.containerTileGroup.GetProperty("TileHeight"));
+                let tth = cdeNMI.GetSizeFromTile(this.containerTileGroup.GetProperty("TileHeight"));
+                let fx = cde.CInt(this.GetProperty("TileFactorY"));
+                if (fx > 1)
+                    tth /= fx;
+                this.canvas.height = tth;
             }
 
             cde.MyBaseAssets.RegisterEvent("ThemeSwitched", () => {
@@ -2279,12 +2287,25 @@
                 bIsDirty = true;
             } else if (pName === "ControlTW" && this.context) {
                 this.containerTileGroup.SetProperty("TileWidth", pValue);
-                this.canvas.width = cdeNMI.GetSizeFromTile(this.containerTileGroup.GetProperty("TileWidth"));
+                let ttw = cdeNMI.GetSizeFromTile(this.containerTileGroup.GetProperty("TileWidth"));
+                let fx = cde.CInt(this.GetProperty("TileFactorX"));
+                if (fx > 1)
+                    ttw /= fx;
+                this.canvas.width = ttw;
                 bIsDirty = true;
-
             } else if (pName === "ControlTH" && this.context) {
                 this.containerTileGroup.SetProperty("TileHeight", pValue);
-                this.canvas.height = cdeNMI.GetSizeFromTile(this.containerTileGroup.GetProperty("TileHeight"));
+                let tth = cdeNMI.GetSizeFromTile(this.containerTileGroup.GetProperty("TileHeight"));
+                let fx = cde.CInt(this.GetProperty("TileFactorY"));
+                if (fx > 1)
+                    tth /= fx;
+                this.canvas.height = tth;
+                bIsDirty = true;
+            } else if (pName === "PixelWidth") {
+                this.canvas.width = cde.CDbl(pValue);
+                bIsDirty = true;
+            } else if (pName === "PixelHeight") {
+                this.canvas.height = cde.CDbl(pValue);
                 bIsDirty = true;
             } else if (pName === "StartAngle" || pName === "EndAngle") {
                 bIsDirty = true;

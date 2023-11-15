@@ -247,7 +247,7 @@ namespace cdeNMI {
                         }
                         break;
                     default:
-                        this.myChoicesOptions.searchEnabled = false;
+                        this.myChoicesOptions.searchEnabled = cde.CBool(this.GetProperty("EnableSearch"));
                         SortOptions = true;
                         break;
                 }

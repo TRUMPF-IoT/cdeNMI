@@ -108,6 +108,7 @@
         MyHostNode: string;
         HasRenderTarget: boolean;
         ScreenScale: number;
+        AllowDragging: boolean;
     }
 
     export interface INMITileEntry extends INMIControl {

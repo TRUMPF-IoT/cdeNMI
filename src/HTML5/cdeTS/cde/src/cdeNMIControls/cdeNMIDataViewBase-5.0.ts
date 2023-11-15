@@ -31,13 +31,16 @@
                     return this.MyTableControls[pRowNo][this.MyTRF.TableName + "_" + pRowNo + "_" + pFld];
             }
         }
-        public ValidateRules(pScreenID: string, pFormID: string, pTableName: string, pRow: number, pFldEntries: INMIControl[], pLocalOnly: boolean, pForceWrite: boolean): boolean {
+        public ValidateRules(pScreenID: string, pFormID: string, pTableName: string, pTRF: TheTRF, pFldEntries: INMIControl[], pLocalOnly: boolean, pForceWrite: boolean): boolean {
             const tModel: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[pScreenID];
             if (!pFormID)
                 pFormID = this.MyTableName;
 
             if (!tModel.MyStorageMeta[pFormID] || tModel.MyStorageMeta[pFormID].AreRulesRunning === true)
                 return false;
+            let tRowNo = 0;
+            if (pTRF) tRowNo = pTRF.RowNo;
+                
             tModel.MyStorageMeta[pFormID].AreRulesRunning = true;
             try {
                 let bIsDirty = false;
@@ -48,7 +51,7 @@
                 const tOldValues: [] = [];
                 let RowData = null;
                 if (tModel.MyStorageMirror[pTableName])
-                    RowData = tModel.MyStorageMirror[pTableName][pRow];
+                    RowData = tModel.MyStorageMirror[pTableName][tRowNo];
                 if (!RowData)
                     RowData = {};
                 if (RowData.cdeMID)
@@ -65,7 +68,7 @@
                     try {
                         tFldInfo = tModel.MyStorageMeta[pFormID].FormFields[j];
                         if (!tFldInfo) continue;
-                        tFldEntry = pFldEntries[pTableName + "_" + pRow + "_" + tFldInfo.FldOrder];
+                        tFldEntry = pFldEntries[pTableName + "_" + tRowNo + "_" + tFldInfo.FldOrder];
                         let WasDirty = false;
                         if (tFldEntry && tFldInfo.Type !== cdeControlType.CollapsibleGroup && tFldInfo.Type !== cdeControlType.TileGroup) {   //TODO: do not process any control that uses the OnUpdateName with Format!
                             if (tFldEntry.MyNMIControl && tFldEntry.MyNMIControl.MyBaseType !== 27)
@@ -97,7 +100,7 @@
                                     }
                                 }
                             }
-                            if (pForceWrite || ((tFldInfo.Flags & 2) !== 0 && !cde.CBool(tFldInfo["WriteOnce"])) || WasDirty)
+                            if (pForceWrite || ((!pTRF || pTRF.FldInfo.cdeO == tFldInfo.cdeO) && (((tFldInfo.Flags & 2) !== 0 && !cde.CBool(tFldInfo["WriteOnce"])) || WasDirty)))
                                 tDirtyMask += "1";
                             else
                                 tDirtyMask += "0";
@@ -124,12 +127,12 @@
                         }
                     }
                     if (cdeNMI.MyEngine && tID !== "")
-                        cdeNMI.MyEngine.FireEvent(false, "RecordUpdated_" + pTableName + "_" + pRow, cde.GuidToString(tModel.cdeMID), pTableName, pRow, tDirtyMask);
+                        cdeNMI.MyEngine.FireEvent(false, "RecordUpdated_" + pTableName + "_" + tRowNo, cde.GuidToString(tModel.cdeMID), pTableName, tRowNo, tDirtyMask, pTRF);
                 }
 
                 for (j = 0; j < tModel.MyStorageMeta[pFormID].FormFields.length; j++) {
                     tFldInfo = tModel.MyStorageMeta[pFormID].FormFields[j];
-                    tFldEntry = pFldEntries[pTableName + "_" + pRow + "_" + tFldInfo.FldOrder];
+                    tFldEntry = pFldEntries[pTableName + "_" + tRowNo + "_" + tFldInfo.FldOrder];
                     let IsHidden = false;
                     const tHideCondition: string = tFldInfo["HideCondition"];
                     if (tHideCondition && tHideCondition !== "") {

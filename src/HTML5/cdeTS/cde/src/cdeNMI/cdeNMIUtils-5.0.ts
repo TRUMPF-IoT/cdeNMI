@@ -344,7 +344,7 @@ namespace cdeNMI {
         return tSeg;
     }
 
-    export function CreateTCB(pFacePlate: cdeNMI.TheFaceWait, pName: string, pType: cdeNMI.cdeControlType = cdeNMI.cdeControlType.SingleEnded, pDigits: number = 0): cdeNMI.TheControlBlock {
+    export function CreateTCB(pFacePlate: cdeNMI.TheFaceWait, pName: string, pType: cdeNMI.cdeControlType = cdeNMI.cdeControlType.SingleEnded, pDigits: number = 0, pCookie:any=null): cdeNMI.TheControlBlock {
         const pTRF: cdeNMI.TheTRF = pFacePlate.TRF;
         const tTCB: cdeNMI.TheControlBlock = new cdeNMI.TheControlBlock();
         tTCB.TargetID = "CNMIC" + (cdeNMI.MyNMISettings.IDCounter++);
@@ -365,13 +365,19 @@ namespace cdeNMI {
             tFldInfo.Type = pType;
             if (pType == cdeNMI.cdeControlType.Number)
                 tFldInfo["Format"] = pDigits;
+            if (pType == cdeNMI.cdeControlType.TimeSpan)
+                tFldInfo["Format"] = pCookie;
             tFldInfo["Element"] = "span";
 
             const tMyScreenInfo = cdeNMI.MyNMIModels[pTRF.ModelID];
             if (tMyScreenInfo && tMyScreenInfo.MyStorageMirror[tOwnerThingID]) {
                 tFldContent = cdeNMI.GetFldContent(tMyScreenInfo.MyStorageMirror[tOwnerThingID][pTRF.RowNo], tFldInfo, false);
-                if (pType == cdeNMI.cdeControlType.Number && tFldContent && pDigits > 0) {
-                    tFldContent = parseFloat(tFldContent).toFixed(pDigits);
+                if (tFldContent) {
+                    if (pType == cdeNMI.cdeControlType.Number && pDigits > 0) {
+                        tFldContent = parseFloat(tFldContent).toFixed(pDigits);
+                    } else if (pType == cdeNMI.cdeControlType.TimeSpan) {
+                        tFldContent = prettyTime(cde.CDbl(tFldContent),cde.CStr(pCookie));
+                    }
                 }
             }
             const tTRF: cdeNMI.TheTRF = new cdeNMI.TheTRF(tOwnerThingID, pTRF ? pTRF.RowNo : 0, tFldInfo);
@@ -411,6 +417,18 @@ namespace cdeNMI {
             tTCB = new cdeNMI.TheControlBlock();
             tTCB.TargetID = "CNMIC" + (cdeNMI.MyNMISettings.IDCounter++);
             pFacePlate.TargetControl.SetProperty(tSeg.Inner + "_TCB", tTCB);
+            pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "<span ID=" + tTCB.TargetID + "></span>");
+        }
+        while (true) {
+            tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, "<%C9:", "%>");
+            if (tSeg === null) break;
+            const tF = tSeg.Inner.split(':');
+            let digi = "s";
+            if (tF.length > 1) {
+                digi = cde.CStr(tF[0]);
+                tSeg.Inner = tF[1];
+            }
+            tTCB = CreateTCB(pFacePlate, tSeg.Inner, cdeNMI.cdeControlType.TimeSpan,0, digi);
             pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "<span ID=" + tTCB.TargetID + "></span>");
         }
         while (true) {
@@ -488,7 +506,7 @@ namespace cdeNMI {
             }
         }
         if (pFacePlate && pFacePlate.TRF) {
-            cdeNMI.MyEngine.RegisterEvent("RecordUpdated_" + pFacePlate.TRF.TableName + "_" + pFacePlate.TRF.RowNo, (pSI, pModelGUID, tTabName, tRowID, pDirtyMask) => {
+            cdeNMI.MyEngine.RegisterEvent("RecordUpdated_" + pFacePlate.TRF.TableName + "_" + pFacePlate.TRF.RowNo, (pSI, pModelGUID, tTabName, tRowID) => {
                 UpdateFldsFromTable(pModelGUID, tTabName, tRowID);
             });
             UpdateFldsFromTable(pFacePlate.TRF.ModelID, pFacePlate.TRF.TableName, pFacePlate.TRF.RowNo);
@@ -1449,7 +1467,7 @@ namespace cdeNMI {
             if (!element || element === document.documentElement) {
                 break;
             }
-            if (element.getAttribute("cdesel") && !tResControl) {
+            if (cde.CBool(element.getAttribute("cdesel") )===true && !tResControl) {
                 const myNmiControl = cdeNMI.MyTCF.GetRegisteredControlGroup(element.getAttribute("cdemid")); 
                 for (const tInfo in myNmiControl) {
                     if (myNmiControl.hasOwnProperty(tInfo)) {
@@ -1459,6 +1477,10 @@ namespace cdeNMI {
                 }
             }
             elements.push(element);
+            if (elements.length > 500) {
+                debugger;
+                break;
+            }
             oldVisibility.push(element.style.visibility);
             element.style.visibility = 'hidden'; // Temporarily hide the element (without changing the layout)
         }
@@ -1506,6 +1528,88 @@ namespace cdeNMI {
         } else {
             focussable[0].focus();
         }
+    }
+
+    export function prettyTime(val: number, typeOfNum: string): string {
+
+        let years, days, hrs, mnts, seconds;
+        switch (typeOfNum) {
+            case 'n':
+                seconds = val * (0.001);
+
+                years = Math.floor(seconds / (365 * 3600 * 24));
+                seconds -= years * 365 * 3600 * 24;
+
+                days = Math.floor(seconds / (3600 * 24));
+                seconds -= days * 3600 * 24;
+
+                hrs = Math.floor(seconds / 3600);
+                seconds -= hrs * 3600;
+
+                mnts = Math.floor(seconds / 60);
+                seconds -= mnts * 60;
+                break;
+            case 's':
+                seconds = val;
+
+                years = Math.floor(seconds / (365 * 3600 * 24));
+                seconds -= years * 365 * 3600 * 24;
+
+                days = Math.floor(seconds / (3600 * 24));
+                seconds -= days * 3600 * 24;
+
+                hrs = Math.floor(seconds / 3600);
+                seconds -= hrs * 3600;
+
+                mnts = Math.floor(seconds / 60);
+                seconds -= mnts * 60;
+                break;
+            case 'm':
+                seconds = val * 60;
+
+                years = Math.floor(seconds / (365 * 3600 * 24));
+                seconds -= years * 365 * 3600 * 24;
+
+                days = Math.floor(seconds / (3600 * 24));
+                seconds -= days * 3600 * 24;
+
+                hrs = Math.floor(seconds / 3600);
+                seconds -= hrs * 3600;
+
+                mnts = Math.floor(seconds / 60);
+                seconds -= mnts * 60;
+                break;
+            case 'h':
+                seconds = val * (3600);
+
+                years = Math.floor(seconds / (365 * 3600 * 24));
+                seconds -= years * 365 * 3600 * 24;
+
+                days = Math.floor(seconds / (3600 * 24));
+                seconds -= days * 3600 * 24;
+
+                hrs = Math.floor(seconds / 3600);
+                seconds -= hrs * 3600;
+
+                mnts = Math.floor(seconds / 60);
+                seconds -= mnts * 60;
+                break;
+        }
+
+        let retStr = "";
+        if (years > 0)
+            retStr += years + "y ";
+        if (days > 0)
+            retStr += days + "d ";
+        if (hrs > 0)
+            retStr += hrs + "h ";
+        if (mnts > 0)
+            retStr += mnts + "m ";
+        if (seconds > 0)
+            retStr += Math.floor(seconds) + "s ";
+        if (retStr.length === 0)
+            retStr = "-";
+        return retStr;
     }
 }
 
