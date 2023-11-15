@@ -1606,7 +1606,7 @@ namespace cdeNMI {
         if (mnts > 0)
             retStr += mnts + "m ";
         if (seconds > 0)
-            retStr += seconds + "s ";
+            retStr += Math.floor(seconds) + "s ";
         if (retStr.length === 0)
             retStr = "-";
         return retStr;
