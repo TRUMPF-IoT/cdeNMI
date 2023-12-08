@@ -50,5 +50,9 @@
   {
     "outputFile": "cde/CSS/LcdeBaseColors.css",
     "inputFile": "cde/CSS/LcdeBaseColors.scss"
+  },
+  {
+    "outputFile": "cde/CSS/MainBaseColors.css",
+    "inputFile": "cde/CSS/MainBaseColors.scss"
   }
 ]
