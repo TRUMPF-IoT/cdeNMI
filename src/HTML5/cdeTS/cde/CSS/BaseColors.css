@@ -650,6 +650,131 @@ button.cdeTabSelected {
   position: absolute;
 }
 
+.cdeFacePinDiv {
+  position: absolute;
+  width: 100%;
+}
+
+.cdePinTopLabel_left {
+  color: white;
+  text-align: right;
+  font: 400 12px "Inter", sans-serif;
+  position: absolute;
+  right: 2px;
+  top: 1px;
+  width: 60px;
+  height: 14px;
+}
+
+.cdePinTopLabel_right {
+  color: white;
+  text-align: left;
+  font: 400 12px "Inter", sans-serif;
+  position: absolute;
+  left: 2px;
+  top: 1px;
+  width: 60px;
+  height: 14px;
+}
+
+.cdePinBottomLabel_right {
+  color: white;
+  text-align: left;
+  font: 400 12px "Inter", sans-serif;
+  position: absolute;
+  left: 2px;
+  top: 25px;
+  width: 60px;
+  height: 14px;
+}
+
+.cdePinBottomLabel_left {
+  color: white;
+  text-align: right;
+  font: 400 12px "Inter", sans-serif;
+  position: absolute;
+  right: 2px;
+  top: 25px;
+  width: 60px;
+  height: 14px;
+}
+
+.cdevertlinenf {
+  width: 6px;
+  background-color: #1e586d;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  left: 14px;
+  overflow: hidden;
+}
+
+.cdevertline {
+  width: 6px;
+  background-color: #1e586d;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  left: 14px;
+  overflow: hidden;
+}
+
+.cdevertline .cdeflowup {
+  width: 6px;
+  height: 10px;
+  background: #1e586d;
+  position: absolute;
+  top: -10px;
+  animation: flow-up 6s linear infinite;
+}
+
+.cdevertline .cdeflowdown {
+  width: 6px;
+  height: 10px;
+  background: #1e586d;
+  position: absolute;
+  top: -10px;
+  animation: flow-down 6s linear infinite;
+}
+
+.cdehoriline {
+  background-color: #1e586d;
+  width: 100%;
+  height: 6px;
+  position: absolute;
+  left: 0px;
+  top: 17px;
+  overflow: hidden;
+}
+
+.cdehorilinenf {
+  background-color: #1e586d;
+  width: 100%;
+  height: 6px;
+  position: absolute;
+  left: 0px;
+  top: 17px;
+  overflow: hidden;
+}
+
+.cdehoriline .cdeflowright {
+  width: 10px;
+  height: 6px;
+  background: #1e586d;
+  position: absolute;
+  left: -40px;
+  animation: flow-right 6s linear infinite;
+}
+
+.cdehoriline .cdeflowleft {
+  width: 10px;
+  height: 6px;
+  background: #1e586d;
+  position: absolute;
+  left: -40px;
+  animation: flow-left 6s linear infinite;
+}
+
 input.cdeButton {
   color: #ccc;
   background-color: initial;

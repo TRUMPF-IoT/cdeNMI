@@ -38,3 +38,4 @@ _[Rr]elease/
 /BuildTools/cdePackager
 /BuildTools/signtool.exe
 
+/BuildTools/AzureSign/azuresign.bat
