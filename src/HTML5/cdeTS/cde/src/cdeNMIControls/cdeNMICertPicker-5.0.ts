@@ -5,10 +5,6 @@
 ﻿namespace cdeNMI {
 
     export class ctrlCertPicker extends cdeNMI.ctrlPropertyPicker implements INMIComboBox {
-        constructor(pTRF?: TheTRF) {
-            super(pTRF);
-        }
-
         public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
             this.MyBaseType = cdeControlType.CertPicker;
             this.ControlText = "ctrlCertPicker";
