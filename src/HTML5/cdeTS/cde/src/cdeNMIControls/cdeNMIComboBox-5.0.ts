@@ -72,12 +72,13 @@ namespace cdeNMI {
             super.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
             this.SetProperty("HasChoices", false);
 
-            if (this.MyFieldInfo && this.MyFieldInfo["DefaultValue"] && !this.MyFieldInfo["Value"])
-                this.MyFieldInfo["Value"] = this.MyFieldInfo["DefaultValue"];
-            if (this.MyFieldInfo && this.MyFieldInfo["HideInput"])
-                this.HideInput = true;
-            if (this.MyFieldInfo)
+            if (this.MyFieldInfo) {
+                if (this.MyFieldInfo["DefaultValue"] && !this.MyFieldInfo["Value"])
+                    this.MyFieldInfo["Value"] = this.MyFieldInfo["DefaultValue"];
+                if (this.MyFieldInfo["HideInput"])
+                    this.HideInput = true;
                 super.SetProperty("UXID", this.MyFieldInfo.cdeMID);
+            }
 
             this.CalculateOption(null);
 
@@ -111,10 +112,10 @@ namespace cdeNMI {
                     const tChoices = pValue.toString().split(this.MySep);
                     this.DontFire = true;
                     try {
-                        for (let i = 0; i < tChoices.length; i++) {
+                        for (const element of tChoices) {
                             const tC = new TheComboOption();
-                            tC.value = tChoices[i];
-                            tC.label = tChoices[i];
+                            tC.value = element;
+                            tC.label = element;
                             this.AddChoice(tC);
                         }
                         if (this.MyCurrentData.length > 0) {
@@ -122,7 +123,6 @@ namespace cdeNMI {
                             this.myChoices.removeActiveItems();
                             this.myChoices.setChoiceByValue(tChoices);
                         }
-                        //const tH=this.myChoices.items;
                     } catch {
                         //empty
                     }
@@ -130,7 +130,6 @@ namespace cdeNMI {
                 }
                 this.IsDirty = true;
             } else if ((pName === "SetChoice" || pName === "SetChoiceV") && pValue) {
-                //TODO: Find pValue in MyCurrentData. If not add to 
                 this.AddChoice(pValue);
                 this.DontFire = true;
                 this.myChoices.setChoices(this.MyCurrentData, "value", "label", true);
@@ -266,7 +265,7 @@ namespace cdeNMI {
                     }
                     this.MyComboDiv.appendChild(this.MyComboBox);
                 }
-                if (tChoiceOptions.substr(0, 6) === "LOOKUP") {
+                if (tChoiceOptions.substring(0, 6) === "LOOKUP") {
                     let tParas: string[] = tChoiceOptions.split(':');
                     if (tParas.length > 1) {
                         switch (tParas[1]) {
@@ -295,7 +294,6 @@ namespace cdeNMI {
                             if (!this.MyLookup) {
                                 this.MyLookup = { ComboControl: this, Content: this.GetProperty("Value"), SrcFld: tParas[2], TgtID: tParas[3], GroupName: tGName };
                             }
-                            //this.CreateComboOptions('[{"V":"CDE_LLL","N":"Select to Load Lookup Table"}]', "CDE_LLL", false);
                             if (cdeNMI.MyEngine) {
                                 cdeNMI.MyEngine.LoadTableLazy(this.MyScreenID, this.MyTableName, this.HandleLazyLoad, this.MyLookup);
                                 return;
@@ -326,12 +324,21 @@ namespace cdeNMI {
         public OnShowDropDown() {
             const cDropDownEle = this.GetElement().getElementsByClassName("choices__list choices__list--dropdown is-active")[0] as HTMLElement;
             if (cDropDownEle && window.innerWidth > 1024) {
-                if (window.innerHeight - (cDropDownEle.getBoundingClientRect().top-window.scrollY) < 300) {
+                const tScreen = cdeNMI.MyScreenManager.GetScreenByID(this.MyFormID);
+                let scale = 1.0;
+                if (tScreen && tScreen.ScreenScale != 1.0 && tScreen.ScreenScale != 0.0)
+                    scale = tScreen.ScreenScale;
+                if (window.innerHeight - (cDropDownEle.getBoundingClientRect().top - window.scrollY) < 300 || scale != 1.0) {
                     cDropDownEle.style.bottom = "0px";
                     cDropDownEle.style.left = "0px";
                     cDropDownEle.style.width = "100%";
+                    if (scale != 1.0)
+                        cDropDownEle.style.position = "absolute";
+                    else
+                        cDropDownEle.style.position = "";
                 } else {
-                    cDropDownEle.style.top = (cDropDownEle.getBoundingClientRect().top - window.scrollY) + "px";
+                    cDropDownEle.style.top = ((cDropDownEle.getBoundingClientRect().top - window.scrollY) / scale) + "px";
+                    cDropDownEle.style.position = "";
                 }
             }
 
@@ -343,10 +350,8 @@ namespace cdeNMI {
             if (cde.IsNotSet(this.GetProperty("Value"))) {
                 if (this.MyLookup !== null)
                     this.myChoices.setChoiceByValue("CDE_LLL");
-                else {
-                    if (this.GetProperty("Options") && this.GetProperty("Options").substr("CDE_NOP") > 0)
+                else if (this.GetProperty("Options") && this.GetProperty("Options").substr("CDE_NOP") > 0)
                         this.myChoices.setChoiceByValue("CDE_NOP");
-                }
             } else
                 this.myChoices.setChoiceByValue(this.GetProperty("Value"));
         }
@@ -395,11 +400,9 @@ namespace cdeNMI {
                                 'search',
                                 (event) => {
                                     const tRealVal: string = event.detail.value;
-                                    //const myC = this.MyCurrentData;
                                     const tCI = new TheComboOption();
                                     tCI.label = tRealVal;
                                     tCI.value = tRealVal;
-                                    //myC.push(tCI);
                                     this.myChoices.setChoices([tCI], "value", "label", true);
                                 },
                                 false,
@@ -457,8 +460,8 @@ namespace cdeNMI {
                 tLO = this.GetProperty("OptionsLive");
             if (!tLO)
                 tLO = this.GetProperty("Options");
-            if (tLO && tLO.startsWith("SCREENPICKER")) {
-                let tLst: string = tLO.substr(13);
+            if (tLO?.startsWith("SCREENPICKER")) {
+                let tLst: string = tLO.substring(13);
                 if (cdeNMI.MyScreenManager)
                     tLst += cdeNMI.MyScreenManager.GetScreenList();
                 super.SetProperty("OptionsLive", tLst);
@@ -478,7 +481,7 @@ namespace cdeNMI {
 
             let tOpt: TheComboOption;
             let i: number;
-            if (pChoiceOptions.substr(0, 1) === "[") {
+            if (pChoiceOptions.substring(0, 1) === "[") {
                 const tJOpgs = JSON.parse(pChoiceOptions);
                 for (i = 0; i < tJOpgs.length; i++) {
                     tOpt = new TheComboOption;
@@ -507,19 +510,19 @@ namespace cdeNMI {
                 const tGroups: string[] = pChoiceOptions.split(';:;');
                 if (tGroups.length > 1) {
                     this.HasGroups = true;
-                    tGroups.sort();
+                    tGroups.sort((a, b) => a.localeCompare(b));
                 }
                 let tOps: string[];
-                for (let tGrp = 0; tGrp < tGroups.length; tGrp++) {
-                    let tOption = tGroups[tGrp];
+                for (const element of tGroups) {
+                    let tOption = element;
                     if (this.HasGroups) {
-                        tOps = tGroups[tGrp].split(this.MySep);
+                        tOps = element.split(this.MySep);
                         if (tOps.length > 1)
                             tOption = tOps[1];
                     }
                     tOps = tOption.split(this.MySep);
                     if (SortOptions)
-                        tOps.sort();
+                        tOps.sort((a, b) => a.localeCompare(b));
                     for (i = 0; i < tOps.length; i++) {
                         const tOptVal: string[] = tOps[i].split(':');
                         tOpt = new TheComboOption;
@@ -542,14 +545,12 @@ namespace cdeNMI {
         public BuildGroups() {
             let id = 1;
             const newData: TheComboOption[] = [];
-            for (let i = 0; i < this.MyCurrentData.length; i++) {
-                const tOpt: TheComboOption = this.MyCurrentData[i];
+            for (const tOpt of this.MyCurrentData) {
                 const tGroups = newData.filter(e => e.label === tOpt.group);
                 if (tGroups.length > 0) {
                     tGroups[0].choices.push(tOpt);
                 } else {
                     const tNewGroup: TheComboOption = new TheComboOption();
-                   //tNewGroup.disabled = true;
                     tNewGroup.id = id;
                     id++;
                     tNewGroup.value = tOpt.group
@@ -584,7 +585,7 @@ namespace cdeNMI {
                 if (tFilter && tFilter.split('=').length > 1) {
                     tFilterFld = tFilter.split('=')[0];
                     const tFVal = tFilter.split('=')[1];
-                    if (tFVal.substr(0, 1) === "[")
+                    if (tFVal.substring(0, 1) === "[")
                         tFilterVal = JSON.parse(tFVal);
                     else
                         tFilterVal[0] = tFVal;
@@ -598,8 +599,8 @@ namespace cdeNMI {
                     const tRow = pMyStorageMirror[row];
                     if (tRow[tFilterFld] && tFilterVal.length > 0) {
                         let tFound = false;
-                        for (let iii = 0; iii < tFilterVal.length; iii++) {
-                            if (tRow[tFilterFld] === tFilterVal[iii]) {
+                        for (const element of tFilterVal) {
+                            if (tRow[tFilterFld] === element) {
                                 tFound = true;
                                 break;
                             }
@@ -681,16 +682,14 @@ namespace cdeNMI {
 
         GetTextFromOptions(pContent: string, pOptions: string): string {
             const tOps: string[] = pOptions.split(this.MySep);
-            for (let i = 0; i < tOps.length; i++) {
-                const tOptVal: string[] = tOps[i].split(':');
+            for (const element of tOps) {
+                const tOptVal: string[] = element.split(':');
                 if (tOptVal.length > 1) {
                     if (pContent === tOptVal[1] || ((!pContent || pContent === '') && tOptVal[1] === '0'))
                         return tOptVal[0];
                 }
-                else {
-                    if (pContent === tOptVal[0])
+                else if (pContent === tOptVal[0])
                         return tOptVal[0];
-                }
             }
             return pContent;
         }
@@ -716,7 +715,7 @@ namespace cdeNMI {
                                     tChoiceOptions = "You have to Select a Thing first";
                                 }
                             }
-                            else {
+                            if (tChoiceOptions) {
                                 this.CreateComboOptions(tChoiceOptions, this.GetProperty("Value"), true);
                                 this.NeedRefresh = true;
                                 this.ApplySkiny();
@@ -760,13 +759,6 @@ namespace cdeNMI {
                 }
                 const tOldVal = this.GetProperty("Value");
                 if (tOldVal !== pValue) {
-                    //if (cde.CBool(this.GetProperty("AllowMultiSelect")) && tOldVal) {
-                    //    const tC = tOldVal.split(this.MySep);
-                    //    if (tC.length > 0 && tC.filter(e => e === pValue).length>0) {
-                    //        return;
-                    //    }
-                    //}
-                    //else
                     this.SetProperty("Value", pValue);
                     return true;
                 }
