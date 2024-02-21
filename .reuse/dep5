@@ -117,6 +117,10 @@ Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/CSS/CDESTYLES.min.css
 Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
+Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/*
+Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+License: MPL-2.0
+
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/CSS/all.min.css
 Copyright: Fonticons, Inc.
 License: CC-BY-4.0
