@@ -4,63 +4,63 @@ Upstream-Contact:  <>
 Source: https://github.com/TRUMPF-IoT/C-DEngine
 
 Files:  README.md
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  .gitignore
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  GitVersion.yml
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  NuGet.config
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/toplogo-128.png
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  docs/*
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files: BuildTools/*
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/cdeNMI.sln
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/readme.md
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/readme.md
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/CDMyNMIHtml5RT.csproj
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: CC0-1.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/README.md
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/CDE/*
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/compilerconfig.json.defaults
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/JS/cdeNMITransforms.js
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/JS/cdeSorttable.js
@@ -94,31 +94,35 @@ Copyright: Tim Wood, Iskren Chernev, Moment.js contributors
 License: MIT
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/FAVICON.ICO
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/APPLE-TOUCH-ICON.PNG
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/CLIENTACCESSPOLICY.XML
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/CROSSDOMAIN.XML
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/CROSSDOMAINPOLICY.XML
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/CSS/CDESTYLES.min.css
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/*.png
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
+License: MPL-2.0
+
+Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/*.webmanifest
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/CSS/all.min.css
@@ -126,19 +130,19 @@ Copyright: Fonticons, Inc.
 License: CC-BY-4.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/IMAGES/*
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/pages/*
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/CSS/*
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/webfonts/C-Labs-Font*
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/CDMyNMIHtml5RT/ClientBin/webfonts/fa-*
@@ -154,30 +158,30 @@ Copyright: 2015 Google Inc
 License: Apache-2.0
 
 Files:  src/HTML5/cdeTS/*.png
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: CC-BY-4.0
 
 Files:  src/HTML5/cdeTS/*.json
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: CC0-1.0
 
 
 
 Files:  src/HTML5/cdeTS/*.json.defaults
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: CC0-1.0
 
 Files:  src/HTML5/cdeTS/*.csproj
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: CC0-1.0
 
 
 Files:  src/HTML5/cdeTS/README.md
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/cdeTS/cde/webfonts/C-Labs-Font*
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/cdeTS/cde/webfonts/Roboto-*
@@ -185,27 +189,27 @@ Copyright: 2015 Google Inc
 License: Apache-2.0
 
 Files: src/HTML5/cdeTS/cde/CSS/*
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files: src/HTML5/cdeTS/cde/cde.min.js
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files: src/HTML5/cdeTS/cde/cdeWorker.min.js
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/CDMyC3.csproj
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: CC0-1.0
 
 Files:  src/HTML5/ExtensionPlugins/readme.md
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/P172/CDMyC3.TheC3Service.js
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
 
 Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/P172/JS/c3.min.js
@@ -221,9 +225,9 @@ Copyright: 2010-2013, Joe Walnes, 2013-2014, Drew Noakes
 License: MIT
 
 Files:  src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/P172/JS/cytoscape.min.js
-Copyright: 2016-2022, The Cytoscape Consortium
+Copyright: 2016-2024, The Cytoscape Consortium
 License: MIT
 
 Files: src/HTML5/cdeTS/cde/cdeWorker.js
-Copyright: 2009-2022 TRUMPF Laser GmbH, authors: C-Labs
+Copyright: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 License: MPL-2.0
