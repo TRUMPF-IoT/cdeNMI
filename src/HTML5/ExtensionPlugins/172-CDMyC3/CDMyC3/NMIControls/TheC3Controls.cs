@@ -15,8 +15,6 @@ namespace CDMyC3
         /// </summary>
         public string Background { get; set; }
 
-        public string Title { get; set; }
-
         public string SetSeries { get; set; }
 
         public string ChartColors { get; set; }

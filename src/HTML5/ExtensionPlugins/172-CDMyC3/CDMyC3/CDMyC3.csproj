@@ -15,7 +15,7 @@
     <!-- Workaround for placing the .nupkg into the build's output folder when using msbuild's GenerateProjectSpecificOutputFolder -->
     <ProjectName>$(AssemblyName).$(TargetFramework)</ProjectName>
     <!-- Workaround for placing each DLL into a separate directory when using msbuild's GenerateProjectSpecificOutputFolder -->
-    <PackageOutputPath>$(OutDir)</PackageOutputPath>
+	  <PackageOutputPath>$(SolutionDir)Nugets</PackageOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -60,7 +60,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="System.Drawing.Common">
-      <Version>8.0.0</Version>
+      <Version>8.0.1</Version>
     </PackageReference>
   </ItemGroup>
 
