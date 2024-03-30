@@ -39,3 +39,4 @@ _[Rr]elease/
 /BuildTools/signtool.exe
 
 /BuildTools/AzureSign/azuresign.bat
+/src/Nugets/
