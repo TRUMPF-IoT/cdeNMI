@@ -54,7 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="C-DEngine" Version="6.104.0-beta.1" />
+    <PackageReference Include="C-DEngine" Version="6.104.0-beta.2" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
