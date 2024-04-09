@@ -158,7 +158,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="C-DEngine" Version="6.104.0-beta.1" />
+	  <PackageReference Include="C-DEngine" Version="6.*-*" />
   </ItemGroup>
 
   <Target Name="GetPackagingOutputs" />

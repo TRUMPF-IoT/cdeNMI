@@ -60,11 +60,7 @@
 
                 const tDnPin = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.PinButton).Create(tCtrl, { ScreenID: this.MyScreenID, PostInitBag: ["Left=6", "Top=6", "ClassName=cdeDivDraw"] });
                 tDnPin.SetProperty("OnClick", (val, evt: MouseEvent, pointer: cdeNMI.ThePointer) => {
-                    this.divSideBarRight.style.display = 'none';
-                    this.divSideBarRight.classList.remove("cde-animate-right");
-                    cdeNMI.UnselectAllControls();
-                    if (this.CurrentScreen?.MyOverlay)
-                        this.CurrentScreen.MyOverlay.SetProperty("IsDisabled", false);
+                    this.HideRightSideBar();
                 });
                 tDnPin.SetProperty("Content", "<i class='fa fa-2x'>&#xf061;</i>");
 
@@ -80,6 +76,16 @@
             this.IsLoaded = true;
             this.FireEvent(false, "OnIsLoaded", this.IsLoaded);
             return true;
+        }
+
+        public HideRightSideBar() {
+            //if (this.divSideBarRight.style.display = '') {
+                this.divSideBarRight.style.display = 'none';
+                this.divSideBarRight.classList.remove("cde-animate-right");
+                cdeNMI.UnselectAllControls();
+                if (this.CurrentScreen?.MyOverlay)
+                    this.CurrentScreen.MyOverlay.SetProperty("IsDisabled", false);
+            //}
         }
 
         RegisterEvents() {
@@ -632,7 +638,7 @@
                             break;
                         }
                         this.SetCurrentScreen(this.MyNMIScreens[i], pCookie, pOwnerTable);
-
+                        this.HideRightSideBar();
                         let tScreenInfo: TheScreenInfo = null;
                         if (cdeNMI.MyEngine) {
                             tScreenInfo = cdeNMI.MyNMIModels[this.CurrentScreen.MyScreenID];
