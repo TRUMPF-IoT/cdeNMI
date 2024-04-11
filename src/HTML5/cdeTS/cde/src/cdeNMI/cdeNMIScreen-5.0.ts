@@ -245,7 +245,9 @@
                         if (tScreen) {
                             if (evt.button === 2) {
                                 if (cdeNMI.MyEngine) {
-                                    cdeNMI.MyEngine.PublishToNMI("NMI_CLEAR_SCREEN:" + this.MyScreenID, tScreen.MyDataRow.cdeN);
+                                    var doForce = "";
+                                    if (evt.shiftKey) doForce="FORCE"
+                                    cdeNMI.MyEngine.PublishToNMI("NMI_CLEAR_SCREEN:" + this.MyScreenID,doForce, tScreen.MyDataRow.cdeN);
                                     cdeNMI.ShowToastMessage("Screen options cleared");
                                 } else
                                     cdeNMI.ShowToastMessage("No NMI Engine found - Screen options not cleared!");
