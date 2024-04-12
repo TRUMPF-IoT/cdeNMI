@@ -79,12 +79,22 @@
         }
 
         public HideRightSideBar() {
-            //if (this.divSideBarRight.style.display = '') {
+            try {
+                //if (this.divSideBarRight.style.display && this.divSideBarRight.style.display == '') {
                 this.divSideBarRight.style.display = 'none';
                 this.divSideBarRight.classList.remove("cde-animate-right");
                 cdeNMI.UnselectAllControls();
                 if (this.CurrentScreen?.MyOverlay)
                     this.CurrentScreen.MyOverlay.SetProperty("IsDisabled", false);
+
+                if (cdeNMI.MyEngine && this.divSideBarRight.hasAttribute('cdeEditorTarget') === true) {
+                    cdeNMI.MyEngine.PublishToNMI("NMI_HIDE_EDITOR", this.divSideBarRight.getAttribute('cdeEditorTarget'));
+                    this.divSideBarRight.removeAttribute('cdeEditorTarget');
+                }
+            }
+            catch (e) {
+                //ignored
+            }
             //}
         }
 

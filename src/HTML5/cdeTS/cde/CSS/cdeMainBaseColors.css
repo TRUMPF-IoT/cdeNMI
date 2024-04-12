@@ -4,15 +4,6 @@
  * SPDX-License-Identifier: CC0-1.0
  */
 /**
-* This file overwrites values in cdeMainBaseColors.scss and defines C-DEngine
-* and addes styles for SomeBrand theme.
-**/
-/*
- * Copyright (c) 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
- *
- * SPDX-License-Identifier: CC0-1.0
- */
-/**
 * This file defines all base colors for the C-DEngine that can be overwritten
 * by 3rd party developers creating their own skins.
 *
@@ -762,14 +753,4 @@ button.cdeTabSelected {
   position: absolute;
   left: -40px;
   animation: flow-left 6s linear infinite;
-}
-
-input.cdeButton {
-  color: #ccc;
-  background-color: initial;
-}
-
-button.cdeAddButton {
-  color: #ccc;
-  background-color: initial;
 }

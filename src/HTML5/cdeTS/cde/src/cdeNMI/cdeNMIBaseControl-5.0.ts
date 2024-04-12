@@ -144,6 +144,7 @@ namespace cdeNMI {
                         if (tSideBar && !tSideBar.classList.contains("cde-animate-right")) {
                             tSideBar.classList.add("cde-animate-right");
                             tSideBar.style.display = '';
+                            tSideBar.setAttribute('cdeEditorTarget', `${this.MyTRF.FldInfo.cdeMID};${sender.MyFormID};${this.MyTRF.FldInfo.cdeO}`);
                             if (cdeNMI.MyEngine)
                                 cdeNMI.MyEngine.PublishToNMI("NMI_SHOW_EDITOR", `${this.MyTRF.FldInfo.cdeMID};${sender.MyFormID};${this.MyTRF.FldInfo.cdeO}`, this.MyTRF.FldInfo.cdeN);
                             const tS = TheNMIScreen.GetScreenByID(sender.MyFormID);
