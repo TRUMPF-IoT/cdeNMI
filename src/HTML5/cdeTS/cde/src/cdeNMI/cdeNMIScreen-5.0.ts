@@ -120,6 +120,10 @@
                 const tAllPinDiv: HTMLDivElement = document.createElement("div");
                 tAllPinDiv.className = "cdeAllPinArea";
                 tAllPins.SetElement(tAllPinDiv);
+                const tPinTarget = cdeNMI.MyTCF.CreateBaseControl().Create(tAllPins);
+                const tPinTargetDiv = document.createElement("div");
+                tPinTargetDiv.id = "PINT" + this.MyScreenID;
+                tPinTarget.SetElement(tPinTargetDiv);
 
                 if (!this.HasRenderTarget) {
                     if (!cde.CBool(this.GetSetting("HidePinPins"))) {
