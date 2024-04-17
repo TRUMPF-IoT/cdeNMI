@@ -50,10 +50,16 @@
 
 
   <ItemGroup>
+    <None Remove="ClientBin\android-chrome-192x192.png" />
+    <None Remove="ClientBin\android-chrome-512x512.png" />
+    <None Remove="ClientBin\apple-touch-icon.png" />
     <None Remove="ClientBin\CDE\cde.min.js" />
     <None Remove="ClientBin\CDE\cde.minold.js" />
     <None Remove="ClientBin\CDE\cdeWorker.min.js" />
     <None Remove="ClientBin\CDE\cdeWorker.minold.js" />
+    <None Remove="ClientBin\CLIENTACCESSPOLICY.XML" />
+    <None Remove="ClientBin\CROSSDOMAIN.XML" />
+    <None Remove="ClientBin\CROSSDOMAINPOLICY.XML" />
     <None Remove="ClientBin\CSS\cdeBaseColors.min.css" />
     <None Remove="ClientBin\CSS\CDESTYLES.min.css" />
     <None Remove="ClientBin\CSS\choices.dark.min.css" />
@@ -71,17 +77,26 @@
     <None Remove="ClientBin\CSS\MYSTYLESTY.min.css" />
     <None Remove="ClientBin\CSS\MYSTYLESW.min.css" />
     <None Remove="ClientBin\CSS\MYSTYLESX.min.css" />
+    <None Remove="ClientBin\favicon-16x16.png" />
+    <None Remove="ClientBin\favicon-32x32.png" />
     <None Remove="ClientBin\IMAGES\GlasButton.png" />
     <None Remove="ClientBin\JS\choices.min.js" />
     <None Remove="ClientBin\JS\flatpickr.js" />
     <None Remove="ClientBin\JS\flatpickr.monthSelect.js" />
+    <None Remove="ClientBin\site.webmanifest" />
     <None Remove="ClientBin\webfonts\roboto-medium-webfont.woff2" />
     <None Remove="ClientBin\webfonts\roboto-regular-webfont.woff2" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="ClientBin\android-chrome-192x192.png" />
+    <EmbeddedResource Include="ClientBin\android-chrome-512x512.png" />
+    <EmbeddedResource Include="ClientBin\apple-touch-icon.png" />
     <EmbeddedResource Include="ClientBin\CDE\cde.min.js" />
     <EmbeddedResource Include="ClientBin\CDE\cdeWorker.min.js" />
+    <EmbeddedResource Include="ClientBin\CLIENTACCESSPOLICY.XML" />
+    <EmbeddedResource Include="ClientBin\CROSSDOMAIN.XML" />
+    <EmbeddedResource Include="ClientBin\CROSSDOMAINPOLICY.XML" />
     <EmbeddedResource Include="ClientBin\CSS\cdeBaseColors.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\CDESTYLES.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\choices.dark.min.css" />
@@ -105,6 +120,8 @@
     <EmbeddedResource Include="ClientBin\CSS\all.min.css" />
     <EmbeddedResource Include="ClientBin\CSS\BaseColors.min.CSS" />
     <EmbeddedResource Include="ClientBin\CSS\LBaseColors.min.CSS" />
+    <EmbeddedResource Include="ClientBin\favicon-16x16.png" />
+    <EmbeddedResource Include="ClientBin\favicon-32x32.png" />
     <EmbeddedResource Include="ClientBin\IMAGES\cdeInnerCheck.png" />
     <EmbeddedResource Include="ClientBin\IMAGES\E.PNG" />
     <EmbeddedResource Include="ClientBin\IMAGES\iconTopLogo.png" />
@@ -123,6 +140,7 @@
     <EmbeddedResource Include="ClientBin\pages\nmiportal.html" />
     <EmbeddedResource Include="ClientBin\pages\ThingFace.html" />
     <EmbeddedResource Include="ClientBin\lang\NMIlang1031.json" />
+    <EmbeddedResource Include="ClientBin\site.webmanifest" />
     <EmbeddedResource Include="ClientBin\webfonts\C-Labs-Font_Basis.eot" />
     <EmbeddedResource Include="ClientBin\webfonts\C-Labs-Font_Basis.otf" />
     <EmbeddedResource Include="ClientBin\webfonts\C-Labs-Font_Basis.ttf" />
@@ -154,7 +172,7 @@
     <None Include="toplogo-128.png" Pack="true" PackagePath="" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClientBin\FAVICON.ICO" />
+    <EmbeddedResource Include="ClientBin\FAVICON.ICO" />
   </ItemGroup>
 
   <ItemGroup>

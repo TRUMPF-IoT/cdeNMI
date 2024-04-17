@@ -539,9 +539,8 @@ namespace NMIService
         private static string CreateHeader(TheRequestData pRequest, string pRealPage, string pComposite, eWebPlatform pWebPlatform, ThePageDefinition pPage, bool IsDebugEnabled, bool IsLite)
         {
             StringBuilder tStr = new StringBuilder();
-            tStr.Append("<!DOCTYPE html><html><head>");
+            tStr.Append("<!DOCTYPE html><html lang=\"en\"><head>");
             tStr.Append("<meta content=\"en-us\" http-equiv=\"Content-Language\" /><meta charset=\"UTF-8\"> ");
-            tStr.Append("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" >");
             string tPlat = "W";
             if (string.IsNullOrEmpty(PageScale))
             {
@@ -564,7 +563,7 @@ namespace NMIService
                 default:
                     break;
             }
-            tStr.Append($"<meta name=\"viewport\" content=\"width=device-width, initial-scale={tScale}, maximum-scale={tScale}\">");
+            tStr.Append($"<meta name=\"viewport\" content=\"width=device-width, initial-scale={tScale}\">");
 
             if (pPage.IncludeCDE)
             {
@@ -590,7 +589,7 @@ namespace NMIService
 
                     tStr.Append("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/all.min.css\" />");
                     tStr.Append("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/cdeStyles.min.css\" />");
-                    tStr.Append($"<link rel=\"stylesheet\" type=\"text/css\" cde=\"colorScheme\" href=\"css/{(IsLite ? "L" : "")}cdeBaseColors.min.css\" lite=\"css/LcdeBaseColors.min.css\" dark=\"css/cdeBaseColors.min.css\"  id=\"basecolorstyle\" />");
+                    tStr.Append($"<link rel=\"stylesheet\" type=\"text/css\" cde=\"colorScheme\" href=\"css/{(IsLite ? "L" : "")}cdeBaseColors.min.css\" lite=\"css/LcdeBaseColors.min.css\" dark=\"css/cdeBaseColors.min.css\"  id=\"cdebasecolorstyle\" />");
                     tStr.Append($"<link rel=\"stylesheet\" type=\"text/css\" cde=\"colorScheme\" href=\"css/{(IsLite ? "L" : "")}BaseColors.min.css\" lite=\"css/LBaseColors.min.css\" dark=\"css/BaseColors.min.css\"  id=\"basecolorstyle\" />");
                     tStr.Append("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/mystyles" + tPlat + ".min.css\" />");
                     if (pWebPlatform == 0)
