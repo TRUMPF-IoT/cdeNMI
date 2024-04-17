@@ -40,3 +40,5 @@ _[Rr]elease/
 /BuildTools/signtool.exe
 
 /BuildTools/AzureSign/azuresign.bat
+/src/Nugets/
+/src/HTML5/cdeTS/cde/src/cdeNMI/.cdeNMIScreenManager-5.0.ts.swp

@@ -491,7 +491,7 @@ div.cdePopupContent41 {
 }
 
 .cdeSideBarRight {
-  background-color: #ccc;
+  background-color: rgba(204, 204, 204, 0.3333333333);
 }
 
 /*cdeStatus0 to cdeStatus7 refer to the status level 0=gray, 1=green, 2=yellow, 3=red, 4=blue, 5=brown, 6=purlple, 7=black*/
@@ -549,7 +549,6 @@ div.cdePopupContent41 {
 
 .cdeBlurBack {
   position: absolute;
-  background: inherit;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 6px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
@@ -563,7 +562,6 @@ div.cdePopupContent41 {
   left: -20px;
   right: -20px;
   bottom: -20px;
-  background: inherit;
   filter: blur(10px) saturate(2);
 }
 .cdeBlurBack.dragging:before {

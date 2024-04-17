@@ -60,7 +60,7 @@ $cde-logo-litegrau: #CCCCCC !default;
 $cde-logo-darker: #1e586d !default;
 $cde-logo-blue: #1DA3D1 !default;
 
-$cde-sidebarright: #0f2b35 !default;
+$cde-sidebarright: #0f2b3555 !default;
 
 $cde-input-back: rgba(90,90,90,.72) !default;
 $cde-input-color: white !default;
@@ -674,7 +674,7 @@ $cde-toggle-active: $system-available-color-green !default;
 
     .cdeBlurBack {
         position: absolute;
-        background: inherit;
+        //background: inherit;
         border: 1px solid rgba(0,0,0,0.1);
         border-radius: 6px;
         box-shadow: 0 8px 16px rgba(0,0,0,0.25);
@@ -688,7 +688,7 @@ $cde-toggle-active: $system-available-color-green !default;
             left: -$blur * 2px;
             right: -$blur * 2px;
             bottom: -$blur * 2px;
-            background: inherit;
+            //background: inherit;
             filter: blur($blur * 1px) saturate(2);
         }
 
