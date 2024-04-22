@@ -144,6 +144,7 @@ namespace cdeNMI {
                         if (tSideBar && !tSideBar.classList.contains("cde-animate-right")) {
                             tSideBar.classList.add("cde-animate-right");
                             tSideBar.style.display = '';
+                            tSideBar.setAttribute('cdeEditorTarget', `${this.MyTRF.FldInfo.cdeMID};${sender.MyFormID};${this.MyTRF.FldInfo.cdeO}`);
                             if (cdeNMI.MyEngine)
                                 cdeNMI.MyEngine.PublishToNMI("NMI_SHOW_EDITOR", `${this.MyTRF.FldInfo.cdeMID};${sender.MyFormID};${this.MyTRF.FldInfo.cdeO}`, this.MyTRF.FldInfo.cdeN);
                             const tS = TheNMIScreen.GetScreenByID(sender.MyFormID);
@@ -628,8 +629,8 @@ namespace cdeNMI {
                             //if (cde.CDbl(ele.GetProperty("Left")) > 0 && cde.CDbl(ele.GetProperty("Left")) - x < 0) x = 0;
                             let y = cde.CDbl(ele.GetProperty("DragY")) + event.dy / rat;
                             //if (cde.CDbl(ele.GetProperty("Top")) > 0 && cde.CDbl(ele.GetProperty("Top")) - y < 0) y = 0;
-                            ele.SaveProperty("DragX", x);
-                            ele.SaveProperty("DragY", y);
+                            ele.SaveProperty("DragX", Math.floor(x));
+                            ele.SaveProperty("DragY", Math.floor(y));
                         }
                     },
                 }

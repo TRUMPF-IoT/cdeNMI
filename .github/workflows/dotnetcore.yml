@@ -34,7 +34,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
         source-url: https://api.nuget.org/v3/index.json
         config-file: .\nuget.config
         owner: ${{secrets.NUGETORG_APIKEY_OWNER}}
@@ -78,8 +78,8 @@ jobs:
       run: dotnet restore './src/cdeNMI.sln'
 
     # Workaround for gitversiontask lock exception: build a single targetframework first
-    - name: Build PackagerInstaller
-      run: dotnet build './BuildTools/PackagerInstaller\PackagerInstaller.csproj' --framework net48 --configuration Release --no-restore --disable-parallel
+    #- name: Build PackagerInstaller
+    #  run: dotnet build './BuildTools/PackagerInstaller\PackagerInstaller.csproj' --framework net48 --configuration Release --no-restore --disable-parallel
 
     - name: Build
       run: dotnet build './src/cdeNMI.sln' --configuration Release --no-restore --disable-parallel /nowarn:CS1591 /nowarn:nu5105
@@ -87,6 +87,9 @@ jobs:
     - name: Gather artifacts
       run: (robocopy .\bin\ .\artifacts\ *.CDEX *.CDEP *.nupkg *.snupkg *.msi /s /np) ^& IF %ERRORLEVEL% LEQ 1 exit 0
       shell: cmd
+    - name: Gather nuget artifacts
+      run: (robocopy .\src\nugets .\artifacts\ *.nupkg *.snupkg /s /np) ^& IF %ERRORLEVEL% LEQ 1 exit 0
+      shell: cmd      
     - name: Upload artifacts
       uses: actions/upload-artifact@v1
       with:

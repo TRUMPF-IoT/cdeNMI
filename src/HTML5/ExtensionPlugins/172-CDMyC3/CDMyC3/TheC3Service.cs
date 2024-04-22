@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2024 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -27,6 +27,7 @@ namespace CDMyC3
             MyBaseEngine.SetEngineID(guidEngineID);
             MyBaseEngine.SetFriendlyName(strFriendlyName);
             MyBaseEngine.RegisterJSEngine(null);
+            MyBaseEngine.SetCDEMinVersion(6.104);
             MyBaseEngine.AddCapability(eThingCaps.NMIControls);
             MyBaseEngine.SetPluginInfo("This plugin wraps the C3 controls in NMI Controls",       // Describe plugin for Plugin Store
                                        0,                       // pPrice - retail price (default = 0)
