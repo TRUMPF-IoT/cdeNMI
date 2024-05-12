@@ -112,6 +112,246 @@ i.cl-5x {
     font-size: 5em;
 }
 
+@keyframes flow-right300 {
+    from {
+        left: -10px;
+    }
+
+    to {
+        left: 300px;
+    }
+}
+
+@keyframes flow-left300 {
+    from {
+        left: 300px;
+    }
+
+    to {
+        left: -10px;
+    }
+}
+
+@keyframes flow-up300 {
+    from {
+        top: 300px;
+    }
+
+    to {
+        top: -10px;
+    }
+}
+
+@keyframes flow-down300 {
+    from {
+        top: -10px;
+    }
+
+    to {
+        top: 300px;
+    }
+}
+
+@keyframes flow-right150 {
+    from {
+        left: -10px;
+    }
+
+    to {
+        left: 150px;
+    }
+}
+
+@keyframes flow-left150 {
+    from {
+        left: 150px;
+    }
+
+    to {
+        left: -10px;
+    }
+}
+
+@keyframes flow-up150 {
+    from {
+        top: 150px;
+    }
+
+    to {
+        top: -10px;
+    }
+}
+
+@keyframes flow-down150 {
+    from {
+        top: -10px;
+    }
+
+    to {
+        top: 150px;
+    }
+}
+
+@keyframes flow-right600 {
+    from {
+        left: -10px;
+    }
+
+    to {
+        left: 600px;
+    }
+}
+
+@keyframes flow-left600 {
+    from {
+        left: 600px;
+    }
+
+    to {
+        left: -10px;
+    }
+}
+
+@keyframes flow-up600 {
+    from {
+        top: 600px;
+    }
+
+    to {
+        top: -10px;
+    }
+}
+
+@keyframes flow-down600 {
+    from {
+        top: -10px;
+    }
+
+    to {
+        top: 600px;
+    }
+}
+
+@keyframes flow-right1200 {
+    from {
+        left: -10px;
+    }
+
+    to {
+        left: 1200px;
+    }
+}
+
+@keyframes flow-left1200 {
+    from {
+        left: 1200px;
+    }
+
+    to {
+        left: -10px;
+    }
+}
+
+@keyframes flow-up1200 {
+    from {
+        top: 1200px;
+    }
+
+    to {
+        top: -10px;
+    }
+}
+
+@keyframes flow-down1200 {
+    from {
+        top: -10px;
+    }
+
+    to {
+        top: 1200px;
+    }
+}
+
+@keyframes flow-right2400 {
+    from {
+        left: -10px;
+    }
+
+    to {
+        left: 2400px;
+    }
+}
+
+@keyframes flow-left2400 {
+    from {
+        left: 2400px;
+    }
+
+    to {
+        left: -10px;
+    }
+}
+
+@keyframes flow-up2400 {
+    from {
+        top: 2400px;
+    }
+
+    to {
+        top: -10px;
+    }
+}
+
+@keyframes flow-down2400 {
+    from {
+        top: -10px;
+    }
+
+    to {
+        top: 2400px;
+    }
+}
+
+@keyframes flow-right4800 {
+    from {
+        left: -10px;
+    }
+
+    to {
+        left: 4800px;
+    }
+}
+
+@keyframes flow-left4800 {
+    from {
+        left: 4800px;
+    }
+
+    to {
+        left: -10px;
+    }
+}
+
+@keyframes flow-up4800 {
+    from {
+        top: 4800px;
+    }
+
+    to {
+        top: -10px;
+    }
+}
+
+@keyframes flow-down4800 {
+    from {
+        top: -10px;
+    }
+
+    to {
+        top: 4800px;
+    }
+}
+
 // Font Awesome Styles gone - now in all.min.css coming from FontAwesome.
 // CDE Specific fa styles:
 
