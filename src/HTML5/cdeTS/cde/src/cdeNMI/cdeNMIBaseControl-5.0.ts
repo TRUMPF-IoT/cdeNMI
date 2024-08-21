@@ -63,7 +63,7 @@ namespace cdeNMI {
         public MyWidth = 0;
         public MyHeight = 0;
         public MyDataItems: [];
-        public MyDirtyList:string []=[];
+        public MyDirtyList: string[] = [];
         private lastXYById: ThePointer[] = [];
         public MyChildren: INMIControl[] = [];
         public MySubControls: Array<TheControlBlock> = [];
@@ -136,7 +136,7 @@ namespace cdeNMI {
                         break;
                     case "circle":
                     case "rightmouse": {
-                        const tEl=this.GetElement();
+                        const tEl = this.GetElement();
                         if (tEl && !tEl.classList.contains("cde-is-selected")) {
                             tEl.classList.add("cde-is-selected");
                         }
@@ -610,7 +610,7 @@ namespace cdeNMI {
                     move(event) {
                         const ele: TheNMIBaseControl = event.target.cookie;
                         const ts = TheNMIScreen.GetScreenByID(ele?.MyFormID);
-                        if (ts.AllowDragging !== true || ele.IsDragging === false || event.buttons<1) {
+                        if (ts.AllowDragging !== true || ele.IsDragging === false || event.buttons < 1) {
                             interact(ele.GetElement()).unset();
                             ele.AttachDragListener(ele);
                             return;
@@ -808,7 +808,7 @@ namespace cdeNMI {
         }
 
         private sinkDoEvent(pEvtObj: Event) {
-            if (cde.CBool(this.GetProperty("IsHitTestDisabled")) || cde.CBool(this.GetProperty("IsUnhooked")) || this.IsDragging===true)
+            if (cde.CBool(this.GetProperty("IsHitTestDisabled")) || cde.CBool(this.GetProperty("IsUnhooked")) || this.IsDragging === true)
                 return;
 
             if (pEvtObj.type === "mousemove" && this.lastXYById.length === 0 && !cde.CBool(this.GetProperty("AllowMoveWithoutDown")))
@@ -1475,6 +1475,17 @@ namespace cdeNMI {
             return Math.floor(tWid / GetSizeFromTile(6));
         }
 
+        public IsFitToScreen(ele: cdeNMI.INMIControl): boolean {
+            if (ele == null) return false;
+            const tFTS = cde.CBool(ele.GetProperty("FitToScreen"));
+            if (tFTS)
+                return true;
+            if (ele.MyTarget)
+                return this.IsFitToScreen(ele.MyTarget);
+            return false;
+        }
+   
+
         public SetWidth(pElement: HTMLElement, tW: number, tMargin = 1, tDontCheckMaxWidth = false): number {
             if (tW > 0) {
                 if (this.GetProperty("MaxTileWidth") && tW > cde.CInt(this.GetProperty("MaxTileWidth")))
@@ -1493,7 +1504,7 @@ namespace cdeNMI {
                     if (tSegments > 0)
                         tWid += GetSizeFromTile(tSegments) / 2;
                 }
-                const tFTS = cde.CBool(this.GetProperty("FitToScreen"));
+                const tFTS = cde.CBool(this.GetProperty("FitToScreen")) || this.IsFitToScreen(this.MyTarget); 
                 if (!tDontCheckMaxWidth && !tFTS && cdeNMI.MyScreenManager && cdeNMI.MyScreenManager.DocumentWidth > 0 && tWid > cdeNMI.MyScreenManager.DocumentWidth)
                     tWid = cdeNMI.MyScreenManager.DocumentWidth - (GetSizeFromTile(1));
                 if (pElement) {

@@ -301,7 +301,7 @@
                      this.bgcanvas.style.width = pValue + "px";
                      this.bgcanvas.width = pValue;
                  }
-                 this.MyWidth = pValue;
+                 this.MyWidth = pValue/this.ScreenScale;
                  this.WidthRatio = 1;
                  bDrawCanvas = true;
              } else if (pName === "YRatio" && this.fgcanvas) {
@@ -1458,7 +1458,7 @@
                 if (tScreen) {
                     tScreen.RegisterEvent("OnLoaded", () => this.ApplySkin());
                     if (tScreen.ScreenScale != 1.0 && tScreen.ScreenScale != 0.0) {
-                        this.Scale = 1.0;// 1/tScreen.ScreenScale
+                        this.Scale = tScreen.ScreenScale
                     }
                 }
             }
@@ -1581,12 +1581,12 @@
                 this.tText.Top = 12;
                 if (this.GetProperty("IsInverted") === true) {
                     this.tRect.Left = this.mCanvas.MyWidth - (this.mCanvas.MyWidth / (this.mMaxValue - this.mMinValue) * (cde.CDbl(pValue) - this.mMinValue));
-                    this.tRect.Width = this.mCanvas.MyWidth;
+                    this.tRect.Width = this.mCanvas.MyWidth / this.Scale;
                     this.tText.Left = this.tRect.Left + 12;
                 }
                 else {
                     this.tRect.Left = 0;
-                    this.tRect.Width = (this.mCanvas.MyWidth / (this.mMaxValue - this.mMinValue) * (cde.CDbl(pValue) - this.mMinValue));
+                    this.tRect.Width = (this.mCanvas.MyWidth / (this.mMaxValue - this.mMinValue) * (cde.CDbl(pValue) - this.mMinValue))/this.Scale;
                     this.tText.Left = this.tRect.Width + 12;
                 }
                 this.tRect.Height = this.mCanvas.MyHeight;
@@ -1669,7 +1669,7 @@
             thisObj.IsPointerDown = false;
             thisObj.PointerID = 0;
             if (pPointer.pointerEvent === cdeNMI.cdeInputEvent.END)
-                thisObj.CalcNewPos(pPointer.AdjPosition.x / thisObj.Scale, pPointer.AdjPosition.y / thisObj.Scale, 1);
+                thisObj.CalcNewPos(pPointer.AdjPosition.x , pPointer.AdjPosition.y , 1);
         }
 
         sinkPointerDown(pTarget: INMIControl, pEvent: Event, pPointer: ThePointer) {
@@ -1678,7 +1678,7 @@
             if (!thisObj.IsPointerDown && thisObj.GetProperty("Disabled") !== true) {
                 thisObj.IsPointerDown = true;
                 thisObj.PointerID = pPointer.Identifier;
-                thisObj.CalcNewPos(pPointer.AdjPosition.x / thisObj.Scale, pPointer.AdjPosition.y / thisObj.Scale, 0);
+                thisObj.CalcNewPos(pPointer.AdjPosition.x , pPointer.AdjPosition.y , 0);
             }
         }
 
@@ -1687,9 +1687,9 @@
             const thisObj: ctrlBarChart = pTarget as ctrlBarChart;
             const tPS: number = thisObj.GetProperty("TouchPoints");
             if (tPS > 1)
-                thisObj.CalcNewPos(pPointer.AdjPosition.x / thisObj.Scale, pPointer.AdjPosition.y / thisObj.Scale, 2);
+                thisObj.CalcNewPos(pPointer.AdjPosition.x , pPointer.AdjPosition.y , 2);
             else
-                thisObj.CalcNewPos(pPointer.AdjPosition.x / thisObj.Scale, pPointer.AdjPosition.y / thisObj.Scale, 0);
+                thisObj.CalcNewPos(pPointer.AdjPosition.x , pPointer.AdjPosition.y , 0);
         }
 
         CalcNewPos(pX: number, pY: number, bSetVal: number) {
@@ -1708,9 +1708,9 @@
                     tNewVal = ((pY) * ((this.mMaxValue - this.mMinValue) / this.mCanvas.MyHeight)) + this.mMinValue;
             } else {
                 if (this.GetProperty("IsInverted") !== true)
-                    tNewVal = ((pX) * ((this.mMaxValue - this.mMinValue) / this.mCanvas.MyWidth)) + this.mMinValue;
+                    tNewVal = ((pX) * ((this.mMaxValue - this.mMinValue) / (this.mCanvas.MyWidth ))) + this.mMinValue;
                 else
-                    tNewVal = ((this.mCanvas.MyWidth - pX) * ((this.mMaxValue - this.mMinValue) / this.mCanvas.MyWidth)) + this.mMinValue;
+                    tNewVal = ((this.mCanvas.MyWidth - pX) * ((this.mMaxValue - this.mMinValue) / (this.mCanvas.MyWidth ))) + this.mMinValue;
             }
 
 
