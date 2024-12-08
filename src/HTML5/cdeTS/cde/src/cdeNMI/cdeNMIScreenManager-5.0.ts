@@ -1493,10 +1493,9 @@
             this.mDivHeaderTitle.innerHTML = "";
             this.mDivHeaderTitle.appendChild(this.MyHeaderTitle.GetElement());
 
-            if (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 1) {
+            if (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 5) {
                 const tPortal = document.getElementById("MyNMIPortal") as HTMLDivElement;
-                if (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 5)
-                    tPortal.style.marginTop = "50px";
+                tPortal.style.marginTop = "50px";
             }
             this.RegisterEvents();
             return true;

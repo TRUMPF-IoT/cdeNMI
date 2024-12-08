@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <None Remove="cde\cdeWorker.js.map" />
+    <None Remove="cde\src\cdeNMI\.cdeNMIScreenManager-5.0.ts.swp" />
   </ItemGroup>
 
   <ItemGroup>
