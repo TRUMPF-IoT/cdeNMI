@@ -24,15 +24,15 @@ jobs:
         CDE_KVC: ${{secrets.CDE_KVC}}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Setup Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
 
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
         source-url: https://api.nuget.org/v3/index.json
@@ -65,7 +65,7 @@ jobs:
         echo $envUpdate
         echo $envUpdate | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
     - name: Install AzureSignTool
-      run: dotnet tool install --global AzureSignTool
+      run: dotnet tool install --global --version 5.0.0.0 AzureSignTool
 
     - name: Enable code signing for build
       run: |
@@ -91,7 +91,7 @@ jobs:
       run: (robocopy .\src\nugets .\artifacts\ *.nupkg *.snupkg /s /np) ^& IF %ERRORLEVEL% LEQ 1 exit 0
       shell: cmd      
     - name: Upload artifacts
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: C-DENMI
         path: ./artifacts
