@@ -322,9 +322,11 @@ var CDMyC3;
             let tLineColor = this.mColors[this.mTimeSeries.length];
             let tFillColor = tLineColor;
             let tLineWidth = 2;
+            let tfilltoBottom = false;
             if (tIdx >= 0 && this.mSeriesNames[tIdx]) {
                 tLineColor = this.mSeriesNames[tIdx].lineColor;
                 tFillColor = tLineColor;
+                tfilltoBottom = cde.CBool(this.mSeriesNames[tIdx].fillToBottom);
                 if (this.mSeriesNames[tIdx].fillColor)
                     tFillColor = this.mSeriesNames[tIdx].fillColor;
                 tSerNo = this.mSeriesNames[tIdx].name;
@@ -334,9 +336,9 @@ var CDMyC3;
             let series = this.mTimeSeries[tSerNo];
             if (!series) {
                 series = new TimeSeries({ lineWidth: tLineWidth, strokeStyle: tLineColor, fillStyle: tFillColor });
-                series.options = { lineWidth: tLineWidth, strokeStyle: tLineColor, fillStyle: tFillColor };
+                series.options = { lineWidth: tLineWidth, strokeStyle: tLineColor, fillStyle: tFillColor, fillToBottom: tfilltoBottom };
                 this.mTimeSeries[tSerNo] = series;
-                this.myChartControl.addTimeSeries(series, { lineWidth: tLineWidth, strokeStyle: tLineColor, fillStyle: tFillColor });
+                this.myChartControl.addTimeSeries(series, { lineWidth: tLineWidth, strokeStyle: tLineColor, fillStyle: tFillColor, fillToBottom: tfilltoBottom });
             }
             const x = (new Date()).getTime();
             series.append(x, cdeCommonUtils.CInt(tVal));
@@ -360,6 +362,8 @@ var CDMyC3;
             if (this.mSpeed === 0)
                 this.mSpeed = 50;
             this.mBackwards = cdeCommonUtils.CBool(this.GetProperty("LeftToRight"));
+            if (this.mBackwards === false)
+                this.mBackwards = cdeCommonUtils.CBool(this.GetProperty("Backwards"));
             let millis = this.mSpeed * 50;
             if (cdeCommonUtils.CInt(this.GetProperty("MillisPerLine")) > 0)
                 millis = cdeCommonUtils.CInt(this.GetProperty("MillisPerLine"));

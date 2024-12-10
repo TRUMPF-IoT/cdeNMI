@@ -681,6 +681,8 @@ namespace NMIService
                         tStr.Append("cde.MyBaseAssets.MyServiceHostInfo.InputSize = 70.0;");
                         break;
                     case eWebPlatform.Mobile:
+                        tStr.Append("cde.MyBaseAssets.MyServiceHostInfo.InputSize = 50.0;");
+                        break;
                     case eWebPlatform.HoloLens:
                         tStr.Append("cde.MyBaseAssets.MyServiceHostInfo.TileSize=70;");
                         tStr.Append("cde.MyBaseAssets.MyServiceHostInfo.TileScale = 70.0 / 78.0;");

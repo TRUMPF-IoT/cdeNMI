@@ -999,6 +999,7 @@
     export class TheControlBlock {
         public TargetID: string;
         public MyControl: INMIControl;
+        public Cookie: any;
         public OnIValueChanged;
     }
     export const MyTCBs: TheControlBlock[][] = [];

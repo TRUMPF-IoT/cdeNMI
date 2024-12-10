@@ -11,10 +11,11 @@
 
   <ItemGroup>
     <None Remove="cde\cdeWorker.js.map" />
+    <None Remove="cde\src\cdeNMI\.cdeNMIScreenManager-5.0.ts.swp" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.4.3">
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.5.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

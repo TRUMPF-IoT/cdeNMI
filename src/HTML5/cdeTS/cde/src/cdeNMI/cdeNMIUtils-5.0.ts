@@ -344,7 +344,7 @@ namespace cdeNMI {
         return tSeg;
     }
 
-    export function CreateTCB(pFacePlate: cdeNMI.TheFaceWait, pName: string, pType: cdeNMI.cdeControlType = cdeNMI.cdeControlType.SingleEnded, pDigits: number = 0, pCookie:any=null): cdeNMI.TheControlBlock {
+    export function CreateTCB(pFacePlate: cdeNMI.TheFaceWait, pName: string, pType: cdeNMI.cdeControlType = cdeNMI.cdeControlType.SingleEnded, pDigits: number = 0, pElement:string=null, pCookie:any=null): cdeNMI.TheControlBlock {
         const pTRF: cdeNMI.TheTRF = pFacePlate.TRF;
         const tTCB: cdeNMI.TheControlBlock = new cdeNMI.TheControlBlock();
         tTCB.TargetID = "CNMIC" + (cdeNMI.MyNMISettings.IDCounter++);
@@ -367,7 +367,9 @@ namespace cdeNMI {
                 tFldInfo["Format"] = pDigits;
             if (pType == cdeNMI.cdeControlType.TimeSpan)
                 tFldInfo["Format"] = pCookie;
-            tFldInfo["Element"] = "span";
+            if (!pElement)
+                pElement="span";
+            tFldInfo["Element"] = pElement;
 
             const tMyScreenInfo = cdeNMI.MyNMIModels[pTRF.ModelID];
             if (tMyScreenInfo && tMyScreenInfo.MyStorageMirror[tOwnerThingID]) {
@@ -428,7 +430,7 @@ namespace cdeNMI {
                 digi = cde.CStr(tF[0]);
                 tSeg.Inner = tF[1];
             }
-            tTCB = CreateTCB(pFacePlate, tSeg.Inner, cdeNMI.cdeControlType.TimeSpan,0, digi);
+            tTCB = CreateTCB(pFacePlate, tSeg.Inner, cdeNMI.cdeControlType.TimeSpan,0,"span", digi);
             pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "<span ID=" + tTCB.TargetID + "></span>");
         }
         while (true) {
@@ -454,6 +456,60 @@ namespace cdeNMI {
             }
             tTCB = CreateTCB(pFacePlate, tSeg.Inner, cdeNMI.cdeControlType.Number, digi);
             pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "<span ID=" + tTCB.TargetID + "></span>");
+        }
+        while (true) {
+            tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, "<%SVG:", "%>");
+            if (tSeg === null) break;
+            const tF = tSeg.Inner.split(':');
+            let svgTag = "tspan";
+            let extTag = "";
+            if (tF.length > 1) {
+                svgTag = tF[0].toLowerCase();
+                tSeg.Inner = tF[1];
+                const tagParts=svgTag.split(' ');
+                if (tagParts.length > 1) {
+                    extTag = svgTag.substring(tagParts[0].length+1);
+                    svgTag = tagParts[0];
+                }
+            }
+            tTCB = CreateTCB(pFacePlate, tSeg.Inner);
+            pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, "<" + svgTag +" "+ extTag +" ID=" + tTCB.TargetID + "_TGT></" + svgTag + ">");
+            tTCB.MyControl.SetProperty("Visibility", false);
+            tTCB.MyControl.SetProperty("MyTCB", tTCB);
+            pFacePlate.HTML += "<span ID=" + tTCB.TargetID + "></span>";
+            tTCB.OnIValueChanged = (sender: INMIControl, pEvt, pVal) => {
+                const ttcb: TheControlBlock = sender.GetProperty("MyTCB");
+                if (pVal && document.getElementById(ttcb.TargetID + "_TGT")) {
+                    (document.getElementById(ttcb.TargetID + "_TGT") as any).textContent = pVal;
+                }
+            };
+        }
+        while (true) {
+            tSeg = cdeNMI.ReturnStringSegment(pFacePlate.HTML, "<%ATT:", "%>");
+            if (tSeg === null) break;
+            const tF = tSeg.Inner.split(':');
+            let svgTag = "";
+            let defVal = "";
+            if (tF.length > 1) {
+                svgTag = tF[0];
+                tSeg.Inner = tF[1];
+                if (tF.length > 2)
+                    defVal = tF[2];
+            }
+            tTCB = CreateTCB(pFacePlate, tSeg.Inner);
+            pFacePlate.HTML = pFacePlate.HTML.replace(tSeg.Outer, " ID=" + tTCB.TargetID + "_TGT");
+            tTCB.MyControl.SetProperty("Visibility", false);
+            if (defVal != "")
+                tTCB.MyControl.SetProperty("iValue", defVal);
+            tTCB.MyControl.SetProperty("MyTCB", tTCB);
+            tTCB.Cookie = svgTag;
+            pFacePlate.HTML += "<span ID=" + tTCB.TargetID + ">" + defVal + "</span>";
+            tTCB.OnIValueChanged = (sender: INMIControl, pEvt, pVal) => {
+                const ttcb: TheControlBlock = sender.GetProperty("MyTCB");
+                if (pVal && document.getElementById(ttcb.TargetID + "_TGT")) {
+                    (document.getElementById(ttcb.TargetID + "_TGT") as any).setAttribute(ttcb.Cookie, pVal);
+                }
+            };
         }
         while (true) {
             tTCB = cdeNMI.ParseTagMacro(pFacePlate, '<%I:', '');
