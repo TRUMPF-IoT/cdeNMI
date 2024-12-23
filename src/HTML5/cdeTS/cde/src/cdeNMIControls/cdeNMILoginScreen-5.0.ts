@@ -341,7 +341,7 @@
                 this.mPWD2.MyNMIControl.RegisterEvent("OnReturn", () => { this.LoginClick(); });
                 if (cde.MyBaseAssets.MyServiceHostInfo.AllowSetScopeWithSetAdmin)
                     this.mScope.SetProperty("Visibility", true);
-                this.mHeaderHelp.MyNMIControl.SetProperty("Text", "The Administrator password and email are not set, yet. Please enter a strong password to ensure maximum security.");
+                this.mHeaderHelp.MyNMIControl.SetProperty("Text", "The Administrator password and email are not set, yet. Please enter a strong password.");
             }
             else {
                 if (cde.MyBaseAssets.MyServiceHostInfo.IsUsingUserMapper) {
