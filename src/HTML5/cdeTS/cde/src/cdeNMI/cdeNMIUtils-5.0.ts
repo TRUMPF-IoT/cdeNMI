@@ -590,115 +590,109 @@ namespace cdeNMI {
     export function GenerateFinalString(pInStr, pData?, pTRF?: cdeNMI.TheTRF, pKeepMacro?: boolean): string {
         if (!pInStr) return pInStr;
         if (typeof pInStr !== "string") pInStr = pInStr.toString();
+        let tInStr: string;
         let outStr: string = pInStr;
-        if (outStr.indexOf('<%UN%>') >= 0) {
-            if (cde.MyBaseAssets.MyCommStatus.UserPref && cde.MyBaseAssets.MyCommStatus.UserPref.CurrentUserName)
-                outStr = outStr.replace('<%UN%>', cde.MyBaseAssets.MyCommStatus.UserPref.CurrentUserName);
-            else
-                outStr = outStr.replace('<%UN%>', '');
-        }
-        if (outStr.indexOf('<%ISID%>') >= 0) {
-            const tN: string = cde.MyBaseAssets.MyCommStatus.InitialNPA;
-            const len: number = (tN.indexOf(".ashx") > 0 ? 5 : 0);
-            const tISID = (!tN ? "" : "?SID=" + tN.substring(4, tN.length - len));
-            outStr = outStr.replace('<%ISID%>', tISID);
-        }
-        if (outStr.indexOf('<%NOW%>') >= 0) {
-            outStr = outStr.replace('<%NOW%>', moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"));
-        }
-        if (pTRF && !pData) {
-            const tScreenInfo: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[pTRF.ModelID];
-            if (tScreenInfo && tScreenInfo.MyStorageMirror && tScreenInfo.MyStorageMirror[pTRF.TableName])
-                pData = tScreenInfo.MyStorageMirror[pTRF.TableName][pTRF.RowNo];
-        }
-
-        if (pData && pData !== true) {
-            if (outStr.indexOf('<%NN%>') >= 0) {
-                try {
-                    outStr = outStr.replace('<%NN%>', pData.cdeN && cdeNMI.MyEngine ? cdeNMI.MyEngine.GetKnownNodeName(pData.cdeN) : '');
-                }
-                catch
-                {
-                    outStr = outStr.replace('<%NN%>', '');
-                }
+        do {
+            tInStr = outStr;
+            if (outStr.indexOf('<%UN%>') >= 0) {
+                if (cde.MyBaseAssets.MyCommStatus.UserPref && cde.MyBaseAssets.MyCommStatus.UserPref.CurrentUserName)
+                    outStr = outStr.replace('<%UN%>', cde.MyBaseAssets.MyCommStatus.UserPref.CurrentUserName);
+                else
+                    outStr = outStr.replace('<%UN%>', '');
             }
-            for (const index in pData) {
-                if (Object.prototype.hasOwnProperty.call(pData, index)) {
-                    if (index === "MyPropertyBag" && outStr.indexOf('%') >= 0) {
-                        const myPropertyBag = pData["MyPropertyBag"];
-                        for (const tBagItem in myPropertyBag) {
-                            if (Object.prototype.hasOwnProperty.call(myPropertyBag, tBagItem)) {
-                                if (outStr.indexOf('%MyPropertyBag.' + tBagItem + '.Value%') >= 0) {
-                                    outStr = outStr.replace('%MyPropertyBag.' + tBagItem + '.Value%',
-                                        myPropertyBag[tBagItem]["Value"]);
-                                } else if (outStr.indexOf('<%' + tBagItem + '%>') >= 0) {
-                                    outStr = outStr.replace('<%' + tBagItem + '%>',
-                                        myPropertyBag[tBagItem]["Value"]);
-                                } else if (outStr.indexOf('%' + tBagItem + '%') >= 0 && myPropertyBag[tBagItem]["Value"]) {
-                                    outStr = outStr
-                                        .replace('%' + tBagItem + '%', myPropertyBag[tBagItem]["Value"]);
+            if (outStr.indexOf('<%ISID%>') >= 0) {
+                const tN: string = cde.MyBaseAssets.MyCommStatus.InitialNPA;
+                const len: number = (tN.indexOf(".ashx") > 0 ? 5 : 0);
+                const tISID = (!tN ? "" : "?SID=" + tN.substring(4, tN.length - len));
+                outStr = outStr.replace('<%ISID%>', tISID);
+            }
+            if (outStr.indexOf('<%NOW%>') >= 0) {
+                outStr = outStr.replace('<%NOW%>', moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"));
+            }
+            if (pTRF && !pData) {
+                const tScreenInfo: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[pTRF.ModelID];
+                if (tScreenInfo && tScreenInfo.MyStorageMirror && tScreenInfo.MyStorageMirror[pTRF.TableName])
+                    pData = tScreenInfo.MyStorageMirror[pTRF.TableName][pTRF.RowNo];
+            }
+
+            if (pData && pData !== true) {
+                if (outStr.indexOf('<%NN%>') >= 0) {
+                    try {
+                        outStr = outStr.replace('<%NN%>', pData.cdeN && cdeNMI.MyEngine ? cdeNMI.MyEngine.GetKnownNodeName(pData.cdeN) : '');
+                    }
+                    catch {
+                        outStr = outStr.replace('<%NN%>', '');
+                    }
+                }
+                for (const index in pData) {
+                    if (Object.prototype.hasOwnProperty.call(pData, index)) {
+                        if (index === "MyPropertyBag" && outStr.indexOf('%') >= 0) {
+                            const myPropertyBag = pData["MyPropertyBag"];
+                            for (const tBagItem in myPropertyBag) {
+                                if (Object.prototype.hasOwnProperty.call(myPropertyBag, tBagItem)) {
+                                    if (outStr.indexOf('%MyPropertyBag.' + tBagItem + '.Value%') >= 0) {
+                                        outStr = outStr.replace('%MyPropertyBag.' + tBagItem + '.Value%',
+                                            myPropertyBag[tBagItem]["Value"]);
+                                    } else if (outStr.indexOf('<%' + tBagItem + '%>') >= 0) {
+                                        outStr = outStr.replace('<%' + tBagItem + '%>',
+                                            myPropertyBag[tBagItem]["Value"]);
+                                    } else if (outStr.indexOf('%' + tBagItem + '%') >= 0 && myPropertyBag[tBagItem]["Value"]) {
+                                        outStr = outStr
+                                            .replace('%' + tBagItem + '%', myPropertyBag[tBagItem]["Value"]);
+                                    }
                                 }
                             }
                         }
-                    }
-                    let repl: string;
-                    let tInStr: string;
-                    if (outStr.indexOf('<%' + index + '%>') >= 0) {
-                        repl = "";
-                        if (pData[index]) {
-                            if (typeof pData[index] !== "string") repl = pData[index].toString();
-                            else repl = pData[index];
-                        }
-                        tInStr = "";
-                        do {
-                            tInStr = outStr;
+                        let repl: string;
+                        if (outStr.indexOf('<%' + index + '%>') >= 0) {
+                            repl = "";
+                            if (pData[index]) {
+                                if (typeof pData[index] !== "string") repl = pData[index].toString();
+                                else repl = pData[index];
+                            }
                             outStr = outStr.replace('<%' + index + '%>', GenerateFinalString(repl, pData, pTRF));
-                        } while (tInStr !== outStr);
-                    } else if (pData[index] &&
-                        pData[index].MyFieldInfo &&
-                        pData[index].MyFieldInfo.FldOrder &&
-                        outStr.indexOf('<%' + pData[index].MyFieldInfo.FldOrder + ".") >= 0) {
-                        const tFldO = pData[index].MyFieldInfo.FldOrder.toString();
-                        const tPos: number = outStr.indexOf('<%' + tFldO + ".") + tFldO.length + 3;
-                        const tPosEnd: number = outStr.indexOf("%>", tPos);
-                        const tPropName: string = outStr.substring(tPos, tPosEnd);
-                        const tVal = pData[index].GetProperty(tPropName);
-                        if (tVal) {
-                            outStr = tVal.toString();
-                        }
-                    } else if (outStr.indexOf('%' + index + '%') >= 0) {
-                        repl = "";
-                        if (pData[index]) {
-                            if (typeof pData[index] !== "string") repl = pData[index].toString();
-                            else repl = pData[index];
-                        }
-                        tInStr = "";
-                        do {
-                            tInStr = outStr;
+                        } else if (pData[index] &&
+                            pData[index].MyFieldInfo &&
+                            pData[index].MyFieldInfo.FldOrder &&
+                            outStr.indexOf('<%' + pData[index].MyFieldInfo.FldOrder + ".") >= 0) {
+                            const tFldO = pData[index].MyFieldInfo.FldOrder.toString();
+                            const tPos: number = outStr.indexOf('<%' + tFldO + ".") + tFldO.length + 3;
+                            const tPosEnd: number = outStr.indexOf("%>", tPos);
+                            const tPropName: string = outStr.substring(tPos, tPosEnd);
+                            const tVal = pData[index].GetProperty(tPropName);
+                            if (tVal) {
+                                outStr = tVal.toString();
+                            }
+                        } else if (outStr.indexOf('%' + index + '%') >= 0) {
+                            repl = "";
+                            if (pData[index]) {
+                                if (typeof pData[index] !== "string") repl = pData[index].toString();
+                                else repl = pData[index];
+                            }
                             outStr = outStr.replace('%' + index + '%', GenerateFinalString(repl, pData, pTRF));
-                        } while (tInStr !== outStr);
+                        }
                     }
                 }
             }
-        }
 
-        if (pTRF && pTRF.FldInfo) {
-            let tT = 1;
-            let gfsoutStr: string;
+            if (pTRF && pTRF.FldInfo) {
+                let tT = 1;
+                let gfsoutStr: string;
 
-            while (tT === 1) {
-                gfsoutStr = outStr;
-                if (gfsoutStr.indexOf("%") < 0) break;		// 3 Recursions allowed then out...
+                while (tT === 1) {
+                    gfsoutStr = outStr;
+                    if (gfsoutStr.indexOf("%") < 0) break;		// 3 Recursions allowed then out...
 
-                const tFound: cde.TheSegment = cdeNMI.ReturnStringSegment(gfsoutStr, "%", "%");
-                if (tFound) {
-                    const tFl: string = pTRF.FldInfo[tFound.Inner];
-                    if (tFl)
-                        gfsoutStr = gfsoutStr.replace(tFound.Outer, tFl);
+                    const tFound: cde.TheSegment = cdeNMI.ReturnStringSegment(gfsoutStr, "%", "%");
+                    if (tFound) {
+                        const tFl: string = pTRF.FldInfo[tFound.Inner];
+                        if (tFl)
+                            gfsoutStr = gfsoutStr.replace(tFound.Outer, tFl);
+                    }
+                    if (gfsoutStr !== outStr) outStr = gfsoutStr; else tT = 0;
                 }
-                if (gfsoutStr !== outStr) outStr = gfsoutStr; else tT = 0;
             }
-        }
+        } while (tInStr !== outStr);
 
         if (!pKeepMacro) {
             while (outStr.indexOf("<%") >= 0) {
