@@ -1250,7 +1250,7 @@
             if (!this.mDivHeadButtonContent) //No Applicatin Bar if HeaderButtonContent is missing
                 return;
 
-            this.MyMainBackButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(null, { PreInitBag: ["ControlTW=1", "ControlTH=1"], PostInitBag: ["Title=<span class='fa' style='font-size:40px'>&#xf359;</span>", "ClassName=MyHeaderButton"] });
+            this.MyMainBackButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(null, { PreInitBag: ["ControlTW=1", "ControlTH=1"], PostInitBag: ["Title=<span class='fa fa-2x' style='font-size:40px'>&#xf359;</span>", "ClassName=MyHeaderButton"] });
             this.MyMainBackButton.SetProperty("OnClick", (sender: INMIControl, e: PointerEvent, tPs: ThePointer) => {
                 this.NavigateBack(false);
             });
@@ -1507,7 +1507,7 @@
             if (!this.mDivHeadButtonContent) //No Applicatin Bar if HeaderButtonContent is missing
                 return;
 
-            this.MyMainBackButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(null, { PreInitBag: ["ControlTW=1", "ControlTH=1", "TileFactorX=2", "TileFactorY=2"], PostInitBag: ["Title=<span class='fa' style='font-size:24px'>&#xf359;</span>", "ClassName=MyHeaderButton", "PixelHeight=48"] });
+            this.MyMainBackButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(null, { PreInitBag: ["ControlTW=1", "ControlTH=1", "TileFactorX=2", "TileFactorY=2"], PostInitBag: ["Title=<span class='fa' style='font-size:24px'>&#xf359;</span>", "ClassName=MyHeaderButton", "PixelHeight=40"] });
             this.MyMainBackButton.SetProperty("OnClick", (sender: INMIControl, e: PointerEvent, tPs: ThePointer) => {
                 this.NavigateBack(false);
             });
