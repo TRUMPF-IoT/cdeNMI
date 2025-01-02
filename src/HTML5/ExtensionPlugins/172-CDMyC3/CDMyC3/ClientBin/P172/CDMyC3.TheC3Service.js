@@ -301,6 +301,12 @@ var CDMyC3;
                 else if (pName === "SeriesNames" && pValue) {
                     this.mSeriesNames = JSON.parse(this.GetProperty("SeriesNames"));
                 }
+                else if (pName === "MaxValue" && pValue) {
+                    this.myChartControl.options.maxValue = cde.CDbl(pValue);
+                }
+                else if (pName === "MinValue" && pValue) {
+                    this.myChartControl.options.minValue = cde.CDbl(pValue);
+                }
                 else if (pName === "TabIndex") {
                     if (cdeCommonUtils.CInt(pValue) < 0) {
                         if (this.myChartControl && this.myChartControl.frame)
