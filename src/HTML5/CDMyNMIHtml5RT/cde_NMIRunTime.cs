@@ -662,6 +662,9 @@ namespace NMIService
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.DisableWebWorker={TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("DisableWebWorker")).ToString().ToLower()};");
                 if (TheBaseAssets.MySettings.HasSetting("RequestGeoLocation"))
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.RequestGeoLocation={TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("RequestGeoLocation")).ToString().ToLower()};");
+                ts = TheCommonUtils.CInt(TheBaseAssets.MySettings.GetSetting("GeoLocInterval"));
+                if (ts > 0)
+                    tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.GeoLocInterval={ts};");
                 if (!string.IsNullOrEmpty(pRequest?.SessionState?.TETO))
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.EnablePinLogin=true;");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.ResourcePath='{TheBaseAssets.MyServiceHostInfo.ResourcePath}';");

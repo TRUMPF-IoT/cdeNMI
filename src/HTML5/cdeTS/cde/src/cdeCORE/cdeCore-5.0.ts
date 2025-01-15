@@ -378,6 +378,8 @@ namespace cde {
 
         //Target Service Depending Settings
         RequestGeoLocation = false;
+        GeoLocInterval = 0;
+        MyGeoInterval = null;
         EnablePinLogin = false;
         DoAllowAnonymous = false;
         LoginDisallowed = false;

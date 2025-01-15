@@ -205,6 +205,16 @@
                 });
             }
         }
+        let geoInt = cde.CInt(cde.MyBaseAssets.MyServiceHostInfo.GeoLocInterval);
+        if (geoInt > 0 && !cde.MyBaseAssets.MyServiceHostInfo.MyGeoInterval) {
+            if (navigator.geolocation) {
+                cde.MyBaseAssets.MyServiceHostInfo.MyGeoInterval = setInterval(() => {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        cde.MyCommChannel.SendQueued(null, cdeNMI.eTheNMIEngine, cdeNMI.eTheNMIEngine, "NMI_MY_LOCATION", (position.coords.longitude + ";" + position.coords.latitude + ";" + position.coords.accuracy), 0, 3, 0, null);
+                    });
+                }, geoInt);
+            }
+        }
         window.addEventListener("scroll", () => {
             cdeNMI.MyNMISettings.IsScrolling = true;
         });

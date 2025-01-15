@@ -413,6 +413,18 @@
                         this.CreateGlobalScript(tCmd[1], pMSG.PLS);
                     }
                     break;
+                case "NMI_GEO_LOC_INTERVAL":
+                    const geoInt = cde.CInt(tCmd[1]); 
+                    if (cde.MyBaseAssets.MyServiceHostInfo.MyGeoInterval)
+                        clearInterval(cde.MyBaseAssets.MyServiceHostInfo.MyGeoInterval);
+                    if (geoInt > 0 && navigator.geolocation) {
+                        cde.MyBaseAssets.MyServiceHostInfo.MyGeoInterval = setInterval(() => {
+                            navigator.geolocation.getCurrentPosition((position) => {
+                                cde.MyCommChannel.SendQueued(null, cdeNMI.eTheNMIEngine, cdeNMI.eTheNMIEngine, "NMI_MY_LOCATION", (position.coords.longitude + ";" + position.coords.latitude + ";" + position.coords.accuracy), 0, 3, 0, null);
+                            });
+                        }, geoInt);
+                    }
+                    break;
                 case "NMI_GLOBAL_STYLE":
                     if (pMSG.PLS && tCmd.length > 1) {
                         this.CreateInlineCSS(tCmd[1], pMSG.PLS);
