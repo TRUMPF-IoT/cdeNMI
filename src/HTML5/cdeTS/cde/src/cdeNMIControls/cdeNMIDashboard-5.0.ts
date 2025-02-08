@@ -64,6 +64,7 @@
 
             let lastCate = "";
             let tTileGroup: cdeNMI.INMIControl = null; 
+            let tSubTileGroup: cdeNMI.INMIControl = null;
             let tTileCount = 0;
             let i: number;
             for (i = 0; i < tDashPanels.length; i++) {
@@ -88,8 +89,20 @@
                         }
                         tTitle = tTitle.substring(dots);
                         tTileGroup.SetProperty("Caption", tTitle);
+                        tTileGroup.SetProperty("OnClickTitle", (pControl: cdeNMI.INMIControl, evt, TP:number, cookie:any) => {
+                            const ctrl: cdeNMI.INMIControl = cookie;
+                            const ele = ctrl.GetContainerElement();
+                            if (ele.style.display === 'none')
+                                ele.style.display = '';
+                            else
+                                ele.style.display = 'none';
+                        });
                     }
                     this.mDashboardScreen.AppendChild(tTileGroup);
+                    tSubTileGroup = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(null); 
+                    tSubTileGroup.SetProperty("ClassName", "cdeSubTileGroup");
+                    tTileGroup.GetProperty("H1Title")?.SetProperty("Cookie", tSubTileGroup);
+                    tTileGroup.AppendChild(tSubTileGroup);
                     lastCate = tCategory;
                 }
                 const tLabelClass: string = cdeNMI.ThePB.GetValueFromBagByName(tDashPanels[i].PropertyBag, "CategoryLabelClassName");
@@ -220,7 +233,7 @@
                 }
 
                 if (tPanelTitle.substring(tPanelTitle.length - 5) !== "-HIDE" && !tNeverHide) {
-                    const tTileButton: cdeNMI.INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(tTileGroup, { PreInitBag: ["IsCustomTile=" + cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tDashPanels[i].PropertyBag, "IsCustomTile")) ], PostInitBag: ["ControlTW=2", "ControlTH=2", "Title=" + tPanelTitle, "Style=" + tStyleExt] });
+                    const tTileButton: cdeNMI.INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(tSubTileGroup, { PreInitBag: ["IsCustomTile=" + cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tDashPanels[i].PropertyBag, "IsCustomTile")) ], PostInitBag: ["ControlTW=2", "ControlTH=2", "Title=" + tPanelTitle, "Style=" + tStyleExt] });
                     tTileButton.SetProperty("OnClick", tOnClick);
                     tTileButton.SetProperty("TabIndex", tDashPanels[i].FldOrder + 101);
                     if (IsForm) {

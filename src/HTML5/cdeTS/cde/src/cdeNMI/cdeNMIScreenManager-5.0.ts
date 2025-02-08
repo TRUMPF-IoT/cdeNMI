@@ -103,31 +103,43 @@
                 window.addEventListener("resize", () => { this.ResizeEventHandler(); }, false);
                 window.addEventListener("scroll", () => { this.ScollEventHandler(); }, false);
             }
+            if (window.matchMedia) {
+                const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                colorSchemeQuery.addEventListener('change', e => {
+                    if (e.matches) {
+                        cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme = false;
+                    }
+                    else {
+                        cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme = true;
+                    }
+                    ApplyTheme();
+                });
+            }
 
-            document.onkeydown = (evt) => {
-                const keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : evt.keyCode;
-                if (keyCode === 13) {
+            document.onkeydown = (evt:KeyboardEvent) => {
+                const keyCode = evt.code;
+                if (keyCode === "Enter" || keyCode === "NumpadEnter") {
                     if (cdeNMI.Key13Event !== null)
                         cdeNMI.Key13Event(evt);
                     cdeNMI.Key13Event = null;
-                } else if (keyCode === 27) {
+                } else if (keyCode === "Escape") {
                     //For escape.
                     if (cdeNMI.Key27Event !== null)
                         cdeNMI.Key27Event(evt);
                     cdeNMI.Key27Event = null;
-                } else if (keyCode === 36 && cde.MyBaseAssets.MyServiceHostInfo.WasPortalRequested && cdeNMI.Key13Event === null) {
-                    if (!cdeNMI.DisableKey36Event)
+                } else if (cdeNMI.Key13Event === null && cdeNMI.DisableKey36Event !== true) {
+                    if (keyCode === "Home" && cde.MyBaseAssets.MyServiceHostInfo.WasPortalRequested) {
                         this.GotoStationHome(false);
-                } else if (keyCode === 10009) {
-                    if (cdeNMI.MyScreenManager)
-                        cdeNMI.MyScreenManager.NavigateBack(false);
-                } else if (keyCode === 39) {
-                    cdeNMI.focusNextElement(false);
-                } else if (keyCode === 37) {
-                    cdeNMI.focusNextElement(true);
-                }
-                if (keyCode > 47 && keyCode < 58 && cdeNMI.Key13Event === null) {
-                    this.TransitToScreenIDX(keyCode - 48);
+                    } else if (keyCode === "Backspace") {
+                        if (cdeNMI.MyScreenManager)
+                            cdeNMI.MyScreenManager.NavigateBack(false);
+                    } else if (keyCode === "ArrowLeft") {
+                        cdeNMI.focusNextElement(true);
+                    } else if (keyCode === "ArrowRight") {
+                        cdeNMI.focusNextElement(false);
+                    } else if (cde.CInt(evt.key) > 0 && cde.CInt(evt.key) < 10) {
+                        this.TransitToScreenIDX(cde.CInt(evt.key));
+                    }
                 }
             };
             window.onpopstate = () => {

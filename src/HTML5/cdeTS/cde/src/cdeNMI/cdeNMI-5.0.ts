@@ -188,6 +188,14 @@
             } else if (pUserPreferences.ThemeName === "Dark") {
                 cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme = false;
                 cdeNMI.ApplyTheme();
+            } else if (pUserPreferences.ThemeName === "Browser" || pUserPreferences.ThemeName === "Auto") {
+                const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
+                if (darkThemeMq.matches) {
+                    cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme = false;
+                } else {
+                    cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme = true;
+                }
+                cdeNMI.ApplyTheme();
             }
         }
         if (cdeNMI.MyScreenManager)

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2025 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -56,7 +56,7 @@
                 this.MyTextArea.className = "ctrlTextArea";
                 this.MyTextArea.style.cssFloat = "left";
                 this.mFrameDiv.appendChild(this.MyTextArea);
-                this.MyTextArea.onblur = () => this.EditElement("13", this.MyTextArea);
+                this.MyTextArea.onblur = () => this.EditElement("Enter", this.MyTextArea);
             } else {
                 if (this.MyFieldInfo && (this.MyFieldInfo.Type === cdeControlType.ComboOption) && cde.CInt(this.GetProperty("MultiLines")) > 1) {
                     this.MyTextArea = document.createElement("textarea");
@@ -213,9 +213,9 @@
                                     });
                                     if (!cde.CBool(this.MyFieldInfo["IsOverlay"]) && !cde.CBool(this.MyFieldInfo["IsInTable"])) {
                                         if (this.MyTextArea)
-                                            this.MyTextArea.onblur = () => this.EditElement("13", this.MyTextArea);
+                                            this.MyTextArea.onblur = () => this.EditElement("Enter", this.MyTextArea);
                                         else
-                                            this.MyEditBox.onblur = () => this.EditElement("13", this.MyEditBox);
+                                            this.MyEditBox.onblur = () => this.EditElement("Enter", this.MyEditBox);
                                     }
                                 }
                             }
@@ -246,16 +246,25 @@
                         this.MyTextArea.onfocus = () => {
                             cdeNMI.DisableKey36Event = true;
                         }
+                        this.MyTextArea.onblur = () => {
+                            cdeNMI.DisableKey36Event = false;
+                        }
                     } else {
                         this.MyEditBox.onkeypress = (evt) => this.EditElement(evt, this.MyEditBox);
                         this.MyEditBox.onfocus = () => {
                             cdeNMI.DisableKey36Event = true;
+                        }
+                        this.MyEditBox.onblur = () => {
+                            cdeNMI.DisableKey36Event = false;
                         }
                     }
                     if (this.MyConfirmBox) {
                         this.MyConfirmBox.onkeypress = (evt) => this.EditElement(evt, this.MyConfirmBox);
                         this.MyConfirmBox.onfocus = () => {
                             cdeNMI.DisableKey36Event = true;
+                        }
+                        this.MyConfirmBox.onblur = () => {
+                            cdeNMI.DisableKey36Event = false;
                         }
                     }
                 }
@@ -412,29 +421,29 @@
                     if (this.EnterButton)
                         this.EnterButton.SetProperty("Visibility", true);
                     if (this.MyEditBox) {
-                        cdeNMI.Key27Event = (evt) => this.EditRestore(evt, this.MyEditBox);
-                        cdeNMI.Key13Event = (evt) => this.EditElement(evt, this.MyEditBox);
+                        cdeNMI.Key27Event = (evt:KeyboardEvent) => this.EditRestore(evt, this.MyEditBox);
+                        cdeNMI.Key13Event = (evt: KeyboardEvent) => this.EditElement(evt, this.MyEditBox);
                         if (cdeNMI.MyTouchOverlay)
                             this.MyEditBox.focus();
                     }
                     if (this.MyTextArea) {
-                        cdeNMI.Key27Event = (evt) => this.EditRestore(evt, this.MyTextArea);
-                        cdeNMI.Key13Event = (evt) => this.EditElement(evt, this.MyTextArea);
+                        cdeNMI.Key27Event = (evt: KeyboardEvent) => this.EditRestore(evt, this.MyTextArea);
+                        cdeNMI.Key13Event = (evt: KeyboardEvent) => this.EditElement(evt, this.MyTextArea);
                         if (cdeNMI.MyTouchOverlay)
                             this.MyTextArea.focus();
                     }
                     if (this.MyConfirmBox) {
-                        cdeNMI.Key27Event = (evt) => this.EditRestore(evt, this.MyConfirmBox);
-                        cdeNMI.Key13Event = (evt) => this.EditElement(evt, this.MyConfirmBox);
+                        cdeNMI.Key27Event = (evt: KeyboardEvent) => this.EditRestore(evt, this.MyConfirmBox);
+                        cdeNMI.Key13Event = (evt: KeyboardEvent) => this.EditElement(evt, this.MyConfirmBox);
                     }
                 } else {
                     if (!this.MyFieldInfo || (!cde.CBool(this.MyFieldInfo["InTemplate"]) && this.MyFieldInfo.Type !== cdeControlType.ComboOption)) {
                         if (this.MyEditBox)
-                            this.MyEditBox.onchange = () => this.EditElement("13", this.MyEditBox);
+                            this.MyEditBox.onchange = () => this.EditElement("Enter", this.MyEditBox);
                         if (this.MyConfirmBox)
-                            this.MyConfirmBox.onchange = () => this.EditElement("13", this.MyConfirmBox);
+                            this.MyConfirmBox.onchange = () => this.EditElement("Enter", this.MyConfirmBox);
                         if (this.MyTextArea)
-                            this.MyTextArea.onchange = () => this.EditElement("13", this.MyTextArea);
+                            this.MyTextArea.onchange = () => this.EditElement("Enter", this.MyTextArea);
                     }
                 }
                 if (this.EnterButton)
@@ -495,18 +504,17 @@
                 this.FireEvent(false, "OnValueChanged", pEvent, tFldContent, this.MyTRF);
             }
         }
-        EditElement(pEvent, pEle) {
+        EditElement(pEvent:any, pEle) {
             let chCode;
             if (typeof pEvent === 'string')
-                chCode = cde.CInt(pEvent);
+                chCode = pEvent;
             else
-                chCode = ('keyCode' in pEvent) ? pEvent.keyCode : pEvent.charCode;
-            //cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "KeyCode:HandleEvent", chCode);
-            if (chCode === 13) {
+                chCode = pEvent.code;
+            if (chCode === "Enter") {
                 cdeNMI.StopPointerEvents(pEvent);
                 this.CheckAndWriteValue(pEle, this.RequiresUpdateButton);
                 cdeNMI.ResetKeyCorder();
-            } else if (chCode === 27) {
+            } else if (chCode === "Escape") {
                 this.EditRestore(pEvent, pEle);
             } else if (this.JustIn && pEle === this.MyEditBox) {
                 this.JustIn = false;

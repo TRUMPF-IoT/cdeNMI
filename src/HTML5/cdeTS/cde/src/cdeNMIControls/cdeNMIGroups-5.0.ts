@@ -106,6 +106,9 @@
             } else if (pName === "HideCaption" && this.h1Title && cde.CBool(pValue)) {
                 this.h1Title.GetElement().parentElement.removeChild(this.h1Title.GetElement());
                 this.h1Title = null;
+            } else if (pName === "OnClickTitle" && pValue) {
+                this.SetProperty("H1Title", this.h1Title);
+                this.h1Title.SetProperty("OnClick", pValue);
             } else if (pName === "OnClick" && pValue) {
                 this.PreventManipulation = true;
                 this.HookEvents(false);

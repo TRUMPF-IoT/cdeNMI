@@ -121,6 +121,10 @@
                     if (cde.CBool(this.GetProperty("Truncate")))
                         this.MyLabelDiv.style.maxWidth = cdeNMI.GetSizeFromTile(this.GetProperty("TileWidth")).toString() + "px";
                 }
+            } else if (pName === "OnClick") {
+                this.HookEvents(false);
+                this.RegisterEvent("OnClick", pValue);
+                this.RegisterEvent("PointerUp", this.DoFireClick);
             } else if (pName === "TileHeight") {
                 if (this.MyLabelDiv)
                     this.MyLabelDiv.style.height = cdeNMI.GetSizeFromTile(this.GetProperty("TileHeight")).toString() + "px";
