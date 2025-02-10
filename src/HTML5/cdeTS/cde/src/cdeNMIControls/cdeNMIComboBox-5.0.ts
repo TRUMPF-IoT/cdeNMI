@@ -314,6 +314,7 @@ namespace cdeNMI {
             this.ApplySkiny();
         }
         public OnHideDropDown() {
+            cdeNMI.DisableKey36Event = false;
             const cDropDownEle = this.GetElement().getElementsByClassName("choices__list choices__list--dropdown")[0] as HTMLElement;
             if (cDropDownEle && window.innerWidth > 1024) {
                 cDropDownEle.style.top = null;
@@ -341,7 +342,7 @@ namespace cdeNMI {
                     cDropDownEle.style.position = "";
                 }
             }
-
+            cdeNMI.DisableKey36Event = true;
             this.myChoices.setChoices(this.MyCurrentData, "value", "label", true);
             if (this.NeedRefresh)
                 this.CalculateOption(null);
