@@ -74,13 +74,13 @@
                     if (tCategory !== " NA" && !cde.IsNotSet(tCategory)) {
                         tTitle = tCategory;
                     }
-                    if (tTitle.substring(tTitle.length - 5) === "-HIDE")
+                    if (tTitle.endsWith("-HIDE"))
                         tTitle = " ";
                     tTileGroup = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(null); 
                     tTileGroup.SetProperty("LabelElement", "h1");
                     tTileGroup.SetProperty("LabelClassName", "cdeDashCategory");
                     tTileGroup.SetProperty("ClassName", "cdeDashCategory cdeTiles");
-                    if (tTitle.substring(tTitle.length - 5) !== "-NONE") {
+                    if (tTitle.endsWith("-NONE")) {
                         let dots = 0;
                         for (const element of tTitle) {
                             if (element !== ".")
