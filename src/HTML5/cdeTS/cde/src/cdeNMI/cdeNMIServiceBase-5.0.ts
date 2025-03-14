@@ -369,6 +369,13 @@ namespace cdeNMI {
                     if (cdeNMI.MyToast)
                         cdeNMI.MyToast.ShowToastMessage(pMSG.PLS);
                     return true;
+                case "NMI_ROW_STYLE": {
+                    if (tCmd.length < 2) return;
+                    const tdl = document.getElementById("r_"+ cde.GuidToString(tCmd[1]));
+                    if (tdl)
+                        tdl.className = pMSG.PLS;
+                    return;
+                }
                 case "NMI_ALERT":
                     if (cdeNMI.MyToast)
                         cdeNMI.MyToast.ShowToastMessage("Alert!", pMSG.PLS, tCmd.length > 1 ? cde.CInt(tCmd[1]) : 15000);

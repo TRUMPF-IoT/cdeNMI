@@ -720,6 +720,10 @@
                 this.tableBody.appendChild(tRow.GetElement());
                 const tDataRow = this.MyScreenInfo.MyStorageMirror[this.MyTableName][i];
                 this.mTableRows[tDataRow.cdeMID] = tRow;
+                tRow.GetElement().id = "r_" + cde.GuidToString(tDataRow.cdeMID);
+                if (tDataRow.cdeRC) {
+                    tRow.SetProperty("ClassName", tDataRow.cdeRC);
+                }
                 let j = 0;
                 for (const tFldInfo of this.mCurrentFormFieldsInfo) {
                     if (!tFldInfo || (tFldInfo.Flags & 8) !== 0 || tFldInfo.Type === cdeControlType.FacePlate) continue;
