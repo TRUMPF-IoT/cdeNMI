@@ -217,7 +217,7 @@ namespace cdeNMI {
             }
         }
 
-        PublishToNodeGET_NMI_DATA(pRes: string) {
+        PublishToNodeGET_NMI_DATA(pRes: string, pPayload?: string) {
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -428,7 +428,10 @@ namespace cdeNMI {
                     break;
                 case "NMI_REQ_DASH":
                     if (pMSG.PLS) {
-                        this.PublishToNodeGET_NMI_DATA(pMSG.PLS);
+                        if (tCmd.length > 1)
+                            this.PublishToNodeGET_NMI_DATA(pMSG.PLS, tCmd[1]);
+                        else
+                            this.PublishToNodeGET_NMI_DATA(pMSG.PLS);
                     }
                     return true;
                 case "NMI_NODEPONG":

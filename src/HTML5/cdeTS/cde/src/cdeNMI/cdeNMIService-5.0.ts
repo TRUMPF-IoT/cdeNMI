@@ -99,8 +99,8 @@
             }
         }
 
-        public PublishToNodeGET_NMI_DATA(pRes: string) {
-            this.PublishToNMI('NMI_GET_DATA:' + pRes);
+        public PublishToNodeGET_NMI_DATA(pRes: string, pPayload?: string) {
+            this.PublishToNMI('NMI_GET_DATA:' + pRes, pPayload);
         }
 
         //////////////////////////////////////////////////////////////////////////////

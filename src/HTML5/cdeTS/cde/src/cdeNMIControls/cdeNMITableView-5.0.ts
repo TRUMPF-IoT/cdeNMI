@@ -313,7 +313,7 @@
                 this.MyScreenInfo.MyStorageMeta[this.MyTableName] = null;
             if (!this.MyScreenInfo.MyStorageMeta[this.MyTableName] || !this.MyScreenInfo.MyStorageMeta[this.MyTableName].FormFields || this.MyScreenInfo.MyStorageMeta[this.MyTableName].FormFields.length === 0) {
                 if (!this.MyScreenInfo.MyStorageMirror[this.MyTableName]) {
-                    this.DisplayHeader(this.mBaseDiv, "No Data Available, yet", this.GetSetting("IsLiveData"));
+                    this.DisplayHeader(this.mBaseDiv, "No Data Available, yet ", this.GetSetting("IsLiveData"));
                     if (cdeNMI.MyEngine && this.MyTarget && this.MyTarget.MyFieldInfo) {
                         cdeNMI.MyEngine.PublishToNMI("NMI_GET_DATA:" + cde.GuidToString(this.MyTarget.MyFieldInfo.cdeMID) + ":CMyTable:" + this.MyTableName + ":" + this.MyScreenID + ":true:true", '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
                     }
@@ -397,11 +397,16 @@
                 tTd.HookEvents(false);
                 if (this.mCurrentFormFieldsInfo[i]["THClassName"])
                     tTd.SetProperty("ClassName", this.mCurrentFormFieldsInfo[i]["THClassName"]);
+                else {
+                    if (this.MyFieldInfo["THClassName"])
+                        tTd.SetProperty("ClassName", this.MyFieldInfo["THClassName"]);
+                    else
+                        tTd.GetElement().style.height = (cdeNMI.GetSizeFromTile(1) / 2) + "px";
+                }
                 let tHWidth = 1;
                 if (cde.CInt(this.mCurrentFormFieldsInfo[i]["FldWidth"]) > 0)
                     tHWidth = cde.CInt(this.mCurrentFormFieldsInfo[i]["FldWidth"]);
                 tTd.SetProperty("TileWidth", tHWidth);
-                tTd.GetElement().style.height = (cdeNMI.GetSizeFromTile(1) / 2) + "px";
                 const tHCellDiv: INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(tTd);
                 tHCellDiv.SetProperty("ClassName", "cdeTHCell");
                 tHCellDiv.SetProperty("TileWidth", tHWidth);
