@@ -683,8 +683,9 @@
                         let tFiVal: string = this.GetProperty("CurrentFilter");
                         if (!tFiVal)
                             tFiVal = "";
-                        this.inputFilter = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SingleEnded).Create(null, { TRF: new TheTRF(this.MyTableName, 1, tFld2), PostInitBag: ["ClassName=cdeInput cdeFilterInput", "TileWidth=2", "iValue=" + tFiVal] });
+                        this.inputFilter = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SingleEnded).Create(null, { TRF: new TheTRF(this.MyTableName, 1, tFld2), PostInitBag: ["ClassName=cdeInput cdeFilterInput","Style=height:16px; margin-top:0px;", "TileWidth=3", "iValue=" + tFiVal] });
                         this.inputFilter.SetProperty("TileFactorY", 2);
+                        this.inputFilter.SetProperty("InnerClassName", "cdeInputFilter");
                         this.inputFilter.RegisterEvent("OnValueChanged", (sender, eventName, pvalue) => {
                             if (this.GetProperty("CurrentFilter") === pvalue)
                                 return;
