@@ -80,7 +80,7 @@
                     tTileGroup.SetProperty("LabelElement", "h1");
                     tTileGroup.SetProperty("LabelClassName", "cdeDashCategory");
                     tTileGroup.SetProperty("ClassName", "cdeDashCategory cdeTiles");
-                    if (tTitle.endsWith("-NONE")) {
+                    if (!tTitle.endsWith("-NONE")) {
                         let dots = 0;
                         for (const element of tTitle) {
                             if (element !== ".")
