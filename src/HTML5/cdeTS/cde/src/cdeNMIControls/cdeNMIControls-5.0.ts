@@ -361,28 +361,33 @@
                     this.Img.alt = pValue;
             } else if ((pName === "Source" || pName === "Value" || pName === "iValue") && this.Img) {
                 try {
-                    if (pValue && pValue.startsWith("FA")) {
-                        pValue = "<i class='fa faIcon " + (pValue.substr(3, 1) === "S" ? "fa-spin " : "") + "fa-" + pValue.substr(2, 1) + "x'>&#x" + pValue.substr(4, pValue.length - 4) + ";</i>";
-                    }
-                    else if (pValue && (pValue.substring(0, 5) === "data:" || cde.CBool(super.GetProperty("IsBlob")) || pValue.length > 512)) {
-                        let tformat: string = super.GetProperty("ImgFormat");
-                        if (!tformat) tformat = "jpeg";
-                        if (pValue.substr(0, 5) !== "data:")
-                            pValue = "data:image/" + tformat + ";base64," + pValue;
-                        if (!this.HostDiv.className)
-                            this.HostDiv.className = "cdeLiveImg";
-                        this.Img.src = pValue;
-                    } else if (pValue) {
-                        const tPa: string[] = cde.CStr(pValue).split(';');
-                        let tImgSrc: string = pValue;
-                        if (tPa.length > 1) {
-                            this.SetProperty("ImageOpacity", tPa[1]);
-                            if (tPa.length > 2)
-                                tImgSrc = tPa[0];
-                            else
-                                tImgSrc = cde.FixupPath(tPa[0]);
+                    if (pValue) {
+                        if (pValue.startsWith("FA")) {
+                            pValue = "<i class='fa faIcon " + (pValue.substr(3, 1) === "S" ? "fa-spin " : "") + "fa-" + pValue.substr(2, 1) + "x'>&#x" + pValue.substr(4, pValue.length - 4) + ";</i>";
                         }
-                        this.Img.src = cde.FixupPath(tImgSrc + cdeNMI.GenerateFinalString("<%ISID%>"));
+                        else if (pValue.startsWith("FI")) {
+                            pValue = "<i class='fa " + (pValue.substr(3, 1) === "S" ? "fa-spin " : "") + "fa-" + pValue.substr(2, 1) + "x'>&#x" + pValue.substr(4, pValue.length - 4) + ";</i>";
+                        }
+                        else if (pValue.substring(0, 5) === "data:" || cde.CBool(super.GetProperty("IsBlob")) || pValue.length > 512) {
+                            let tformat: string = super.GetProperty("ImgFormat");
+                            if (!tformat) tformat = "jpeg";
+                            if (pValue.substr(0, 5) !== "data:")
+                                pValue = "data:image/" + tformat + ";base64," + pValue;
+                            if (!this.HostDiv.className)
+                                this.HostDiv.className = "cdeLiveImg";
+                            this.Img.src = pValue;
+                        } else {
+                            const tPa: string[] = cde.CStr(pValue).split(';');
+                            let tImgSrc: string = pValue;
+                            if (tPa.length > 1) {
+                                this.SetProperty("ImageOpacity", tPa[1]);
+                                if (tPa.length > 2)
+                                    tImgSrc = tPa[0];
+                                else
+                                    tImgSrc = cde.FixupPath(tPa[0]);
+                            }
+                            this.Img.src = cde.FixupPath(tImgSrc + cdeNMI.GenerateFinalString("<%ISID%>"));
+                        }
                     }
                 } catch (ex) {
                     cdeNMI.ShowToastMessage(pValue + ":IMG SETP ERROR:" + ex);

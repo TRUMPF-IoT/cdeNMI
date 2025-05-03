@@ -70,8 +70,12 @@
                         tNewVal = this.GetProperty("Format").format(pValue);
                     }
                     if (this.MyBaseType !== cdeControlType.CollapsibleGroup && cde.CBool(this.GetProperty("IsDivOnly"))) {
-                        if (tNewVal && tNewVal.startsWith("FA") && tNewVal.length === 8) {
-                            tNewVal = "<i class='fa faIcon " + (tNewVal.substring(3, 4) === "S" ? "fa-spin " : "") + "fa-" + tNewVal.substring(2, 3) + "x'>&#x" + tNewVal.substring(4) + ";</i>";
+                        if (tNewVal) {
+                            if (tNewVal.startsWith("FA") && tNewVal.length > 7) {
+                                tNewVal = "<i class='fa faIcon " + (tNewVal.substring(3, 4) === "S" ? "fa-spin " : "") + "fa-" + tNewVal.substring(2, 3) + "x'>&#x" + tNewVal.substring(4) + ";</i>";
+                            } else if (tNewVal.startsWith("FI") && tNewVal.length > 7) {
+                                tNewVal = "<i class='fa " + (tNewVal.substring(3, 4) === "S" ? "fa-spin " : "") + "fa-" + tNewVal.substring(2, 3) + "x'>&#x" + tNewVal.substring(4) + ";</i>";
+                            }
                         }
                         this.divTiles.innerHTML = tNewVal;
                         this.divTiles.style.cssFloat = "none";

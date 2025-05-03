@@ -227,7 +227,7 @@
                 this.SetTileTitle("Title", this.GetProperty("RTitle"));
             } else if (pName.toLowerCase() === "thumbnail") {
                 const tParts: string[] = pValue.split(';');
-                if (tParts[0].startsWith("FA")) {
+                if (tParts[0].startsWith("FA") || tParts[0].startsWith("FI")) {
                     this.SetTileTitle("Title", this.GetProperty("RTitle"));
                 }
                 else {
@@ -302,8 +302,8 @@
                 if (this.divTitle && (pValue || tS)) {
                     if (pValue)
                         pValue = cdeNMI.IconShim(pValue);
-                    if (tS && tS.startsWith("FA")) {
-                        pValue = "<i class='fa" + (tS.substr(3, 1) === "B" ? "b": "") + " faIcon " + (tS.substr(3, 1) === "S" ? "fa-spin " : "") + "fa-" + tS.substr(2, 1) + "x'>&#x" + tS.substr(4, tS.length - 4) + ";</i></br>" + (pValue ? pValue : "");
+                    if (tS && (tS.startsWith("FA") || tS.startsWith("FI"))) {
+                        pValue = "<i class='fa" + (tS.substr(3, 1) === "B" ? "b" : "") + (tS.startsWith("FI") ? " " : " faIcon ") + (tS.substr(3, 1) === "S" ? "fa-spin " : "") + "fa-" + tS.substr(2, 1) + "x'>&#x" + tS.substr(4, tS.length - 4) + ";</i></br>" + (pValue ? pValue : "");
                     }
                     const tSubT = this.GetProperty("SubTitle");
                     if (tSubT)
