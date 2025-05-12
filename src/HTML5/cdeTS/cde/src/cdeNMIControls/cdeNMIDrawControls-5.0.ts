@@ -2605,10 +2605,11 @@
 
 
         public ApplySkin() {
-            if (!this.GaugeShell.GetElement()) return;
-            this.mWidth = this.GaugeShell.GetElement().clientWidth;
+            const tEle: HTMLElement = this.GaugeShell.GetElement();
+            if (!tEle) return;
+            this.mWidth = tEle.clientWidth;
             this.mycanvas.width = this.mWidth;
-            this.mHeight = this.GaugeShell.GetElement().clientHeight;
+            this.mHeight = tEle.clientHeight;
             this.mycanvas.height = this.mHeight;
             if (this.mHeight > 0 && this.mWidth > 0)
                 this.AnimateFrame(true);
@@ -2617,7 +2618,12 @@
 
 
         DoRender() {
-            if (!this.mycanvas || this.mWidth === 0 || this.mHeight === 0) return;
+            if (!this.mycanvas) return;
+            if (this.mWidth === 0 || this.mHeight === 0) {
+                this.ApplySkin();
+                if (this.mWidth === 0 || this.mHeight === 0)
+                    return;
+            }
             const context: CanvasRenderingContext2D = this.mycontext as CanvasRenderingContext2D;
             const canvas = this.mycanvas;
             const x = this.mycanvas.width / 2;
