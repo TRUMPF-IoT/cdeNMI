@@ -536,7 +536,6 @@ namespace NMIService
             TheProcessMessage pMSG = (TheProcessMessage)pPara;
             if (pMSG == null || pMSG.Message == null) return;
 
-#if !CDE_NET4 && !CDE_NET35
             string[] cmd = pMSG.Message.PLS.Split(':');
             if (cmd.Length > 2)
             {
@@ -631,7 +630,6 @@ namespace NMIService
                     }
                 }
             }
-#endif
         }
 
         public override void HandleMessage(ICDEThing sender, object pIncoming)

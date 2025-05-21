@@ -721,9 +721,6 @@ namespace NMIService
                     else
                         tStationUri = new Uri(TheBaseAssets.MyServiceHostInfo.GetPrimaryStationURL(false));
                 }
-#if CDE_NET35
-                tStationUri = TheCommonUtils.CUri(tStationUri, false);
-#endif
                 if (TheBaseAssets.MySettings.HasSetting("BrowserReconnectUrl"))
                     tStationUri = new Uri(TheBaseAssets.MySettings.GetSetting("BrowserReconnectUrl"));
                 tStr.Append($"cde.MyBaseAssets.MyCommStatus.MyServiceUrl='{tStationUri.Scheme}://{tStationUri.Host}:{tStationUri.Port}';");
