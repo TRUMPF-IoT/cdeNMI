@@ -443,8 +443,6 @@
                 this.Img.className = pValue;
             } else if (pName === "OnClick") {
                 this.HookEvents(false);
-                //if (pValue && (typeof (pValue) == 'string') && pValue.toString().substr(0, 4) == "TTS:")
-                //    pValue = "cdeNMI.MyScreenManager.TransitToScreen('" + pValue.substr(4) + "', true)";    //4.107:TODO Update with real SCreenManager
                 this.RegisterEvent("OnClick", pValue);
                 this.RegisterEvent("PointerUp", this.DoFireClick);
                 this.Img.style.cursor = "pointer";

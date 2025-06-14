@@ -1855,4 +1855,21 @@
             super.TransitToScreen(pTargetScreen, MustExist, DontTryLoad, pCookie, pOwnerTable);
         }
     }
-}
+
+     export class TheScreenManagerInApp extends cdeNMI.TheScreenManager {
+         constructor() {
+             super(null);
+             this.MyBaseType = cdeControlType.ScreenManager;
+         }
+
+         public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
+             super.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
+
+             this.RegisterEvents();
+             return true;
+         }
+         public CreateLoginButtonOnly() {
+             return;
+         }
+     }
+ }

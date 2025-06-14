@@ -4,6 +4,7 @@
 
 using nsCDEngine.BaseClasses;
 using nsCDEngine.Communication;
+using nsCDEngine.Engines;
 using nsCDEngine.Engines.NMIService;
 using nsCDEngine.Security;
 using nsCDEngine.ViewModels;
@@ -744,6 +745,14 @@ namespace NMIService
                 if (string.IsNullOrEmpty(tStartScreen) && pPage.StartScreen != Guid.Empty)
                     tStartScreen = pPage.StartScreen.ToString();
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.StartScreen= '{tStartScreen}';");
+                TheCDEngines.MyNMIService?.GetBaseThing()?.FireEvent("eventNMIScreenRequested", TheCDEngines.MyNMIService?.GetBaseThing(), pRequest, false);
+                if (!string.IsNullOrEmpty(pRequest.ResponseBufferStr))
+                {
+                    tStr.Append(pRequest.ResponseBufferStr);
+                    if (!pRequest.ResponseBufferStr.EndsWith(';'))
+                        tStr.Append(';');
+                    pRequest.ResponseBufferStr = null;
+                }
                 tStr.Append("cdeNMI.StartupNMI(); });");
                 tStr.Append("</script>");
             }
