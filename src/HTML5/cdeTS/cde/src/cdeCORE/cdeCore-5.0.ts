@@ -417,6 +417,7 @@ namespace cde {
         HasInternetAccess = false;
         IsAppHosted = false;
         IsWebHosted = false;
+        HidePinsInApp = false; //If true, the pins are not shown in the app (i.e. for convenience apps)
 
         MsgSendCounter = 0;
         DebugLevel = 0;

@@ -102,7 +102,12 @@
             }
             this.divDragContent.classList.add("cde-animate-opacity");
 
-            if (!cde.CBool(this.GetSetting("NeverHide")) && !cde.CBool(this.GetSetting("HidePins")) && !cde.MyBaseAssets.MyServiceHostInfo.HideHeader && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 2 && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 4) {
+            if (!cde.CBool(this.GetSetting("NeverHide")) &&
+                !cde.CBool(this.GetSetting("HidePins")) &&
+                !cde.MyBaseAssets.MyServiceHostInfo.HideHeader &&
+                //!cde.MyBaseAssets.MyServiceHostInfo.HidePinsInApp &&
+                cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 2 &&
+                cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 4) {
 
                 const IsTesla: boolean = (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform === 5);
 
@@ -113,7 +118,8 @@
                 else
                     tPinDiv.className = "cdePinArea";
                 this.MyPinArea.SetElement(tPinDiv);
-
+                if (cde.MyBaseAssets.MyServiceHostInfo.HidePinsInApp === true)
+                    this.MyPinArea.SetProperty("Visibility", false);
                 this.MyScreenTitle = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).Create(this.MyPinArea, { ScreenID: this.MyScreenID, PreInitBag: ["Element=h1"], PostInitBag: [(this.GetSetting("ScreenTitle") ? "iValue=" + this.GetSetting("ScreenTitle") : ""), "ClassName=cdeScreenTitle"] });
 
                 const tAllPins = cdeNMI.MyTCF.CreateBaseControl().Create(this.MyPinArea);
@@ -517,7 +523,7 @@
                 this.GetContainerElement().style.overflow = "auto";
                 this.ApplySkin();
             } else if (pName === "HidePins" && this.MyPinArea) {
-                this.MyPinArea.SetProperty("Visibility", !cde.CBool(pValue));
+                this.MyPinArea.SetProperty("Visibility", !cde.CBool(pValue) && cde.MyBaseAssets.MyServiceHostInfo.HidePinsInApp !== true);
             }
         }
 
