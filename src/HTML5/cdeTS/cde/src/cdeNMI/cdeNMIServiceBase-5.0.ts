@@ -91,7 +91,7 @@ namespace cdeNMI {
             }
             if (tJS.startsWith("TTS:")) {
                 if (cdeNMI.MyScreenManager) {
-                    const tScrParts: string[] = tJS.split(':');
+                    const tScrParts: string[] = cdeNMI.GenerateFinalString(tJS).split(':');
                     if (tScrParts[1] === "CLOSE") {
                         const tLast: INMIScreen = cdeNMI.MyScreenManager.GetCurrentScreen();
                         if (tLast) {

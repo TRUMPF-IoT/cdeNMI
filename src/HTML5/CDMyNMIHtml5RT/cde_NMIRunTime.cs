@@ -560,6 +560,7 @@ namespace NMIService
                 case eWebPlatform.TeslaXS: tPlat = "T"; break;
                 case eWebPlatform.TizenFamilyHub: tPlat = "FH"; break;
                 case eWebPlatform.TizenTV: tPlat = "TY"; break;
+                case eWebPlatform.InApp: tPlat = "AP"; break;
                 case eWebPlatform.Bot: tPlat = null; break;
                 default:
                     break;

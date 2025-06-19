@@ -609,6 +609,7 @@ namespace cdeNMI {
             if (outStr.indexOf('<%NOW%>') >= 0) {
                 outStr = outStr.replace('<%NOW%>', moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"));
             }
+
             if (pTRF && !pData) {
                 const tScreenInfo: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[pTRF.ModelID];
                 if (tScreenInfo && tScreenInfo.MyStorageMirror && tScreenInfo.MyStorageMirror[pTRF.TableName])
@@ -691,6 +692,21 @@ namespace cdeNMI {
                     }
                     if (gfsoutStr !== outStr) outStr = gfsoutStr; else tT = 0;
                 }
+            }
+            while (outStr.indexOf("<$HSI:") >= 0) {
+                if (outStr.indexOf("$>") > 0) {
+                    const tHSI: string = outStr.substring(outStr.indexOf("<$HSI:") + 6, outStr.indexOf("$>"));
+                    let repl: string = "";
+                    try {
+                        repl = cde.MyBaseAssets.MyServiceHostInfo[tHSI];
+                    }
+                    catch {
+                        //intended
+                    }
+                    outStr = outStr.replace("<$HSI:" + tHSI + "$>", repl);
+                }
+                else
+                    break;
             }
         } while (tInStr !== outStr);
 

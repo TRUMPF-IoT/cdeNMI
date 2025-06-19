@@ -633,6 +633,8 @@
             }
             if (!pTargetScreen)
                 pTargetScreen = cde.MyBaseAssets.MyServiceHostInfo.PortalScreen;
+            else
+                pTargetScreen = cdeNMI.GenerateFinalString(pTargetScreen);
 
             if (!cde.MyBaseAssets.MyServiceHostInfo.WasInitialScreenVisible) {
                 if (cde.MyBaseAssets.MyServiceHostInfo.DoesRequireConfiguration && !cde.MyBaseAssets.MyServiceHostInfo.DoAllowAnonymous && cde.MyBaseAssets.MyServiceHostInfo.MainConfigScreen) {
