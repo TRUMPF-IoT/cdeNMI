@@ -327,8 +327,7 @@
                             return;
                         let bForce = false;
                         if (evt.button !== 2) bForce = true;
-                        const tFetch: string = 'NMI_GET_DATA:' + this.MyScreenID + ':' + tScreen.GetProperty("ControlClass") + ':' + tScreen.GetProperty("DashID") + ':true:' + bForce;
-                        cdeNMI.MyEngine.PublishToNMI(tFetch, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
+                        this.ReloadScreen(tScreen, bForce);
                     }
                 });
                 if (IsTesla)
@@ -407,6 +406,11 @@
             }
 
             return true;
+        }
+
+        public ReloadScreen(tScreen: INMIScreen, bForce: boolean = false) {
+            const tFetch: string = 'NMI_GET_DATA:' + this.MyScreenID + ':' + tScreen.GetProperty("ControlClass") + ':' + tScreen.GetProperty("DashID") + ':true:' + bForce;
+            cdeNMI.MyEngine.PublishToNMI(tFetch, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
         }
 
         SaveHomeScreen(tScreen: INMIScreen) {

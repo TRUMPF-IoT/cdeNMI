@@ -96,6 +96,7 @@
         CreateHTMLView(pHtml: string);
         AppendContent(pHtml: string);
         Clear(AllKids: boolean);
+        ReloadScreen(tScreen: INMIScreen, bForce: boolean);
 
         ShowPin();
         ShowFullscreen(force: boolean);

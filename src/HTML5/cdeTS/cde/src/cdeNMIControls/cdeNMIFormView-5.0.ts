@@ -147,10 +147,16 @@ namespace cdeNMI {
                         }
                     }
 
+                    const tSCreen = cdeNMI.MyScreenManager.GetScreenByID(this.MyTableName);
+                    if (cde.MyBaseAssets.MyServiceHostInfo.IsPortrait === true && cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(this.MyFormInfo.PropertyBag, "TileWidthPortrait"))) {
+                        cdeNMI.RegisterEvent("CDE_ORIENTATION_CHANGED", () => {
+                            tSCreen.ReloadScreen(tSCreen, true);
+                        });
+                    }
+
                     //Set Form Properties from Bag
                     const tCap = cdeNMI.ThePB.GetValueFromBagByName(this.MyFormInfo.PropertyBag, "Caption");
                     if (tCap && cdeNMI.MyScreenManager) {
-                        const tSCreen = cdeNMI.MyScreenManager.GetScreenByID(this.MyTableName);
                         if (tSCreen)
                             tSCreen.SetProperty("Caption", tCap);
                         cdeNMI.ThePB.RemoveProperty(this.MyFormInfo.PropertyBag, "Caption");
