@@ -226,6 +226,15 @@
         window.addEventListener("scroll", () => {
             cdeNMI.MyNMISettings.IsScrolling = true;
         });
+        cde.MyBaseAssets.MyServiceHostInfo.IsPortrait = window.matchMedia("(orientation: portrait)").matches;
+        window.matchMedia("(orientation: portrait)").addEventListener("change", (e) => {
+            if (e.matches) {
+                cde.MyBaseAssets.MyServiceHostInfo.IsPortrait = true;
+            } else {
+                cde.MyBaseAssets.MyServiceHostInfo.IsPortrait = false;
+            }
+            cdeNMI.FireEvent(true, "CDE_ORIENTATION_CHANGED", cde.MyBaseAssets.MyServiceHostInfo.IsPortrait);
+        });
         cdeNMI.MyScreenManager.Create(null);
         cdeNMI.MyScreenManager.CreateLoginButtonOnly();
         if (cde.MyBaseAssets.MyServiceHostInfo.DoAllowAnonymous || !cdeNMI.MyEngine)

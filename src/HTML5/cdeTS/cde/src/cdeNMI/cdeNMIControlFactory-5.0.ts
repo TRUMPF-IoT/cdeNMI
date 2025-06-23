@@ -338,6 +338,7 @@
                     if (!cde.CBool(pTEControl.GetProperty("IsInTable"))) {
                         pTEControl.SetProperty("MinTileWidth", pTgtControl.GetProperty("MinTileWidth"));
                         pTEControl.SetProperty("MinTileHeight", pTgtControl.GetProperty("MinTileHeight"));
+                        pTEControl.SetProperty("TileWidthPortrait", pTgtControl.GetProperty("TileWidthPortrait"));
                         if (cde.CInt(pTgtControl.GetProperty("TileWidth")) > 0)
                             pTEControl.SetProperty("TileWidth", pTgtControl.GetProperty("TileWidth"));
                         if (cde.CInt(pTgtControl.GetProperty("TileHeight")) > 0)

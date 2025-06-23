@@ -351,11 +351,21 @@ namespace cdeNMI {
                     this.SetInitialWidth(1);
                 } else if (pName === "TileFactorY" && this.MyRootElement) {
                     this.SetInitialHeight(1);
+                } else if (pName === "TileWidthPortrait" && this.MyRootElement && cde.MyBaseAssets.MyServiceHostInfo.IsPortrait) {
+                    pValue = cde.CInt(pValue);
+                    if (pValue > 0) {
+                        this.SetWidth(this.MyRootElement, pValue, this.MyBaseType === cdeNMI.cdeControlType.Screen ? 0 : (this.MyBaseType === cdeNMI.cdeControlType.TileEntry ? 0 : 1));
+                    }
                 } else if (pName === "TileWidth" && this.MyRootElement) {
                     pValue = cde.CInt(pValue);
                     if (pValue === 0) pValue = 1;
-                    const tScrolRes = 0;
-                    this.SetWidth(this.MyRootElement, pValue, this.MyBaseType === cdeNMI.cdeControlType.Screen ? tScrolRes : (this.MyBaseType === cdeNMI.cdeControlType.TileEntry ? 0 : 1));
+                    if (cde.MyBaseAssets.MyServiceHostInfo.IsPortrait) {
+                        const tPor = cde.CInt(this.GetProperty("TileWidthPortrait"));
+                        if (tPor > 0) {
+                            pValue = tPor;
+                        }
+                    }
+                    this.SetWidth(this.MyRootElement, pValue, this.MyBaseType === cdeNMI.cdeControlType.Screen ? 0 : (this.MyBaseType === cdeNMI.cdeControlType.TileEntry ? 0 : 1));
                 } else if (pName === "TileHeight" && this.MyRootElement) {
                     pValue = cde.CInt(pValue);
                     if (pValue < 0)
@@ -1423,6 +1433,16 @@ namespace cdeNMI {
                 tW = cde.CInt(this.GetSetting("TileWidth"));
             if (tW === 0 && this.GetProperty("TileWidth"))
                 tW = cde.CInt(this.GetProperty("TileWidth"));
+            if (cde.MyBaseAssets.MyServiceHostInfo.IsPortrait) {
+                let tPor = cde.CInt(this.GetSetting("TileWidthPortrait"));
+                if (tPor > 0) {
+                    tW = tPor;
+                } else {
+                    tPor = cde.CInt(this.GetProperty("TileWidthPortrait"));
+                    if (tPor > 0)
+                        tW = tPor;
+                }
+            }
             return this.SetWidth(this.GetElement(), tW, tMargin);
         }
 
@@ -1465,7 +1485,13 @@ namespace cdeNMI {
         }
 
         public GetSegmentWidth(): number {
-            let tWid: number = cdeNMI.GetSizeFromTile(this.GetProperty("TileWidth"));
+            let tW = cde.CInt(this.GetProperty("TileWidth"));
+            if (cde.MyBaseAssets.MyServiceHostInfo.IsPortrait) {
+                const tPor = cde.CInt(this.GetProperty("TileWidthPortrait"));
+                if (tPor > 0)
+                    tW = tPor;
+            }
+            let tWid: number = cdeNMI.GetSizeFromTile(tW);
             if (cde.CInt(this.GetProperty("TileFactorX")) > 1)
                 tWid /= cde.CInt(this.GetProperty("TileFactorX"));
             else {

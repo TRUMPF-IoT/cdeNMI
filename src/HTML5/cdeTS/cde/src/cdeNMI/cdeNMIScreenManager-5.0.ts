@@ -1031,8 +1031,14 @@
                         tScreen.GetElement().style.transformOrigin = "top left";
 
                         let tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidth"));
-                        if (tWid > 0)
+                        if (tWid > 0) {
+                            if (cde.MyBaseAssets.MyServiceHostInfo.IsPortrait) {
+                                const tPor = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidthPortrait"));
+                                if (tPor > 0) 
+                                    tWid = tPor;
+                            }
                             tWid = cdeNMI.GetSizeFromTile(tWid);
+                        }
                         else
                             tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelWidth"));
                         if (tWid > 0) 

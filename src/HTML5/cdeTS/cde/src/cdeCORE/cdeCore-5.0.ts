@@ -380,6 +380,7 @@ namespace cde {
         RequestGeoLocation = false;
         GeoLocInterval = 0;
         MyGeoInterval = null;
+        IsPortrait = false; //True if the device is in portrait mode (i.e. a phone or tablet)
         EnablePinLogin = false;
         DoAllowAnonymous = false;
         LoginDisallowed = false;
