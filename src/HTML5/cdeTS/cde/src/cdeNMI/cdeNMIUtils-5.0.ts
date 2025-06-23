@@ -664,13 +664,15 @@ namespace cdeNMI {
                             if (tVal) {
                                 outStr = tVal.toString();
                             }
-                        } else if (outStr.indexOf('%' + index + '%') >= 0) {
-                            repl = "";
-                            if (pData[index]) {
-                                if (typeof pData[index] !== "string") repl = pData[index].toString();
-                                else repl = pData[index];
+                        } else {
+                            while (outStr.indexOf('%' + index + '%') >= 0) {
+                                repl = "";
+                                if (pData[index]) {
+                                    if (typeof pData[index] !== "string") repl = pData[index].toString();
+                                    else repl = pData[index];
+                                }
+                                outStr = outStr.replace('%' + index + '%', GenerateFinalString(repl, pData, pTRF));
                             }
-                            outStr = outStr.replace('%' + index + '%', GenerateFinalString(repl, pData, pTRF));
                         }
                     }
                 }
