@@ -34,10 +34,11 @@ namespace cdeNMI {
         myChoicesOptions = {
             delimiter: this.MySep,
             editItems: false,
-            maxItemCount: 1,
+            maxItemCount: 1, 
             removeItemButton: false,
             searchEnabled: false,
-            shouldSort: true,
+            shouldSort: true, 
+            itemSelectText: "",
             searchResultLimit: 100,
             shouldSortItems: true,
             duplicateItemsAllowed: false,
