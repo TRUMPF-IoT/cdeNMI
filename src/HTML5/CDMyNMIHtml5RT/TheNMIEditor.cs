@@ -103,7 +103,8 @@ namespace NMIService
             MyEditorForm.ModelID = "NMIEditor";
             TheCDEngines.MyNMIService?.SetProperty("NMIEditorFormID", MyEditorForm.cdeMID);
             TheDashboardInfo tDash = TheNMIEngine.GetDashboardById(TheNMIHtml5RT.eNMIDashboard);
-            MyEditorDashIcon = TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, MyEditorForm, "CMyForm", "NMI Control Editor", 1, 0x89, 0x80, "NMI", null, new ThePropertyBag() { "RenderTarget=cdeInSideBarRight", "NeverHide=true" }); //"mAllowDrag=true", "nVisibility=false", 
+            if (!TheBaseAssets.MyServiceHostInfo.IsCloudService)
+                MyEditorDashIcon = TheNMIEngine.AddFormToThingUX(tDash, MyBaseThing, MyEditorForm, "CMyForm", "NMI Control Editor", 1, 0x89, 0x80, "NMI", null, new ThePropertyBag() { "RenderTarget=cdeInSideBarRight", "NeverHide=true" }); //"mAllowDrag=true", "nVisibility=false", 
             return true; //retired for now. Moved into NMI Control Code
 
             TheNMIEngine.AddSmartControl(MyBaseThing, MyEditorForm, eFieldType.TileGroup, 9, 0, 0, null, null, new nmiCtrlTileGroup { TileWidth = 7, TileHeight = 1, TileFactorY = 2 });
