@@ -697,11 +697,12 @@ span.cdeMyHeaderTitle {
   border-width: 1px;
   border-style: solid;
   overflow: hidden;
-  margin-left: 5px;
-  margin-top: 5px;
+  margin: 0 auto;
   float: left;
   box-sizing: content-box;
   text-align: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.2);
 }
 
 .cdePopupTemplate {
@@ -818,7 +819,7 @@ i.cdeFormPin {
 }
 
 .cdeButtonHover2:hover, .cdeButtonHover2:visited, .cdeButtonHover2:active, .cdeButtonHover2:focus, .cdeLiveTile:hover, .cdeLiveTile:visited, .cdeLiveTile:active, .cdeLiveTile:focus, .cdeLiveTileBar:hover, .cdeLiveTileBar:visited, .cdeLiveTileBar:active, .cdeLiveTileBar:focus, .cdeGlassButton:hover, .cdeGlassButton:visited, .cdeGlassButton:active, .cdeGlassButton:focus {
-  box-shadow: inset 1px 1px 1px hsl(220deg, 1%, 57%), 1px 1px 1px hsl(0deg, 0%, 100%);
+  box-shadow: inset 1px 1px 1px hsl(220, 1%, 57%), 1px 1px 1px hsl(0, 0%, 100%);
 }
 
 div.cdeOverlay {
@@ -1206,11 +1207,6 @@ body.cdeLogBody {
 
 div.cdeSideBar {
   background-color: white;
-}
-
-.TemplateThing12x10 {
-  background-color: rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 0, 0, 0.2);
 }
 
 .cdeScreenListButtoninner:hover {

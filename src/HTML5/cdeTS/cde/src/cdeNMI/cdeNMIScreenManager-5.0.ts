@@ -1029,7 +1029,7 @@
                     if (tFTS === true) {
                         tScreen.ScreenScale = 1.0;
                         tScreen.GetElement().style.transformOrigin = "top left";
-
+                        tScreen.GetElement().style.margin = "0";
                         let tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidth"));
                         if (tWid > 0) {
                             if (cde.MyBaseAssets.MyServiceHostInfo.IsPortrait) {

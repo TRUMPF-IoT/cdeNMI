@@ -788,11 +788,12 @@ span.cdeMyHeaderTitle {
     border-width: 1px;
     border-style: solid;
     overflow: hidden;
-    margin-left: 5px; //Depends on TileSize (TS/4) Must be zero on Phones!
-    margin-top: 5px; //Depends on TileSize (TS/4)
+    margin: 0 auto; //Depends on TileSize (TS/4) Must be zero on Phones!
     float: left;
     box-sizing: content-box;
     text-align: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.2);
 }
 
 .cdePopupTemplate {
@@ -1335,11 +1336,6 @@ body.cdeLogBody {
 
 div.cdeSideBar {
     background-color: white;
-}
-
-.TemplateThing12x10 {
-    background-color: rgba(0, 0, 0, 0.1);
-    border-color: rgba(0, 0, 0, 0.2);
 }
 
 .cdeScreenListButtoninner:hover {

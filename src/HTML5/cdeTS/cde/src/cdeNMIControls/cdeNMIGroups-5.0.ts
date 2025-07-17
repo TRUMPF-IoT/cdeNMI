@@ -267,9 +267,10 @@
             if (!this.GetSetting("TileWidth") && this.GetSetting("MinTileWidth"))
                 this.SetProperty("TileWidth", this.GetSetting("MinTileWidth"));
 
-            this.IsTesla = false; 
+            this.IsTesla = false;
 
             this.mTitleGroup = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup);
+            const CanBeOpened: boolean = (pTRF && pTRF.FldInfo) && ((pTRF.FldInfo.Flags & 2)== 2);
             const tGrpInfo: TheFieldInfo = new TheFieldInfo(cdeControlType.TileGroup, (pTRF && pTRF.FldInfo) ? pTRF.FldInfo.Flags : 2, null);
             tGrpInfo.FldOrder = (pTRF && pTRF.FldInfo) ? pTRF.FldInfo.FldOrder : 0;
             this.mTitleGroup.InitControl(this, new TheTRF(null, 0, tGrpInfo));
@@ -366,7 +367,8 @@
                 }
             }
 
-            this.SetProperty("Overflow", "hidden");
+            if (CanBeOpened)
+                this.SetProperty("Overflow", "hidden");
             this.ApplySkin();
             this.ToggleDrop(!cde.CBool(cde.CBool(this.GetProperty("DoClose"))), true);
             return true;
