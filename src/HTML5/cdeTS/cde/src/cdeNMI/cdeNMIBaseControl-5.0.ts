@@ -1510,29 +1510,33 @@ namespace cdeNMI {
                 return this.IsFitToScreen(ele.MyTarget);
             return false;
         }
-   
+
+        public GetWidth(tW: number, tDontCheckMaxWidth = false): number {
+            if (this.GetProperty("MaxTileWidth") && tW > cde.CInt(this.GetProperty("MaxTileWidth")))
+                tW = cde.CInt(this.GetProperty("MaxTileWidth"));
+            if (this.GetProperty("MinTileWidth") && tW < cde.CInt(this.GetProperty("MinTileWidth")))
+                tW = cde.CInt(this.GetProperty("MinTileWidth"));
+            let tWid: number = cdeNMI.GetSizeFromTile(tW); // - tMargin; //-1 compensates for 1px margin
+            if (cde.CInt(this.GetProperty("TileFactorX")) > 1)
+                tWid /= cde.CInt(this.GetProperty("TileFactorX"));
+            else {
+                if (cde.CInt(this.GetSetting("TileFactorX")) > 1)
+                    tWid /= cde.CInt(this.GetSetting("TileFactorX"));
+            }
+            if (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 1 && this.MyBaseType === cdeNMI.cdeControlType.CollapsibleGroup && this.MyFieldInfo && this.MyFieldInfo.FldOrder === 1 && cde.CBool(this.GetProperty("UseMargin")) === true) {
+                const tSegments: number = Math.floor(tW / 6);
+                if (tSegments > 0)
+                    tWid += GetSizeFromTile(tSegments) / 2;
+            }
+            const tFTS = cde.CBool(this.GetProperty("FitToScreen")) || this.IsFitToScreen(this.MyTarget);
+            if (!tDontCheckMaxWidth && !tFTS && cdeNMI.MyScreenManager && cdeNMI.MyScreenManager.DocumentWidth > 0 && tWid > cdeNMI.MyScreenManager.DocumentWidth)
+                tWid = cdeNMI.MyScreenManager.DocumentWidth - (GetSizeFromTile(1));
+            return tWid;
+        }
 
         public SetWidth(pElement: HTMLElement, tW: number, tMargin = 1, tDontCheckMaxWidth = false): number {
             if (tW > 0) {
-                if (this.GetProperty("MaxTileWidth") && tW > cde.CInt(this.GetProperty("MaxTileWidth")))
-                    tW = cde.CInt(this.GetProperty("MaxTileWidth"));
-                if (this.GetProperty("MinTileWidth") && tW < cde.CInt(this.GetProperty("MinTileWidth")))
-                    tW = cde.CInt(this.GetProperty("MinTileWidth"));
-                let tWid: number = cdeNMI.GetSizeFromTile(tW); // - tMargin; //-1 compensates for 1px margin
-                if (cde.CInt(this.GetProperty("TileFactorX")) > 1)
-                    tWid /= cde.CInt(this.GetProperty("TileFactorX"));
-                else {
-                    if (cde.CInt(this.GetSetting("TileFactorX")) > 1)
-                        tWid /= cde.CInt(this.GetSetting("TileFactorX"));
-                }
-                if (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 1 && this.MyBaseType === cdeNMI.cdeControlType.CollapsibleGroup && this.MyFieldInfo && this.MyFieldInfo.FldOrder === 1 && cde.CBool(this.GetProperty("UseMargin")) === true) {
-                    const tSegments: number = Math.floor(tW / 6);
-                    if (tSegments > 0)
-                        tWid += GetSizeFromTile(tSegments) / 2;
-                }
-                const tFTS = cde.CBool(this.GetProperty("FitToScreen")) || this.IsFitToScreen(this.MyTarget); 
-                if (!tDontCheckMaxWidth && !tFTS && cdeNMI.MyScreenManager && cdeNMI.MyScreenManager.DocumentWidth > 0 && tWid > cdeNMI.MyScreenManager.DocumentWidth)
-                    tWid = cdeNMI.MyScreenManager.DocumentWidth - (GetSizeFromTile(1));
+                const tWid=this.GetWidth(tW, tDontCheckMaxWidth);
                 if (pElement) {
                     pElement.style.width = tWid + "px";
                     this.MyWidth = tWid;

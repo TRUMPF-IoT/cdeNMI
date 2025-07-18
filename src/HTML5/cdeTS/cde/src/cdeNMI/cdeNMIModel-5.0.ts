@@ -35,6 +35,7 @@
         SetTE(pTE: INMITileEntry);
         GetTE(): INMITileEntry;
         GetSegmentWidth(): number;
+        GetWidth(tW: number, tDontCheckMaxWidth:boolean): number;
         SetWidth(pElement: HTMLElement, tW: number, tMargin: number): number;
         SetHeight(pElement: HTMLElement, tW: number, tMargin: number): number;
         IsAChildBigger(tW: number): boolean;
@@ -101,6 +102,8 @@
         ShowPin();
         ShowFullscreen(force: boolean);
 
+        MyFormInfo: cdeNMI.TheFormInfo;
+
         MyRefreshButton: INMIControl;
         MySavePin: INMIControl;
         MyRefreshPin: INMIControl;
@@ -110,6 +113,7 @@
         HasRenderTarget: boolean;
         ScreenScale: number;
         AllowDragging: boolean;
+        IsFitToScreenSet: boolean;
     }
 
     export interface INMITileEntry extends INMIControl {

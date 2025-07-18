@@ -300,6 +300,12 @@ i.cl-5x {
     top: 4800px;
   }
 }
+.cdeScaledScreen {
+  position: absolute;
+  transform-origin: center top;
+  left: 50%;
+}
+
 .cdeDetailsButton::before {
   font-family: "Font Awesome 5 Free", sans-serif;
   font-weight: 900;

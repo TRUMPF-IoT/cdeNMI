@@ -787,10 +787,14 @@
                     if (pScreen.Visibility)
                         pScreen.OnUnload();
                     pScreen.SetProperty("Visibility", false);
+                } else if (pScreen.GetProperty("IsPinned")) {
+                    this.RemoveScreenScaling(pScreen);
                 }
             } else {
-                if (!pScreen.Visibility)
+                if (!pScreen.Visibility) {
+                    this.CalculateFitToScreen(pScreen);
                     pScreen.OnLoad(true);
+                }
                 pScreen.SetProperty("Visibility", true);
             }
         }
@@ -994,7 +998,7 @@
                 const tTRF: TheTRF = cdeNMI.TheTRF.FromScreenForm(tModel, tTableName);
                 if (tFormInfo.IsAlwaysEmpty === true)
                     tTRF.RowNo = -1;
-                const tFTS = cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "FitToScreen"));
+                const tIsFitToScreenSet:boolean = cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "FitToScreen"));
                 const tRef = cde.GuidToString(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TableReference"));
                 if (!pRowMID && tScreen && tScreen.GetProperty("TTSCookie")) {
                     pRowMID = tScreen.GetProperty("TTSCookie");
@@ -1018,7 +1022,7 @@
                     }
                 }
 
-                tBaseControl = cdeNMI.MyTCF.CreateNMIControl(tTRF.FldInfo.Type).Create(pTarget, { ScreenID: cde.GuidToString(tModel.MyDashboard.cdeMID), TRF: tTRF, PreInitBag: ["ExtraInfo=" + pExtraInfo, (tFTS===true ? "FitToScreen=" + tFTS : ""), (tRef ? "TableReference=" + tRef : "")], PostInitBag: tFormInfo.PropertyBag }) as INMIDataView;
+                tBaseControl = cdeNMI.MyTCF.CreateNMIControl(tTRF.FldInfo.Type).Create(pTarget, { ScreenID: cde.GuidToString(tModel.MyDashboard.cdeMID), TRF: tTRF, PreInitBag: ["ExtraInfo=" + pExtraInfo, (tIsFitToScreenSet ? "FitToScreen=" + tIsFitToScreenSet : ""), (tRef ? "TableReference=" + tRef : "")], PostInitBag: tFormInfo.PropertyBag }) as INMIDataView;
                 if (tBaseControl && cdeNMI.MyTCF && pTarget) {
                     const tableTE = cdeNMI.MyTCF.GetRegisteredControl(pTarget.MyScreenID, "TE") as cdeNMI.INMITileEntry;
                     if (tableTE) {
@@ -1026,37 +1030,9 @@
                     }
                 }
                 if (tScreen) {
-                    if (tFTS === true) {
-                        tScreen.ScreenScale = 1.0;
-                        tScreen.GetElement().style.transformOrigin = "top left";
-                        tScreen.GetElement().style.margin = "0";
-                        let tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidth"));
-                        if (tWid > 0) {
-                            if (cde.MyBaseAssets.MyServiceHostInfo.IsPortrait) {
-                                const tPor = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidthPortrait"));
-                                if (tPor > 0) 
-                                    tWid = tPor;
-                            }
-                            tWid = cdeNMI.GetSizeFromTile(tWid);
-                        }
-                        else
-                            tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelWidth"));
-                        if (tWid > 0) 
-                            tScreen.ScreenScale = (document.body.clientWidth-20) / tWid;
-
-                        let tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileHeight"));
-                        if (tHei > 0)
-                            tHei = cdeNMI.GetSizeFromTile(tHei);
-                        else
-                            tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelHeight"));
-                        if (tHei > 0) {
-                            const tRatioH = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) / tHei;
-                            if (tRatioH < tScreen.ScreenScale)
-                                tScreen.ScreenScale = tRatioH;
-                        }
-                        if (tScreen.ScreenScale != 1.0) 
-                            tScreen.GetElement().style.transform = "scale(" + tScreen.ScreenScale + ")";
-                    }
+                    tScreen.IsFitToScreenSet = tIsFitToScreenSet;
+                    tScreen.MyFormInfo = tFormInfo;
+                    this.CalculateFitToScreen(tScreen);
                     tBaseControl.OnLoaded();
                     if (tBaseControl && tBaseControl.MyFieldInfo)
                         cdeNMI.ThePB.SetPropertiesFromBag(tScreen, tBaseControl.MyFieldInfo.PropertyBag, null, false, false);
@@ -1086,6 +1062,60 @@
             else
                 cdeNMI.MyTCF.RegisterControl("TABLES", tTableName, tBaseControl);
             return tBaseControl;
+        }
+
+        public CalculateFitToScreen(tScreen: cdeNMI.INMIScreen, ForceOff:boolean=false) {
+            if (!tScreen) return;
+
+            if (!tScreen.IsFitToScreenSet || ForceOff) {
+                this.RemoveScreenScaling(tScreen);
+            }
+            else {
+                const tFormInfo: cdeNMI.TheFormInfo = tScreen.MyFormInfo;
+                tScreen.ScreenScale = 1.0;
+                tScreen.GetElement().style.margin = "0";
+                let tW = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidth"));
+                let tWid = tW;
+                if (tW > 0) {
+                    if (cde.MyBaseAssets.MyServiceHostInfo.IsPortrait) {
+                        const tPor = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidthPortrait"));
+                        if (tPor > 0)
+                            tW = tPor;
+                    }
+                    tWid = tScreen.GetWidth(tW,false);
+                    if (cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "UseMargin"))) {
+                        const tSegments: number = Math.floor(tW / 6);
+                        if (tSegments > 0)
+                            tWid += GetSizeFromTile(tSegments);
+                    }
+                }
+                else
+                    tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelWidth"));
+                if (tWid > 0)
+                    tScreen.ScreenScale = (document.body.clientWidth) / tWid;
+
+                let tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileHeight"));
+                if (tHei > 0)
+                    tHei = cdeNMI.GetSizeFromTile(tHei);
+                else
+                    tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelHeight"));
+                if (tHei > 0) {
+                    const tRatioH = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) / tHei;
+                    if (tRatioH < tScreen.ScreenScale)
+                        tScreen.ScreenScale = tRatioH;
+                }
+                if (tScreen.ScreenScale != 1.0) {
+                    tScreen.GetElement().classList.add("cdeScaledScreen");
+                    tScreen.GetElement().style.transform = "translateX(-50%) scale(" + tScreen.ScreenScale + ")";
+                } else {
+                    this.RemoveScreenScaling(tScreen);
+                }
+            }
+        }
+
+        public RemoveScreenScaling(tScreen: cdeNMI.INMIScreen) {
+            tScreen.GetElement().classList.remove("cdeScaledScreen");
+            tScreen.GetElement().style.transform = "";
         }
 
 

@@ -33,6 +33,7 @@
         mIsInitialized = false;
         IsIFrame = false;
 
+        public IsFitToScreenSet: boolean = false;
         public AllowDragging = false;
         public MyHostNode = "";
         public MyRefreshButton: INMIControl = null;
@@ -43,6 +44,7 @@
         MyPinButton: INMIControl = null;
         MyDrawPin: INMIControl = null;
         MyOverlay: INMICanvasDraw = null;
+        MyFormInfo: cdeNMI.TheFormInfo = null;
 
         MyPinArea: INMIControl = null;
         MyScreenTitle: INMIControl = null;
