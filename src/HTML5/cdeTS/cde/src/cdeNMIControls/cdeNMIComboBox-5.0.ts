@@ -317,7 +317,7 @@ namespace cdeNMI {
         public OnHideDropDown() {
             cdeNMI.DisableKey36Event = false;
             const cDropDownEle = this.GetElement().getElementsByClassName("choices__list choices__list--dropdown")[0] as HTMLElement;
-            if (cDropDownEle && window.innerWidth > 1024) {
+            if (cDropDownEle && cdeNMI.GetBrowserWidth() > 1024) {
                 cDropDownEle.style.top = null;
                 cDropDownEle.style.bottom = null; //"initial";
                 cDropDownEle.style.width = null; //"800px";
@@ -325,12 +325,12 @@ namespace cdeNMI {
         }
         public OnShowDropDown() {
             const cDropDownEle = this.GetElement().getElementsByClassName("choices__list choices__list--dropdown is-active")[0] as HTMLElement;
-            if (cDropDownEle && window.innerWidth > 1024) {
+            if (cDropDownEle && cdeNMI.GetBrowserWidth() > 1024) {
                 const tScreen = cdeNMI.MyScreenManager.GetScreenByID(this.MyFormID);
                 let scale = 1.0;
                 if (tScreen && tScreen.ScreenScale != 1.0 && tScreen.ScreenScale != 0.0)
                     scale = tScreen.ScreenScale;
-                if (window.innerHeight - (cDropDownEle.getBoundingClientRect().top - window.scrollY) < 300 || scale != 1.0) {
+                if (cdeNMI.GetBrowserHeight() - (cDropDownEle.getBoundingClientRect().top - window.scrollY) < 300 || scale != 1.0) {
                     cDropDownEle.style.bottom = "0px";
                     cDropDownEle.style.left = "0px";
                     cDropDownEle.style.width = "100%";

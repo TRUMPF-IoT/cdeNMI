@@ -393,7 +393,7 @@
                 this.mDivDashboardContent.style.width = "100%";
                 this.mDivDashboardContent.style.display = "flex";
                 this.mDivDashboardContent.style.verticalAlign= "middle";
-                this.mDivDashboardContent.style.height = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) + "px";
+                this.mDivDashboardContent.style.height = (cdeNMI.GetBrowserHeight() - cdeNMI.GetSizeFromTile(1)) + "px";
             }
             this.MyScreenDIV.appendChild(this.mDivDashboardContent);
 
@@ -445,11 +445,11 @@
 
         public ResizePopup() {
             if (cde.CBool(this.GetProperty("IsPopup"))) {
-                this.GetElement().style.left = (window.innerWidth / 2 - (this.GetElement().clientWidth / 2) + "px");
+                this.GetElement().style.left = (cdeNMI.GetBrowserWidth() / 2 - (this.GetElement().clientWidth / 2) + "px");
                 let tH = this.GetElement().clientHeight;
                 if (tH === 0)
                     tH = cdeNMI.GetSizeFromTile(this.GetProperty("TileHeight"));
-                this.GetElement().style.top = ((window.innerHeight / 2 - (tH / 2) + window.scrollY) + "px");
+                this.GetElement().style.top = ((cdeNMI.GetBrowserHeight() / 2 - (tH / 2) + window.scrollY) + "px");
             }
         }
 

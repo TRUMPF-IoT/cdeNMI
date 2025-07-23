@@ -71,7 +71,7 @@
                 document.body.appendChild(this.divSideBarRight);
             }
 
-            this.DocumentWidth = document.body.clientWidth + cdeNMI.GetSizeFromTile(1);
+            this.DocumentWidth = cdeNMI.GetBrowserWidth() + cdeNMI.GetSizeFromTile(1);
             this.SetElement(tPortal, false, mDivMainDashboard);
             this.IsLoaded = true;
             this.FireEvent(false, "OnIsLoaded", this.IsLoaded);
@@ -211,7 +211,7 @@
         }
 
         ResizeEventHandler() {
-            this.DocumentWidth = document.body.clientWidth + cdeNMI.GetSizeFromTile(1);
+            this.DocumentWidth = cdeNMI.GetBrowserWidth() + cdeNMI.GetSizeFromTile(1);
             this.IsBrowserFS();
             this.FireEvent(true, "OnWindowResize");
         }
@@ -221,7 +221,7 @@
         }
 
         IsBrowserFS() {
-            if (window.innerWidth === screen.width && window.innerHeight === screen.height) {
+            if (cdeNMI.GetBrowserWidth() === screen.width && cdeNMI.GetBrowserHeight() === screen.height) {
                 if (!this.IsBrowserFullscreen) {
                     this.IsBrowserFullscreen = true;
                     this.FireEvent(true, "OnBrowserFullscreen", true);
@@ -683,7 +683,7 @@
                             this.MyPopupOverlay.SetProperty("ClassName", "cdePopupOverlay");
                             this.CurrentScreen.GetElement().style.position = "absolute";
                             this.CurrentScreen.GetElement().style.zIndex = "1100";
-                            this.CurrentScreen.GetElement().style.left = (window.innerWidth / 2 - (this.CurrentScreen.GetElement().clientWidth / 2) + "px");
+                            this.CurrentScreen.GetElement().style.left = (cdeNMI.GetBrowserWidth() / 2 - (this.CurrentScreen.GetElement().clientWidth / 2) + "px");
                             this.CurrentScreen.GetElement().className = "cdePopupTemplate cde-animate-opacity";
                             this.CurrentScreen.SetProperty("ClassName", "cdePopupContent");
                             this.CurrentScreen.SetProperty("OldScreen", tOldScreen.MyScreenID);
@@ -1067,7 +1067,7 @@
         public CalculateFitToScreen(tScreen: cdeNMI.INMIScreen, ForceOff:boolean=false) {
             if (!tScreen) return;
 
-            if (!tScreen.IsFitToScreenSet || ForceOff) {
+            if (!tScreen.IsFitToScreenSet || ForceOff || this.CntScreenPinned()>0) {
                 this.RemoveScreenScaling(tScreen);
             }
             else {
@@ -1082,7 +1082,7 @@
                         if (tPor > 0)
                             tW = tPor;
                     }
-                    tWid = tScreen.GetWidth(tW,false);
+                    tWid = tScreen.GetWidth(tW, true);
                     if (cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "UseMargin"))) {
                         const tSegments: number = Math.floor(tW / 6);
                         if (tSegments > 0)
@@ -1092,7 +1092,7 @@
                 else
                     tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelWidth"));
                 if (tWid > 0)
-                    tScreen.ScreenScale = (document.body.clientWidth) / tWid;
+                    tScreen.ScreenScale = cdeNMI.GetBrowserWidth() / tWid;
 
                 let tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileHeight"));
                 if (tHei > 0)
@@ -1100,7 +1100,7 @@
                 else
                     tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelHeight"));
                 if (tHei > 0) {
-                    const tRatioH = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) / tHei;
+                    const tRatioH = (cdeNMI.GetBrowserHeight() - cdeNMI.GetSizeFromTile(1)) / tHei;
                     if (tRatioH < tScreen.ScreenScale)
                         tScreen.ScreenScale = tRatioH;
                 }

@@ -46,6 +46,13 @@ namespace cdeNMI {
         }
     }
 
+    export function GetBrowserWidth() {
+        return document.body.clientWidth || (window.innerWidth/window.devicePixelRatio) || document.documentElement.clientWidth;
+    }
+    export function GetBrowserHeight() {
+        return document.documentElement.clientHeight || (window.innerHeight / window.devicePixelRatio) || document.body.clientHeight;
+    }
+
     export function cdeEscapeHtml(source: string) {
         return String(source).replace(/[&<>"']/g, s => cdeNMI.TheEscapeMap[s]);
     }

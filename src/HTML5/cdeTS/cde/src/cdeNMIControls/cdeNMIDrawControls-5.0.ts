@@ -1316,13 +1316,8 @@
 
 
         public ResizeEventHandler() {
-            const w = window.innerWidth
-                || document.documentElement.clientWidth
-                || document.body.clientWidth;
-
-            const h = window.innerHeight
-                || document.documentElement.clientHeight
-                || document.body.clientHeight;
+            const w = cdeNMI.GetBrowserWidth();
+            const h = cdeNMI.GetBrowserHeight();
             this.divTiles.style.width = w + "px";
             this.divTiles.style.height = h + "px";
         }
