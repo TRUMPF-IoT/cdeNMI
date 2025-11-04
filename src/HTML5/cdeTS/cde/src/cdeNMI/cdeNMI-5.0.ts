@@ -161,7 +161,7 @@
                     if (!cde.MyBaseAssets.MyCommStatus.UserPref)
                         cde.MyBaseAssets.MyCommStatus.UserPref = JSON.parse(cde.MyBaseAssets.MyServiceHostInfo.InitUserPref);
                 }
-                catch (e) {
+                catch {
                     //ignored
                 }
                 cdeNMI.DoLoginSuccess(cde.MyBaseAssets.MyCommStatus.UserPref);

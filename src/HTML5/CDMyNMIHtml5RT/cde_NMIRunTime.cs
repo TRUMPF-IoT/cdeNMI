@@ -536,7 +536,8 @@ namespace NMIService
         #endregion
 
         #region Header and Footer
-
+        private static List<string> AppUserAgents = null;
+        private static List<string> HSIMappings = null;
         private static string CreateHeader(TheRequestData pRequest, string pRealPage, string pComposite, eWebPlatform pWebPlatform, ThePageDefinition pPage, bool IsDebugEnabled, bool IsLite)
         {
             StringBuilder tStr = new StringBuilder();
@@ -746,6 +747,41 @@ namespace NMIService
                 if (string.IsNullOrEmpty(tStartScreen) && pPage.StartScreen != Guid.Empty)
                     tStartScreen = pPage.StartScreen.ToString();
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.StartScreen= '{tStartScreen}';");
+                if (AppUserAgents == null)
+                {
+                    var t = TheBaseAssets.MySettings.GetSetting("AppUserAgents");
+                    AppUserAgents = TheCommonUtils.CStringToList(t, ';');
+                    if (AppUserAgents == null)
+                        AppUserAgents = new List<string>();
+                }
+                if (AppUserAgents?.Count > 0)
+                {
+                    foreach (var ua in AppUserAgents)
+                    {
+                        if (pRequest.UserAgent.Contains(ua))
+                        {
+                            pRequest.ResponseBufferStr += $"cde.MyBaseAssets.MyServiceHostInfo.ScreenManagerClass='cdeNMI.TheScreenManagerInApp';" +
+                            $"cde.MyBaseAssets.MyServiceHostInfo.HidePinsInApp = true;";
+                            break;
+                        }
+                    }
+                }
+                if (HSIMappings == null)
+                {
+                    var t = TheBaseAssets.MySettings.GetSetting("HSIMappings");
+                    HSIMappings = TheCommonUtils.CStringToList(t, ';');
+                    if (HSIMappings == null)
+                        HSIMappings = new List<string>();
+                }
+                if (HSIMappings?.Count > 0)
+                {
+                    pRequest.ResponseBufferStr += "try { ";
+                    foreach (var hsimap in HSIMappings)
+                    {
+                        pRequest.ResponseBufferStr += $"cde.MyBaseAssets.MyServiceHostInfo.{hsimap};";
+                    }
+                    pRequest.ResponseBufferStr += "} catch {} ";
+                }
                 TheCDEngines.MyNMIService?.GetBaseThing()?.FireEvent("eventNMIScreenRequested", TheCDEngines.MyNMIService?.GetBaseThing(), pRequest, false);
                 if (!string.IsNullOrEmpty(pRequest.ResponseBufferStr))
                 {

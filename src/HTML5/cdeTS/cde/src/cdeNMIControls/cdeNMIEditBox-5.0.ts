@@ -49,6 +49,7 @@
             this.mFrameDiv.style.height = "inherit";
             this.mFrameDiv.className = "ctrlInput";
             this.SetElement(this.mFrameDiv);
+            const rand = Math.floor((Math.random() * 1000) + 1) //NOSONAR not crypto related
 
             if (this.MyFieldInfo && this.MyFieldInfo.Type === cdeControlType.TextArea) //Text Area
             {
@@ -72,9 +73,10 @@
                 }
                 else {
                     this.MyEditBox = document.createElement("input");
+                    this.MyEditBox.id = "EB" + cde.GuidToString(this.MyFieldInfo.cdeMID) + "_" + rand;
                     this.MyEditBox.style.cssFloat = "left";
                     if (!cde.CBool(this.GetProperty("EnableAutoFill")) && !cde.CBool(this.GetProperty("InTemplate"))) {
-                        this.MyEditBox.name = "EB" + cde.GuidToString(this.MyFieldInfo.cdeMID) + "_" + Math.floor((Math.random() * 1000) + 1) //NOSONAR not crypto related
+                        this.MyEditBox.name = "EB" + cde.GuidToString(this.MyFieldInfo.cdeMID) + "_" + rand;
                         this.MyEditBox.autocomplete = "new-password";
                     }
                     this.mFrameDiv.appendChild(this.MyEditBox);
@@ -125,6 +127,7 @@
                                 this.MyConfirmBox.type = "password";
 
                                 if (!cde.CBool(this.GetProperty("EnableAutoFill")) && !cde.CBool(this.GetProperty("InTemplate"))) {
+                                    this.MyConfirmBox.id = "EB" + cde.GuidToString(this.MyFieldInfo.cdeMID) + "_" + rand;
                                     this.MyConfirmBox.name = "EB" + cde.GuidToString(this.MyFieldInfo.cdeMID) + "_" + Math.floor((Math.random() * 1000) + 1) //NOSONAR not crypto related
                                     this.MyConfirmBox.autocomplete = "new-password";
                                 }
