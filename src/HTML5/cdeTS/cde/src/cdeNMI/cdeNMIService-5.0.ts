@@ -35,7 +35,7 @@
                     switch (cred[0]) {  //TODO: V4.109: Security Review: can we control this by the Relay? Reflect all to Relay?
                         case "APPLOG":
                             if (cred.length > 2) {
-                                cdeNMI.MyEngine.Login(cred[1], cred[2]);
+                                cdeNMI.MyEngine.Login(null, cred[1], cred[2]);
                                 //res = "Done";
                             }
                             break;
