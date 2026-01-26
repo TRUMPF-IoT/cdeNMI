@@ -123,6 +123,7 @@
         btnAdder: ctrlTileButton = null;
         inputFilter: INMIControl = null;
         InfoText: INMIControl = null;
+        customButtonArea: INMIControl = null;
         mBaseDiv: HTMLDivElement = null;
         IsPropertyTable = false;
         IsNMIOnly = false;
@@ -695,6 +696,11 @@
                         tHeadTd.appendChild(this.inputFilter.GetElement());
                     }
                 }
+                this.customButtonArea = ctrlSmartLabel.Create(null, null, null, "", "div", true);
+                this.customButtonArea.SetProperty("ID", "custab" + this.MyFormInfo.cdeMID);
+                this.customButtonArea.SetProperty("Style", "float: left; height: inherit;");
+                tHeadTd.appendChild(this.customButtonArea.GetElement());
+
                 this.InfoText = ctrlSmartLabel.Create(null, null, null, "", "span", true);
                 this.InfoText.SetProperty("TileFactorY", 2);
                 this.InfoText.SetProperty("ClassName", "cdeRefresher");
@@ -702,7 +708,6 @@
                 if (HasContent === true)
                     tHeadTd.style.height = (cdeNMI.GetSizeFromTile(1) / 2) + "px";
                 tHeadTd.appendChild(this.InfoText.GetElement());
-
             }
 
             if (tAddHeadline)

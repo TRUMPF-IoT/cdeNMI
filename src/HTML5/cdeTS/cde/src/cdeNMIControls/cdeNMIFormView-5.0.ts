@@ -205,7 +205,7 @@ namespace cdeNMI {
                         switch (tFldInfo.Type) {
                             case cdeControlType.Table:
                                 {
-                                    const tTE: INMITileEntry = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(fldParent, { ScreenID: this.MyScreenID, TRF: tTRF, PostInitBag: ["ContentOuterClassName=cdeTableInline", "ContainerClassName=cdeTableTEContainer"] }) as INMITileEntry;
+                                    const tTE: INMITileEntry = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileEntry).Create(fldParent, { ScreenID: this.MyScreenID, TRF: tTRF, PostInitBag: ["ContentOuterClassName=cdeTableInline", "ContainerClassName=cdeTableTEContainer"] }) as INMITileEntry;
                                     this.MyFormControls[tFldID] = tTE;
                                     if (cdeNMI.MyTCF)
                                         cdeNMI.MyTCF.RegisterControl(cde.GuidToString(tFldInfo.cdeMID), "TE", tTE);

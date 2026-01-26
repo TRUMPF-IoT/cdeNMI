@@ -44,8 +44,12 @@
             else {
                 if (this.GetSetting("Element"))
                     this.MyLabelDiv = document.createElement(this.GetSetting("Element")) as HTMLElement;
-                else
-                    this.MyLabelDiv = document.createElement("span");
+                else {
+                    if (this.GetProperty("Element"))
+                        this.MyLabelDiv = document.createElement(this.GetProperty("Element")) as HTMLElement;
+                    else
+                        this.MyLabelDiv = document.createElement("span");
+                }
             }
             const tS: string = this.GetSetting("ValueTitle");
             if (tS) {
