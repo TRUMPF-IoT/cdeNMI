@@ -138,10 +138,10 @@
                         case 4:
                             this.myShapeDraw = [{ Type: 4, Fill: "gradientc(#000080, #0000FF)", Width: (tW / 2) - tM, Top: tH / 2, Left: tL / 2, Visibility: true, IsTemp: true }] as cdeNMI.TheDrawingObject[];
                             break;
-                        case 5:
+                        case 6:
                             this.myShapeDraw = [{ Type: 4, Fill: "gradientc(#000000, #6f4200)", Width: (tW / 2) - tM, Top: tH / 2, Left: tL / 2, Visibility: true, IsTemp: true }] as cdeNMI.TheDrawingObject[];
                             break;
-                        case 6:
+                        case 5:
                             this.myShapeDraw = [{ Type: 4, Fill: "gradientc(#400080, #8000FF)", Width: (tW / 2) - tM, Top: tH / 2, Left: tL / 2, Visibility: true, IsTemp: true }] as cdeNMI.TheDrawingObject[];
                             break;
                         case 7:
