@@ -1071,6 +1071,9 @@
                 this.RemoveScreenScaling(tScreen);
             }
             else {
+                const bra:number = cdeNMI.GetBrowserHeight() / cdeNMI.GetBrowserWidth();
+                let divi:number = 1;
+
                 const tFormInfo: cdeNMI.TheFormInfo = tScreen.MyFormInfo;
                 tScreen.ScreenScale = 1.0;
                 tScreen.GetElement().style.margin = "0";
@@ -1079,10 +1082,13 @@
                 if (tW > 0) {
                     if (cde.MyBaseAssets.MyServiceHostInfo.IsPortrait) {
                         const tPor = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidthPortrait"));
-                        if (tPor > 0)
+                        if (tPor > 0) {
                             tW = tPor;
+                            if (bra > 1.9)
+                                divi = 2;
+                        }
                     }
-                    tWid = tScreen.GetWidth(tW, true);
+                    tWid = tScreen.GetWidth(tW, true)/divi;
                     if (cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "UseMargin"))) {
                         const tSegments: number = Math.floor(tW / 6);
                         if (tSegments > 0)
@@ -1100,13 +1106,24 @@
                 else
                     tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelHeight"));
                 if (tHei > 0) {
-                    const tRatioH = (cdeNMI.GetBrowserHeight() - cdeNMI.GetSizeFromTile(1)) / tHei;
+                    let heisub = (cdeNMI.GetSizeFromTile(1) / 2) + 48;
+                    if (cde.MyBaseAssets.MyServiceHostInfo.HidePinsInApp === true)
+                        heisub = 0; //Pin and Title Bar
+                    const tRatioH = cdeNMI.GetBrowserHeight() / (tHei + heisub);
                     if (tRatioH < tScreen.ScreenScale)
                         tScreen.ScreenScale = tRatioH;
                 }
                 if (tScreen.ScreenScale != 1.0) {
-                    tScreen.GetElement().classList.add("cdeScaledScreen");
-                    tScreen.GetElement().style.transform = "translateX(-50%) scale(" + tScreen.ScreenScale + ")";
+                    if (divi == 1) {
+                        tScreen.GetElement().classList.remove("cdeScaledHalfScreen");
+                        tScreen.GetElement().classList.add("cdeScaledScreen");
+                        tScreen.GetElement().style.transform = "translateX(-50%) scale(" + tScreen.ScreenScale + ")";
+                    }
+                    else {
+                        tScreen.GetElement().classList.remove("cdeScaledScreen");
+                        tScreen.GetElement().classList.add("cdeScaledHalfScreen");
+                        tScreen.GetElement().style.transform = "scale(" + tScreen.ScreenScale + ")";
+                    }
                 } else {
                     this.RemoveScreenScaling(tScreen);
                 }
@@ -1115,6 +1132,7 @@
 
         public RemoveScreenScaling(tScreen: cdeNMI.INMIScreen) {
             tScreen.GetElement().classList.remove("cdeScaledScreen");
+            tScreen.GetElement().classList.remove("cdeScaledHalfScreen");
             tScreen.GetElement().style.transform = "";
         }
 

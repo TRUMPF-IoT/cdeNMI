@@ -360,7 +360,10 @@ i.cl-5x {
     transform-origin: center top;
     left: 50%;
 }
-
+.cdeScaledHalfScreen {
+    transform-origin: left top;
+    left: 0%;
+}
 
 .cdeDetailsButton::before {
     font-family: "Font Awesome 5 Free", sans-serif;
