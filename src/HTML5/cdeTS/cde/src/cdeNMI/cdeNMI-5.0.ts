@@ -139,7 +139,6 @@
             if (cdeNMI.MyScreenManager || cdeNMI.MyLoginScreen) {
                 return;
             }
-
             if (!cde.MyBaseAssets.MyCommStatus.IsUserLoggedIn && !cde.MyBaseAssets.MyServiceHostInfo.DoAllowAnonymous) {
                 cdeNMI.MyLoginScreen = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.LoginScreen, true) as cdeNMI.INMILoginScreen;
                 if (cdeNMI.MyLoginScreen) {
@@ -154,6 +153,7 @@
                             cdeNMI.DoLoginSuccess(pUserPreferences);
                         }
                     });
+                    window.location.hash = "cdeloginup:";
                     cdeNMI.MyLoginScreen.Create(null);
                 }
             } else {
