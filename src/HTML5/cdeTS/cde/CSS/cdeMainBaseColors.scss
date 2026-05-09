@@ -72,6 +72,7 @@ $cde-edit-border: #3f4458 !default;
 $cde-wizard-explainer: #eee !default;
 
 $cde-table-frame-color: #1e586d !default;
+$cde-table-background: rgba(255,255,255,.72); 
 
 $cde-popup-overlay: rgba(0,0,0,.8) !default;
 $cde-popup-template-back: #181818 !default;
@@ -715,16 +716,17 @@ $cde-toggle-active: $system-available-color-green !default;
         margin: 0px;
     }
 
-    .cdeTableContainer {
-        box-sizing: border-box;
-        border-color: $cde-table-frame-color;
-        border-left-width: 1px;
-        border-left-style: solid;
-        border-right-style: solid;
-        border-right-width: 1px;
-        border-bottom-style: solid;
-        border-bottom-width: 1px;
-    }
+.cdeTableContainer {
+    box-sizing: border-box;
+    border-color: $cde-table-frame-color;
+    border-left-width: 1px;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    background-color: $cde-table-background;
+}
 
     .cdeTabButton {
         background: $cde-logo-darkblue;

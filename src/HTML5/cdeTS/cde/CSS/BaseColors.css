@@ -36,7 +36,7 @@ body.cdeBody {
 }
 
 div.cdeHeader {
-  background-color: hsl(0deg, 0%, 15%);
+  background-color: hsl(0, 0%, 15%);
 }
 
 h1.cdeScreenTitle {
@@ -52,7 +52,7 @@ span.cdeMyHeaderTitle {
 }
 
 td.cdeDlgTitleBar {
-  color: hsl(0deg, 0%, 15%);
+  color: hsl(0, 0%, 15%);
 }
 
 div.cdeCentered {
@@ -428,7 +428,7 @@ div.cdeDivRefresh {
 }
 
 div.cdeSideBar {
-  background-color: hsl(0deg, 0%, 15%);
+  background-color: hsl(0, 0%, 15%);
 }
 
 .cdeScreenListButtoninner {
@@ -440,7 +440,7 @@ div.cdeSideBar {
 }
 
 .cdeVertCenter {
-  color: hsl(52deg, 97%, 59%);
+  color: hsl(52, 97%, 59%);
 }
 
 .cdeOkButton {
@@ -476,11 +476,11 @@ div.cdeSideBar {
 }
 
 div.cdePopupBackAlarm {
-  background: hsl(0deg, 0%, 0%);
+  background: hsl(0, 0%, 0%);
 }
 
 div.cdePopupBackInfo {
-  background: hsl(0deg, 0%, 0%);
+  background: hsl(0, 0%, 0%);
 }
 
 div.cdePopupContent41 {
@@ -488,11 +488,11 @@ div.cdePopupContent41 {
 }
 
 .cdeSwitch {
-  background: hsl(50deg, 15%, 70%);
+  background: hsl(50, 15%, 70%);
 }
 
 .cdeSwitch div {
-  background: hsl(0deg, 0%, 100%);
+  background: hsl(0, 0%, 100%);
 }
 
 .toggleChecked > .cdeSwitch {
@@ -590,6 +590,7 @@ div.cdePopupContent41 {
   border-right-width: 1px;
   border-bottom-style: solid;
   border-bottom-width: 1px;
+  background-color: rgba(255, 255, 255, 0.72);
 }
 
 .cdeTabButton {

@@ -458,11 +458,11 @@ div.cdeSideBar {
 }
 
 div.cdePopupBackAlarm {
-  background: hsl(0deg, 0%, 0%);
+  background: hsl(0, 0%, 0%);
 }
 
 div.cdePopupBackInfo {
-  background: hsl(0deg, 0%, 0%);
+  background: hsl(0, 0%, 0%);
 }
 
 div.cdePopupContent41 {
@@ -470,11 +470,11 @@ div.cdePopupContent41 {
 }
 
 .cdeSwitch {
-  background: hsl(50deg, 15%, 70%);
+  background: hsl(50, 15%, 70%);
 }
 
 .cdeSwitch div {
-  background: hsl(0deg, 0%, 100%);
+  background: hsl(0, 0%, 100%);
 }
 
 .toggleChecked > .cdeSwitch {
@@ -572,6 +572,7 @@ div.cdePopupContent41 {
   border-right-width: 1px;
   border-bottom-style: solid;
   border-bottom-width: 1px;
+  background-color: rgba(255, 255, 255, 0.72);
 }
 
 .cdeTabButton {

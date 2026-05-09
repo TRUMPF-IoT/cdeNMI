@@ -1,8 +1,8 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2026 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
-﻿namespace cdeNMI {
+namespace cdeNMI {
     declare let Debug;
     export function StartupNMI() {
         if (cde.MyBaseAssets.MyServiceHostInfo.DebugLevel > 3)
