@@ -82,9 +82,8 @@ namespace CDMyC3
 
                     TheNMIEngine.AddSmartControl(MyBaseThing, tMyForm, eFieldType.UserControl, 15, 0, 0, null, "SampleProperty", new ThePropertyBag()
                 {
-                    "NoTE=true",$"ParentFld=10", $"MaxValue=255", "ChartLength=300",
-                    "SetSeries={ \"name\": \"Watts\",\"data\": [80],\"tooltip\": { \"valueSuffix\": \" watt\"}}",
-                    "SeriesNames=[{ \"name\":\"H2Flow\", \"lineColor\":\"rgba(64,242,125,1)\", \"fillToBottom\":false, \"fillColor\":\"rgba(64,242,125,0.5)\", \"lineWidth\": 3}] ",
+                    "NoTE=true",$"ParentFld=10", $"MaxValue=255", "ChartLength=40",
+                    "SeriesNames=[{ \"name\":\"H2Flow\", \"lineColor\":\"rgba(64,242,125,1)\", \"fillToBottom\":false, \"fillColor\":\"rgba(64,242,125,0.5)\", \"lineWidth\": 3}] ", 
                     "TileWidth=6", "TileHeight=6", "ControlType=uPlot Chart", "EngineName=CDMyC3.TheC3Service"
                 });
                     //TheNMIEngine.AddSmartControl(MyBaseThing, tMyForm, eFieldType.CollapsibleGroup, 29, 2, 0, "Pie Demo", null, new nmiCtrlCollapsibleGroup { /*TileHeight = 5, */TileWidth = 6, ClassName = "AXGroup", IsSmall = true });

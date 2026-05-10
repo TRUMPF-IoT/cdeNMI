@@ -70,6 +70,7 @@ var CDMyC3;
             }
             if (TheC3Service.HaveCtrlsLoaded && this.myChartControl) {
                 if ((pName === "Value" || pName === "iValue") && pValue) {
+                    this.IsDataDirty = true;
                     if (cdeCommonUtils.CStr(pValue).substring(0, 1) === "[") {
                         const ts = JSON.parse(pValue);
                         for (let i = 0; i < ts.length; i++) {
@@ -96,10 +97,10 @@ var CDMyC3;
                     this.mSeriesNames = JSON.parse(this.GetProperty("SeriesNames"));
                 }
                 else if (pName === "MaxValue" && pValue) {
-                    this.myChartControl.setScale('y', { min: 0, max: cdeCommonUtils.CDbl(pValue) });
+                    this.uPlotOptions.scales.y.range[1] = cdeCommonUtils.CDbl(pValue);
                 }
                 else if (pName === "MinValue" && pValue) {
-                    this.myChartControl.setScale('y', { min: cdeCommonUtils.CDbl(pValue), max: 0 });
+                    this.uPlotOptions.scales.y.range[0] = cdeCommonUtils.CDbl(pValue);
                 }
             }
         }
@@ -115,7 +116,6 @@ var CDMyC3;
                 tfilltoBottom = cde.CBool(this.mSeriesNames[tIdx].fillToBottom);
                 if (this.mSeriesNames[tIdx].fillColor)
                     tFillColor = this.mSeriesNames[tIdx].fillColor;
-                tSerNo = this.mSeriesNames[tIdx].name;
                 if (cde.CInt(this.mSeriesNames[tIdx].lineWidth) > 0)
                     tLineWidth = cde.CInt(this.mSeriesNames[tIdx].lineWidth);
             }
@@ -123,6 +123,7 @@ var CDMyC3;
                 label: this.mSeriesNames[tIdx].name,
                 stroke: tLineColor,
                 fill: tFillColor,
+                width: tLineWidth
             };
             this.myChartControl.addSeries(newSeriesOpts);
             this.ydata[tSerNo] = Array.from({ length: this.chartLength }, (v, i) => 0);
@@ -149,9 +150,6 @@ var CDMyC3;
                 this.mSeriesNames = cde.cdeEval("(" + this.GetProperty("SeriesNames") + ")");
             else
                 this.mSeriesNames = [{ name: 'Data', lineColor: 'rgba(0,255,0,0.39)', fillColor: 'transparent' }];
-            for (let i = 0; i < this.mSeriesNames.length; i++) {
-                this.AddASeries(i);
-            }
             let wid = cdeCommonUtils.CInt(this.GetProperty("PixelWidth"));
             if (wid === 0) {
                 wid = cdeCommonUtils.CInt(this.GetProperty("ControlTW"));
@@ -177,10 +175,6 @@ var CDMyC3;
             this.uPlotOptions.height = hei;
             this.ydata[0] = Array.from({ length: this.chartLength }, (v, i) => 0);
             this.xdata = Array.from({ length: this.chartLength }, (v, i) => this.chartStart + i * 60 * 5);
-            if (cdeCommonUtils.CInt(this.GetProperty("MaxValue")) !== 0)
-                this.uPlotOptions.scales['y'].max = cdeCommonUtils.CInt(this.GetProperty("MaxValue"));
-            if (cdeCommonUtils.CInt(this.GetProperty("MinValue")) !== 0)
-                this.uPlotOptions.scales['y'].min = cdeCommonUtils.CInt(this.GetProperty("MinValue"));
             if (cde.CBool(this.GetProperty("HideLabels")) === true) {
                 this.uPlotOptions.legend.show = false;
             }
@@ -188,7 +182,14 @@ var CDMyC3;
                 this.uPlotOptions.scales['x'].dir = -1;
             else
                 this.uPlotOptions.scales['x'].dir = 1;
+            if (cdeCommonUtils.CInt(this.GetProperty("MaxValue")) !== 0)
+                this.uPlotOptions.scales.y.range[1] = cdeCommonUtils.CDbl(this.GetProperty("MaxValue"));
+            if (cdeCommonUtils.CInt(this.GetProperty("MinValue")) !== 0)
+                this.uPlotOptions.scales.y.range[0] = cdeCommonUtils.CDbl(this.GetProperty("MinValue"));
             this.myChartControl = new uPlot(this.uPlotOptions, this.chartData, this.myChartContainer.GetElement());
+            for (let i = 0; i < this.mSeriesNames.length; i++) {
+                this.AddASeries(i);
+            }
             this.mHasStarted = true;
             this.mIsRunning = true;
             cdeNMI.TheNMIBaseControl.SetPropertiesFromBag(this, this.myPropertyBag);
@@ -204,6 +205,7 @@ var CDMyC3;
             this.mMaxVal = 100;
             this.mBackwards = false;
             this.mIsRunning = false;
+            this.IsDataDirty = true;
             this.mHasStarted = false;
             this.chartData = [[], []];
             this.xdata = [];
@@ -226,13 +228,7 @@ var CDMyC3;
                 pxAlign: true,
                 axes: [{ show: false }, { show: false }],
                 series: [
-                    {},
-                    {
-                        stroke: this.mColors[0],
-                        paths: uPlot.paths.spline(),
-                        fill: "transparent",
-                        points: { show: false }
-                    }
+                    {}
                 ],
                 legend: {
                     show: false
@@ -282,16 +278,18 @@ var CDMyC3;
                 this.chartShift += 1;
                 this.xdata.push(this.chartStart + this.chartShift * 60 * 5);
                 for (let i = 0; i < this.ydata.length; i++) {
-                    if (this.newData.length > i)
-                        this.ydata[i].push(cdeCommonUtils.CDbl(this.newData[i]));
-                    else
-                        this.ydata[i].push(cdeCommonUtils.CDbl(this.GetProperty("iValue")));
-                }
-                if (this.xdata.length > this.chartLength) {
-                    this.xdata.shift();
-                    for (let i = 0; i < this.ydata.length; i++) {
-                        this.ydata[i].shift();
+                    if (this.IsDataDirty) {
+                        if (this.newData.length > i)
+                            this.ydata[i].push(cdeCommonUtils.CDbl(this.newData[i]));
+                        else
+                            this.ydata[i].push(cdeCommonUtils.CDbl(this.GetProperty("iValue")));
                     }
+                }
+                if (this.xdata.length > this.chartLength)
+                    this.xdata.shift();
+                for (let i = 0; i < this.ydata.length; i++) {
+                    if (this.ydata[i].length > this.chartLength)
+                        this.ydata[i].shift();
                 }
                 this.myChartControl.setData([this.xdata, this.ydata[0]]);
             }
