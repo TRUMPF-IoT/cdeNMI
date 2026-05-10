@@ -67,6 +67,7 @@ namespace CDMyC3
                 TheNMIEngine.RegisterControlType(MyBaseEngine, "Stack Chart", "CDMyC3.ctrlC3StackChart");
                 TheNMIEngine.RegisterControlType(MyBaseEngine, "Cyto Chart", "CDMyC3.ctrlProCytoChart");
                 TheNMIEngine.RegisterControlType(MyBaseEngine, "Line Chart", "CDMyC3.ctrlC3Line");
+                TheNMIEngine.RegisterControlType(MyBaseEngine, "uPlot Chart", "CDMyC3.ctrlCuPlotChart");
                 //NUI Definition for All clients
 
                 if (TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("ShowSamples")))
@@ -79,6 +80,13 @@ namespace CDMyC3
                     TheNMIEngine.AddSmartControl(MyBaseThing, tMyForm, eFieldType.SingleEnded, 11, 2, 0, "My Sample Value Is", "SampleProperty", new nmiCtrlSingleEnded { ParentFld=10 });
                     TheNMIEngine.AddSmartControl(MyBaseThing, tMyForm, eFieldType.BarChart, 12, 2, 0, "My Sample Value Bar", "SampleProperty", new nmiCtrlBarChart() { ParentFld=10, MaxValue = 255, TileHeight = 2 });
 
+                    TheNMIEngine.AddSmartControl(MyBaseThing, tMyForm, eFieldType.UserControl, 15, 0, 0, null, "SampleProperty", new ThePropertyBag()
+                {
+                    "NoTE=true",$"ParentFld=10", $"MaxValue=255", "ChartLength=300",
+                    "SetSeries={ \"name\": \"Watts\",\"data\": [80],\"tooltip\": { \"valueSuffix\": \" watt\"}}",
+                    "SeriesNames=[{ \"name\":\"H2Flow\", \"lineColor\":\"rgba(64,242,125,1)\", \"fillToBottom\":false, \"fillColor\":\"rgba(64,242,125,0.5)\", \"lineWidth\": 3}] ",
+                    "TileWidth=6", "TileHeight=6", "ControlType=uPlot Chart", "EngineName=CDMyC3.TheC3Service"
+                });
                     //TheNMIEngine.AddSmartControl(MyBaseThing, tMyForm, eFieldType.CollapsibleGroup, 29, 2, 0, "Pie Demo", null, new nmiCtrlCollapsibleGroup { /*TileHeight = 5, */TileWidth = 6, ClassName = "AXGroup", IsSmall = true });
                     //TheNMIEngine.AddSmartControl(MyBaseThing, tMyForm, eFieldType.UserControl, 30, 2, 0, "My Pie", "SampleProperty", new ctrlC3Chart { ChartType="pie", UpdateData = true, NoTE = true, ParentFld = 29, TileHeight = 4, TileWidth = 6, SetSeries = "[[\"Dogs\", 100],[\"Cats\", 20],[\"Birds\", 34]]" });
 
