@@ -97,6 +97,9 @@ namespace CDMyC3 {
             'rgba(255,255,255,0.62)',
         ];
 
+        rangeMin: number = -1000;
+        rangeMax: number = 1000;
+
         uPlotOptions:uPlot.Options = {
             width: 100,
             height: 100,
@@ -113,7 +116,9 @@ namespace CDMyC3 {
             },
             scales: {
                 x: { time: false, dir: -1 }, // -1 = left to right
-                y: { range: [-100, 100] } // Full height
+                y: {
+                     auto: true
+                } // Full height
             }
         };
 
@@ -123,7 +128,7 @@ namespace CDMyC3 {
                     return i;
             }
             return -1;
-        }
+        } 
 
         public SetProperty(pName: string, pValue) {
             super.SetProperty(pName, pValue);
@@ -149,18 +154,26 @@ namespace CDMyC3 {
                         else {
                             tVal = cdeCommonUtils.CDbl(pValue);
                         }
-                        this.newData[tSerNo] = tVal;
+                        this.newData[tSerNo] = tVal; 
                     }
                     if (!this.mHasStarted)
                         this.RenderChart();
                 } else if (pName === "SeriesNames" && pValue) {
                     this.mSeriesNames = JSON.parse(this.GetProperty("SeriesNames"));
                 } else if (pName === "MaxValue" && pValue) {
-                    this.uPlotOptions.scales.y.range[1] = cdeCommonUtils.CDbl(pValue);
-                    //this.myChartControl.setScale('y', { min: this.myChartControl.scales.y.min, max: cdeCommonUtils.CDbl(pValue) });
+                    this.rangeMax = cdeCommonUtils.CDbl(pValue);
+                    //this.uPlotOptions.scales.y.range[1] = cdeCommonUtils.CDbl(pValue);
+                    //this.myChartControl.scales.y.range[1] = cdeCommonUtils.CDbl(pValue);
+                    //this.myChartControl.scales.y.max = cdeCommonUtils.CDbl(pValue);
+                    this.myChartControl.setScale('y', { min: cdeCommonUtils.CDbl(pValue) * -1, max: cdeCommonUtils.CDbl(pValue) });
+                    this.myChartControl.redraw();
                 } else if (pName === "MinValue" && pValue) {
-                    this.uPlotOptions.scales.y.range[0] = cdeCommonUtils.CDbl(pValue);
+                    this.rangeMin = cdeCommonUtils.CDbl(pValue);
+                    //this.myChartControl.scales.y.range[0] = cdeCommonUtils.CDbl(pValue);
+                    //this.myChartControl.scales.y.min = cdeCommonUtils.CDbl(pValue);
+                    //this.uPlotOptions.scales.y.range[0] = cdeCommonUtils.CDbl(pValue);
                     //this.myChartControl.setScale('y', { min: cdeCommonUtils.CDbl(pValue), max: this.myChartControl.scales.y.max });
+                    //this.myChartControl.redraw();
                 }
             }
         }
@@ -244,11 +257,13 @@ namespace CDMyC3 {
             else
                 this.uPlotOptions.scales['x'].dir = 1;
 
-            if (cdeCommonUtils.CInt(this.GetProperty("MaxValue")) !== 0)
-                this.uPlotOptions.scales.y.range[1] = cdeCommonUtils.CDbl(this.GetProperty("MaxValue"));
-            if (cdeCommonUtils.CInt(this.GetProperty("MinValue")) !== 0)
-                this.uPlotOptions.scales.y.range[0] = cdeCommonUtils.CDbl(this.GetProperty("MinValue"));
+            // if (cdeCommonUtils.CInt(this.GetProperty("MaxValue")) !== 0)
+            //     this.uPlotOptions.scales.y.range[1] = cdeCommonUtils.CDbl(this.GetProperty("MaxValue"));
+            // if (cdeCommonUtils.CInt(this.GetProperty("MinValue")) !== 0)
+            //     this.uPlotOptions.scales.y.range[0] = cdeCommonUtils.CDbl(this.GetProperty("MinValue"));
             this.myChartControl = new uPlot(this.uPlotOptions, this.chartData, this.myChartContainer.GetElement());
+            if (cdeCommonUtils.CInt(this.GetProperty("MaxValue")) !== 0)
+                this.myChartControl.setScale('y', { min: cdeCommonUtils.CDbl(this.GetProperty("MaxValue")) * -1, max: cdeCommonUtils.CDbl(this.GetProperty("MaxValue")) });
             for (let i = 0; i < this.mSeriesNames.length; i++) {
                 this.AddASeries(i);
             }
@@ -316,7 +331,7 @@ namespace CDMyC3 {
                     if (this.ydata[i].length > this.chartLength)
                         this.ydata[i].shift();
                 }
-                this.myChartControl.setData([this.xdata, this.ydata[0]]);
+                this.myChartControl.setData([this.xdata, this.ydata[0]], true); 
             }
             requestAnimationFrame(() => this.update3());
         }

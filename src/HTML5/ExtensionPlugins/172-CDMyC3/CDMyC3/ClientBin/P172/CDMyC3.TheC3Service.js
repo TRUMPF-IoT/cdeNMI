@@ -97,10 +97,12 @@ var CDMyC3;
                     this.mSeriesNames = JSON.parse(this.GetProperty("SeriesNames"));
                 }
                 else if (pName === "MaxValue" && pValue) {
-                    this.uPlotOptions.scales.y.range[1] = cdeCommonUtils.CDbl(pValue);
+                    this.rangeMax = cdeCommonUtils.CDbl(pValue);
+                    this.myChartControl.setScale('y', { min: cdeCommonUtils.CDbl(pValue) * -1, max: cdeCommonUtils.CDbl(pValue) });
+                    this.myChartControl.redraw();
                 }
                 else if (pName === "MinValue" && pValue) {
-                    this.uPlotOptions.scales.y.range[0] = cdeCommonUtils.CDbl(pValue);
+                    this.rangeMin = cdeCommonUtils.CDbl(pValue);
                 }
             }
         }
@@ -182,11 +184,9 @@ var CDMyC3;
                 this.uPlotOptions.scales['x'].dir = -1;
             else
                 this.uPlotOptions.scales['x'].dir = 1;
-            if (cdeCommonUtils.CInt(this.GetProperty("MaxValue")) !== 0)
-                this.uPlotOptions.scales.y.range[1] = cdeCommonUtils.CDbl(this.GetProperty("MaxValue"));
-            if (cdeCommonUtils.CInt(this.GetProperty("MinValue")) !== 0)
-                this.uPlotOptions.scales.y.range[0] = cdeCommonUtils.CDbl(this.GetProperty("MinValue"));
             this.myChartControl = new uPlot(this.uPlotOptions, this.chartData, this.myChartContainer.GetElement());
+            if (cdeCommonUtils.CInt(this.GetProperty("MaxValue")) !== 0)
+                this.myChartControl.setScale('y', { min: cdeCommonUtils.CDbl(this.GetProperty("MaxValue")) * -1, max: cdeCommonUtils.CDbl(this.GetProperty("MaxValue")) });
             for (let i = 0; i < this.mSeriesNames.length; i++) {
                 this.AddASeries(i);
             }
@@ -222,6 +222,8 @@ var CDMyC3;
                 'rgba(255,0,0,0.62)',
                 'rgba(255,255,255,0.62)',
             ];
+            this.rangeMin = -1000;
+            this.rangeMax = 1000;
             this.uPlotOptions = {
                 width: 100,
                 height: 100,
@@ -238,7 +240,9 @@ var CDMyC3;
                 },
                 scales: {
                     x: { time: false, dir: -1 },
-                    y: { range: [-100, 100] }
+                    y: {
+                        auto: true
+                    }
                 }
             };
         }
@@ -291,7 +295,7 @@ var CDMyC3;
                     if (this.ydata[i].length > this.chartLength)
                         this.ydata[i].shift();
                 }
-                this.myChartControl.setData([this.xdata, this.ydata[0]]);
+                this.myChartControl.setData([this.xdata, this.ydata[0]], true);
             }
             requestAnimationFrame(() => this.update3());
         }
