@@ -117,7 +117,7 @@ namespace CDMyC3 {
             scales: {
                 x: { time: false, dir: -1 }, // -1 = left to right
                 y: {
-                     auto: true
+                     auto: false
                 } // Full height
             }
         };
@@ -160,13 +160,16 @@ namespace CDMyC3 {
                         this.RenderChart();
                 } else if (pName === "SeriesNames" && pValue) {
                     this.mSeriesNames = JSON.parse(this.GetProperty("SeriesNames"));
+                } else if (pName === "MinMaxValue" && pValue) {
+                    this.rangeMin = cdeCommonUtils.CDbl(pValue)*-1;
+                    this.rangeMax = cdeCommonUtils.CDbl(pValue);
                 } else if (pName === "MaxValue" && pValue) {
                     this.rangeMax = cdeCommonUtils.CDbl(pValue);
                     //this.uPlotOptions.scales.y.range[1] = cdeCommonUtils.CDbl(pValue);
                     //this.myChartControl.scales.y.range[1] = cdeCommonUtils.CDbl(pValue);
                     //this.myChartControl.scales.y.max = cdeCommonUtils.CDbl(pValue);
-                    this.myChartControl.setScale('y', { min: cdeCommonUtils.CDbl(pValue) * -1, max: cdeCommonUtils.CDbl(pValue) });
-                    this.myChartControl.redraw();
+                    //this.myChartControl.setScale('y', { min: cdeCommonUtils.CDbl(pValue) * -1, max: cdeCommonUtils.CDbl(pValue) });
+                    //this.myChartControl.redraw();
                 } else if (pName === "MinValue" && pValue) {
                     this.rangeMin = cdeCommonUtils.CDbl(pValue);
                     //this.myChartControl.scales.y.range[0] = cdeCommonUtils.CDbl(pValue);
@@ -262,8 +265,8 @@ namespace CDMyC3 {
             // if (cdeCommonUtils.CInt(this.GetProperty("MinValue")) !== 0)
             //     this.uPlotOptions.scales.y.range[0] = cdeCommonUtils.CDbl(this.GetProperty("MinValue"));
             this.myChartControl = new uPlot(this.uPlotOptions, this.chartData, this.myChartContainer.GetElement());
-            if (cdeCommonUtils.CInt(this.GetProperty("MaxValue")) !== 0)
-                this.myChartControl.setScale('y', { min: cdeCommonUtils.CDbl(this.GetProperty("MaxValue")) * -1, max: cdeCommonUtils.CDbl(this.GetProperty("MaxValue")) });
+            //if (cdeCommonUtils.CInt(this.GetProperty("MaxValue")) !== 0)
+              //  this.myChartControl.setScale('y', { min: cdeCommonUtils.CDbl(this.GetProperty("MaxValue")) * -1, max: cdeCommonUtils.CDbl(this.GetProperty("MaxValue")) });
             for (let i = 0; i < this.mSeriesNames.length; i++) {
                 this.AddASeries(i);
             }
@@ -331,7 +334,9 @@ namespace CDMyC3 {
                     if (this.ydata[i].length > this.chartLength)
                         this.ydata[i].shift();
                 }
+                this.myChartControl.setScale('y', { min: cdeCommonUtils.CDbl(this.rangeMin), max: cdeCommonUtils.CDbl(this.rangeMax) });
                 this.myChartControl.setData([this.xdata, this.ydata[0]], true); 
+                //this.myChartControl.redraw();
             }
             requestAnimationFrame(() => this.update3());
         }
@@ -607,6 +612,9 @@ namespace CDMyC3 {
                     //    this.myChartControl.title.text = pValue;
                 } else if (pName === "SeriesNames" && pValue) {
                     this.mSeriesNames = JSON.parse(this.GetProperty("SeriesNames"));
+                } else if (pName === "MinMaxValue" && pValue) {
+                    this.myChartControl.options.maxValue = cde.CDbl(pValue);
+                    this.myChartControl.options.minValue = cde.CDbl(pValue)*-1;
                 } else if (pName === "MaxValue" && pValue) {
                     this.myChartControl.options.maxValue = cde.CDbl(pValue);
                 } else if (pName === "MinValue" && pValue) {
