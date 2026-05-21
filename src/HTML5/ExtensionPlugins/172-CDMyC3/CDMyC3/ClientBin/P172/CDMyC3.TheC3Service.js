@@ -633,6 +633,7 @@ var CDMyC3;
                 gridColor = "transparent";
             this.myChartCanvas.width = wid;
             this.myChartCanvas.height = hei;
+            this.myChartCanvas.style.overflow = "visible";
             this.mTimeSeries = new Array();
             const tConf = { millisPerPixel: this.mSpeed, grid: { verticalSections: 0, strokeStyle: gridColor, millisPerLine: millis, fillStyle: tBack, borderVisible: false }, horizontalLines: [{ color: '#ffffff', lineWidth: 1, value: 0 }] };
             if (cdeCommonUtils.CInt(this.GetProperty("MaxValue")) !== 0)
