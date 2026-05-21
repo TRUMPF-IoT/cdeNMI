@@ -711,6 +711,7 @@ namespace CDMyC3 {
                  
             this.myChartCanvas.width = wid;
             this.myChartCanvas.height = hei;
+            this.myChartCanvas.style.overflow = "visible";
 
             this.mTimeSeries = new Array<any>();
             const tConf: smoothie.IChartOptions = { millisPerPixel: this.mSpeed, grid: { verticalSections: 0, strokeStyle: gridColor, millisPerLine: millis, fillStyle: tBack, borderVisible: false }, horizontalLines: [{ color: '#ffffff', lineWidth: 1, value: 0 }] };
