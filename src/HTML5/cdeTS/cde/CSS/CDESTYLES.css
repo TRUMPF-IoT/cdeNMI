@@ -2233,6 +2233,7 @@ div.ToastText {
   width: 100%;
   font-size: 20px;
   font-family: "robotothin", "Segoe UI", Arial, sans-serif;
+  color: white;
 }
 
 div.ToastDebug {
