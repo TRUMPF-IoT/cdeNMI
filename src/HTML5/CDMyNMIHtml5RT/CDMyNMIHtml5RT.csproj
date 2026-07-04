@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net10</TargetFrameworks>
 	  <PackageId>CDMyNMIHtml5RT</PackageId>
-    <Version>6.135.0$(cdeNugetSuffix)</Version>
+    <Version>7.107.0$(cdeNugetSuffix)</Version>
     <Authors>Chris Muench</Authors>
     <Company>C-Labs</Company>
     <Product>CDMyNMI HTML5 Runtime for $(TargetFramework)$(cdeDebugProductSuffix)</Product>
     <PackageDescription>CDMyNMI HTML5 Runtime</PackageDescription>
     <PackageIcon>toplogo-128.png</PackageIcon>
-    <Description>HMTL5 NMI Runtime for C-DEngine based Relays</Description>
+    <Description>HTML5 NMI Runtime for C-DEngine based Relays</Description>
     <Copyright>Copyright (C) 2017-2026 TRUMPF Laser GmbH, authors: C-Labs</Copyright>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
     <ProjectName>$(AssemblyName).$(TargetFramework)</ProjectName>
@@ -176,7 +176,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="C-DEngine" Version="6.*-*" />
+	  <PackageReference Include="C-DEngine" Version="7.*-*" />
   </ItemGroup>
 
   <Target Name="GetPackagingOutputs" />
