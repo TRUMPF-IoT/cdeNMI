@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net10</TargetFrameworks>
+    <TargetFrameworks>net10.0</TargetFrameworks>
 	  <PackageId>CDMyNMIHtml5RT</PackageId>
     <Version>7.107.0$(cdeNugetSuffix)</Version>
     <Authors>Chris Muench</Authors>
@@ -14,7 +14,7 @@
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
     <ProjectName>$(AssemblyName).$(TargetFramework)</ProjectName>
     <AssemblyName>CDMyNMIHtml5</AssemblyName>
-
+	  <DefineConstants>TRACE;CDE_SYSLOG</DefineConstants>
     <!-- Set if you want to have a Nuget created automatically -->
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <!-- Workaround for placing the .nupkg into the build's output folder when using msbuild's GenerateProjectSpecificOutputFolder -->
@@ -23,16 +23,6 @@
     <PackageOutputPath>$(SolutionDir)Nugets</PackageOutputPath>
   </PropertyGroup>
 
-
-
-      <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DefineConstants>TRACE;DEBUG;CDE_SYSLOG;CDE_STANDARD;NET_STANDARD</DefineConstants>
-      </PropertyGroup>
-
-      <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DefineConstants>TRACE;RELEASE;CDE_SYSLOG;CDE_STANDARD;NET_STANDARD</DefineConstants>
-      </PropertyGroup>
-  
   <ItemGroup>
     <Compile Remove="ClientBin\CDEHTML5\Scripts\**" />
     <Compile Remove="ClientBin\fonts\**" />

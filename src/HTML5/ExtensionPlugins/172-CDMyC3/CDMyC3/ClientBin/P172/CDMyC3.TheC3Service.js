@@ -1,3 +1,4 @@
+"use strict";
 var CDMyC3;
 (function (CDMyC3) {
     CDMyC3.eC3Engine = "CDMyC3.TheC3Service";
@@ -13,7 +14,6 @@ var CDMyC3;
                         cdeNMI.TheNMIService.cdeGetScript("/P172/JS/cytoscape.min.js", () => {
                             cdeNMI.TheNMIService.cdeGetScript("/P172/JS/uPlot.iife.min.js", () => {
                                 TheC3Service.HaveCtrlsLoaded = true;
-                                debugger;
                                 cdeNMI.MyTCF.RegisterControlName("Speed Gauge", "CDMyC3.ctrlC3SpeedGauge:" + CDMyC3.eC3Engine);
                                 cdeNMI.MyTCF.RegisterControlName("Live Chart", "CDMyC3.ctrlProLiveChart:" + CDMyC3.eC3Engine);
                                 cdeNMI.MyTCF.RegisterControlName("Stack Chart", "CDMyC3.ctrlC3StackChart:" + CDMyC3.eC3Engine);

@@ -28,7 +28,7 @@ namespace CDMyC3 {
                         cdeNMI.TheNMIService.cdeGetScript("/P172/JS/cytoscape.min.js", () => {
                             cdeNMI.TheNMIService.cdeGetScript("/P172/JS/uPlot.iife.min.js", () => {
                                 TheC3Service.HaveCtrlsLoaded = true;
-                                debugger;
+                                //debugger;
                             cdeNMI.MyTCF.RegisterControlName("Speed Gauge", "CDMyC3.ctrlC3SpeedGauge:" + eC3Engine);
                             cdeNMI.MyTCF.RegisterControlName("Live Chart", "CDMyC3.ctrlProLiveChart:" + eC3Engine);
                             cdeNMI.MyTCF.RegisterControlName("Stack Chart", "CDMyC3.ctrlC3StackChart:" + eC3Engine);
