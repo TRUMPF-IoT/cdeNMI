@@ -881,6 +881,7 @@
             const tTRF: TheTRF = new cdeNMI.TheTRF(tFormID, tFormInfo && tFormInfo.CurrentRow ? tFormInfo.CurrentRow : 0, null);
             tTRF.FldInfo = new TheFieldInfo(cdeControlType.BaseControl);
             if (tFormInfo) {
+                tFormInfo.DefaultView ??= 0;
                 switch (tFormInfo.DefaultView) {
                     case 0: tTRF.FldInfo.Type = cdeControlType.Table; break;
                     case 1: tTRF.FldInfo.Type = cdeControlType.FormView; break;
