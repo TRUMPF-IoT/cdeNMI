@@ -53,7 +53,7 @@
   <ItemGroup>
     <PackageReference Include="C-DEngine" Version="7.*-*" />
     <PackageReference Include="System.Drawing.Common">
-      <Version>10.0.9</Version>
+      <Version>10.0.10</Version>
     </PackageReference>
   </ItemGroup>
 
