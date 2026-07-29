@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v10.0": {
-      "cdePackager/7.107.1-beta.1+1": {
+      "cdePackager/7.107.2": {
         "dependencies": {
           "C-DEngine": "7.107.0",
           "cdePackagerTask": "1.0.0"
@@ -58,6 +58,22 @@
           }
         }
       },
+      "Microsoft.Win32.SystemEvents/10.0.9": {
+        "runtime": {
+          "lib/net10.0/Microsoft.Win32.SystemEvents.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.926.27113"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net10.0/Microsoft.Win32.SystemEvents.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.926.27113"
+          }
+        }
+      },
       "System.Configuration.ConfigurationManager/8.0.0": {
         "dependencies": {
           "System.Diagnostics.EventLog": "8.0.0",
@@ -92,6 +108,25 @@
           }
         }
       },
+      "System.Drawing.Common/10.0.9": {
+        "dependencies": {
+          "Microsoft.Win32.SystemEvents": "10.0.9"
+        },
+        "runtime": {
+          "lib/net10.0/System.Drawing.Common.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.926.27113"
+          },
+          "lib/net10.0/System.Private.Windows.Core.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.926.27113"
+          },
+          "lib/net10.0/System.Private.Windows.GdiPlus.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.926.27113"
+          }
+        }
+      },
       "System.Reflection.MetadataLoadContext/8.0.0": {
         "runtime": {
           "lib/net8.0/System.Reflection.MetadataLoadContext.dll": {
@@ -109,10 +144,13 @@
         }
       },
       "C-DEngine/7.107.0": {
+        "dependencies": {
+          "System.Drawing.Common": "10.0.9"
+        },
         "runtime": {
           "C-DEngine.dll": {
-            "assemblyVersion": "7.107.1.0",
-            "fileVersion": "7.107.1.0"
+            "assemblyVersion": "7.107.2.0",
+            "fileVersion": "7.107.2.0"
           }
         }
       },
@@ -124,15 +162,15 @@
         },
         "runtime": {
           "cdePackagerTask.dll": {
-            "assemblyVersion": "7.107.1.0",
-            "fileVersion": "7.107.1.0"
+            "assemblyVersion": "7.107.2.0",
+            "fileVersion": "7.107.2.0"
           }
         }
       }
     }
   },
   "libraries": {
-    "cdePackager/7.107.1-beta.1+1": {
+    "cdePackager/7.107.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -165,6 +203,13 @@
       "path": "microsoft.net.stringtools/17.9.5",
       "hashPath": "microsoft.net.stringtools.17.9.5.nupkg.sha512"
     },
+    "Microsoft.Win32.SystemEvents/10.0.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dk5HKolAR9bBxlL4dl6Koaf0s/Q47QApog+/o341LSuvWGW6ig4q5fTsgYG0MrK//l2Slv6mygncMK/8lgXVDg==",
+      "path": "microsoft.win32.systemevents/10.0.9",
+      "hashPath": "microsoft.win32.systemevents.10.0.9.nupkg.sha512"
+    },
     "System.Configuration.ConfigurationManager/8.0.0": {
       "type": "package",
       "serviceable": true,
@@ -178,6 +223,13 @@
       "sha512": "sha512-fdYxcRjQqTTacKId/2IECojlDSFvp7LP5N78+0z/xH7v/Tuw5ZAxu23Y6PTCRinqyu2ePx+Gn1098NC6jM6d+A==",
       "path": "system.diagnostics.eventlog/8.0.0",
       "hashPath": "system.diagnostics.eventlog.8.0.0.nupkg.sha512"
+    },
+    "System.Drawing.Common/10.0.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ShkEj8jOhklJgrN3SoaVbCcopvqyIgVXHso2/eibQBL7IZxzJjND77UYVlViHqpwPxyQeA67IOut4b41clBkQw==",
+      "path": "system.drawing.common/10.0.9",
+      "hashPath": "system.drawing.common.10.0.9.nupkg.sha512"
     },
     "System.Reflection.MetadataLoadContext/8.0.0": {
       "type": "package",
