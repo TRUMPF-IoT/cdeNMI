@@ -334,9 +334,9 @@ namespace cdeNMI {
                     cDropDownEle.style.bottom = "0px";
                     cDropDownEle.style.left = "0px";
                     cDropDownEle.style.width = "100%";
-                    cDropDownEle.style.zIndex = "1000";
+                    //cDropDownEle.style.zIndex = "1000";
                     if (scale != 1.0)
-                        cDropDownEle.style.position = "absolute";
+                        cDropDownEle.style.position = "fixed";
                     else
                         cDropDownEle.style.position = "";
                 } else {
