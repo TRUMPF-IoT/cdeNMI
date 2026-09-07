@@ -14,7 +14,7 @@ namespace NMIService
 {
     public class TheNMIEditor : TheThingBase
     {
-        public override bool Init()
+        public override bool Init() 
         {
             if (mIsInitCalled) return false;
             mIsInitCalled = true;
