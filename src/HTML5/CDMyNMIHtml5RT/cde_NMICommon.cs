@@ -205,6 +205,8 @@ namespace NMIService
                     {new TheFieldInfo() {FldOrder = 17, DataItem = "MyPropertyBag.Value.Value", Flags = 2, Type = eFieldType.SingleEnded, Header = "Current Value", TileLeft = 0, TileTop = 7, TileWidth = 10, TileHeight = 1, FldWidth = 4, PropertyBag = new ThePropertyBag() {"Truncate=true" } } },// "Style=text-overflow:ellipsis;overflow:hidden; max-width:624px"}}},
                     {new TheFieldInfo() {FldOrder = 18, DataItem = "MyPropertyBag.cdeStartupTime.Value", Flags = 0, Type = eFieldType.Number, Header = "Startup Time", TileLeft = 0, TileTop = 8, TileWidth = 10, TileHeight = 1, FldWidth = 1 }},
 
+                    {new TheFieldInfo() {FldOrder = 19, DataItem = "PropertyCount", Flags = 0, Type = eFieldType.Number, Header = "P-Cnt", TileLeft = 0, TileTop = 9, TileWidth = 1, FldWidth = 1}},
+
                     {new TheFieldInfo() {FldOrder = 20, DataItem = "HasLiveObject", Flags = 0, Type = eFieldType.SingleCheck, Header = "Is Alive", TileLeft = 0, TileTop = 9, TileWidth = 3, FldWidth = 1}},
                     {new TheFieldInfo() {FldOrder = 21, DataItem = "IsInitialized", Flags = 0, Type = eFieldType.SingleCheck, Header = "Is Init", TileLeft = 3, TileTop = 9, TileWidth = 3, FldWidth = 1}},
                     {new TheFieldInfo() {FldOrder = 22, DataItem = "IsUXInitialized", Flags = 0, Type = eFieldType.SingleCheck, Header = "UX Init", TileLeft = 6, TileTop = 9, TileWidth = 3, FldWidth = 1}},
