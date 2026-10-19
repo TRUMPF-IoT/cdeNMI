@@ -1,14 +1,14 @@
 {
     "compilerOptions": {
-        "moduleResolution": "node",
+        "strict": false,
         "noImplicitAny": false,
         "noEmitOnError": true,
         "removeComments": false,
-        "sourceMap": true,
+        "sourceMap": false,
         "declaration": true,
-        "module": "system",
         "target": "ES6",
-        "outFile": "./cde.js"
+        "rootDir": ".",
+        "outDir": "../obj/tsc/cde"
     },
     "files": [
         "src/cdeCore/cdeCore-5.0.ts",

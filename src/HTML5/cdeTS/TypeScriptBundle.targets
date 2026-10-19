@@ -1,0 +1,207 @@
+<Project>
+
+  <!--
+	TypeScript 7 removed the "outFile" compiler option, so tsc now emits one .js (and .d.ts) per source file
+	into the outDir configured in each tsconfig.json. This target reproduces the previous single-file output by
+	concatenating the emitted files in the exact order listed under "files" in the tsconfig.json.
+  -->
+
+  <UsingTask TaskName="BundleTypeScriptOutput" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+	<ParameterGroup>
+	  <TsConfig ParameterType="System.String" Required="true" />
+	  <RootDir ParameterType="System.String" Required="true" />
+	  <OutDir ParameterType="System.String" Required="true" />
+	  <OutputJs ParameterType="System.String" Required="true" />
+	  <OutputDts ParameterType="System.String" />
+	</ParameterGroup>
+	<Task>
+	  <Code Type="Class" Language="cs"><![CDATA[
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
+
+public class BundleTypeScriptOutput : Task
+{
+	[Required] public string TsConfig { get; set; }
+	[Required] public string RootDir { get; set; }
+	[Required] public string OutDir { get; set; }
+	[Required] public string OutputJs { get; set; }
+	public string OutputDts { get; set; }
+
+	public override bool Execute()
+	{
+		string configPath = Path.GetFullPath(TsConfig);
+		string configDir = Path.GetDirectoryName(configPath);
+		string rootDir = Path.GetFullPath(RootDir).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
+
+		Match filesMatch = Regex.Match(File.ReadAllText(configPath), "\"files\"\\s*:\\s*\\[(.*?)\\]", RegexOptions.Singleline);
+		if (!filesMatch.Success)
+		{
+			Log.LogError("'{0}' does not contain a \"files\" array; it is required to define the bundle order.", configPath);
+			return false;
+		}
+
+		var jsParts = new List<string>();
+		var dtsParts = new List<string>();
+		foreach (Match m in Regex.Matches(filesMatch.Groups[1].Value, "\"([^\"]+)\""))
+		{
+			string source = Path.GetFullPath(Path.Combine(configDir, m.Groups[1].Value));
+			if (!source.StartsWith(rootDir, StringComparison.OrdinalIgnoreCase))
+			{
+				Log.LogError("Source file '{0}' is not under rootDir '{1}'.", source, rootDir);
+				return false;
+			}
+
+			string relative = source.Substring(rootDir.Length);
+			relative = relative.Substring(0, relative.Length - Path.GetExtension(relative).Length);
+
+			string js = Path.Combine(OutDir, relative + ".js");
+			if (!File.Exists(js))
+			{
+				Log.LogError("Expected TypeScript output '{0}' was not emitted.", js);
+				return false;
+			}
+			jsParts.Add(js);
+
+			string dts = Path.Combine(OutDir, relative + ".d.ts");
+			if (File.Exists(dts))
+			{
+				dtsParts.Add(dts);
+			}
+		}
+
+		WriteBundle(OutputJs, jsParts);
+		if (!string.IsNullOrEmpty(OutputDts) && dtsParts.Count > 0)
+		{
+			WriteBundle(OutputDts, dtsParts);
+		}
+
+		return !Log.HasLoggedErrors;
+	}
+
+	private void WriteBundle(string outputPath, List<string> parts)
+	{
+		var sb = new StringBuilder();
+		foreach (string part in parts)
+		{
+			bool inPrologue = true;
+			foreach (string line in File.ReadAllLines(part))
+			{
+				// TypeScript 7 always emits a "use strict" prologue (alwaysStrict can no longer be disabled).
+				// The pre-TS7 single-file output was non-strict, so drop it to keep runtime semantics unchanged.
+				if (inPrologue && line.Trim() == "\"use strict\";")
+				{
+					continue;
+				}
+				inPrologue = false;
+				if (line.TrimStart().StartsWith("//# sourceMappingURL=", StringComparison.Ordinal))
+				{
+					continue;
+				}
+				sb.AppendLine(line);
+			}
+		}
+
+		string fullPath = Path.GetFullPath(outputPath);
+		string content = sb.ToString();
+		if (File.Exists(fullPath) && File.ReadAllText(fullPath) == content)
+		{
+				Log.LogMessage(MessageImportance.Normal, "{0} is up to date", fullPath);
+				return;
+		}
+		Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+		File.WriteAllText(fullPath, content, new UTF8Encoding(false));
+		Log.LogMessage(MessageImportance.High, "Bundled {0} file(s) into {1}", parts.Count, fullPath);
+	}
+}
+]]></Code>
+	</Task>
+  </UsingTask>
+
+  <Target Name="BundleTypeScriptOutputs"
+		  AfterTargets="RunTscCompile"
+		  Condition="'$(TypeScriptCompileBlocked)' != 'true' AND '$(TscExe)' != '' AND Exists('$(TscExe)') AND '@(TypeScriptBundle)' != ''">
+	<BundleTypeScriptOutput TsConfig="%(TypeScriptBundle.FullPath)"
+							RootDir="%(TypeScriptBundle.SourceRoot)"
+							OutDir="%(TypeScriptBundle.OutDir)"
+							OutputJs="%(TypeScriptBundle.OutputJs)"
+							OutputDts="%(TypeScriptBundle.OutputDts)" />
+	</Target>
+
+	<!--
+		Minifies the bundled .js files with NUglify (the same engine the Bundler & Minifier extension uses for bundleconfig.json),
+		so cde.min.js / cdeWorker.min.js are produced by every build and not only from within Visual Studio.
+	-->
+	<UsingTask TaskName="MinifyJavaScript" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll" Condition="'$(PkgNUglify)' != ''">
+		<ParameterGroup>
+			<InputFile ParameterType="System.String" Required="true" />
+			<OutputFile ParameterType="System.String" Required="true" />
+		</ParameterGroup>
+		<Task>
+			<Reference Include="$(PkgNUglify)\lib\netstandard2.0\NUglify.dll" />
+			<Code Type="Class" Language="cs"><![CDATA[
+using System;
+using System.IO;
+using System.Text;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
+using NUglify;
+using NUglify.JavaScript;
+
+public class MinifyJavaScript : Task
+{
+		[Required] public string InputFile { get; set; }
+		[Required] public string OutputFile { get; set; }
+
+		public override bool Execute()
+		{
+				string source = File.ReadAllText(InputFile);
+				UglifyResult result = Uglify.Js(source, new CodeSettings());
+
+				foreach (UglifyError error in result.Errors)
+				{
+						if (error.IsError)
+						{
+								Log.LogError(null, error.ErrorCode, null, InputFile, error.StartLine, error.StartColumn, error.EndLine, error.EndColumn, error.Message);
+						}
+						else
+						{
+								Log.LogWarning(null, error.ErrorCode, null, InputFile, error.StartLine, error.StartColumn, error.EndLine, error.EndColumn, error.Message);
+						}
+				}
+
+				if (result.HasErrors)
+				{
+						return false;
+				}
+
+				string fullPath = Path.GetFullPath(OutputFile);
+				Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+				File.WriteAllText(fullPath, result.Code, new UTF8Encoding(false));
+				Log.LogMessage(MessageImportance.High, "Minified {0} -> {1} ({2:N0} -> {3:N0} bytes)", InputFile, fullPath, source.Length, result.Code.Length);
+				return true;
+		}
+}
+]]></Code>
+		</Task>
+	</UsingTask>
+
+	<Target Name="MinifyTypeScriptBundles"
+					AfterTargets="BundleTypeScriptOutputs"
+					Condition="'$(TypeScriptCompileBlocked)' != 'true' AND '$(PkgNUglify)' != '' AND '@(TypeScriptBundle)' != ''"
+					Inputs="%(TypeScriptBundle.OutputJs)"
+					Outputs="%(TypeScriptBundle.OutputMinJs)">
+		<MinifyJavaScript Condition="'%(TypeScriptBundle.OutputMinJs)' != ''"
+											InputFile="%(TypeScriptBundle.OutputJs)"
+											OutputFile="%(TypeScriptBundle.OutputMinJs)" />
+	</Target>
+
+	<Target Name="CleanTypeScriptBundles" AfterTargets="CleanTypeScriptOutputs" Condition="'@(TypeScriptBundle)' != ''">
+		<Delete Files="%(TypeScriptBundle.OutputJs);%(TypeScriptBundle.OutputDts);%(TypeScriptBundle.OutputMinJs)" TreatErrorsAsWarnings="true" />
+	</Target>
+
+</Project>

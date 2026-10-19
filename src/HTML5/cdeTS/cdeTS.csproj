@@ -3,10 +3,31 @@
   <PropertyGroup>
     <TargetFrameworks>net80</TargetFrameworks>
     <OutputType>Library</OutputType>
+    <!-- Let each tsconfig.json control target/sourceMap instead of the MSBuild-wide tsc command line switches. -->
+    <TypeScriptTarget></TypeScriptTarget>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Per-file tsc output (TypeScript 7 has no outFile) is concatenated into single files by TypeScriptBundle.targets. -->
+    <TypeScriptBundle Include="cde\tsconfig.json">
+      <SourceRoot>$(MSBuildProjectDirectory)\cde</SourceRoot>
+      <OutDir>$(MSBuildProjectDirectory)\obj\tsc\cde</OutDir>
+      <OutputJs>$(MSBuildProjectDirectory)\cde\cde.js</OutputJs>
+      <OutputDts>$(MSBuildProjectDirectory)\cde\cde.d.ts</OutputDts>
+      <OutputMinJs>$(MSBuildProjectDirectory)\cde\cde.min.js</OutputMinJs>
+    </TypeScriptBundle>
+    <TypeScriptBundle Include="cdews\tsconfig.json">
+      <SourceRoot>$(MSBuildProjectDirectory)</SourceRoot>
+      <OutDir>$(MSBuildProjectDirectory)\obj\tsc\cdews</OutDir>
+      <OutputJs>$(MSBuildProjectDirectory)\cde\cdeWorker.js</OutputJs>
+      <OutputDts>$(MSBuildProjectDirectory)\cde\cdeWorker.d.ts</OutputDts>
+      <OutputMinJs>$(MSBuildProjectDirectory)\cde\cdeWorker.min.js</OutputMinJs>
+    </TypeScriptBundle>
   </ItemGroup>
 
   <ItemGroup>
@@ -15,9 +36,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.5.3">
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="7.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <!-- Only used by the MinifyJavaScript build task in TypeScriptBundle.targets; not referenced by the assembly. -->
+    <PackageReference Include="NUglify" Version="1.23.4" GeneratePathProperty="true">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>all</ExcludeAssets>
     </PackageReference>
   </ItemGroup>
 
@@ -172,5 +198,7 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
   </ItemGroup>
+
+  <Import Project="TypeScriptBundle.targets" />
 
 </Project>
