@@ -46,3 +46,5 @@ _[Rr]elease/
 /src/HTML5/ExtensionPlugins/172-CDMyC3/CDMyC3/ClientBin/P172/TypeScript/node_modules
 /src/HTML5/cdeTS/cde/cde.js
 /src/HTML5/cdeTS/cde/cdeWorker.js
+/src/HTML5/cdeTS/cde/cde.min.js
+/src/HTML5/cdeTS/cde/cdeWorker.min.js
