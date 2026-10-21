@@ -456,12 +456,6 @@ namespace NMIService
                 }
                 TheBaseAssets.MySYSLOG.WriteToLog(10004, TSM.L(eDEBUG_LEVELS.OFF) ? null : new TSM(MyBaseEngine.GetEngineName(), "NMI Interceptor registered", eMsgLevel.l3_ImportantMessage));
 
-                if (TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("RedPill")))
-                {
-                    TheThing MyLiveThing = TheThingRegistry.GetThingByProperty(eEngineName.NMIService, Guid.Empty, "DeviceType", "NMI Editor");
-                    var MyNMIEditor = new TheNMIEditor(MyLiveThing);
-                    TheThingRegistry.RegisterThing(MyNMIEditor);
-                }
                 TheCDEngines.MyNMIService.RegisterEvent(eEngineEvents.IncomingMessage, SinkNMIMessage);
                 MyBaseThing.LastMessage = "NMI Runtime started...";
                 MyBaseEngine.ProcessInitialized(); //Set the status of the Base Engine according to the status of the Things it manages
