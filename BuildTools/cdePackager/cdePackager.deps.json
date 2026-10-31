@@ -6,63 +6,54 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v10.0": {
-      "cdePackager/7.107.2": {
+      "cdePackager/7.110.1-beta.1+19": {
         "dependencies": {
-          "C-DEngine": "7.107.0",
+          "C-DEngine": "7.110.0",
+          "System.Drawing.Common": "10.0.13",
           "cdePackagerTask": "1.0.0"
         },
         "runtime": {
           "cdePackager.dll": {}
         }
       },
-      "Microsoft.Build/17.9.5": {
+      "Microsoft.Build.Framework/18.9.6": {
         "dependencies": {
-          "Microsoft.Build.Framework": "17.9.5",
-          "Microsoft.NET.StringTools": "17.9.5",
-          "System.Configuration.ConfigurationManager": "8.0.0",
-          "System.Reflection.MetadataLoadContext": "8.0.0"
+          "Microsoft.NET.StringTools": "18.9.6"
         },
         "runtime": {
-          "lib/net8.0/Microsoft.Build.dll": {
+          "lib/net10.0/Microsoft.Build.Framework.dll": {
             "assemblyVersion": "15.1.0.0",
-            "fileVersion": "17.9.5.7608"
+            "fileVersion": "18.9.6.37712"
           }
         }
       },
-      "Microsoft.Build.Framework/17.9.5": {
-        "runtime": {
-          "lib/net8.0/Microsoft.Build.Framework.dll": {
-            "assemblyVersion": "15.1.0.0",
-            "fileVersion": "17.9.5.7608"
-          }
-        }
-      },
-      "Microsoft.Build.Utilities.Core/17.9.5": {
+      "Microsoft.Build.Utilities.Core/18.9.6": {
         "dependencies": {
-          "Microsoft.Build.Framework": "17.9.5",
-          "Microsoft.NET.StringTools": "17.9.5",
-          "System.Configuration.ConfigurationManager": "8.0.0"
+          "Microsoft.Build.Framework": "18.9.6",
+          "System.Configuration.ConfigurationManager": "10.0.8",
+          "System.Diagnostics.EventLog": "10.0.8",
+          "System.Security.Cryptography.ProtectedData": "10.0.8"
         },
         "runtime": {
-          "lib/net8.0/Microsoft.Build.Utilities.Core.dll": {
+          "lib/net10.0/Microsoft.Build.Utilities.Core.dll": {
             "assemblyVersion": "15.1.0.0",
-            "fileVersion": "17.9.5.7608"
+            "fileVersion": "18.9.6.37712"
           }
         }
       },
-      "Microsoft.NET.StringTools/17.9.5": {
+      "Microsoft.NET.StringTools/18.9.6": {
         "runtime": {
-          "lib/net8.0/Microsoft.NET.StringTools.dll": {
+          "lib/net10.0/Microsoft.NET.StringTools.dll": {
             "assemblyVersion": "1.0.0.0",
-            "fileVersion": "17.9.5.7608"
+            "fileVersion": "18.9.6.37712"
           }
         }
       },
-      "Microsoft.Win32.SystemEvents/10.0.9": {
+      "Microsoft.Win32.SystemEvents/10.0.13": {
         "runtime": {
           "lib/net10.0/Microsoft.Win32.SystemEvents.dll": {
             "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.926.27113"
+            "fileVersion": "10.0.1326.50504"
           }
         },
         "runtimeTargets": {
@@ -70,182 +61,160 @@
             "rid": "win",
             "assetType": "runtime",
             "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.926.27113"
+            "fileVersion": "10.0.1326.50504"
           }
         }
       },
-      "System.Configuration.ConfigurationManager/8.0.0": {
+      "System.Configuration.ConfigurationManager/10.0.8": {
         "dependencies": {
-          "System.Diagnostics.EventLog": "8.0.0",
-          "System.Security.Cryptography.ProtectedData": "8.0.0"
+          "System.Diagnostics.EventLog": "10.0.8",
+          "System.Security.Cryptography.ProtectedData": "10.0.8"
         },
         "runtime": {
-          "lib/net8.0/System.Configuration.ConfigurationManager.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
+          "lib/net10.0/System.Configuration.ConfigurationManager.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
           }
         }
       },
-      "System.Diagnostics.EventLog/8.0.0": {
+      "System.Diagnostics.EventLog/10.0.8": {
         "runtime": {
-          "lib/net8.0/System.Diagnostics.EventLog.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
+          "lib/net10.0/System.Diagnostics.EventLog.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
           }
         },
         "runtimeTargets": {
-          "runtimes/win/lib/net8.0/System.Diagnostics.EventLog.Messages.dll": {
+          "runtimes/win/lib/net10.0/System.Diagnostics.EventLog.Messages.dll": {
             "rid": "win",
             "assetType": "runtime",
-            "assemblyVersion": "8.0.0.0",
+            "assemblyVersion": "10.0.0.0",
             "fileVersion": "0.0.0.0"
           },
-          "runtimes/win/lib/net8.0/System.Diagnostics.EventLog.dll": {
+          "runtimes/win/lib/net10.0/System.Diagnostics.EventLog.dll": {
             "rid": "win",
             "assetType": "runtime",
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
           }
         }
       },
-      "System.Drawing.Common/10.0.9": {
+      "System.Drawing.Common/10.0.13": {
         "dependencies": {
-          "Microsoft.Win32.SystemEvents": "10.0.9"
+          "Microsoft.Win32.SystemEvents": "10.0.13"
         },
         "runtime": {
           "lib/net10.0/System.Drawing.Common.dll": {
             "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.926.27113"
+            "fileVersion": "10.0.1326.50504"
           },
           "lib/net10.0/System.Private.Windows.Core.dll": {
             "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.926.27113"
+            "fileVersion": "10.0.1326.50504"
           },
           "lib/net10.0/System.Private.Windows.GdiPlus.dll": {
             "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.926.27113"
+            "fileVersion": "10.0.1326.50504"
           }
         }
       },
-      "System.Reflection.MetadataLoadContext/8.0.0": {
+      "System.Security.Cryptography.ProtectedData/10.0.8": {
         "runtime": {
-          "lib/net8.0/System.Reflection.MetadataLoadContext.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
+          "lib/net10.0/System.Security.Cryptography.ProtectedData.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.826.23019"
           }
         }
       },
-      "System.Security.Cryptography.ProtectedData/8.0.0": {
-        "runtime": {
-          "lib/net8.0/System.Security.Cryptography.ProtectedData.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.23.53103"
-          }
-        }
-      },
-      "C-DEngine/7.107.0": {
+      "C-DEngine/7.110.0": {
         "dependencies": {
-          "System.Drawing.Common": "10.0.9"
+          "System.Drawing.Common": "10.0.13"
         },
         "runtime": {
           "C-DEngine.dll": {
-            "assemblyVersion": "7.107.2.0",
-            "fileVersion": "7.107.2.0"
+            "assemblyVersion": "7.110.1.0",
+            "fileVersion": "7.110.1.0"
           }
         }
       },
       "cdePackagerTask/1.0.0": {
         "dependencies": {
-          "C-DEngine": "7.107.0",
-          "Microsoft.Build": "17.9.5",
-          "Microsoft.Build.Utilities.Core": "17.9.5"
+          "C-DEngine": "7.110.0",
+          "Microsoft.Build.Utilities.Core": "18.9.6",
+          "System.Drawing.Common": "10.0.13"
         },
         "runtime": {
           "cdePackagerTask.dll": {
-            "assemblyVersion": "7.107.2.0",
-            "fileVersion": "7.107.2.0"
+            "assemblyVersion": "7.110.1.0",
+            "fileVersion": "7.110.1.0"
           }
         }
       }
     }
   },
   "libraries": {
-    "cdePackager/7.107.2": {
+    "cdePackager/7.110.1-beta.1+19": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "Microsoft.Build/17.9.5": {
+    "Microsoft.Build.Framework/18.9.6": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-DxMxhO2DrGytHQLRlKB1CiyJVghemYY4vynMKwh5Y/7Ion07VdqVWLZZmyS+KYkMKD7oC4+rijiVldakN7ZNMA==",
-      "path": "microsoft.build/17.9.5",
-      "hashPath": "microsoft.build.17.9.5.nupkg.sha512"
+      "sha512": "sha512-P5y8IAhu6UyN6FtzfN4sCNZEQGyV6S4kSTBYldtzB9bzvgdCBBKjsS6epH5aJVFM0q1yJqa8RaTzr1iEJBwIMA==",
+      "path": "microsoft.build.framework/18.9.6",
+      "hashPath": "microsoft.build.framework.18.9.6.nupkg.sha512"
     },
-    "Microsoft.Build.Framework/17.9.5": {
+    "Microsoft.Build.Utilities.Core/18.9.6": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-CjRmqu9Wv2fyC1d7NKOuBDXcNMI8+GiXGM6izygB+skGGu4Vf0cBcoPq7AFqZCcMpn5DtZ+y7RpaLpB2qrzanQ==",
-      "path": "microsoft.build.framework/17.9.5",
-      "hashPath": "microsoft.build.framework.17.9.5.nupkg.sha512"
+      "sha512": "sha512-BkU2irGHBdkULHzLmEObQCjOz7x+3unHkcmGa+BlTXyEFyj4wupcSAG3E0SlzpeF9s3ViSLbhjNDMHwMxC/Ugg==",
+      "path": "microsoft.build.utilities.core/18.9.6",
+      "hashPath": "microsoft.build.utilities.core.18.9.6.nupkg.sha512"
     },
-    "Microsoft.Build.Utilities.Core/17.9.5": {
+    "Microsoft.NET.StringTools/18.9.6": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-H2hpVdm7cX/uGJD1HOfab3RKgD5tlnvzQkFqvsrAqGHRi0sqb2w1+hRwERFm23witCjmERnqNgiQjYks6/ds8A==",
-      "path": "microsoft.build.utilities.core/17.9.5",
-      "hashPath": "microsoft.build.utilities.core.17.9.5.nupkg.sha512"
+      "sha512": "sha512-CNZfh4P65tHm1Wh/uuIbYfvHlPnb0dJ9SCaIZbXRzOMn+8JEorSqSdXdGRsrDbKBDJfNG6nmgleYhnfL2pd1oQ==",
+      "path": "microsoft.net.stringtools/18.9.6",
+      "hashPath": "microsoft.net.stringtools.18.9.6.nupkg.sha512"
     },
-    "Microsoft.NET.StringTools/17.9.5": {
+    "Microsoft.Win32.SystemEvents/10.0.13": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-C/oPRnjcIZBRzcpl1V06R1eEMCxOGt6mIm+8ioyblELgJEXLM8XjUPuCwljMO52VetsHw54xMcYwU8UEeHEIEg==",
-      "path": "microsoft.net.stringtools/17.9.5",
-      "hashPath": "microsoft.net.stringtools.17.9.5.nupkg.sha512"
+      "sha512": "sha512-rtd1rRf5uiusn/r+hNsODiCjvA+nErw+1EQb2uCv0EedLi2GEYWgLK0V31SXzcZ2b0D7VeoOrHJ0WCQqfbO67Q==",
+      "path": "microsoft.win32.systemevents/10.0.13",
+      "hashPath": "microsoft.win32.systemevents.10.0.13.nupkg.sha512"
     },
-    "Microsoft.Win32.SystemEvents/10.0.9": {
+    "System.Configuration.ConfigurationManager/10.0.8": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-dk5HKolAR9bBxlL4dl6Koaf0s/Q47QApog+/o341LSuvWGW6ig4q5fTsgYG0MrK//l2Slv6mygncMK/8lgXVDg==",
-      "path": "microsoft.win32.systemevents/10.0.9",
-      "hashPath": "microsoft.win32.systemevents.10.0.9.nupkg.sha512"
+      "sha512": "sha512-QG+HHwJjLyUiRuA9axr5pDqHAxboo7FXCTRakxMABE9CUAUij/tsd/MsgQPJUEppkf+YBLT+F/P/wKIVCAIcNg==",
+      "path": "system.configuration.configurationmanager/10.0.8",
+      "hashPath": "system.configuration.configurationmanager.10.0.8.nupkg.sha512"
     },
-    "System.Configuration.ConfigurationManager/8.0.0": {
+    "System.Diagnostics.EventLog/10.0.8": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-JlYi9XVvIREURRUlGMr1F6vOFLk7YSY4p1vHo4kX3tQ0AGrjqlRWHDi66ImHhy6qwXBG3BJ6Y1QlYQ+Qz6Xgww==",
-      "path": "system.configuration.configurationmanager/8.0.0",
-      "hashPath": "system.configuration.configurationmanager.8.0.0.nupkg.sha512"
+      "sha512": "sha512-+Ro7WgIom+BDNH+YhTuZKL6QJ0ctfOpTyfUG/h3aU5KwXt3OaNf0wYWrTvoBUj+34Dy5V8dN9yCco1hAJQ4txw==",
+      "path": "system.diagnostics.eventlog/10.0.8",
+      "hashPath": "system.diagnostics.eventlog.10.0.8.nupkg.sha512"
     },
-    "System.Diagnostics.EventLog/8.0.0": {
+    "System.Drawing.Common/10.0.13": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-fdYxcRjQqTTacKId/2IECojlDSFvp7LP5N78+0z/xH7v/Tuw5ZAxu23Y6PTCRinqyu2ePx+Gn1098NC6jM6d+A==",
-      "path": "system.diagnostics.eventlog/8.0.0",
-      "hashPath": "system.diagnostics.eventlog.8.0.0.nupkg.sha512"
+      "sha512": "sha512-s8JRuC+ec1djwT471SbZRXWCBFXCKkNNGILWD/OCmIcdL0KP0w4arMjyEZzNUuKxolperKtlxHhS+34rA4N3XA==",
+      "path": "system.drawing.common/10.0.13",
+      "hashPath": "system.drawing.common.10.0.13.nupkg.sha512"
     },
-    "System.Drawing.Common/10.0.9": {
+    "System.Security.Cryptography.ProtectedData/10.0.8": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ShkEj8jOhklJgrN3SoaVbCcopvqyIgVXHso2/eibQBL7IZxzJjND77UYVlViHqpwPxyQeA67IOut4b41clBkQw==",
-      "path": "system.drawing.common/10.0.9",
-      "hashPath": "system.drawing.common.10.0.9.nupkg.sha512"
+      "sha512": "sha512-/ldVgSfImIBp6fLWS7sLH0BnmtFj0ZwGlZo4Xx2q0K3ZhJNDbW45kj2f6zPoC+L+BTINuHdMzTsopuwmkbgcNA==",
+      "path": "system.security.cryptography.protecteddata/10.0.8",
+      "hashPath": "system.security.cryptography.protecteddata.10.0.8.nupkg.sha512"
     },
-    "System.Reflection.MetadataLoadContext/8.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-SZxrQ4sQYnIcdwiO3G/lHZopbPYQ2lW0ioT4JezgccWUrKaKbHLJbAGZaDfkYjWcta1pWssAo3MOXLsR0ie4tQ==",
-      "path": "system.reflection.metadataloadcontext/8.0.0",
-      "hashPath": "system.reflection.metadataloadcontext.8.0.0.nupkg.sha512"
-    },
-    "System.Security.Cryptography.ProtectedData/8.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-+TUFINV2q2ifyXauQXRwy4CiBhqvDEDZeVJU7qfxya4aRYOKzVBpN+4acx25VcPB9ywUN6C0n8drWl110PhZEg==",
-      "path": "system.security.cryptography.protecteddata/8.0.0",
-      "hashPath": "system.security.cryptography.protecteddata.8.0.0.nupkg.sha512"
-    },
-    "C-DEngine/7.107.0": {
+    "C-DEngine/7.110.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
