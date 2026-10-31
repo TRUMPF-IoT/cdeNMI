@@ -205,6 +205,8 @@ namespace NMIService
                     {new TheFieldInfo() {FldOrder = 17, DataItem = "MyPropertyBag.Value.Value", Flags = 2, Type = eFieldType.SingleEnded, Header = "Current Value", TileLeft = 0, TileTop = 7, TileWidth = 10, TileHeight = 1, FldWidth = 4, PropertyBag = new ThePropertyBag() {"Truncate=true" } } },// "Style=text-overflow:ellipsis;overflow:hidden; max-width:624px"}}},
                     {new TheFieldInfo() {FldOrder = 18, DataItem = "MyPropertyBag.cdeStartupTime.Value", Flags = 0, Type = eFieldType.Number, Header = "Startup Time", TileLeft = 0, TileTop = 8, TileWidth = 10, TileHeight = 1, FldWidth = 1 }},
 
+                    {new TheFieldInfo() {FldOrder = 19, DataItem = "PropertyCount", Flags = 0, Type = eFieldType.Number, Header = "P-Cnt", TileLeft = 0, TileTop = 9, TileWidth = 1, FldWidth = 1}},
+
                     {new TheFieldInfo() {FldOrder = 20, DataItem = "HasLiveObject", Flags = 0, Type = eFieldType.SingleCheck, Header = "Is Alive", TileLeft = 0, TileTop = 9, TileWidth = 3, FldWidth = 1}},
                     {new TheFieldInfo() {FldOrder = 21, DataItem = "IsInitialized", Flags = 0, Type = eFieldType.SingleCheck, Header = "Is Init", TileLeft = 3, TileTop = 9, TileWidth = 3, FldWidth = 1}},
                     {new TheFieldInfo() {FldOrder = 22, DataItem = "IsUXInitialized", Flags = 0, Type = eFieldType.SingleCheck, Header = "UX Init", TileLeft = 6, TileTop = 9, TileWidth = 3, FldWidth = 1}},
@@ -454,12 +456,6 @@ namespace NMIService
                 }
                 TheBaseAssets.MySYSLOG.WriteToLog(10004, TSM.L(eDEBUG_LEVELS.OFF) ? null : new TSM(MyBaseEngine.GetEngineName(), "NMI Interceptor registered", eMsgLevel.l3_ImportantMessage));
 
-                if (TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("RedPill")))
-                {
-                    TheThing MyLiveThing = TheThingRegistry.GetThingByProperty(eEngineName.NMIService, Guid.Empty, "DeviceType", "NMI Editor");
-                    var MyNMIEditor = new TheNMIEditor(MyLiveThing);
-                    TheThingRegistry.RegisterThing(MyNMIEditor);
-                }
                 TheCDEngines.MyNMIService.RegisterEvent(eEngineEvents.IncomingMessage, SinkNMIMessage);
                 MyBaseThing.LastMessage = "NMI Runtime started...";
                 MyBaseEngine.ProcessInitialized(); //Set the status of the Base Engine according to the status of the Things it manages
@@ -536,7 +532,6 @@ namespace NMIService
             TheProcessMessage pMSG = (TheProcessMessage)pPara;
             if (pMSG == null || pMSG.Message == null) return;
 
-#if !CDE_NET4 && !CDE_NET35
             string[] cmd = pMSG.Message.PLS.Split(':');
             if (cmd.Length > 2)
             {
@@ -631,7 +626,6 @@ namespace NMIService
                     }
                 }
             }
-#endif
         }
 
         public override void HandleMessage(ICDEThing sender, object pIncoming)

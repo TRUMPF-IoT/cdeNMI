@@ -91,7 +91,7 @@ namespace cdeNMI {
             }
             if (tJS.startsWith("TTS:")) {
                 if (cdeNMI.MyScreenManager) {
-                    const tScrParts: string[] = tJS.split(':');
+                    const tScrParts: string[] = cdeNMI.GenerateFinalString(tJS).split(':');
                     if (tScrParts[1] === "CLOSE") {
                         const tLast: INMIScreen = cdeNMI.MyScreenManager.GetCurrentScreen();
                         if (tLast) {
@@ -217,7 +217,7 @@ namespace cdeNMI {
             }
         }
 
-        PublishToNodeGET_NMI_DATA(pRes: string) {
+        PublishToNodeGET_NMI_DATA(pRes: string, pPayload?: string) {
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -369,6 +369,13 @@ namespace cdeNMI {
                     if (cdeNMI.MyToast)
                         cdeNMI.MyToast.ShowToastMessage(pMSG.PLS);
                     return true;
+                case "NMI_ROW_STYLE": {
+                    if (tCmd.length < 2) return;
+                    const tdl = document.getElementById("r_"+ cde.GuidToString(tCmd[1]));
+                    if (tdl)
+                        tdl.className = pMSG.PLS;
+                    return;
+                }
                 case "NMI_ALERT":
                     if (cdeNMI.MyToast)
                         cdeNMI.MyToast.ShowToastMessage("Alert!", pMSG.PLS, tCmd.length > 1 ? cde.CInt(tCmd[1]) : 15000);
@@ -421,7 +428,10 @@ namespace cdeNMI {
                     break;
                 case "NMI_REQ_DASH":
                     if (pMSG.PLS) {
-                        this.PublishToNodeGET_NMI_DATA(pMSG.PLS);
+                        if (tCmd.length > 1)
+                            this.PublishToNodeGET_NMI_DATA(pMSG.PLS, tCmd[1]);
+                        else
+                            this.PublishToNodeGET_NMI_DATA(pMSG.PLS);
                     }
                     return true;
                 case "NMI_NODEPONG":

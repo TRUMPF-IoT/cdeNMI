@@ -1316,13 +1316,8 @@
 
 
         public ResizeEventHandler() {
-            const w = window.innerWidth
-                || document.documentElement.clientWidth
-                || document.body.clientWidth;
-
-            const h = window.innerHeight
-                || document.documentElement.clientHeight
-                || document.body.clientHeight;
+            const w = cdeNMI.GetBrowserWidth();
+            const h = cdeNMI.GetBrowserHeight();
             this.divTiles.style.width = w + "px";
             this.divTiles.style.height = h + "px";
         }
@@ -2341,10 +2336,10 @@
             this.context.textAlign = 'center';
             this.context.strokeStyle = this.GetProperty("Foreground");
 
-            const upperLimit = cde.CInt(this.GetProperty("UpperLimit"));
-            const lowerLimit = cde.CInt(this.GetProperty("LowerLimit"));
-            const maxValue = cde.CInt(this.GetProperty("MaxValue"));
-            const minValue = cde.CInt(this.GetProperty("MinValue"));
+            const upperLimit = cde.CDbl(this.GetProperty("UpperLimit"));
+            const lowerLimit = cde.CDbl(this.GetProperty("LowerLimit"));
+            const maxValue = cde.CDbl(this.GetProperty("MaxValue"));
+            const minValue = cde.CDbl(this.GetProperty("MinValue"));
 
             //arc
             const x = this.canvas.width / 2;
@@ -2352,13 +2347,13 @@
 
             const counterClockwise = cde.CBool(this.GetProperty("IsInverted"));
 
-            let tSetStartAngle = cde.CInt(this.GetProperty("StartAngle")) - 90;
+            let tSetStartAngle = cde.CDbl(this.GetProperty("StartAngle")) - 90;
             if (tSetStartAngle < 0)
                 tSetStartAngle += 360;
 
             let fullEndAngle = 360;
             if (this.GetProperty("EndAngle"))
-                fullEndAngle = cde.CInt(this.GetProperty("EndAngle"));
+                fullEndAngle = cde.CDbl(this.GetProperty("EndAngle"));
 
             let tSetEndAngle;
             if (counterClockwise) {
@@ -2418,21 +2413,17 @@
             gradient.addColorStop(.6, 'rgba(255,0,0,.549)');
             gradient.addColorStop(.6, 'rgba(255,0,0,1.0)');
             //Limit Shaders
-            if (upperLimit > minValue) {
-                const valMaxLim = cdeNMI.cdeMinMax(upperLimit, maxValue, minValue, fullEndAngle, 0);
-                //if (this.tempValue > upperLimit)
-                {
+            if (upperLimit != lowerLimit) {
+                if (upperLimit > minValue) {
+                    const valMaxLim = cdeNMI.cdeMinMax(upperLimit, maxValue, minValue, fullEndAngle, 0);
                     context.beginPath();
                     context.lineWidth = thick;
                     context.strokeStyle = gradient;
                     context.arc(x, y, radius, (valMaxLim + tSetStartAngle) * (Math.PI / 180), tSetEndAngle * (Math.PI / 180), counterClockwise);
                     context.stroke();
                 }
-            }
-            if (lowerLimit > minValue) {
-                const valLowLim = cdeNMI.cdeMinMax(lowerLimit, maxValue, minValue, fullEndAngle, 0);
-                //if (this.tempValue < lowerLimit)
-                {
+                if (lowerLimit > minValue) {
+                    const valLowLim = cdeNMI.cdeMinMax(lowerLimit, maxValue, minValue, fullEndAngle, 0);
                     context.beginPath();
                     context.lineWidth = thick;
                     context.strokeStyle = gradient;
@@ -2451,7 +2442,7 @@
                     const tFrom = cdeNMI.cdeMinMax(this.myPlotBand[idx].from, maxValue, minValue, fullEndAngle, 0);
                     const tTo = cdeNMI.cdeMinMax(this.myPlotBand[idx].to, maxValue, minValue, fullEndAngle, 0);
                     context.beginPath();
-                    context.lineWidth = thick * .4;
+                    context.lineWidth = thick * .2;
                     context.strokeStyle = this.myPlotBand[idx].color;
                     if (!counterClockwise)
                         endAngle = (Math.PI / 180) * (tTo + tSetStartAngle); //this is the point where the arc stops
@@ -2491,6 +2482,12 @@
                 context.font = '16pt Roboto';
                 context.fillStyle = whitePart;
                 context.fillText(this.GetProperty("SubTitle"), x, y + (thick * 2));
+            }
+            //Caption Text
+            if (this.GetProperty("Caption")) {
+                context.font = '16pt Roboto';
+                context.fillStyle = whitePart;
+                context.fillText(this.GetProperty("Caption"), x, y + (thick * 2)+25);
             }
         }
 
@@ -2603,10 +2600,11 @@
 
 
         public ApplySkin() {
-            if (!this.GaugeShell.GetElement()) return;
-            this.mWidth = this.GaugeShell.GetElement().clientWidth;
+            const tEle: HTMLElement = this.GaugeShell.GetElement();
+            if (!tEle) return;
+            this.mWidth = tEle.clientWidth;
             this.mycanvas.width = this.mWidth;
-            this.mHeight = this.GaugeShell.GetElement().clientHeight;
+            this.mHeight = tEle.clientHeight;
             this.mycanvas.height = this.mHeight;
             if (this.mHeight > 0 && this.mWidth > 0)
                 this.AnimateFrame(true);
@@ -2615,7 +2613,12 @@
 
 
         DoRender() {
-            if (!this.mycanvas || this.mWidth === 0 || this.mHeight === 0) return;
+            if (!this.mycanvas) return;
+            if (this.mWidth === 0 || this.mHeight === 0) {
+                this.ApplySkin();
+                if (this.mWidth === 0 || this.mHeight === 0)
+                    return;
+            }
             const context: CanvasRenderingContext2D = this.mycontext as CanvasRenderingContext2D;
             const canvas = this.mycanvas;
             const x = this.mycanvas.width / 2;

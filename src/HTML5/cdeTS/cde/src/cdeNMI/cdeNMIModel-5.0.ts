@@ -35,6 +35,7 @@
         SetTE(pTE: INMITileEntry);
         GetTE(): INMITileEntry;
         GetSegmentWidth(): number;
+        GetWidth(tW: number, tDontCheckMaxWidth:boolean): number;
         SetWidth(pElement: HTMLElement, tW: number, tMargin: number): number;
         SetHeight(pElement: HTMLElement, tW: number, tMargin: number): number;
         IsAChildBigger(tW: number): boolean;
@@ -96,9 +97,12 @@
         CreateHTMLView(pHtml: string);
         AppendContent(pHtml: string);
         Clear(AllKids: boolean);
+        ReloadScreen(tScreen: INMIScreen, bForce: boolean);
 
         ShowPin();
         ShowFullscreen(force: boolean);
+
+        MyFormInfo: cdeNMI.TheFormInfo;
 
         MyRefreshButton: INMIControl;
         MySavePin: INMIControl;
@@ -109,6 +113,7 @@
         HasRenderTarget: boolean;
         ScreenScale: number;
         AllowDragging: boolean;
+        IsFitToScreenSet: boolean;
     }
 
     export interface INMITileEntry extends INMIControl {
@@ -876,6 +881,7 @@
             const tTRF: TheTRF = new cdeNMI.TheTRF(tFormID, tFormInfo && tFormInfo.CurrentRow ? tFormInfo.CurrentRow : 0, null);
             tTRF.FldInfo = new TheFieldInfo(cdeControlType.BaseControl);
             if (tFormInfo) {
+                tFormInfo.DefaultView ??= 0;
                 switch (tFormInfo.DefaultView) {
                     case 0: tTRF.FldInfo.Type = cdeControlType.Table; break;
                     case 1: tTRF.FldInfo.Type = cdeControlType.FormView; break;

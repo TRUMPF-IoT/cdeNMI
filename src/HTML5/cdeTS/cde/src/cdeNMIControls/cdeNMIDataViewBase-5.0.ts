@@ -134,6 +134,17 @@
                     tFldInfo = tModel.MyStorageMeta[pFormID].FormFields[j];
                     tFldEntry = pFldEntries[pTableName + "_" + tRowNo + "_" + tFldInfo.FldOrder];
                     let IsHidden = false;
+                    const tInitScript: string = tFldInfo["InitScript"];
+                    if (tInitScript && tInitScript !== "") {
+                        let tRealCondition = "";
+                        try {
+                            tRealCondition = cdeNMI.GenerateFinalString(tInitScript, RowData);
+                            cde.cdeEval(tRealCondition);
+                        }
+                        catch (e) {
+                            cde.MyEventLogger.FireEvent(true, "CDE_NEW_LOGENTRY", "Validating Hide-Condition Error:" + e, "in: (" + tRealCondition + ") resolved to<br/>" + tRealCondition);
+                       }
+                    }
                     const tHideCondition: string = tFldInfo["HideCondition"];
                     if (tHideCondition && tHideCondition !== "") {
                         let tRealCondition = "";

@@ -1,8 +1,8 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2026 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
-﻿namespace cdeNMI {
+namespace cdeNMI {
     declare let Debug;
     export function StartupNMI() {
         if (cde.MyBaseAssets.MyServiceHostInfo.DebugLevel > 3)
@@ -139,7 +139,6 @@
             if (cdeNMI.MyScreenManager || cdeNMI.MyLoginScreen) {
                 return;
             }
-
             if (!cde.MyBaseAssets.MyCommStatus.IsUserLoggedIn && !cde.MyBaseAssets.MyServiceHostInfo.DoAllowAnonymous) {
                 cdeNMI.MyLoginScreen = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.LoginScreen, true) as cdeNMI.INMILoginScreen;
                 if (cdeNMI.MyLoginScreen) {
@@ -154,6 +153,7 @@
                             cdeNMI.DoLoginSuccess(pUserPreferences);
                         }
                     });
+                    window.location.hash = "cdeloginup:";
                     cdeNMI.MyLoginScreen.Create(null);
                 }
             } else {
@@ -161,7 +161,7 @@
                     if (!cde.MyBaseAssets.MyCommStatus.UserPref)
                         cde.MyBaseAssets.MyCommStatus.UserPref = JSON.parse(cde.MyBaseAssets.MyServiceHostInfo.InitUserPref);
                 }
-                catch (e) {
+                catch {
                     //ignored
                 }
                 cdeNMI.DoLoginSuccess(cde.MyBaseAssets.MyCommStatus.UserPref);
@@ -188,6 +188,14 @@
             } else if (pUserPreferences.ThemeName === "Dark") {
                 cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme = false;
                 cdeNMI.ApplyTheme();
+            } else if (pUserPreferences.ThemeName === "Browser" || pUserPreferences.ThemeName === "Auto") {
+                const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
+                if (darkThemeMq.matches) {
+                    cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme = false;
+                } else {
+                    cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme = true;
+                }
+                cdeNMI.ApplyTheme();
             }
         }
         if (cdeNMI.MyScreenManager)
@@ -205,8 +213,27 @@
                 });
             }
         }
+        let geoInt = cde.CInt(cde.MyBaseAssets.MyServiceHostInfo.GeoLocInterval);
+        if (geoInt > 0 && !cde.MyBaseAssets.MyServiceHostInfo.MyGeoInterval) {
+            if (navigator.geolocation) {
+                cde.MyBaseAssets.MyServiceHostInfo.MyGeoInterval = setInterval(() => {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        cde.MyCommChannel.SendQueued(null, cdeNMI.eTheNMIEngine, cdeNMI.eTheNMIEngine, "NMI_MY_LOCATION", (position.coords.longitude + ";" + position.coords.latitude + ";" + position.coords.accuracy), 0, 3, 0, null);
+                    });
+                }, geoInt);
+            }
+        }
         window.addEventListener("scroll", () => {
             cdeNMI.MyNMISettings.IsScrolling = true;
+        });
+        cde.MyBaseAssets.MyServiceHostInfo.IsPortrait = window.matchMedia("(orientation: portrait)").matches;
+        window.matchMedia("(orientation: portrait)").addEventListener("change", (e) => {
+            if (e.matches) {
+                cde.MyBaseAssets.MyServiceHostInfo.IsPortrait = true;
+            } else {
+                cde.MyBaseAssets.MyServiceHostInfo.IsPortrait = false;
+            }
+            cdeNMI.FireEvent(true, "CDE_ORIENTATION_CHANGED", cde.MyBaseAssets.MyServiceHostInfo.IsPortrait);
         });
         cdeNMI.MyScreenManager.Create(null);
         cdeNMI.MyScreenManager.CreateLoginButtonOnly();

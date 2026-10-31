@@ -33,6 +33,7 @@
         mIsInitialized = false;
         IsIFrame = false;
 
+        public IsFitToScreenSet: boolean = false;
         public AllowDragging = false;
         public MyHostNode = "";
         public MyRefreshButton: INMIControl = null;
@@ -43,6 +44,7 @@
         MyPinButton: INMIControl = null;
         MyDrawPin: INMIControl = null;
         MyOverlay: INMICanvasDraw = null;
+        MyFormInfo: cdeNMI.TheFormInfo = null;
 
         MyPinArea: INMIControl = null;
         MyScreenTitle: INMIControl = null;
@@ -102,7 +104,12 @@
             }
             this.divDragContent.classList.add("cde-animate-opacity");
 
-            if (!cde.CBool(this.GetSetting("NeverHide")) && !cde.CBool(this.GetSetting("HidePins")) && !cde.MyBaseAssets.MyServiceHostInfo.HideHeader && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 2 && cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 4) {
+            if (!cde.CBool(this.GetSetting("NeverHide")) &&
+                !cde.CBool(this.GetSetting("HidePins")) &&
+                !cde.MyBaseAssets.MyServiceHostInfo.HideHeader &&
+                //!cde.MyBaseAssets.MyServiceHostInfo.HidePinsInApp &&
+                cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 2 &&
+                cde.MyBaseAssets.MyServiceHostInfo.WebPlatform !== 4) {
 
                 const IsTesla: boolean = (cde.MyBaseAssets.MyServiceHostInfo.WebPlatform === 5);
 
@@ -113,7 +120,8 @@
                 else
                     tPinDiv.className = "cdePinArea";
                 this.MyPinArea.SetElement(tPinDiv);
-
+                if (cde.MyBaseAssets.MyServiceHostInfo.HidePinsInApp === true)
+                    this.MyPinArea.SetProperty("Visibility", false);
                 this.MyScreenTitle = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SmartLabel).Create(this.MyPinArea, { ScreenID: this.MyScreenID, PreInitBag: ["Element=h1"], PostInitBag: [(this.GetSetting("ScreenTitle") ? "iValue=" + this.GetSetting("ScreenTitle") : ""), "ClassName=cdeScreenTitle"] });
 
                 const tAllPins = cdeNMI.MyTCF.CreateBaseControl().Create(this.MyPinArea);
@@ -321,8 +329,7 @@
                             return;
                         let bForce = false;
                         if (evt.button !== 2) bForce = true;
-                        const tFetch: string = 'NMI_GET_DATA:' + this.MyScreenID + ':' + tScreen.GetProperty("ControlClass") + ':' + tScreen.GetProperty("DashID") + ':true:' + bForce;
-                        cdeNMI.MyEngine.PublishToNMI(tFetch, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
+                        this.ReloadScreen(tScreen, bForce);
                     }
                 });
                 if (IsTesla)
@@ -386,7 +393,7 @@
                 this.mDivDashboardContent.style.width = "100%";
                 this.mDivDashboardContent.style.display = "flex";
                 this.mDivDashboardContent.style.verticalAlign= "middle";
-                this.mDivDashboardContent.style.height = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) + "px";
+                this.mDivDashboardContent.style.height = (cdeNMI.GetBrowserHeight() - cdeNMI.GetSizeFromTile(1)) + "px";
             }
             this.MyScreenDIV.appendChild(this.mDivDashboardContent);
 
@@ -401,6 +408,11 @@
             }
 
             return true;
+        }
+
+        public ReloadScreen(tScreen: INMIScreen, bForce: boolean = false) {
+            const tFetch: string = 'NMI_GET_DATA:' + this.MyScreenID + ':' + tScreen.GetProperty("ControlClass") + ':' + tScreen.GetProperty("DashID") + ':true:' + bForce;
+            cdeNMI.MyEngine.PublishToNMI(tFetch, '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
         }
 
         SaveHomeScreen(tScreen: INMIScreen) {
@@ -433,11 +445,11 @@
 
         public ResizePopup() {
             if (cde.CBool(this.GetProperty("IsPopup"))) {
-                this.GetElement().style.left = (window.innerWidth / 2 - (this.GetElement().clientWidth / 2) + "px");
+                this.GetElement().style.left = (cdeNMI.GetBrowserWidth() / 2 - (this.GetElement().clientWidth / 2) + "px");
                 let tH = this.GetElement().clientHeight;
                 if (tH === 0)
                     tH = cdeNMI.GetSizeFromTile(this.GetProperty("TileHeight"));
-                this.GetElement().style.top = ((window.innerHeight / 2 - (tH / 2) + window.scrollY) + "px");
+                this.GetElement().style.top = ((cdeNMI.GetBrowserHeight() / 2 - (tH / 2) + window.scrollY) + "px");
             }
         }
 
@@ -517,7 +529,7 @@
                 this.GetContainerElement().style.overflow = "auto";
                 this.ApplySkin();
             } else if (pName === "HidePins" && this.MyPinArea) {
-                this.MyPinArea.SetProperty("Visibility", !cde.CBool(pValue));
+                this.MyPinArea.SetProperty("Visibility", !cde.CBool(pValue) && cde.MyBaseAssets.MyServiceHostInfo.HidePinsInApp !== true);
             }
         }
 

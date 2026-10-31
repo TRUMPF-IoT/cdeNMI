@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net10.0</TargetFrameworks>
 	  <PackageId>CDMyNMIHtml5RT</PackageId>
-    <Version>6.104.0$(cdeNugetSuffix)</Version>
+    <Version>7.107.0$(cdeNugetSuffix)</Version>
     <Authors>Chris Muench</Authors>
     <Company>C-Labs</Company>
     <Product>CDMyNMI HTML5 Runtime for $(TargetFramework)$(cdeDebugProductSuffix)</Product>
     <PackageDescription>CDMyNMI HTML5 Runtime</PackageDescription>
     <PackageIcon>toplogo-128.png</PackageIcon>
-    <Description>HMTL5 NMI Runtime for C-DEngine based Relays</Description>
-    <Copyright>Copyright (C) 2017-2024 TRUMPF Laser GmbH, authors: C-Labs</Copyright>
+    <Description>HTML5 NMI Runtime for C-DEngine based Relays</Description>
+    <Copyright>Copyright (C) 2017-2026 TRUMPF Laser GmbH, authors: C-Labs</Copyright>
     <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
     <ProjectName>$(AssemblyName).$(TargetFramework)</ProjectName>
     <AssemblyName>CDMyNMIHtml5</AssemblyName>
-
+	  <DefineConstants>TRACE;CDE_SYSLOG</DefineConstants>
     <!-- Set if you want to have a Nuget created automatically -->
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <!-- Workaround for placing the .nupkg into the build's output folder when using msbuild's GenerateProjectSpecificOutputFolder -->
@@ -23,16 +23,23 @@
     <PackageOutputPath>$(SolutionDir)Nugets</PackageOutputPath>
   </PropertyGroup>
 
+  <!-- The NMI JavaScript engine is built by the cdeTS project; Debug embeds the readable cde.js, Release the minified cde.min.js. -->
+  <PropertyGroup>
+    <cdeTSOutputDir>$(MSBuildProjectDirectory)\..\cdeTS\cde\</cdeTSOutputDir>
+    <cdeCoreScript Condition="'$(Configuration)' == 'Debug'">cde.js</cdeCoreScript>
+    <cdeCoreScript Condition="'$(cdeCoreScript)' == ''">cde.min.js</cdeCoreScript>
+    <cdeWorkerScript Condition="'$(Configuration)' == 'Debug'">cdeWorker.js</cdeWorkerScript>
+    <cdeWorkerScript Condition="'$(cdeWorkerScript)' == ''">cdeWorker.min.js</cdeWorkerScript>
+  </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\cdeTS\cdeTS.csproj" ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <cdeScriptSource Include="$(cdeTSOutputDir)$(cdeCoreScript);$(cdeTSOutputDir)$(cdeWorkerScript)" />
+    <EmbeddedResource Include="ClientBin\CDE\$(cdeCoreScript)" />
+    <!-- The browser always requests ClientBin/CDE/cdeWorker.min.js, so keep that resource name even for the unminified Debug file. -->
+    <EmbeddedResource Include="ClientBin\CDE\$(cdeWorkerScript)" LogicalName="$(RootNamespace).ClientBin.CDE.cdeWorker.min.js" />
+  </ItemGroup>
 
-      <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DefineConstants>TRACE;DEBUG;CDE_SYSLOG;CDE_STANDARD;NET_STANDARD</DefineConstants>
-      </PropertyGroup>
-
-      <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <DefineConstants>TRACE;RELEASE;CDE_SYSLOG;CDE_STANDARD;NET_STANDARD</DefineConstants>
-      </PropertyGroup>
-  
   <ItemGroup>
     <Compile Remove="ClientBin\CDEHTML5\Scripts\**" />
     <Compile Remove="ClientBin\fonts\**" />
@@ -53,8 +60,10 @@
     <None Remove="ClientBin\android-chrome-192x192.png" />
     <None Remove="ClientBin\android-chrome-512x512.png" />
     <None Remove="ClientBin\apple-touch-icon.png" />
+    <None Remove="ClientBin\CDE\cde.js" />
     <None Remove="ClientBin\CDE\cde.min.js" />
     <None Remove="ClientBin\CDE\cde.minold.js" />
+    <None Remove="ClientBin\CDE\cdeWorker.js" />
     <None Remove="ClientBin\CDE\cdeWorker.min.js" />
     <None Remove="ClientBin\CDE\cdeWorker.minold.js" />
     <None Remove="ClientBin\CLIENTACCESSPOLICY.XML" />
@@ -92,8 +101,6 @@
     <EmbeddedResource Include="ClientBin\android-chrome-192x192.png" />
     <EmbeddedResource Include="ClientBin\android-chrome-512x512.png" />
     <EmbeddedResource Include="ClientBin\apple-touch-icon.png" />
-    <EmbeddedResource Include="ClientBin\CDE\cde.min.js" />
-    <EmbeddedResource Include="ClientBin\CDE\cdeWorker.min.js" />
     <EmbeddedResource Include="ClientBin\CLIENTACCESSPOLICY.XML" />
     <EmbeddedResource Include="ClientBin\CROSSDOMAIN.XML" />
     <EmbeddedResource Include="ClientBin\CROSSDOMAINPOLICY.XML" />
@@ -176,10 +183,19 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="C-DEngine" Version="6.*-*" />
+	  <PackageReference Include="C-DEngine" Version="7.*-*" />
   </ItemGroup>
 
   <Target Name="GetPackagingOutputs" />
+
+  <Target Name="CopyCdeScripts"
+          AfterTargets="ResolveProjectReferences"
+          BeforeTargets="CoreCompile"
+          Inputs="@(cdeScriptSource)"
+          Outputs="@(cdeScriptSource->'$(MSBuildProjectDirectory)\ClientBin\CDE\%(Filename)%(Extension)')">
+    <Error Condition="!Exists('%(cdeScriptSource.Identity)')" Text="'%(cdeScriptSource.Identity)' was not found. Build the cdeTS project first." />
+    <Copy SourceFiles="@(cdeScriptSource)" DestinationFolder="$(MSBuildProjectDirectory)\ClientBin\CDE" SkipUnchangedFiles="true" />
+  </Target>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="call &quot;$(ProjectDir)..\..\..\BuildTools\signandpackage.cmd&quot; &quot;$(ProjectDir)&quot; &quot;$(TargetDir)&quot; &quot;$(TargetFileName)&quot;" />
   </Target>

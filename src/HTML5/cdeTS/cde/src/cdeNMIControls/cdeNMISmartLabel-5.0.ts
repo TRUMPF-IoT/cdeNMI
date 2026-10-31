@@ -44,8 +44,12 @@
             else {
                 if (this.GetSetting("Element"))
                     this.MyLabelDiv = document.createElement(this.GetSetting("Element")) as HTMLElement;
-                else
-                    this.MyLabelDiv = document.createElement("span");
+                else {
+                    if (this.GetProperty("Element"))
+                        this.MyLabelDiv = document.createElement(this.GetProperty("Element")) as HTMLElement;
+                    else
+                        this.MyLabelDiv = document.createElement("span");
+                }
             }
             const tS: string = this.GetSetting("ValueTitle");
             if (tS) {
@@ -121,6 +125,10 @@
                     if (cde.CBool(this.GetProperty("Truncate")))
                         this.MyLabelDiv.style.maxWidth = cdeNMI.GetSizeFromTile(this.GetProperty("TileWidth")).toString() + "px";
                 }
+            } else if (pName === "OnClick") {
+                this.HookEvents(false);
+                this.RegisterEvent("OnClick", pValue);
+                this.RegisterEvent("PointerUp", this.DoFireClick);
             } else if (pName === "TileHeight") {
                 if (this.MyLabelDiv)
                     this.MyLabelDiv.style.height = cdeNMI.GetSizeFromTile(this.GetProperty("TileHeight")).toString() + "px";

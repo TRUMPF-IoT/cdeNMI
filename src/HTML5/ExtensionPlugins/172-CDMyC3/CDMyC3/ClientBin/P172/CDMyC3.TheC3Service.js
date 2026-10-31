@@ -1,32 +1,37 @@
+"use strict";
 var CDMyC3;
 (function (CDMyC3) {
     CDMyC3.eC3Engine = "CDMyC3.TheC3Service";
     class TheC3Service {
-        constructor() {
-            this.MyBaseEngine = null;
-            this.MyBaseEngine = cdeCommCore.StartNewEngine(CDMyC3.eC3Engine);
-            this.MyBaseEngine.RegisterIncomingMessage((pProcessMessage) => { this.HandleMessage(pProcessMessage); });
-        }
         static StartEngine() {
             TheC3Service.MyEngine = new TheC3Service();
             cdeNMI.TheNMIService.cdeGetStyle("/P172/CSS/C3.min.css", null);
             cdeNMI.TheNMIService.cdeGetStyle("/P172/CSS/cssDark.min.css", null);
+            cdeNMI.TheNMIService.cdeGetStyle("/P172/CSS/uPlot.min.css", null);
             cdeNMI.TheNMIService.cdeGetScript("/P172/JS/d3.min.js", () => {
                 cdeNMI.TheNMIService.cdeGetScript("/P172/JS/c3.min.js", () => {
                     cdeNMI.TheNMIService.cdeGetScript("/P172/JS/smoothie.js", () => {
                         cdeNMI.TheNMIService.cdeGetScript("/P172/JS/cytoscape.min.js", () => {
-                            TheC3Service.HaveCtrlsLoaded = true;
-                            cdeNMI.MyTCF.RegisterControlName("Speed Gauge", "CDMyC3.ctrlC3SpeedGauge:" + CDMyC3.eC3Engine);
-                            cdeNMI.MyTCF.RegisterControlName("Live Chart", "CDMyC3.ctrlProLiveChart:" + CDMyC3.eC3Engine);
-                            cdeNMI.MyTCF.RegisterControlName("Stack Chart", "CDMyC3.ctrlC3StackChart:" + CDMyC3.eC3Engine);
-                            cdeNMI.MyTCF.RegisterControlName("Cyto Chart", "CDMyC3.ctrlProCytoChart:" + CDMyC3.eC3Engine);
-                            cdeNMI.MyTCF.RegisterControlName("Line Chart", "CDMyC3.ctrlC3Line:" + CDMyC3.eC3Engine);
-                            cde.MyBaseAssets.MyEngines[CDMyC3.eC3Engine].FireEngineIsReady();
-                            cdeNMI.FireEvent(false, "EngineReady", CDMyC3.eC3Engine);
+                            cdeNMI.TheNMIService.cdeGetScript("/P172/JS/uPlot.iife.min.js", () => {
+                                TheC3Service.HaveCtrlsLoaded = true;
+                                cdeNMI.MyTCF.RegisterControlName("Speed Gauge", "CDMyC3.ctrlC3SpeedGauge:" + CDMyC3.eC3Engine);
+                                cdeNMI.MyTCF.RegisterControlName("Live Chart", "CDMyC3.ctrlProLiveChart:" + CDMyC3.eC3Engine);
+                                cdeNMI.MyTCF.RegisterControlName("Stack Chart", "CDMyC3.ctrlC3StackChart:" + CDMyC3.eC3Engine);
+                                cdeNMI.MyTCF.RegisterControlName("Cyto Chart", "CDMyC3.ctrlProCytoChart:" + CDMyC3.eC3Engine);
+                                cdeNMI.MyTCF.RegisterControlName("Line Chart", "CDMyC3.ctrlC3Line:" + CDMyC3.eC3Engine);
+                                cdeNMI.MyTCF.RegisterControlName("uPlot Chart", "CDMyC3.ctrlCuPlotChart:" + CDMyC3.eC3Engine);
+                                cde.MyBaseAssets.MyEngines[CDMyC3.eC3Engine].FireEngineIsReady();
+                                cdeNMI.FireEvent(false, "EngineReady", CDMyC3.eC3Engine);
+                            });
                         });
                     });
                 });
             });
+        }
+        constructor() {
+            this.MyBaseEngine = null;
+            this.MyBaseEngine = cdeCommCore.StartNewEngine(CDMyC3.eC3Engine);
+            this.MyBaseEngine.RegisterIncomingMessage((pProcessMessage) => { this.HandleMessage(pProcessMessage); });
         }
         HandleMessage(pProcessMessage) {
             const pMSG = pProcessMessage.Message;
@@ -50,6 +55,253 @@ var CDMyC3;
     TheC3Service.HaveCtrlsLoaded = false;
     TheC3Service.MyChartScreens = new Array();
     CDMyC3.TheC3Service = TheC3Service;
+    class ctrlCuPlotChart extends cdeNMI.TheNMIBaseControl {
+        findIndex(inStr) {
+            for (let i = 0; i < this.mSeriesNames.length; i++) {
+                if (this.mSeriesNames[i].name === inStr)
+                    return i;
+            }
+            return -1;
+        }
+        SetProperty(pName, pValue) {
+            super.SetProperty(pName, pValue);
+            if (pName == "ChartLength") {
+                this.chartLength = cdeCommonUtils.CInt(pValue);
+            }
+            if (TheC3Service.HaveCtrlsLoaded && this.myChartControl) {
+                if ((pName === "Value" || pName === "iValue") && pValue) {
+                    this.IsDataDirty = true;
+                    if (cdeCommonUtils.CStr(pValue).substring(0, 1) === "[") {
+                        const ts = JSON.parse(pValue);
+                        for (let i = 0; i < ts.length; i++) {
+                            this.newData[cdeCommonUtils.CInt(ts[i].name)] = ts[i].value;
+                        }
+                    }
+                    else {
+                        const tParts = cdeCommonUtils.CStr(pValue).split(';');
+                        let tSerNo = 0;
+                        let tVal = 0;
+                        if (tParts.length > 1) {
+                            tSerNo = cdeCommonUtils.CInt(tParts[1]);
+                            tVal = cdeCommonUtils.CDbl(tParts[0]);
+                        }
+                        else {
+                            tVal = cdeCommonUtils.CDbl(pValue);
+                        }
+                        this.newData[tSerNo] = tVal;
+                    }
+                    if (!this.mHasStarted)
+                        this.RenderChart();
+                }
+                else if (pName === "SeriesNames" && pValue) {
+                    this.mSeriesNames = JSON.parse(this.GetProperty("SeriesNames"));
+                }
+                else if (pName === "MinMaxValue" && pValue) {
+                    this.rangeMin = cdeCommonUtils.CDbl(pValue) * -1;
+                    this.rangeMax = cdeCommonUtils.CDbl(pValue);
+                }
+                else if (pName === "MaxValue" && pValue) {
+                    this.rangeMax = cdeCommonUtils.CDbl(pValue);
+                }
+                else if (pName === "MinValue" && pValue) {
+                    this.rangeMin = cdeCommonUtils.CDbl(pValue);
+                }
+            }
+        }
+        AddASeries(tSerNo = 0) {
+            let tIdx = tSerNo;
+            let tLineColor = this.mColors[this.mSeriesNames.length];
+            let tFillColor = tLineColor;
+            let tLineWidth = 2;
+            let tfilltoBottom = false;
+            if (tIdx >= 0 && this.mSeriesNames[tIdx]) {
+                tLineColor = this.mSeriesNames[tIdx].lineColor;
+                tFillColor = tLineColor;
+                tfilltoBottom = cde.CBool(this.mSeriesNames[tIdx].fillToBottom);
+                if (this.mSeriesNames[tIdx].fillColor)
+                    tFillColor = this.mSeriesNames[tIdx].fillColor;
+                if (cde.CInt(this.mSeriesNames[tIdx].lineWidth) > 0)
+                    tLineWidth = cde.CInt(this.mSeriesNames[tIdx].lineWidth);
+            }
+            const newSeriesOpts = {
+                label: this.mSeriesNames[tIdx].name,
+                stroke: tLineColor,
+                fill: tFillColor,
+                width: tLineWidth
+            };
+            this.myChartControl.addSeries(newSeriesOpts);
+            this.ydata[tSerNo] = Array.from({ length: this.chartLength }, (v, i) => 0);
+        }
+        RenderChart() {
+            if (!this.myChartContainer || this.myChartControl)
+                return;
+            debugger;
+            let tTitle = this.GetProperty("Title");
+            if (!tTitle)
+                tTitle = "";
+            let tSubTitle = this.GetProperty("SubTitle");
+            if (!tSubTitle)
+                tSubTitle = "";
+            this.uPlotOptions.title = tTitle;
+            let tBack = this.GetProperty("Background");
+            if (!tBack)
+                tBack = "rgba(0,0,0,0.01)";
+            this.myChartContainer.SetProperty("Background", tBack);
+            this.mBackwards = cdeCommonUtils.CBool(this.GetProperty("LeftToRight"));
+            if (this.mBackwards === false)
+                this.mBackwards = cdeCommonUtils.CBool(this.GetProperty("Backwards"));
+            if (this.GetProperty("SeriesNames"))
+                this.mSeriesNames = cde.cdeEval("(" + this.GetProperty("SeriesNames") + ")");
+            else
+                this.mSeriesNames = [{ name: 'Data', lineColor: 'rgba(0,255,0,0.39)', fillColor: 'transparent' }];
+            let wid = cdeCommonUtils.CInt(this.GetProperty("PixelWidth"));
+            if (wid === 0) {
+                wid = cdeCommonUtils.CInt(this.GetProperty("ControlTW"));
+                if (wid === 0)
+                    wid = null;
+                else
+                    wid = cdeNMI.GetSizeFromTile(wid);
+                this.myChartContainer.SetProperty("TileWidth", this.GetProperty("ControlTW"));
+            }
+            let hei = cdeCommonUtils.CInt(this.GetProperty("PixelHeight"));
+            if (hei === 0) {
+                hei = cdeCommonUtils.CInt(this.GetProperty("ControlTH"));
+                if (hei === 0)
+                    hei = null;
+                else
+                    hei = cdeNMI.GetSizeFromTile(hei);
+                this.myChartContainer.SetProperty("TileHeight", this.GetProperty("ControlTH"));
+            }
+            let gridColor = this.GetProperty("GridColor");
+            if (!gridColor)
+                gridColor = "transparent";
+            this.uPlotOptions.width = wid;
+            this.uPlotOptions.height = hei;
+            this.ydata[0] = Array.from({ length: this.chartLength }, (v, i) => 0);
+            this.xdata = Array.from({ length: this.chartLength }, (v, i) => this.chartStart + i * 60 * 5);
+            if (cde.CBool(this.GetProperty("HideLabels")) === true) {
+                this.uPlotOptions.legend.show = false;
+            }
+            if (this.mBackwards === true)
+                this.uPlotOptions.scales['x'].dir = -1;
+            else
+                this.uPlotOptions.scales['x'].dir = 1;
+            this.myChartControl = new uPlot(this.uPlotOptions, this.chartData, this.myChartContainer.GetElement());
+            for (let i = 0; i < this.mSeriesNames.length; i++) {
+                this.AddASeries(i);
+            }
+            this.mHasStarted = true;
+            this.mIsRunning = true;
+            cdeNMI.TheNMIBaseControl.SetPropertiesFromBag(this, this.myPropertyBag);
+        }
+        constructor() {
+            super(null, null);
+            this.myChartContainer = null;
+            this.myChartScreen = null;
+            this.myChartControl = null;
+            this.myPropertyBag = null;
+            this.mLastUpdate = null;
+            this.mSeriesNames = null;
+            this.mMaxVal = 100;
+            this.mBackwards = false;
+            this.mIsRunning = false;
+            this.IsDataDirty = true;
+            this.mHasStarted = false;
+            this.chartData = [[], []];
+            this.xdata = [];
+            this.ydata = [[]];
+            this.newData = [];
+            this.chartStart = Math.floor(Date.now() / 1e3);
+            this.chartShift = 0;
+            this.chartLength = 100;
+            this.mColors = [
+                'rgba(0,255,0,0.62)',
+                'rgba(0,255,255,0.62)',
+                'rgba(255,255,0,0.62)',
+                'rgba(0,0,255,0.62)',
+                'rgba(255,0,0,0.62)',
+                'rgba(255,255,255,0.62)',
+            ];
+            this.rangeMin = -1000;
+            this.rangeMax = 1000;
+            this.uPlotOptions = {
+                width: 100,
+                height: 100,
+                pxAlign: true,
+                axes: [{ show: false }, { show: false }],
+                series: [
+                    {}
+                ],
+                legend: {
+                    show: false
+                },
+                cursor: {
+                    show: false,
+                },
+                scales: {
+                    x: { time: false, dir: -1 },
+                    y: {
+                        auto: false
+                    }
+                }
+            };
+        }
+        start() {
+            this.mIsRunning = true;
+            this.update3();
+        }
+        stop() {
+            this.mIsRunning = false;
+        }
+        InitControl(pTargetElem, pTRF, pPropertyBag, pScreenID) {
+            super.InitControl(pTargetElem, pTRF, pPropertyBag, pScreenID);
+            this.myPropertyBag = pPropertyBag;
+            this.myChartScreen = cdeNMI.ctrlTileGroup.Create(pTargetElem, null);
+            this.myChartContainer = cdeNMI.ctrlTileGroup.Create(this.myChartScreen, null, null);
+            this.RegisterEvent("PointerUp", () => {
+            });
+            this.SetElement(this.myChartContainer.GetElement(), true, this.myChartScreen.GetElement());
+            return true;
+        }
+        ApplySkin() {
+            if (TheC3Service.HaveCtrlsLoaded) {
+                if (!this.myChartControl)
+                    this.RenderChart();
+                if (!this.MyTarget || this.MyTarget.GetProperty("IsUnloaded"))
+                    this.stop();
+                else
+                    this.start();
+                return true;
+            }
+            else {
+                cdeNMI.RegisterEvent("ChartsReady", () => { this.ApplySkin(); });
+            }
+        }
+        update3() {
+            if (this.mIsRunning) {
+                this.chartShift += 1;
+                this.xdata.push(this.chartStart + this.chartShift * 60 * 5);
+                for (let i = 0; i < this.ydata.length; i++) {
+                    if (this.IsDataDirty) {
+                        if (this.newData.length > i)
+                            this.ydata[i].push(cdeCommonUtils.CDbl(this.newData[i]));
+                        else
+                            this.ydata[i].push(cdeCommonUtils.CDbl(this.GetProperty("iValue")));
+                    }
+                }
+                if (this.xdata.length > this.chartLength)
+                    this.xdata.shift();
+                for (let i = 0; i < this.ydata.length; i++) {
+                    if (this.ydata[i].length > this.chartLength)
+                        this.ydata[i].shift();
+                }
+                this.myChartControl.setScale('y', { min: cdeCommonUtils.CDbl(this.rangeMin), max: cdeCommonUtils.CDbl(this.rangeMax) });
+                this.myChartControl.setData([this.xdata, this.ydata[0]], true);
+            }
+            requestAnimationFrame(() => this.update3());
+        }
+    }
+    CDMyC3.ctrlCuPlotChart = ctrlCuPlotChart;
     class ctrlC3SpeedGauge extends cdeNMI.ctrlCircularGauge2 {
         InitControl(pTargetElem, pTRF, pPropertyBag, pScreenID) {
             super.InitControl(pTargetElem, pTRF, pPropertyBag, pScreenID);
@@ -63,12 +315,6 @@ var CDMyC3;
     }
     CDMyC3.ctrlC3SpeedGauge = ctrlC3SpeedGauge;
     class ctrlProCytoChart extends cdeNMI.TheNMIBaseControl {
-        constructor() {
-            super(null, null);
-            this.myChartContainer = null;
-            this.myChartControl = null;
-            this.myPropertyBag = null;
-        }
         SetProperty(pName, pValue) {
             super.SetProperty(pName, pValue);
             if (TheC3Service.HaveCtrlsLoaded) {
@@ -207,6 +453,12 @@ var CDMyC3;
             ele.childNodes[0].style.display = 'flex';
             cdeNMI.TheNMIBaseControl.SetPropertiesFromBag(this, this.myPropertyBag);
         }
+        constructor() {
+            super(undefined, undefined);
+            this.myChartContainer = null;
+            this.myChartControl = null;
+            this.myPropertyBag = null;
+        }
         InitControl(pTargetElem, pTRF, pPropertyBag, pScreenID) {
             super.InitControl(pTargetElem, pTRF, pPropertyBag, pScreenID);
             this.myPropertyBag = pPropertyBag;
@@ -218,8 +470,9 @@ var CDMyC3;
             if (this.GetSetting("TileHeight"))
                 tH = cdeCommonUtils.CInt(this.GetSetting("TileHeight"));
             pTargetElem.RegisterEvent("Resize", (sender, para) => {
+                var _a;
                 this.MyParentCtrl.SetProperty("TileWidth", para[1]);
-                this.myChartContainer.SetProperty("TileWidth", para[1]);
+                (_a = this.myChartContainer) === null || _a === void 0 ? void 0 : _a.SetProperty("TileWidth", para[1]);
                 if (TheC3Service.HaveCtrlsLoaded) {
                     this.RenderChart(null);
                 }
@@ -241,30 +494,6 @@ var CDMyC3;
     }
     CDMyC3.ctrlProCytoChart = ctrlProCytoChart;
     class ctrlProLiveChart extends cdeNMI.TheNMIBaseControl {
-        constructor() {
-            super(null, null);
-            this.myChartContainer = null;
-            this.myChartScreen = null;
-            this.myChartControl = null;
-            this.myPropertyBag = null;
-            this.myChartCanvas = null;
-            this.mLastUpdate = null;
-            this.mSeriesNames = null;
-            this.mMaxVal = 100;
-            this.mBackwards = false;
-            this.mTimeSeries = [];
-            this.mDelay = 500;
-            this.mSpeed = 50;
-            this.mHasStarted = false;
-            this.mColors = [
-                'rgba(0,255,0,0.62)',
-                'rgba(0,255,255,0.62)',
-                'rgba(255,255,0,0.62)',
-                'rgba(0,0,255,0.62)',
-                'rgba(255,0,0,0.62)',
-                'rgba(255,255,255,0.62)',
-            ];
-        }
         findIndex(inStr) {
             for (let i = 0; i < this.mSeriesNames.length; i++) {
                 if (this.mSeriesNames[i].name === inStr)
@@ -300,6 +529,16 @@ var CDMyC3;
                 }
                 else if (pName === "SeriesNames" && pValue) {
                     this.mSeriesNames = JSON.parse(this.GetProperty("SeriesNames"));
+                }
+                else if (pName === "MinMaxValue" && pValue) {
+                    this.myChartControl.options.maxValue = cde.CDbl(pValue);
+                    this.myChartControl.options.minValue = cde.CDbl(pValue) * -1;
+                }
+                else if (pName === "MaxValue" && pValue) {
+                    this.myChartControl.options.maxValue = cde.CDbl(pValue);
+                }
+                else if (pName === "MinValue" && pValue) {
+                    this.myChartControl.options.minValue = cde.CDbl(pValue);
                 }
                 else if (pName === "TabIndex") {
                     if (cdeCommonUtils.CInt(pValue) < 0) {
@@ -394,6 +633,7 @@ var CDMyC3;
                 gridColor = "transparent";
             this.myChartCanvas.width = wid;
             this.myChartCanvas.height = hei;
+            this.myChartCanvas.style.overflow = "visible";
             this.mTimeSeries = new Array();
             const tConf = { millisPerPixel: this.mSpeed, grid: { verticalSections: 0, strokeStyle: gridColor, millisPerLine: millis, fillStyle: tBack, borderVisible: false }, horizontalLines: [{ color: '#ffffff', lineWidth: 1, value: 0 }] };
             if (cdeCommonUtils.CInt(this.GetProperty("MaxValue")) !== 0)
@@ -414,6 +654,30 @@ var CDMyC3;
             this.myChartControl.streamTo(this.myChartCanvas, this.mDelay);
             this.mHasStarted = true;
             cdeNMI.TheNMIBaseControl.SetPropertiesFromBag(this, this.myPropertyBag);
+        }
+        constructor() {
+            super(null, null);
+            this.myChartContainer = null;
+            this.myChartScreen = null;
+            this.myChartControl = null;
+            this.myPropertyBag = null;
+            this.myChartCanvas = null;
+            this.mLastUpdate = null;
+            this.mSeriesNames = null;
+            this.mMaxVal = 100;
+            this.mBackwards = false;
+            this.mTimeSeries = [];
+            this.mDelay = 500;
+            this.mSpeed = 50;
+            this.mHasStarted = false;
+            this.mColors = [
+                'rgba(0,255,0,0.62)',
+                'rgba(0,255,255,0.62)',
+                'rgba(255,255,0,0.62)',
+                'rgba(0,0,255,0.62)',
+                'rgba(255,0,0,0.62)',
+                'rgba(255,255,255,0.62)',
+            ];
         }
         InitControl(pTargetElem, pTRF, pPropertyBag, pScreenID) {
             super.InitControl(pTargetElem, pTRF, pPropertyBag, pScreenID);
@@ -735,13 +999,6 @@ var CDMyC3;
     }
     CDMyC3.ctrlC3Gauge = ctrlC3Gauge;
     class ctrlTimeLineChart extends cdeNMI.TheNMIBaseControl {
-        constructor() {
-            super(null, null);
-            this.cAllProps = "ChartType,ChartColors,SetSeries,Groups";
-            this.myChartScreen = null;
-            this.myStripHeader = null;
-            this.myStripImage = null;
-        }
         SetProperty(pName, pValue) {
             super.SetProperty(pName, pValue);
             if ((pName === "Value" || pName === "iValue") && pValue) {
@@ -755,6 +1012,13 @@ var CDMyC3;
             else if (pName === "StripImage" && this.myStripHeader) {
                 this.myStripImage.SetProperty("iValue", pValue);
             }
+        }
+        constructor() {
+            super(null, null);
+            this.cAllProps = "ChartType,ChartColors,SetSeries,Groups";
+            this.myChartScreen = null;
+            this.myStripHeader = null;
+            this.myStripImage = null;
         }
         InitControl(pTargetElem, pTRF, pPropertyBag, pScreenID) {
             super.InitControl(pTargetElem, pTRF, pPropertyBag, pScreenID);
@@ -1057,4 +1321,4 @@ var CDMyC3;
     }
     CDMyC3.ctrlTeslaSpeedometer = ctrlTeslaSpeedometer;
 })(CDMyC3 || (CDMyC3 = {}));
-//# sourceMappingURL=/ClientBin/plugins/P172/CDMyC3.TheC3Service.js.map
+//# sourceMappingURL=CDMyC3.TheC3Service.js.map

@@ -71,7 +71,7 @@
                 document.body.appendChild(this.divSideBarRight);
             }
 
-            this.DocumentWidth = document.body.clientWidth + cdeNMI.GetSizeFromTile(1);
+            this.DocumentWidth = cdeNMI.GetBrowserWidth() + cdeNMI.GetSizeFromTile(1);
             this.SetElement(tPortal, false, mDivMainDashboard);
             this.IsLoaded = true;
             this.FireEvent(false, "OnIsLoaded", this.IsLoaded);
@@ -103,31 +103,43 @@
                 window.addEventListener("resize", () => { this.ResizeEventHandler(); }, false);
                 window.addEventListener("scroll", () => { this.ScollEventHandler(); }, false);
             }
+            if (window.matchMedia) {
+                const colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                colorSchemeQuery.addEventListener('change', e => {
+                    if (e.matches) {
+                        cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme = false;
+                    }
+                    else {
+                        cde.MyBaseAssets.MyServiceHostInfo.IsLiteTheme = true;
+                    }
+                    ApplyTheme();
+                });
+            }
 
-            document.onkeydown = (evt) => {
-                const keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : evt.keyCode;
-                if (keyCode === 13) {
+            document.onkeydown = (evt:KeyboardEvent) => {
+                const keyCode = evt.code;
+                if (keyCode === "Enter" || keyCode === "NumpadEnter") {
                     if (cdeNMI.Key13Event !== null)
                         cdeNMI.Key13Event(evt);
                     cdeNMI.Key13Event = null;
-                } else if (keyCode === 27) {
+                } else if (keyCode === "Escape") {
                     //For escape.
                     if (cdeNMI.Key27Event !== null)
                         cdeNMI.Key27Event(evt);
                     cdeNMI.Key27Event = null;
-                } else if (keyCode === 36 && cde.MyBaseAssets.MyServiceHostInfo.WasPortalRequested && cdeNMI.Key13Event === null) {
-                    if (!cdeNMI.DisableKey36Event)
+                } else if (cdeNMI.Key13Event === null && cdeNMI.DisableKey36Event !== true) {
+                    if (keyCode === "Home" && cde.MyBaseAssets.MyServiceHostInfo.WasPortalRequested) {
                         this.GotoStationHome(false);
-                } else if (keyCode === 10009) {
-                    if (cdeNMI.MyScreenManager)
-                        cdeNMI.MyScreenManager.NavigateBack(false);
-                } else if (keyCode === 39) {
-                    cdeNMI.focusNextElement(false);
-                } else if (keyCode === 37) {
-                    cdeNMI.focusNextElement(true);
-                }
-                if (keyCode > 47 && keyCode < 58 && cdeNMI.Key13Event === null) {
-                    this.TransitToScreenIDX(keyCode - 48);
+                    } else if (keyCode === "Backspace") {
+                        if (cdeNMI.MyScreenManager)
+                            cdeNMI.MyScreenManager.NavigateBack(false);
+                    } else if (keyCode === "ArrowLeft") {
+                        cdeNMI.focusNextElement(true);
+                    } else if (keyCode === "ArrowRight") {
+                        cdeNMI.focusNextElement(false);
+                    } else if (cde.CInt(evt.key) > 0 && cde.CInt(evt.key) < 10) {
+                        this.TransitToScreenIDX(cde.CInt(evt.key));
+                    }
                 }
             };
             window.onpopstate = () => {
@@ -199,7 +211,7 @@
         }
 
         ResizeEventHandler() {
-            this.DocumentWidth = document.body.clientWidth + cdeNMI.GetSizeFromTile(1);
+            this.DocumentWidth = cdeNMI.GetBrowserWidth() + cdeNMI.GetSizeFromTile(1);
             this.IsBrowserFS();
             this.FireEvent(true, "OnWindowResize");
         }
@@ -209,7 +221,7 @@
         }
 
         IsBrowserFS() {
-            if (window.innerWidth === screen.width && window.innerHeight === screen.height) {
+            if (cdeNMI.GetBrowserWidth() === screen.width && cdeNMI.GetBrowserHeight() === screen.height) {
                 if (!this.IsBrowserFullscreen) {
                     this.IsBrowserFullscreen = true;
                     this.FireEvent(true, "OnBrowserFullscreen", true);
@@ -621,6 +633,8 @@
             }
             if (!pTargetScreen)
                 pTargetScreen = cde.MyBaseAssets.MyServiceHostInfo.PortalScreen;
+            else
+                pTargetScreen = cdeNMI.GenerateFinalString(pTargetScreen);
 
             if (!cde.MyBaseAssets.MyServiceHostInfo.WasInitialScreenVisible) {
                 if (cde.MyBaseAssets.MyServiceHostInfo.DoesRequireConfiguration && !cde.MyBaseAssets.MyServiceHostInfo.DoAllowAnonymous && cde.MyBaseAssets.MyServiceHostInfo.MainConfigScreen) {
@@ -669,7 +683,7 @@
                             this.MyPopupOverlay.SetProperty("ClassName", "cdePopupOverlay");
                             this.CurrentScreen.GetElement().style.position = "absolute";
                             this.CurrentScreen.GetElement().style.zIndex = "1100";
-                            this.CurrentScreen.GetElement().style.left = (window.innerWidth / 2 - (this.CurrentScreen.GetElement().clientWidth / 2) + "px");
+                            this.CurrentScreen.GetElement().style.left = (cdeNMI.GetBrowserWidth() / 2 - (this.CurrentScreen.GetElement().clientWidth / 2) + "px");
                             this.CurrentScreen.GetElement().className = "cdePopupTemplate cde-animate-opacity";
                             this.CurrentScreen.SetProperty("ClassName", "cdePopupContent");
                             this.CurrentScreen.SetProperty("OldScreen", tOldScreen.MyScreenID);
@@ -773,10 +787,14 @@
                     if (pScreen.Visibility)
                         pScreen.OnUnload();
                     pScreen.SetProperty("Visibility", false);
+                } else if (pScreen.GetProperty("IsPinned")) {
+                    this.RemoveScreenScaling(pScreen);
                 }
             } else {
-                if (!pScreen.Visibility)
+                if (!pScreen.Visibility) {
+                    this.CalculateFitToScreen(pScreen);
                     pScreen.OnLoad(true);
+                }
                 pScreen.SetProperty("Visibility", true);
             }
         }
@@ -980,7 +998,7 @@
                 const tTRF: TheTRF = cdeNMI.TheTRF.FromScreenForm(tModel, tTableName);
                 if (tFormInfo.IsAlwaysEmpty === true)
                     tTRF.RowNo = -1;
-                const tFTS = cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "FitToScreen"));
+                const tIsFitToScreenSet:boolean = cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "FitToScreen"));
                 const tRef = cde.GuidToString(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TableReference"));
                 if (!pRowMID && tScreen && tScreen.GetProperty("TTSCookie")) {
                     pRowMID = tScreen.GetProperty("TTSCookie");
@@ -1004,7 +1022,7 @@
                     }
                 }
 
-                tBaseControl = cdeNMI.MyTCF.CreateNMIControl(tTRF.FldInfo.Type).Create(pTarget, { ScreenID: cde.GuidToString(tModel.MyDashboard.cdeMID), TRF: tTRF, PreInitBag: ["ExtraInfo=" + pExtraInfo, (tFTS===true ? "FitToScreen=" + tFTS : ""), (tRef ? "TableReference=" + tRef : "")], PostInitBag: tFormInfo.PropertyBag }) as INMIDataView;
+                tBaseControl = cdeNMI.MyTCF.CreateNMIControl(tTRF.FldInfo.Type).Create(pTarget, { ScreenID: cde.GuidToString(tModel.MyDashboard.cdeMID), TRF: tTRF, PreInitBag: ["ExtraInfo=" + pExtraInfo, (tIsFitToScreenSet ? "FitToScreen=" + tIsFitToScreenSet : ""), (tRef ? "TableReference=" + tRef : "")], PostInitBag: tFormInfo.PropertyBag }) as INMIDataView;
                 if (tBaseControl && cdeNMI.MyTCF && pTarget) {
                     const tableTE = cdeNMI.MyTCF.GetRegisteredControl(pTarget.MyScreenID, "TE") as cdeNMI.INMITileEntry;
                     if (tableTE) {
@@ -1012,31 +1030,9 @@
                     }
                 }
                 if (tScreen) {
-                    if (tFTS === true) {
-                        tScreen.ScreenScale = 1.0;
-                        tScreen.GetElement().style.transformOrigin = "top left";
-
-                        let tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidth"));
-                        if (tWid > 0)
-                            tWid = cdeNMI.GetSizeFromTile(tWid);
-                        else
-                            tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelWidth"));
-                        if (tWid > 0) 
-                            tScreen.ScreenScale = (document.body.clientWidth-20) / tWid;
-
-                        let tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileHeight"));
-                        if (tHei > 0)
-                            tHei = cdeNMI.GetSizeFromTile(tHei);
-                        else
-                            tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelHeight"));
-                        if (tHei > 0) {
-                            const tRatioH = (window.innerHeight - cdeNMI.GetSizeFromTile(1)) / tHei;
-                            if (tRatioH < tScreen.ScreenScale)
-                                tScreen.ScreenScale = tRatioH;
-                        }
-                        if (tScreen.ScreenScale != 1.0) 
-                            tScreen.GetElement().style.transform = "scale(" + tScreen.ScreenScale + ")";
-                    }
+                    tScreen.IsFitToScreenSet = tIsFitToScreenSet;
+                    tScreen.MyFormInfo = tFormInfo;
+                    this.CalculateFitToScreen(tScreen);
                     tBaseControl.OnLoaded();
                     if (tBaseControl && tBaseControl.MyFieldInfo)
                         cdeNMI.ThePB.SetPropertiesFromBag(tScreen, tBaseControl.MyFieldInfo.PropertyBag, null, false, false);
@@ -1066,6 +1062,78 @@
             else
                 cdeNMI.MyTCF.RegisterControl("TABLES", tTableName, tBaseControl);
             return tBaseControl;
+        }
+
+        public CalculateFitToScreen(tScreen: cdeNMI.INMIScreen, ForceOff:boolean=false) {
+            if (!tScreen) return;
+
+            if (!tScreen.IsFitToScreenSet || ForceOff || this.CntScreenPinned()>0) {
+                this.RemoveScreenScaling(tScreen);
+            }
+            else {
+                const bra:number = cdeNMI.GetBrowserHeight() / cdeNMI.GetBrowserWidth();
+                let divi:number = 1;
+
+                const tFormInfo: cdeNMI.TheFormInfo = tScreen.MyFormInfo;
+                tScreen.ScreenScale = 1.0;
+                tScreen.GetElement().style.margin = "0";
+                let tW = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidth"));
+                let tWid = tW;
+                if (tW > 0) {
+                    if (cde.MyBaseAssets.MyServiceHostInfo.IsPortrait) {
+                        const tPor = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileWidthPortrait"));
+                        if (tPor > 0) {
+                            tW = tPor;
+                            if (bra > 1.9)
+                                divi = 2;
+                        }
+                    }
+                    tWid = tScreen.GetWidth(tW, true)/divi;
+                    if (cde.CBool(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "UseMargin"))) {
+                        const tSegments: number = Math.floor(tW / 6);
+                        if (tSegments > 0)
+                            tWid += GetSizeFromTile(tSegments);
+                    }
+                }
+                else
+                    tWid = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelWidth"));
+                if (tWid > 0)
+                    tScreen.ScreenScale = cdeNMI.GetBrowserWidth() / tWid;
+
+                let tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "TileHeight"));
+                if (tHei > 0)
+                    tHei = cdeNMI.GetSizeFromTile(tHei);
+                else
+                    tHei = cde.CInt(cdeNMI.ThePB.GetValueFromBagByName(tFormInfo.PropertyBag, "PixelHeight"));
+                if (tHei > 0) {
+                    let heisub = (cdeNMI.GetSizeFromTile(1) / 2) + 48;
+                    if (cde.MyBaseAssets.MyServiceHostInfo.HidePinsInApp === true)
+                        heisub = 0; //Pin and Title Bar
+                    const tRatioH = cdeNMI.GetBrowserHeight() / (tHei + heisub);
+                    if (tRatioH < tScreen.ScreenScale)
+                        tScreen.ScreenScale = tRatioH;
+                }
+                if (tScreen.ScreenScale != 1.0) {
+                    if (divi == 1) {
+                        tScreen.GetElement().classList.remove("cdeScaledHalfScreen");
+                        tScreen.GetElement().classList.add("cdeScaledScreen");
+                        tScreen.GetElement().style.transform = "translateX(-50%) scale(" + tScreen.ScreenScale + ")";
+                    }
+                    else {
+                        tScreen.GetElement().classList.remove("cdeScaledScreen");
+                        tScreen.GetElement().classList.add("cdeScaledHalfScreen");
+                        tScreen.GetElement().style.transform = "scale(" + tScreen.ScreenScale + ")";
+                    }
+                } else {
+                    this.RemoveScreenScaling(tScreen);
+                }
+            }
+        }
+
+        public RemoveScreenScaling(tScreen: cdeNMI.INMIScreen) {
+            tScreen.GetElement().classList.remove("cdeScaledScreen");
+            tScreen.GetElement().classList.remove("cdeScaledHalfScreen");
+            tScreen.GetElement().style.transform = "";
         }
 
 
@@ -1250,7 +1318,7 @@
             if (!this.mDivHeadButtonContent) //No Applicatin Bar if HeaderButtonContent is missing
                 return;
 
-            this.MyMainBackButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(null, { PreInitBag: ["ControlTW=1", "ControlTH=1"], PostInitBag: ["Title=<span class='fa' style='font-size:40px'>&#xf359;</span>", "ClassName=MyHeaderButton"] });
+            this.MyMainBackButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(null, { PreInitBag: ["ControlTW=1", "ControlTH=1"], PostInitBag: ["Title=<span class='fa fa-2x' style='font-size:40px'>&#xf359;</span>", "ClassName=MyHeaderButton"] });
             this.MyMainBackButton.SetProperty("OnClick", (sender: INMIControl, e: PointerEvent, tPs: ThePointer) => {
                 this.NavigateBack(false);
             });
@@ -1507,7 +1575,7 @@
             if (!this.mDivHeadButtonContent) //No Applicatin Bar if HeaderButtonContent is missing
                 return;
 
-            this.MyMainBackButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(null, { PreInitBag: ["ControlTW=1", "ControlTH=1", "TileFactorX=2", "TileFactorY=2"], PostInitBag: ["Title=<span class='fa' style='font-size:24px'>&#xf359;</span>", "ClassName=MyHeaderButton", "PixelHeight=48"] });
+            this.MyMainBackButton = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileButton).Create(null, { PreInitBag: ["ControlTW=1", "ControlTH=1", "TileFactorX=2", "TileFactorY=2"], PostInitBag: ["Title=<span class='fa' style='font-size:24px'>&#xf359;</span>", "ClassName=MyHeaderButton", "PixelHeight=40"] });
             this.MyMainBackButton.SetProperty("OnClick", (sender: INMIControl, e: PointerEvent, tPs: ThePointer) => {
                 this.NavigateBack(false);
             });
@@ -1843,4 +1911,21 @@
             super.TransitToScreen(pTargetScreen, MustExist, DontTryLoad, pCookie, pOwnerTable);
         }
     }
-}
+
+     export class TheScreenManagerInApp extends cdeNMI.TheScreenManager {
+         constructor() {
+             super(null);
+             this.MyBaseType = cdeControlType.ScreenManager;
+         }
+
+         public InitControl(pTargetControl: cdeNMI.INMIControl, pTRF?: cdeNMI.TheTRF, pPropertyBag?: string[], pScreenID?: string): boolean {
+             super.InitControl(pTargetControl, pTRF, pPropertyBag, pScreenID);
+
+             this.RegisterEvents();
+             return true;
+         }
+         public CreateLoginButtonOnly() {
+             return;
+         }
+     }
+ }

@@ -1,15 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1</TargetFrameworks>
-    <Version>6.104.0</Version>
+    <TargetFrameworks>net10.0</TargetFrameworks>
+    <Version>7.107.0</Version>
     <Authors>Chris Muench</Authors>
     <Company>C-Labs</Company>
     <Product>C-DMyC3</Product>
     <Description>C3 Chart Controls for the C-DEngine ($(TargetFramework))</Description>
-    <Copyright>(C) 2017-2024 C-Labs</Copyright>
+    <Copyright>(C) 2017-2026 C-Labs</Copyright>
     <AssemblyName>CDMyC3</AssemblyName>
     <RootNamespace>CDMyC3</RootNamespace>
+	<DefineConstants>TRACE;CDE_SYSLOG</DefineConstants>
     <!-- Set if you want to have a Nuget created automatically -->
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <!-- Workaround for placing the .nupkg into the build's output folder when using msbuild's GenerateProjectSpecificOutputFolder -->
@@ -18,14 +19,6 @@
 	  <PackageOutputPath>$(SolutionDir)Nugets</PackageOutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE;RELEASE</DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="ClientBin\plugins\**" />
@@ -37,30 +30,28 @@
     <None Remove="ClientBin\P172\CDMyC3.TheC3Service.js" />
     <None Remove="ClientBin\P172\CSS\c3.min.css" />
     <None Remove="ClientBin\P172\CSS\cssDark.min.css" />
+    <None Remove="ClientBin\P172\CSS\uPlot.min.css" />
     <None Remove="ClientBin\P172\JS\c3.min.js" />
     <None Remove="ClientBin\P172\JS\cytoscape.min.js" />
     <None Remove="ClientBin\P172\JS\d3.min.js" />
     <None Remove="ClientBin\P172\JS\smoothie.js" />
+    <None Remove="ClientBin\P172\JS\uPlot.iife.min.js" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="ClientBin\P172\CDMyC3.TheC3Service.js" />
     <EmbeddedResource Include="ClientBin\P172\CSS\c3.min.css" />
     <EmbeddedResource Include="ClientBin\P172\CSS\cssDark.min.css" />
+    <EmbeddedResource Include="ClientBin\P172\CSS\uPlot.min.css" />
     <EmbeddedResource Include="ClientBin\P172\JS\c3.min.js" />
     <EmbeddedResource Include="ClientBin\P172\JS\cytoscape.min.js" />
     <EmbeddedResource Include="ClientBin\P172\JS\d3.min.js" />
     <EmbeddedResource Include="ClientBin\P172\JS\smoothie.js" />
+    <EmbeddedResource Include="ClientBin\P172\JS\uPlot.iife.min.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="C-DEngine" Version="6.*-*" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-    <PackageReference Include="System.Drawing.Common">
-      <Version>9.0.0</Version>
-    </PackageReference>
+    <PackageReference Include="C-DEngine" Version="7.*-*" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

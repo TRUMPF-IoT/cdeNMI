@@ -52,7 +52,7 @@ namespace cdeNMI {
                 this.mBaseDiv.innerHTML = "";    //OK
             }
             this.mBaseDiv.style.width = "inherit";
-            this.mBaseDiv.style.height = (window.innerHeight-cdeNMI.GetSizeFromTile(1))+"px";
+            this.mBaseDiv.style.height = (cdeNMI.GetBrowserHeight() - cdeNMI.GetSizeFromTile(1)) + "px";
             this.mDivDashboardContent = document.createElement("iframe");
             this.mDivDashboardContent.className = "cdeDashboardIFrame";
             this.mDivDashboardContent.style.width = "inherit";

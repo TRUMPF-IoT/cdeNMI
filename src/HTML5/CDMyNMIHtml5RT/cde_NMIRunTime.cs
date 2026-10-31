@@ -1,9 +1,10 @@
-// SPDX-FileCopyrightText: 2009-2023 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2025 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
 using nsCDEngine.BaseClasses;
 using nsCDEngine.Communication;
+using nsCDEngine.Engines;
 using nsCDEngine.Engines.NMIService;
 using nsCDEngine.Security;
 using nsCDEngine.ViewModels;
@@ -535,7 +536,8 @@ namespace NMIService
         #endregion
 
         #region Header and Footer
-
+        private static List<string> AppUserAgents = null;
+        private static List<string> HSIMappings = null;
         private static string CreateHeader(TheRequestData pRequest, string pRealPage, string pComposite, eWebPlatform pWebPlatform, ThePageDefinition pPage, bool IsDebugEnabled, bool IsLite)
         {
             StringBuilder tStr = new StringBuilder();
@@ -559,6 +561,7 @@ namespace NMIService
                 case eWebPlatform.TeslaXS: tPlat = "T"; break;
                 case eWebPlatform.TizenFamilyHub: tPlat = "FH"; break;
                 case eWebPlatform.TizenTV: tPlat = "TY"; break;
+                case eWebPlatform.InApp: tPlat = "AP"; break;
                 case eWebPlatform.Bot: tPlat = null; break;
                 default:
                     break;
@@ -662,6 +665,9 @@ namespace NMIService
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.DisableWebWorker={TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("DisableWebWorker")).ToString().ToLower()};");
                 if (TheBaseAssets.MySettings.HasSetting("RequestGeoLocation"))
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.RequestGeoLocation={TheCommonUtils.CBool(TheBaseAssets.MySettings.GetSetting("RequestGeoLocation")).ToString().ToLower()};");
+                ts = TheCommonUtils.CInt(TheBaseAssets.MySettings.GetSetting("GeoLocInterval"));
+                if (ts > 0)
+                    tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.GeoLocInterval={ts};");
                 if (!string.IsNullOrEmpty(pRequest?.SessionState?.TETO))
                     tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.EnablePinLogin=true;");
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.ResourcePath='{TheBaseAssets.MyServiceHostInfo.ResourcePath}';");
@@ -718,9 +724,6 @@ namespace NMIService
                     else
                         tStationUri = new Uri(TheBaseAssets.MyServiceHostInfo.GetPrimaryStationURL(false));
                 }
-#if CDE_NET35
-                tStationUri = TheCommonUtils.CUri(tStationUri, false);
-#endif
                 if (TheBaseAssets.MySettings.HasSetting("BrowserReconnectUrl"))
                     tStationUri = new Uri(TheBaseAssets.MySettings.GetSetting("BrowserReconnectUrl"));
                 tStr.Append($"cde.MyBaseAssets.MyCommStatus.MyServiceUrl='{tStationUri.Scheme}://{tStationUri.Host}:{tStationUri.Port}';");
@@ -744,6 +747,49 @@ namespace NMIService
                 if (string.IsNullOrEmpty(tStartScreen) && pPage.StartScreen != Guid.Empty)
                     tStartScreen = pPage.StartScreen.ToString();
                 tStr.Append($"cde.MyBaseAssets.MyServiceHostInfo.StartScreen= '{tStartScreen}';");
+                if (AppUserAgents == null)
+                {
+                    var t = TheBaseAssets.MySettings.GetSetting("AppUserAgents");
+                    AppUserAgents = TheCommonUtils.CStringToList(t, ';');
+                    if (AppUserAgents == null)
+                        AppUserAgents = new List<string>();
+                }
+                if (AppUserAgents?.Count > 0)
+                {
+                    foreach (var ua in AppUserAgents)
+                    {
+                        if (pRequest.UserAgent.Contains(ua))
+                        {
+                            pRequest.ResponseBufferStr += $"cde.MyBaseAssets.MyServiceHostInfo.ScreenManagerClass='cdeNMI.TheScreenManagerInApp';" +
+                            $"cde.MyBaseAssets.MyServiceHostInfo.HidePinsInApp = true;";
+                            break;
+                        }
+                    }
+                }
+                if (HSIMappings == null)
+                {
+                    var t = TheBaseAssets.MySettings.GetSetting("HSIMappings");
+                    HSIMappings = TheCommonUtils.CStringToList(t, ';');
+                    if (HSIMappings == null)
+                        HSIMappings = new List<string>();
+                }
+                if (HSIMappings?.Count > 0)
+                {
+                    pRequest.ResponseBufferStr += "try { ";
+                    foreach (var hsimap in HSIMappings)
+                    {
+                        pRequest.ResponseBufferStr += $"cde.MyBaseAssets.MyServiceHostInfo.{hsimap};";
+                    }
+                    pRequest.ResponseBufferStr += "} catch {} ";
+                }
+                TheCDEngines.MyNMIService?.GetBaseThing()?.FireEvent("eventNMIScreenRequested", TheCDEngines.MyNMIService?.GetBaseThing(), pRequest, false);
+                if (!string.IsNullOrEmpty(pRequest.ResponseBufferStr))
+                {
+                    tStr.Append(pRequest.ResponseBufferStr);
+                    if (!pRequest.ResponseBufferStr.EndsWith(';'))
+                        tStr.Append(';');
+                    pRequest.ResponseBufferStr = null;
+                }
                 tStr.Append("cdeNMI.StartupNMI(); });");
                 tStr.Append("</script>");
             }

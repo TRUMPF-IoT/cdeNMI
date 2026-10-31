@@ -357,6 +357,8 @@ namespace cdeCommCore {
     ///Used by Convenience Apps
     export function DoAppLogin(pUID: string, pPWD?: string, pPlatform?: number) {
         cde.MyBaseAssets.MyServiceHostInfo.IsAppHosted = true;
+        if (cde.MyBaseAssets.MyServiceHostInfo.IsUserLoggedIn === true)
+            return;
         if (cdeNMI.MyEngine) {
             cdeNMI.MyEngine.Login(null, pUID, pPWD, pPlatform);
         }

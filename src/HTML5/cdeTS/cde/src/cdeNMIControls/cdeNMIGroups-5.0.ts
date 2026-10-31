@@ -70,8 +70,12 @@
                         tNewVal = this.GetProperty("Format").format(pValue);
                     }
                     if (this.MyBaseType !== cdeControlType.CollapsibleGroup && cde.CBool(this.GetProperty("IsDivOnly"))) {
-                        if (tNewVal && tNewVal.startsWith("FA") && tNewVal.length === 8) {
-                            tNewVal = "<i class='fa faIcon " + (tNewVal.substring(3, 4) === "S" ? "fa-spin " : "") + "fa-" + tNewVal.substring(2, 3) + "x'>&#x" + tNewVal.substring(4) + ";</i>";
+                        if (tNewVal) {
+                            if (tNewVal.startsWith("FA") && tNewVal.length > 7) {
+                                tNewVal = "<i class='fa faIcon " + (tNewVal.substring(3, 4) === "S" ? "fa-spin " : "") + "fa-" + tNewVal.substring(2, 3) + "x'>&#x" + tNewVal.substring(4) + ";</i>";
+                            } else if (tNewVal.startsWith("FI") && tNewVal.length > 7) {
+                                tNewVal = "<i class='fa " + (tNewVal.substring(3, 4) === "S" ? "fa-spin " : "") + "fa-" + tNewVal.substring(2, 3) + "x'>&#x" + tNewVal.substring(4) + ";</i>";
+                            }
                         }
                         this.divTiles.innerHTML = tNewVal;
                         this.divTiles.style.cssFloat = "none";
@@ -106,6 +110,9 @@
             } else if (pName === "HideCaption" && this.h1Title && cde.CBool(pValue)) {
                 this.h1Title.GetElement().parentElement.removeChild(this.h1Title.GetElement());
                 this.h1Title = null;
+            } else if (pName === "OnClickTitle" && pValue && this.h1Title) {
+                this.SetProperty("H1Title", this.h1Title);
+                this.h1Title.SetProperty("OnClick", pValue);
             } else if (pName === "OnClick" && pValue) {
                 this.PreventManipulation = true;
                 this.HookEvents(false);
@@ -260,9 +267,10 @@
             if (!this.GetSetting("TileWidth") && this.GetSetting("MinTileWidth"))
                 this.SetProperty("TileWidth", this.GetSetting("MinTileWidth"));
 
-            this.IsTesla = false; 
+            this.IsTesla = false;
 
             this.mTitleGroup = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup);
+            const CanBeOpened: boolean = (pTRF && pTRF.FldInfo) && ((pTRF.FldInfo.Flags & 2)== 2);
             const tGrpInfo: TheFieldInfo = new TheFieldInfo(cdeControlType.TileGroup, (pTRF && pTRF.FldInfo) ? pTRF.FldInfo.Flags : 2, null);
             tGrpInfo.FldOrder = (pTRF && pTRF.FldInfo) ? pTRF.FldInfo.FldOrder : 0;
             this.mTitleGroup.InitControl(this, new TheTRF(null, 0, tGrpInfo));
@@ -359,7 +367,8 @@
                 }
             }
 
-            this.SetProperty("Overflow", "hidden");
+            if (CanBeOpened)
+                this.SetProperty("Overflow", "hidden");
             this.ApplySkin();
             this.ToggleDrop(!cde.CBool(cde.CBool(this.GetProperty("DoClose"))), true);
             return true;

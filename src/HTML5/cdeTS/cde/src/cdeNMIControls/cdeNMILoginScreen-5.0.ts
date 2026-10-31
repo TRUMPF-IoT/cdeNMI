@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2009-2020 TRUMPF Laser GmbH, authors: C-Labs
+// SPDX-FileCopyrightText: 2009-2025 TRUMPF Laser GmbH, authors: C-Labs
 //
 // SPDX-License-Identifier: MPL-2.0
 
@@ -9,9 +9,6 @@
 * (4.1 Ready!)
 */
     export class TheLoginScreen extends TheNMIScreen implements INMILoginScreen {
-        constructor(pTRF?: TheTRF) {
-            super(pTRF);
-        }
 
         mUID: cdeNMI.INMITileEntry = null;
         mPWD: cdeNMI.INMITileEntry = null;
@@ -52,7 +49,7 @@
             });
 
 
-            const tHeader: cdeNMI.TheTRF = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.SmartLabel, 4, "", 2, "", ["NoTE=true", "TileHeight=1", "TileWidth=4", "ClassName=cdeDlgTitleBar", "ContainerStyle=margin-top: 34px;", "iValue=Welcome to your NMI Portal"]));
+            const tHeader: cdeNMI.TheTRF = new cdeNMI.TheTRF("NOTABLE", 0, new cdeNMI.TheFieldInfo(cdeNMI.cdeControlType.SmartLabel, 4, "", 2, "", ["NoTE=true", "TileHeight=1", "TileWidth=4", "ClassName=cdeDlgTitleBar", "ContainerStyle=margin-top: 34px;", "iValue=Welcome to " + cde.MyBaseAssets.MyServiceHostInfo.ApplicationTitle]));
             this.mHeader = cdeNMI.MyTCF.CreateNMIControl(cdeNMI.cdeControlType.TileEntry).Create(this.tLoginGroup, { TRF: tHeader }) as INMITileEntry;
             this.mHeader.CreateControl("HEADER");
 

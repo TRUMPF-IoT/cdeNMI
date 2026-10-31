@@ -34,10 +34,11 @@ namespace cdeNMI {
         myChoicesOptions = {
             delimiter: this.MySep,
             editItems: false,
-            maxItemCount: 1,
+            maxItemCount: 1, 
             removeItemButton: false,
             searchEnabled: false,
-            shouldSort: true,
+            shouldSort: true, 
+            itemSelectText: "",
             searchResultLimit: 100,
             shouldSortItems: true,
             duplicateItemsAllowed: false,
@@ -314,8 +315,9 @@ namespace cdeNMI {
             this.ApplySkiny();
         }
         public OnHideDropDown() {
+            cdeNMI.DisableKey36Event = false;
             const cDropDownEle = this.GetElement().getElementsByClassName("choices__list choices__list--dropdown")[0] as HTMLElement;
-            if (cDropDownEle && window.innerWidth > 1024) {
+            if (cDropDownEle && cdeNMI.GetBrowserWidth() > 1024) {
                 cDropDownEle.style.top = null;
                 cDropDownEle.style.bottom = null; //"initial";
                 cDropDownEle.style.width = null; //"800px";
@@ -323,17 +325,18 @@ namespace cdeNMI {
         }
         public OnShowDropDown() {
             const cDropDownEle = this.GetElement().getElementsByClassName("choices__list choices__list--dropdown is-active")[0] as HTMLElement;
-            if (cDropDownEle && window.innerWidth > 1024) {
+            if (cDropDownEle && cdeNMI.GetBrowserWidth() > 1024) {
                 const tScreen = cdeNMI.MyScreenManager.GetScreenByID(this.MyFormID);
                 let scale = 1.0;
                 if (tScreen && tScreen.ScreenScale != 1.0 && tScreen.ScreenScale != 0.0)
                     scale = tScreen.ScreenScale;
-                if (window.innerHeight - (cDropDownEle.getBoundingClientRect().top - window.scrollY) < 300 || scale != 1.0) {
+                if (cdeNMI.GetBrowserHeight() - (cDropDownEle.getBoundingClientRect().top - window.scrollY) < 300 || scale != 1.0) {
                     cDropDownEle.style.bottom = "0px";
                     cDropDownEle.style.left = "0px";
                     cDropDownEle.style.width = "100%";
+                    //cDropDownEle.style.zIndex = "1000";
                     if (scale != 1.0)
-                        cDropDownEle.style.position = "absolute";
+                        cDropDownEle.style.position = "fixed";
                     else
                         cDropDownEle.style.position = "";
                 } else {
@@ -341,7 +344,7 @@ namespace cdeNMI {
                     cDropDownEle.style.position = "";
                 }
             }
-
+            cdeNMI.DisableKey36Event = true;
             this.myChoices.setChoices(this.MyCurrentData, "value", "label", true);
             if (this.NeedRefresh)
                 this.CalculateOption(null);

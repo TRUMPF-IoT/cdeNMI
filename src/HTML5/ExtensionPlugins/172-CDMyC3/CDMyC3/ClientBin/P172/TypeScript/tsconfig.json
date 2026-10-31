@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": false,
+        "noEmitOnError": false,
+        "removeComments": true,
+        "strictNullChecks": false,
+        "sourceMap": true,
+        "module": "system",
+        "target": "es6",
+        "rootDir": "./",
+        "outDir": "../" // Output JS files here
+    },
+    "include": ["**/*.ts"],
+    "exclude": [
+        "node_modules",
+        "wwwroot"
+    ],
+    "compileOnSave": true
+}

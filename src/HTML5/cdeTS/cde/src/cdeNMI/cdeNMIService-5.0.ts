@@ -35,7 +35,7 @@
                     switch (cred[0]) {  //TODO: V4.109: Security Review: can we control this by the Relay? Reflect all to Relay?
                         case "APPLOG":
                             if (cred.length > 2) {
-                                cdeNMI.MyEngine.Login(cred[1], cred[2]);
+                                cdeNMI.MyEngine.Login(null, cred[1], cred[2]);
                                 //res = "Done";
                             }
                             break;
@@ -99,8 +99,8 @@
             }
         }
 
-        public PublishToNodeGET_NMI_DATA(pRes: string) {
-            this.PublishToNMI('NMI_GET_DATA:' + pRes);
+        public PublishToNodeGET_NMI_DATA(pRes: string, pPayload?: string) {
+            this.PublishToNMI('NMI_GET_DATA:' + pRes, pPayload);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -411,6 +411,18 @@
                 case "NMI_GLOBAL_SCRIPT":
                     if (pMSG.PLS && tCmd.length > 1) {
                         this.CreateGlobalScript(tCmd[1], pMSG.PLS);
+                    }
+                    break;
+                case "NMI_GEO_LOC_INTERVAL":
+                    const geoInt = cde.CInt(tCmd[1]); 
+                    if (cde.MyBaseAssets.MyServiceHostInfo.MyGeoInterval)
+                        clearInterval(cde.MyBaseAssets.MyServiceHostInfo.MyGeoInterval);
+                    if (geoInt > 0 && navigator.geolocation) {
+                        cde.MyBaseAssets.MyServiceHostInfo.MyGeoInterval = setInterval(() => {
+                            navigator.geolocation.getCurrentPosition((position) => {
+                                cde.MyCommChannel.SendQueued(null, cdeNMI.eTheNMIEngine, cdeNMI.eTheNMIEngine, "NMI_MY_LOCATION", (position.coords.longitude + ";" + position.coords.latitude + ";" + position.coords.accuracy), 0, 3, 0, null);
+                            });
+                        }, geoInt);
                     }
                     break;
                 case "NMI_GLOBAL_STYLE":

@@ -46,6 +46,13 @@ namespace cdeNMI {
         }
     }
 
+    export function GetBrowserWidth() {
+        return document.body.clientWidth || (window.innerWidth/window.devicePixelRatio) || document.documentElement.clientWidth;
+    }
+    export function GetBrowserHeight() {
+        return document.documentElement.clientHeight || (window.innerHeight / window.devicePixelRatio) || document.body.clientHeight;
+    }
+
     export function cdeEscapeHtml(source: string) {
         return String(source).replace(/[&<>"']/g, s => cdeNMI.TheEscapeMap[s]);
     }
@@ -609,6 +616,7 @@ namespace cdeNMI {
             if (outStr.indexOf('<%NOW%>') >= 0) {
                 outStr = outStr.replace('<%NOW%>', moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"));
             }
+
             if (pTRF && !pData) {
                 const tScreenInfo: cdeNMI.TheScreenInfo = cdeNMI.MyNMIModels[pTRF.ModelID];
                 if (tScreenInfo && tScreenInfo.MyStorageMirror && tScreenInfo.MyStorageMirror[pTRF.TableName])
@@ -663,13 +671,15 @@ namespace cdeNMI {
                             if (tVal) {
                                 outStr = tVal.toString();
                             }
-                        } else if (outStr.indexOf('%' + index + '%') >= 0) {
-                            repl = "";
-                            if (pData[index]) {
-                                if (typeof pData[index] !== "string") repl = pData[index].toString();
-                                else repl = pData[index];
+                        } else {
+                            while (outStr.indexOf('%' + index + '%') >= 0) {
+                                repl = "";
+                                if (pData[index]) {
+                                    if (typeof pData[index] !== "string") repl = pData[index].toString();
+                                    else repl = pData[index];
+                                }
+                                outStr = outStr.replace('%' + index + '%', GenerateFinalString(repl, pData, pTRF));
                             }
-                            outStr = outStr.replace('%' + index + '%', GenerateFinalString(repl, pData, pTRF));
                         }
                     }
                 }
@@ -691,6 +701,21 @@ namespace cdeNMI {
                     }
                     if (gfsoutStr !== outStr) outStr = gfsoutStr; else tT = 0;
                 }
+            }
+            while (outStr.indexOf("<$HSI:") >= 0) {
+                if (outStr.indexOf("$>") > 0) {
+                    const tHSI: string = outStr.substring(outStr.indexOf("<$HSI:") + 6, outStr.indexOf("$>"));
+                    let repl: string = "";
+                    try {
+                        repl = cde.MyBaseAssets.MyServiceHostInfo[tHSI];
+                    }
+                    catch {
+                        //intended
+                    }
+                    outStr = outStr.replace("<$HSI:" + tHSI + "$>", repl);
+                }
+                else
+                    break;
             }
         } while (tInStr !== outStr);
 
@@ -1310,7 +1335,7 @@ namespace cdeNMI {
     export function Check4ValidEmail(email: string): boolean {
         if (!email || email.length === 0)
             return true;
-        const filter = /([!#-'*+\/-9=?A-Z^-~-]+(.[!#-'*+\/-9=?A-Z^-~-]+)*|"([]!#-[^-~ \t]|(\[\t -~]))+")@([!#-'*+\/-9=?A-Z^-~-]+(.[!#-'*+\/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])/; //NOSONAR RFC5322 validation
+        const filter = /([!#-'*+\/-9=?A-Z^-~-]+(.[!#-'*+\/-9=?A-Z^-~-]+)*|"([\]!#-\[^-~ \t]|(\[\t -~]))+")@([!#-'*+\/-9=?A-Z^-~-]+(.[!#-'*+\/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])/; //NOSONAR RFC5322 validation
         if (!email || !filter.test(email.toLowerCase()) || email.substring(0, 1) === '.' || email.substring(email.length - 1, 1) === '.')
             return false;
         return true;

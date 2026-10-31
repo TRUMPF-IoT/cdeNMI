@@ -123,6 +123,7 @@
         btnAdder: ctrlTileButton = null;
         inputFilter: INMIControl = null;
         InfoText: INMIControl = null;
+        customButtonArea: INMIControl = null;
         mBaseDiv: HTMLDivElement = null;
         IsPropertyTable = false;
         IsNMIOnly = false;
@@ -313,7 +314,7 @@
                 this.MyScreenInfo.MyStorageMeta[this.MyTableName] = null;
             if (!this.MyScreenInfo.MyStorageMeta[this.MyTableName] || !this.MyScreenInfo.MyStorageMeta[this.MyTableName].FormFields || this.MyScreenInfo.MyStorageMeta[this.MyTableName].FormFields.length === 0) {
                 if (!this.MyScreenInfo.MyStorageMirror[this.MyTableName]) {
-                    this.DisplayHeader(this.mBaseDiv, "No Data Available, yet", this.GetSetting("IsLiveData"));
+                    this.DisplayHeader(this.mBaseDiv, "No Data Available, yet ", this.GetSetting("IsLiveData"));
                     if (cdeNMI.MyEngine && this.MyTarget && this.MyTarget.MyFieldInfo) {
                         cdeNMI.MyEngine.PublishToNMI("NMI_GET_DATA:" + cde.GuidToString(this.MyTarget.MyFieldInfo.cdeMID) + ":CMyTable:" + this.MyTableName + ":" + this.MyScreenID + ":true:true", '', this.MyFieldInfo ? this.MyFieldInfo.cdeN : null);
                     }
@@ -397,11 +398,16 @@
                 tTd.HookEvents(false);
                 if (this.mCurrentFormFieldsInfo[i]["THClassName"])
                     tTd.SetProperty("ClassName", this.mCurrentFormFieldsInfo[i]["THClassName"]);
+                else {
+                    if (this.MyFieldInfo["THClassName"])
+                        tTd.SetProperty("ClassName", this.MyFieldInfo["THClassName"]);
+                    else
+                        tTd.GetElement().style.height = (cdeNMI.GetSizeFromTile(1) / 2) + "px";
+                }
                 let tHWidth = 1;
                 if (cde.CInt(this.mCurrentFormFieldsInfo[i]["FldWidth"]) > 0)
                     tHWidth = cde.CInt(this.mCurrentFormFieldsInfo[i]["FldWidth"]);
                 tTd.SetProperty("TileWidth", tHWidth);
-                tTd.GetElement().style.height = (cdeNMI.GetSizeFromTile(1) / 2) + "px";
                 const tHCellDiv: INMIControl = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.TileGroup).Create(tTd);
                 tHCellDiv.SetProperty("ClassName", "cdeTHCell");
                 tHCellDiv.SetProperty("TileWidth", tHWidth);
@@ -678,8 +684,9 @@
                         let tFiVal: string = this.GetProperty("CurrentFilter");
                         if (!tFiVal)
                             tFiVal = "";
-                        this.inputFilter = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SingleEnded).Create(null, { TRF: new TheTRF(this.MyTableName, 1, tFld2), PostInitBag: ["ClassName=cdeInput cdeFilterInput", "TileWidth=2", "iValue=" + tFiVal] });
+                        this.inputFilter = cdeNMI.MyTCF.CreateNMIControl(cdeControlType.SingleEnded).Create(null, { TRF: new TheTRF(this.MyTableName, 1, tFld2), PostInitBag: ["ClassName=cdeInput cdeFilterInput","Style=height:16px; margin-top:0px;", "TileWidth=3", "iValue=" + tFiVal] });
                         this.inputFilter.SetProperty("TileFactorY", 2);
+                        this.inputFilter.SetProperty("InnerClassName", "cdeInputFilter");
                         this.inputFilter.RegisterEvent("OnValueChanged", (sender, eventName, pvalue) => {
                             if (this.GetProperty("CurrentFilter") === pvalue)
                                 return;
@@ -689,6 +696,11 @@
                         tHeadTd.appendChild(this.inputFilter.GetElement());
                     }
                 }
+                this.customButtonArea = ctrlSmartLabel.Create(null, null, null, "", "div", true);
+                this.customButtonArea.SetProperty("ID", "custab" + this.MyFormInfo.cdeMID);
+                this.customButtonArea.SetProperty("Style", "float: left; height: inherit;");
+                tHeadTd.appendChild(this.customButtonArea.GetElement());
+
                 this.InfoText = ctrlSmartLabel.Create(null, null, null, "", "span", true);
                 this.InfoText.SetProperty("TileFactorY", 2);
                 this.InfoText.SetProperty("ClassName", "cdeRefresher");
@@ -696,7 +708,6 @@
                 if (HasContent === true)
                     tHeadTd.style.height = (cdeNMI.GetSizeFromTile(1) / 2) + "px";
                 tHeadTd.appendChild(this.InfoText.GetElement());
-
             }
 
             if (tAddHeadline)
@@ -720,6 +731,10 @@
                 this.tableBody.appendChild(tRow.GetElement());
                 const tDataRow = this.MyScreenInfo.MyStorageMirror[this.MyTableName][i];
                 this.mTableRows[tDataRow.cdeMID] = tRow;
+                tRow.GetElement().id = "r_" + cde.GuidToString(tDataRow.cdeMID);
+                if (tDataRow.cdeRC) {
+                    tRow.SetProperty("ClassName", tDataRow.cdeRC);
+                }
                 let j = 0;
                 for (const tFldInfo of this.mCurrentFormFieldsInfo) {
                     if (!tFldInfo || (tFldInfo.Flags & 8) !== 0 || tFldInfo.Type === cdeControlType.FacePlate) continue;
