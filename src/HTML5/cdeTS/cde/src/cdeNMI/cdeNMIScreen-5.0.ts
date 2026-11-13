@@ -267,7 +267,9 @@
                                 if (cdeNMI.MyEngine) {
                                     const tScene: TheFOR = new TheFOR();
                                     tScene.ID = this.MyScreenID;
-                                    tScene.TileWidth = tScreen.GetProperty("TileWidth");
+                                    const isCalc: boolean = cde.CBool(tScreen.GetProperty("IsSizeCalc")) === true;
+                                    if (!isCalc)
+                                        tScene.TileWidth = tScreen.GetProperty("TileWidth");
                                     if (tScreen.GetProperty("StartGroup"))
                                         tScene.StartGroup = tScreen.GetProperty("StartGroup");
                                     tScene.Flds = new Array<TheFLDOR>();
